@@ -13,9 +13,6 @@
  * ## Import
  */
 import {Record} from 'immutable';
-import {
-  LOGIN
-} from '../../lib/constants'
 
 /**
  * ## Form
@@ -23,13 +20,14 @@ import {
  * fields it contains.
  */
 const InitialState = Record({
-  state: LOGIN,
   disabled: false,
   error: null,
   isValid: false,
   isFetching: false,
+  isPristine: true,
   fields: new (Record({
-    phone: '',
+    phoneNumber: '',
+    phoneNumberFormatted: '', //Properly formatted phone number
     code: '',
     name: ''
   }))

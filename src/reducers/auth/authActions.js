@@ -24,7 +24,7 @@ import {
   SEND_CODE_SUCCESS,
   SEND_CODE_FAILURE,
 
-  ON_AUTH_FORM_FIELD_CHANGE
+  ON_PHONE_NUMBER_CHANGE
 
 } from '../../lib/constants'
 
@@ -50,14 +50,10 @@ export function phoneNumberState() {
 }
 
 
-/**
- * ## onAuthFormFieldChange
- * Set the payload so the reducer can work on it
- */
-export function onAuthFormFieldChange(field,value) {
+export function onPhoneNumberChange(text) {
   return {
-    type: ON_AUTH_FORM_FIELD_CHANGE,
-    payload: {field: field, value: value}
+    type: ON_PHONE_NUMBER_CHANGE,
+    payload: text
   };
 }
 
@@ -157,7 +153,7 @@ export function sendCode(phonenumber) {
   return dispatch => {
     dispatch(sendCodeRequest());
     //TODO: cloud function sendCode
-    return Parse().signup({ username: phonenumber, password: '' })
+    return new Parse().signup({ username: phonenumber, password: '' })
       .then((json) => {
         dispatch(sendCodeSuccess(json));
         Actions.loginVerificationCode();

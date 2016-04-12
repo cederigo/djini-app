@@ -1,50 +1,31 @@
-/**
- * ## Imports
- * 
- * Redux 
- */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
-
-/**
- * The actions we need
- */
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as authActions from '../reducers/auth/authActions';
-
-/**
- * The necessary React components
- */
 import React, {
   Component,
   PropTypes,
   StyleSheet,
   View,
   Text,
-  TextInput,
-  TouchableOpacity
+  TextInput
 } from 'react-native';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 20,
+    alignItems: 'center'
+  },
+
   text: {
-    marginTop: 50,
-    padding: 20
+    margin: 20
   },
 
-  input: {
-    marginTop: 50,
-    padding: 20
-  },
-
-  button: {
-    width: 100,
-    height: 30,
-    padding: 10,
-    backgroundColor: 'lightgray',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 3
-  }
+  icon: {},
+  input: {}
 });
 
 class LoginPhoneNumber extends Component {
@@ -52,37 +33,43 @@ class LoginPhoneNumber extends Component {
   render() {
 
     const {actions, authState} = this.props
-    const value = authState.getIn(['fields', 'phone'])
-    //const isDisabled = auth.isFetching || !auth.isValid
+    const phoneNumber = authState.getIn(['fields', 'phoneNumber'])
+    const phoneNumberFormatted = authState.getIn(['fields', 'phoneNumberFormatted'])
+    const iconName = authState.isValid ? 'sentiment-satisfied' : 'sentiment-neutral'
 
     return ( 
       <View style={styles.container}>
         <Text style={styles.text}>Deine Telefon Nummer..</Text>
+        <Icon name={iconName} size={90} />
         <TextInput
           style={styles.input}
-          placeholder={'+41 79 123 456'}
+          editable={!authState.isFetching}
+          autoFocus={true}
+          keyboardType="phone-pad"
+          autoCorrect={false}
+          placeholder="+41 79 123 456"
           onChangeText={(text) => {
-            actions.onAuthFormFieldChange('phone', text)
+            actions.onPhoneNumberChange(text)
           }}
-          value={value}
+          onSubmitEditing={() => {
+            if (authState.isValid) {
+              actions.sendCode(phoneNumberFormatted)
+            }
+          }}
+          value={phoneNumber}
         />
-        <TouchableOpacity 
-            onPress={() => {actions.sendCode(value)}}
-            style={styles.button}>
-          <Text>Weiter</Text>
-        </TouchableOpacity>
       </View>
     )
   }
 }
 
 LoginPhoneNumber.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Map).isRequired,
+  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
   actions: PropTypes.object.isRequired
 }
 
 /**
- * ## Redux boilerplate
+ * Redux boilerplate
  */
 function mapStateToProps(state) {
   return { authState: state.auth};
@@ -92,4 +79,4 @@ function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(authActions, dispatch) };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPhoneNumber);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPhoneNumber)

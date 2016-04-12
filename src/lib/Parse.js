@@ -8,7 +8,6 @@
 
 import {
   PARSE_APP_ID,
-  PARSE_REST_API_KEY,
   PARSE_BASE_URL
 } from './config'
 
@@ -27,7 +26,7 @@ export default class Parse {
     this._sessionToken = sessionToken
     this.API_BASE_URL= PARSE_BASE_URL
     this._applicationId = PARSE_APP_ID
-    this._restAPIKey = PARSE_REST_API_KEY
+    this._restAPIKey = null
     this._masterKey = null
   }
 
@@ -148,23 +147,23 @@ export default class Parse {
     var reqOpts = {
       method: opts.method,
       headers: {
-        'X-Parse-Application-Id': this._applicationId,
-        'X-Parse-REST-API-Key': this._restAPIKey
+        'X-Parse-Application-Id': this._applicationId
       }
-    };
+    }
+
+    if (this._restAPIKey) {
+      reqOpts.headers['X-Parse-REST-API-Key'] = this._restAPIKey
+    }
     if (this._sessionToken) {
       reqOpts.headers['X-Parse-Session-Token'] = this._sessionToken;
     }
-    
     if (this._masterKey) {
       reqOpts.headers['X-Parse-Master-Key'] = this.masterKey;
     }
-
     if (opts.method === 'POST' || opts.method === 'PUT') {
       reqOpts.headers['Accept'] = 'application/json';
       reqOpts.headers['Content-Type'] = 'application/json';
     }
-
     if (opts.body) {
       reqOpts.body = JSON.stringify(opts.body);
     }
