@@ -19,12 +19,19 @@ import {
   SESSION_TOKEN_FAILURE,
   
   PHONE_NUMBER,
+  VERIFICATION_CODE,
+  PROFILE_NAME,
 
   SEND_CODE_REQUEST,
   SEND_CODE_SUCCESS,
   SEND_CODE_FAILURE,
 
-  ON_PHONE_NUMBER_CHANGE
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+
+  ON_PHONE_NUMBER_CHANGE,
+  ON_FORM_FIELD_CHANGE
 
 } from '../../lib/constants'
 
@@ -38,15 +45,22 @@ import {Actions} from 'react-native-router-flux'
 //TODO Store
 //import AppAuthToken from '../../lib/AppAuthToken'
 
-/**
- * ## State actions
- * controls which form is displayed to the user
- */
-
-export function phoneNumberState() {
+export function phoneNumber() {
   return {
     type: PHONE_NUMBER
   };
+}
+
+export function verificationCode() {
+  return {
+    type: VERIFICATION_CODE
+  }
+}
+
+export function profileName() {
+  return {
+    type: PROFILE_NAME
+  }
 }
 
 
@@ -55,6 +69,13 @@ export function onPhoneNumberChange(text) {
     type: ON_PHONE_NUMBER_CHANGE,
     payload: text
   };
+}
+
+export function onFormFieldChange(field, value) {
+  return {
+    type: ON_FORM_FIELD_CHANGE,
+    payload: {field, value}
+  }
 }
 
 /**
@@ -97,13 +118,14 @@ export function getSessionToken() {
           //Actions.home();
         } else {
           dispatch(sessionTokenRequestFailure());
+          dispatch(phoneNumber());
           Actions.login();
         }
       })
     
       .catch((error) => {
         dispatch(sessionTokenRequestFailure(error));
-        dispatch(phoneNumberState());
+        dispatch(profileName());
         Actions.login();
       });
   };
@@ -119,9 +141,6 @@ export function saveSessionToken(json) {
     .then(() => json)
 }
 
-/**
- * ## Login actions
- */
 export function sendCodeRequest() {
   return {
     type: SEND_CODE_REQUEST
@@ -149,25 +168,50 @@ export function sendCodeFailure(error) {
  * If successful, set the state to login
  * otherwise, dispatch a failure
  */
-export function sendCode(phonenumber) {
+export function sendCode(phoneNumber) {
   return dispatch => {
-    dispatch(sendCodeRequest());
-    //TODO: cloud function sendCode
-    return new Parse().signup({ username: phonenumber, password: '' })
+    dispatch(sendCodeRequest())
+    return new Parse().runCloudFunction('sendCode', {phoneNumber})
       .then((json) => {
-        dispatch(sendCodeSuccess(json));
-        Actions.loginVerificationCode();
+        dispatch(sendCodeSuccess(json))
+        dispatch(verificationCode())
       })
       .catch((error) => {
-        dispatch(sendCodeFailure(error));
+        dispatch(sendCodeFailure(error))
       });
   };
 }
 
-export function login(phoneNumber, verificationCode) {
-  return () => {
-    console.log('TODO: login ', phoneNumber, verificationCode);
-    //TODO
-    Actions.loginProfile();
+export function loginRequest() {
+  return {
+    type: LOGIN_REQUEST
+  };
+}
+
+export function loginSuccess(json) {
+  return {
+    type: LOGIN_SUCCESS,
+    payload: json
+  };
+}
+
+export function loginFailure(error) {
+  return {
+    type: LOGIN_FAILURE,
+    payload: error
+  };
+}
+
+export function login(phoneNumber, code) {
+  return dispatch => {
+    dispatch(loginRequest())
+    return new Parse().runCloudFunction('logIn', {phoneNumber, code})
+      .then((json) => {
+        dispatch(loginSuccess(json))
+        dispatch(profileName())
+      })
+      .catch((error) => {
+        dispatch(loginFailure(error))
+      })
   }
 }

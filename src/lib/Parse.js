@@ -26,8 +26,6 @@ export default class Parse {
     this._sessionToken = sessionToken
     this.API_BASE_URL= PARSE_BASE_URL
     this._applicationId = PARSE_APP_ID
-    this._restAPIKey = null
-    this._masterKey = null
   }
 
   /**
@@ -132,6 +130,17 @@ export default class Parse {
       .then(this._handleResponse)
   }  
   /**
+   * ### runCloudFunction
+   * Run cloud function named `name`
+   *
+   * @param name the name of the cloud function
+   * @param data object: {}
+   */
+  runCloudFunction(name, data) {
+    return this._fetch({ method: 'POST', url: '/functions/' + name, body: data })
+      .then(this._handleResponse)
+  }
+  /**
    * ### _fetch
    * A generic function that prepares the request to Parse.com
    */  
@@ -151,14 +160,8 @@ export default class Parse {
       }
     }
 
-    if (this._restAPIKey) {
-      reqOpts.headers['X-Parse-REST-API-Key'] = this._restAPIKey
-    }
     if (this._sessionToken) {
       reqOpts.headers['X-Parse-Session-Token'] = this._sessionToken;
-    }
-    if (this._masterKey) {
-      reqOpts.headers['X-Parse-Master-Key'] = this.masterKey;
     }
     if (opts.method === 'POST' || opts.method === 'PUT') {
       reqOpts.headers['Accept'] = 'application/json';
@@ -176,7 +179,17 @@ export default class Parse {
    * A generic function that handles the response
    */  
   _handleResponse(response) {
-    var json = response._bodyInit ? JSON.parse(response._bodyInit) : {};
+    let json = {}
+    try {
+      if (response._bodyInit) {
+        json = JSON.parse(response._bodyInit);
+      }
+    } catch (e) {
+      json = {}
+    }
+
+    console.log('Parse response status', response.status)
+    console.log('Parse response json', json)
     if (response.status === 200 || response.status === 201) {
       return json;
     } else {

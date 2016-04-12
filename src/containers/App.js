@@ -31,6 +31,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('App.render()')
     return(
       <View style={ styles.container }>
         <Text style={ styles.summary }>App Startup Screen</Text>

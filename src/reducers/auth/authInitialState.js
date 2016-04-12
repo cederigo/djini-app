@@ -20,16 +20,16 @@ import {Record} from 'immutable';
  * fields it contains.
  */
 const InitialState = Record({
-  disabled: false,
   error: null,
   isValid: false,
   isFetching: false,
-  isPristine: true,
+  formName: '',
   fields: new (Record({
     phoneNumber: '',
     phoneNumberFormatted: '', //Properly formatted phone number
     code: '',
-    name: ''
+    name: '',
+    birthday: '1.16'
   }))
 });
 

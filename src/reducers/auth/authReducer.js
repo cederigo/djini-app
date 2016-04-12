@@ -27,7 +27,8 @@ import {
 
   PROFILE_NAME,
   
-  ON_PHONE_NUMBER_CHANGE
+  ON_PHONE_NUMBER_CHANGE,
+  ON_FORM_FIELD_CHANGE
 
 } from '../../lib/constants'
 
@@ -38,6 +39,8 @@ const initialState = new InitialState;
  * @param {Object} action - type and payload
  */
 export default function authReducer(state = initialState, {type, payload}) {
+
+  console.log('auth action', {type, payload})
 
   switch (type) {
     /**
@@ -52,25 +55,42 @@ export default function authReducer(state = initialState, {type, payload}) {
 
   case PHONE_NUMBER:
     return state.setIn(['fields', 'phoneNumber'], '')
+      .set('formName', type)
       .set('error', null)
 
   case VERIFICATION_CODE:
     return state.setIn(['fields', 'code'], '')
+      .set('formName', type)
       .set('error', null)
 
   case PROFILE_NAME:
     return state.setIn(['fields', 'name'], '')
+      .set('formName', type)
       .set('error', null)
 
   case ON_PHONE_NUMBER_CHANGE: {
     return phoneNumberValidation(state, {type, payload})
   }
 
+  case ON_FORM_FIELD_CHANGE: {
+    const {field, value} = payload
+
+    switch (field) {
+    case 'birthday': {
+      let formatted = (value.getMonth() + 1) + '.' + value.getDate();
+      return state.setIn(['fields', field], formatted)
+    }
+    default:
+      return state.setIn(['fields', field], value)
+    }
+
+  }
+
   case SESSION_TOKEN_SUCCESS:
   case SEND_CODE_SUCCESS:
   case LOGIN_SUCCESS:
     return state.set('isFetching', false)
-      .set('error',null)
+      .set('error', null)
     
 
   case SESSION_TOKEN_FAILURE:

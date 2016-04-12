@@ -16,7 +16,6 @@ export function phoneNumberValidation(state, action) {
   }
 
   return state.set('isValid', isValid)
-    .set('isPristine', number.length ? false : true)
     .setIn(['fields', 'phoneNumber'], number)
     .setIn(['fields', 'phoneNumberFormatted'], isValid ? phoneUtil.format(numberProto, PhoneNumberFormat.INTERNATIONAL) : '')
 }

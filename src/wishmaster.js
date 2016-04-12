@@ -7,9 +7,10 @@ import configureStore from './lib/configureStore';
 import Icon from 'react-native-vector-icons/FontAwesome';
 /*  Containers */
 import App from './containers/App';
-import LoginPhoneNumber from './containers/LoginPhoneNumber';
-import LoginVerificationCode from './containers/LoginVerificationCode';
-import LoginProfile from './containers/LoginProfile';
+import Login from './containers/Login';
+// import LoginPhoneNumber from './containers/LoginPhoneNumber';
+// import LoginVerificationCode from './containers/LoginVerificationCode';
+// import LoginProfileName from './containers/LoginProfileName';
 /* Actions */
 import * as deviceActions from './reducers/device/deviceActions';
 
@@ -68,6 +69,10 @@ export default function native(platform) {
       // it will then create the store based on aggregate state from all reducers
       store.dispatch(deviceActions.setPlatform(platform));
       store.dispatch(deviceActions.setVersion(VERSION));
+
+      // <Scene key="loginPhoneNumber" type="replace" component={LoginPhoneNumber} />
+      // <Scene key="loginVerificationCode" type="replace" component={LoginVerificationCode} />
+      // <Scene key="loginProfileName" type="replace" component={LoginProfileName} />
       
       // setup the router table with App selected as the initial component
       return (
@@ -80,11 +85,7 @@ export default function native(platform) {
                 title="Wishmaster"
                 initial={true}/>
 
-              <Scene key="login">
-                <Scene key="loginPhoneNumber" initial={true} component={LoginPhoneNumber} />
-                <Scene key="loginVerificationCode" component={LoginVerificationCode} />
-                <Scene key="loginProfile" component={LoginProfile} />
-              </Scene>
+              <Scene key="login" type="replace" component={Login} />
 
             </Scene>
           </Router>

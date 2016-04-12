@@ -24,4 +24,5 @@ export const UPDATE_PROFILE_REQUEST = 'update-profile-request'
 export const UPDATE_PROFILE_SUCCESS = 'update-profile-success'
 export const UPDATE_PROFILE_FAILURE = 'update-profile-failure'
 
-export const ON_PHONE_NUMBER_CHANGE = 'on-auth-form-field-change'
+export const ON_PHONE_NUMBER_CHANGE = 'on-phone-number-change'
+export const ON_FORM_FIELD_CHANGE = 'on-form-field-change'
