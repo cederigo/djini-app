@@ -12,6 +12,7 @@
  */
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import createLogger from 'redux-logger';
 
 /**
 * ## Reducer
@@ -20,12 +21,14 @@ import thunk from 'redux-thunk';
 */
 import reducer from '../reducers';
 
+const logger = createLogger();
+
 /**
  * ## creatStoreWithMiddleware
  * Like the name...
  */ 
 const createStoreWithMiddleware = applyMiddleware(
-  thunk
+  thunk, logger
 )(createStore);
 
 /**

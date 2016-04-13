@@ -15,17 +15,17 @@ import {
   SESSION_TOKEN_SUCCESS,
   SESSION_TOKEN_FAILURE,
   
-  PHONE_NUMBER,
+  LOGIN_PHONENUMBER_FORM,
   SEND_CODE_REQUEST,
   SEND_CODE_SUCCESS,
   SEND_CODE_FAILURE,
 
-  VERIFICATION_CODE,
+  LOGIN_VERIFICATIONCODE_FORM,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
 
-  PROFILE_NAME,
+  LOGIN_PROFILE_FORM,
   
   ON_PHONE_NUMBER_CHANGE,
   ON_FORM_FIELD_CHANGE
@@ -40,8 +40,6 @@ const initialState = new InitialState;
  */
 export default function authReducer(state = initialState, {type, payload}) {
 
-  console.log('auth action', {type, payload})
-
   switch (type) {
     /**
      * ### Requests start
@@ -53,17 +51,17 @@ export default function authReducer(state = initialState, {type, payload}) {
     return state.set('isFetching', true)
       .set('error', null);
 
-  case PHONE_NUMBER:
+  case LOGIN_PHONENUMBER_FORM:
     return state.setIn(['fields', 'phoneNumber'], '')
       .set('formName', type)
       .set('error', null)
 
-  case VERIFICATION_CODE:
+  case LOGIN_VERIFICATIONCODE_FORM:
     return state.setIn(['fields', 'code'], '')
       .set('formName', type)
       .set('error', null)
 
-  case PROFILE_NAME:
+  case LOGIN_PROFILE_FORM:
     return state.setIn(['fields', 'name'], '')
       .set('formName', type)
       .set('error', null)

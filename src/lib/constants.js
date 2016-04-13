@@ -7,10 +7,9 @@ export const SESSION_TOKEN_FAILURE = 'sessoin-token-failure'
 export const SET_PLATFORM = 'set-platform'
 export const SET_VERSION = 'set-version'
 
-//steps in authentication
-export const PHONE_NUMBER = 'phone-number'
-export const VERIFICATION_CODE = 'verification-code'
-export const PROFILE_NAME = 'profile-name'
+export const LOGIN_PHONENUMBER_FORM = 'login-phonenumber-form'
+export const LOGIN_VERIFICATIONCODE_FORM = 'login-verificationcode-form'
+export const LOGIN_PROFILE_FORM = 'login-profile-form'
 
 export const SEND_CODE_REQUEST = 'send-code-request'
 export const SEND_CODE_SUCCESS = 'send-code-success'

@@ -13,9 +13,9 @@ import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
 import ProfileForm from '../components/login/ProfileForm'
 import {
-  PHONE_NUMBER,
-  VERIFICATION_CODE,
-  PROFILE_NAME
+  LOGIN_PHONENUMBER_FORM,
+  LOGIN_VERIFICATIONCODE_FORM,
+  LOGIN_PROFILE_FORM
 } from '../lib/constants'
 
 const styles = StyleSheet.create({
@@ -45,11 +45,11 @@ class Login extends Component {
     }
 
     switch(formName) {
-      case PHONE_NUMBER:
+      case LOGIN_PHONENUMBER_FORM:
         return (<PhoneNumberForm {...this.props} styles={styles}/>)
-      case VERIFICATION_CODE:
+      case LOGIN_VERIFICATIONCODE_FORM:
         return (<VerificationCodeForm {...this.props} styles={styles}/>)
-      case PROFILE_NAME:
+      case LOGIN_PROFILE_FORM:
         return (<ProfileForm {...this.props} styles={styles}/>)
     }
   }

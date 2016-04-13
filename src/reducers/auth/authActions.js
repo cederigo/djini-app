@@ -18,9 +18,9 @@ import {
   SESSION_TOKEN_SUCCESS,
   SESSION_TOKEN_FAILURE,
   
-  PHONE_NUMBER,
-  VERIFICATION_CODE,
-  PROFILE_NAME,
+  LOGIN_PHONENUMBER_FORM,
+  LOGIN_VERIFICATIONCODE_FORM,
+  LOGIN_PROFILE_FORM,
 
   SEND_CODE_REQUEST,
   SEND_CODE_SUCCESS,
@@ -45,21 +45,22 @@ import {Actions} from 'react-native-router-flux'
 //TODO Store
 //import AppAuthToken from '../../lib/AppAuthToken'
 
-export function phoneNumber() {
-  return {
-    type: PHONE_NUMBER
-  };
-}
-
-export function verificationCode() {
-  return {
-    type: VERIFICATION_CODE
+export function phoneNumberForm() {
+  return dispatch => {
+    dispatch({type: LOGIN_PHONENUMBER_FORM})
+    Actions.login()
   }
 }
 
-export function profileName() {
+export function verificationCodeForm() {
   return {
-    type: PROFILE_NAME
+    type: LOGIN_VERIFICATIONCODE_FORM
+  }
+}
+
+export function profileForm() {
+  return {
+    type: LOGIN_PROFILE_FORM
   }
 }
 
@@ -118,15 +119,13 @@ export function getSessionToken() {
           //Actions.home();
         } else {
           dispatch(sessionTokenRequestFailure());
-          dispatch(phoneNumber());
-          Actions.login();
+          dispatch(phoneNumberForm());
         }
       })
     
       .catch((error) => {
         dispatch(sessionTokenRequestFailure(error));
-        dispatch(profileName());
-        Actions.login();
+        dispatch(phoneNumberForm());
       });
   };
 }
@@ -174,7 +173,7 @@ export function sendCode(phoneNumber) {
     return new Parse().runCloudFunction('sendCode', {phoneNumber})
       .then((json) => {
         dispatch(sendCodeSuccess(json))
-        dispatch(verificationCode())
+        dispatch(verificationCodeForm())
       })
       .catch((error) => {
         dispatch(sendCodeFailure(error))
@@ -208,7 +207,7 @@ export function login(phoneNumber, code) {
     return new Parse().runCloudFunction('logIn', {phoneNumber, code})
       .then((json) => {
         dispatch(loginSuccess(json))
-        dispatch(profileName())
+        dispatch(profileForm())
       })
       .catch((error) => {
         dispatch(loginFailure(error))
