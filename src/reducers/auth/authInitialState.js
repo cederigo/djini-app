@@ -31,7 +31,7 @@ const InitialState = Record({
     phoneNumberFormatted: '', //Properly formatted phone number
     code: '',
     name: '',
-    birthday: now.getYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate()
+    birthday: now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate()
   }))
 });
 

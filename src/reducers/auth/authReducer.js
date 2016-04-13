@@ -86,7 +86,7 @@ export default function authReducer(state = initialState, {type, payload}) {
       return state.setIn(['fields', field], value)
         .set('isValid', value.length ? true : false)
     case 'birthday': {
-      let formatted = value.getYear() + '/' + (value.getMonth() + 1) + '/' + value.getDate();
+      let formatted = value.getFullYear() + '/' + (value.getMonth() + 1) + '/' + value.getDate();
       return state.setIn(['fields', field], formatted)
     }
     default:
