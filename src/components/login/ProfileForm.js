@@ -12,7 +12,7 @@ import React, {
 //Picker Items
 let DAYS = []
 for (let i = 1; i <= 31; i++) { 
-  DAYS.push({label: '' + i, value: i})
+  DAYS.push({label: i + '.', value: i})
 }
 
 let MONTHS = [
@@ -36,17 +36,10 @@ export default class ProfileForm extends Component {
 
     const {actions, authState, styles} = this.props
     const {name, birthday} = authState.fields
-    const dayItems = DAYS.map(item => {
-      return (<Picker.Item label={item.label} value={item.value}/>)
-    })
-    const monthItems = MONTHS.map(item => {
-      return (<Picker.Item label={item.label} value={item.value}/>)
-    })
     let birthdayDate = new Date(birthday)
     return ( 
       <View style={styles.container}>
-        <Icon name="account-circle" size={90} />
-
+        <Icon name="account-circle" style={styles.icon} size={90} />
 
         <Text style={[styles.text, {alignSelf: 'flex-start'}]}>Wann hast du Geburtstag?</Text>
         <View style={{alignSelf: 'flex-start', flexDirection: 'row'}}>
@@ -58,7 +51,9 @@ export default class ProfileForm extends Component {
               actions.onFormFieldChange('birthday', birthdayDate)
             }}
             >
-            {dayItems}
+            {DAYS.map(item => 
+              <Picker.Item label={item.label} value={item.value} key={item.value}/>
+            )}
           </Picker>
 
           <Picker
@@ -69,15 +64,23 @@ export default class ProfileForm extends Component {
               actions.onFormFieldChange('birthday', birthdayDate)
             }}
             >
-            {monthItems}
+            {MONTHS.map(item => 
+              <Picker.Item label={item.label} value={item.value} key={item.value}/>
+            )}
           </Picker>
         </View>
 
         <TextInput
-          style={[styles.text, {alignSelf: 'flex-start'}]}
+          style={styles.input}
+          editable={!authState.isFetching}
           placeholder="Wie heist du?"
           onChangeText={(text) => { actions.onFormFieldChange('name', text)}}
           autoFocus={true}
+          onSubmitEditing={() => {
+            if (authState.isValid) {
+              actions.updateProfile({name, birthday})
+            }
+          }}
           value={name}
         />
 

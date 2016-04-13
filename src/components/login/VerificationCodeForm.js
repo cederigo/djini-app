@@ -20,8 +20,8 @@ export default class VerificationCodeForm extends Component {
 
     return ( 
       <View style={styles.container}>
-        <Text style={styles.text}>Den per SMS erhaltenen Code..</Text>
-        <Icon name="sms" size={90} />
+        <Icon name="sms" size={90} style={styles.icon} />
+        <Text style={styles.text}>SMS Code..</Text>
         <TextInput
           style={styles.input}
           editable={!authState.isFetching}

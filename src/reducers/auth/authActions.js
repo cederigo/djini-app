@@ -17,6 +17,11 @@ import {
   SESSION_TOKEN_REQUEST,
   SESSION_TOKEN_SUCCESS,
   SESSION_TOKEN_FAILURE,
+
+  CURRENT_USER_REQUEST,
+  CURRENT_USER_SUCCESS,
+  CURRENT_USER_FAILURE,
+  
   
   LOGIN_PHONENUMBER_FORM,
   LOGIN_VERIFICATIONCODE_FORM,
@@ -30,6 +35,10 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
 
+  PROFILE_UPDATE_REQUEST,
+  PROFILE_UPDATE_SUCCESS,
+  PROFILE_UPDATE_FAILURE,
+
   ON_PHONE_NUMBER_CHANGE,
   ON_FORM_FIELD_CHANGE
 
@@ -39,11 +48,9 @@ import {
  * Project requirements
  */
 import Parse from '../../lib/Parse'
+import db from '../../lib/db'
 
 import {Actions} from 'react-native-router-flux'
-
-//TODO Store
-//import AppAuthToken from '../../lib/AppAuthToken'
 
 export function phoneNumberForm() {
   return dispatch => {
@@ -53,14 +60,16 @@ export function phoneNumberForm() {
 }
 
 export function verificationCodeForm() {
-  return {
-    type: LOGIN_VERIFICATIONCODE_FORM
+  return dispatch => {
+    dispatch({type: LOGIN_VERIFICATIONCODE_FORM})
+    Actions.login()
   }
 }
 
 export function profileForm() {
-  return {
-    type: LOGIN_PROFILE_FORM
+  return dispatch => {
+    dispatch({type: LOGIN_PROFILE_FORM})
+    Actions.login()
   }
 }
 
@@ -79,9 +88,6 @@ export function onFormFieldChange(field, value) {
   }
 }
 
-/**
- * ## SessionToken actions
- */
 export function sessionTokenRequest() {
   return {
     type: SESSION_TOKEN_REQUEST
@@ -100,44 +106,60 @@ export function sessionTokenRequestFailure(error) {
   };
 }
 
-/**
- * ## Token
- * If AppAuthToken has the sessionToken, the user is logged in
- * Otherwise, the user will default to the login in screen.
- */
 export function getSessionToken() {
   return dispatch => {
     dispatch(sessionTokenRequest());
-    //TODO get session token from store
-    //return new AppAuthToken().getSessionToken()
-    return Promise.reject(new Error('not implemented yet'))
-
+    return db.getSessionToken()
       .then((token) => {
-        if (token) {
-          dispatch(sessionTokenRequestSuccess(token));
-          //TODO home
-          //Actions.home();
-        } else {
+        if (!token) {
           dispatch(sessionTokenRequestFailure());
-          dispatch(phoneNumberForm());
+          return Promise.reject();
         }
+
+        dispatch(sessionTokenRequestSuccess(token));
+        return token;
       })
-    
       .catch((error) => {
         dispatch(sessionTokenRequestFailure(error));
-        dispatch(phoneNumberForm());
+        return Promise.reject(error)
       });
   };
 }
 
-/**
- * ## saveSessionToken
- * @param {Object} response - to return to keep the promise chain
- * @param {Object} json - object with sessionToken
- */
-export function saveSessionToken(json) {
-  return new AppAuthToken().storeSessionToken(json)
-    .then(() => json)
+export function currentUserRequest() {
+  return {
+    type: CURRENT_USER_REQUEST
+  };
+}
+export function currentUserSuccess(user) {
+  return {
+    type: CURRENT_USER_SUCCESS,
+    payload: user
+  };
+}
+export function currentUserFailure(error) {
+  return {
+    type: CURRENT_USER_FAILURE,
+    payload: error
+  };
+}
+
+export function getCurrentUser() {
+  return dispatch => {
+    dispatch(currentUserRequest())
+    return db.getCurrentUser()
+      .then((user) => {
+        if (!user) {
+          return Promise.reject(new Error('current user not found'));
+        }
+        dispatch(currentUserSuccess(user))
+        return user
+      })
+      .catch(error => {
+        dispatch(currentUserFailure(error))
+        return Promise.reject(error)
+      })
+  }
 }
 
 export function sendCodeRequest() {
@@ -206,11 +228,61 @@ export function login(phoneNumber, code) {
     dispatch(loginRequest())
     return new Parse().runCloudFunction('logIn', {phoneNumber, code})
       .then((json) => {
+        //not interested in promise result
+        db.saveSessionToken(json.sessionToken)
+        return json;
+      })
+      .then((json) => {
         dispatch(loginSuccess(json))
         dispatch(profileForm())
       })
       .catch((error) => {
         dispatch(loginFailure(error))
+      })
+  }
+}
+
+export function profileUpdateRequest() {
+  return {
+    type: PROFILE_UPDATE_REQUEST
+  };
+}
+
+export function profileUpdateSuccess(json) {
+  return {
+    type: PROFILE_UPDATE_SUCCESS,
+    payload: json
+  };
+}
+
+export function profileUpdateFailure(error) {
+  return {
+    type: PROFILE_UPDATE_FAILURE,
+    payload: error
+  };
+}
+
+export function updateProfile(data) {
+
+  return (dispatch, getState) => {
+    dispatch(profileUpdateRequest());
+    const {currentUser, sessionToken} = getState().global;
+
+    if (!(currentUser && sessionToken)) {
+      dispatch(profileUpdateFailure(new Error('Du bist nich mehr eingeloggt')))
+      dispatch(phoneNumberForm())
+      return;
+    }
+
+    return new Parse(sessionToken).updateProfile(currentUser.objectId, data)
+      .then(() => new Parse(sessionToken).getProfile())
+      .then((json) => {
+        db.saveCurrentUser(json)
+        dispatch(profileUpdateSuccess(json))
+        Actions.home()
+      })
+      .catch(error => {
+        dispatch(profileUpdateFailure(error))
       })
   }
 }

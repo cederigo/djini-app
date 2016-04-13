@@ -1,8 +1,11 @@
 
-export const SET_SESSION_TOKEN = 'set-session-token'
 export const SESSION_TOKEN_REQUEST = 'session-token-request'
 export const SESSION_TOKEN_SUCCESS = 'session-token-success'
 export const SESSION_TOKEN_FAILURE = 'sessoin-token-failure'
+
+export const CURRENT_USER_REQUEST = 'current-user-request'
+export const CURRENT_USER_SUCCESS = 'current-user-success'
+export const CURRENT_USER_FAILURE = 'current-user-failure'
 
 export const SET_PLATFORM = 'set-platform'
 export const SET_VERSION = 'set-version'
@@ -19,9 +22,8 @@ export const LOGIN_REQUEST = 'login-request'
 export const LOGIN_SUCCESS = 'login-success'
 export const LOGIN_FAILURE = 'login-failure'
 
-export const UPDATE_PROFILE_REQUEST = 'update-profile-request'
-export const UPDATE_PROFILE_SUCCESS = 'update-profile-success'
-export const UPDATE_PROFILE_FAILURE = 'update-profile-failure'
+export const PROFILE_UPDATE_REQUEST = 'profile-update-request'
+export const PROFILE_UPDATE_SUCCESS = 'profile-update-success'
+export const PROFILE_UPDATE_FAILURE = 'profile-update-failure'
 
-export const ON_PHONE_NUMBER_CHANGE = 'on-phone-number-change'
 export const ON_FORM_FIELD_CHANGE = 'on-form-field-change'

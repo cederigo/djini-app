@@ -14,6 +14,8 @@
  */
 import {Record} from 'immutable';
 
+let now = new Date();
+
 /**
  * ## Form
  * This Record contains the state of the form and the
@@ -29,7 +31,7 @@ const InitialState = Record({
     phoneNumberFormatted: '', //Properly formatted phone number
     code: '',
     name: '',
-    birthday: '1.16'
+    birthday: now.getYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate()
   }))
 });
 

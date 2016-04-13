@@ -22,13 +22,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 20,
+    padding: 10,
     alignItems: 'center'
   },
   text: {
-    margin: 20
+    marginLeft: 5,
   },
-  icon: {},
+  icon: {
+    marginBottom: 30
+  },
   input: {}
 });
 

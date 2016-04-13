@@ -139,6 +139,7 @@ export default class Parse {
   runCloudFunction(name, data) {
     return this._fetch({ method: 'POST', url: '/functions/' + name, body: data })
       .then(this._handleResponse)
+      .then(json => json.result)
   }
   /**
    * ### _fetch
@@ -156,17 +157,16 @@ export default class Parse {
     var reqOpts = {
       method: opts.method,
       headers: {
-        'X-Parse-Application-Id': this._applicationId
+        'X-Parse-Application-Id': this._applicationId,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       }
     }
 
     if (this._sessionToken) {
       reqOpts.headers['X-Parse-Session-Token'] = this._sessionToken;
     }
-    if (opts.method === 'POST' || opts.method === 'PUT') {
-      reqOpts.headers['Accept'] = 'application/json';
-      reqOpts.headers['Content-Type'] = 'application/json';
-    }
+
     if (opts.body) {
       reqOpts.body = JSON.stringify(opts.body);
     }
@@ -179,21 +179,13 @@ export default class Parse {
    * A generic function that handles the response
    */  
   _handleResponse(response) {
-    let json = {}
-    try {
-      if (response._bodyInit) {
-        json = JSON.parse(response._bodyInit);
-      }
-    } catch (e) {
-      json = {}
-    }
-
-    console.log('Parse response status', response.status)
-    console.log('Parse response json', json)
-    if (response.status === 200 || response.status === 201) {
-      return json;
-    } else {
-      throw(json);
-    }
+    return response.json()
+      .then(json => {
+        console.log('Parse response', json)
+        if (json.error) {
+          throw new Error(json.error)
+        }
+        return json
+      })
   }
 }

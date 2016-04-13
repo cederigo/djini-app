@@ -1,22 +1,19 @@
 /**
  * # app.js
- *  Display startup screen and 
- *  getSessionTokenAtStartup which will navigate upon completion 
+ *  Display startup screen and navigate according to auth state
  */
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux'
 import React, { Component, StyleSheet, View, Text, PropTypes } from 'react-native';
 import * as authActions from '../reducers/auth/authActions';
 
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
-    borderTopWidth: 2,
-    borderBottomWidth:2,
-    marginTop: 80,
-    padding: 10
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   summary: {
     fontSize: 18,
@@ -27,14 +24,19 @@ var styles = StyleSheet.create({
 class App extends Component {
 
   componentDidMount() {
-    this.props.actions.getSessionToken();
+    this.props.actions.getSessionToken()
+      .then(() => this.props.actions.getCurrentUser())
+      .then(() => this.props.actions.phoneNumberForm())
+      .catch(() => {
+        this.props.actions.phoneNumberForm()
+      })
   }
 
   render() {
     console.log('App.render()')
     return(
       <View style={ styles.container }>
-        <Text style={ styles.summary }>App Startup Screen</Text>
+        <Text style={ styles.summary }>Wishmaster</Text>
       </View>
     );
   }
