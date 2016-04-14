@@ -2,10 +2,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import React, {
+  Platform,
   Alert,
   Component,
+  TouchableOpacity,
+  View,
+  Text,
   PropTypes,
-  StyleSheet
+  StyleSheet,
+  StatusBar
 } from 'react-native';
 
 import * as authActions from '../reducers/auth/authActions'
@@ -18,6 +23,7 @@ import {
   LOGIN_PROFILE_FORM
 } from '../lib/constants'
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -25,14 +31,45 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center'
   },
-  text: {
-    marginLeft: 5,
+  navbar: {
+    marginTop: 20,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#CDCDCD'
   },
+  button: {
+    padding: 15,
+    alignSelf: 'flex-end'
+  },
+  buttonText: {
+    fontSize: 17,
+    fontWeight: '500'
+  },
+  text: {},
   icon: {
     marginBottom: 30
   },
-  input: {}
+
+  input: {
+    marginLeft: Platform.OS === 'android' ? -5 : 0,
+    height: 50,
+    marginTop: 10,
+    marginBottom: 10
+  }
 });
+
+class NavButton extends React.Component {
+  render() {
+    const {enabled, onPress, text} = this.props
+    return (
+      <TouchableOpacity
+        activeOpacity={enabled ? 0 : 1}
+        style={styles.button}
+        onPress={() => { if (enabled) { onPress() }}}>
+        <Text style={[styles.buttonText, {color: enabled ? 'rgb(0, 122, 155)' : 'grey'}]}>{text}</Text>
+      </TouchableOpacity>
+    );
+  }
+}
 
 class Login extends Component {
 
@@ -40,7 +77,10 @@ class Login extends Component {
 
     console.log('Login.render()')
 
-    const {formName, error} = this.props.authState
+    const {formName, error, isValid, fields} = this.props.authState
+    const {sendCode, login, updateProfile} = this.props.actions
+
+    let form, onNext, nextText
 
     if (error) {
       Alert.alert('Error', error.message)
@@ -48,12 +88,33 @@ class Login extends Component {
 
     switch(formName) {
       case LOGIN_PHONENUMBER_FORM:
-        return (<PhoneNumberForm {...this.props} styles={styles}/>)
+        form = <PhoneNumberForm {...this.props} styles={styles}/>
+        onNext = () => sendCode(fields.get('phoneNumberFormatted'))
+        nextText = "Code senden"
+        break;
       case LOGIN_VERIFICATIONCODE_FORM:
-        return (<VerificationCodeForm {...this.props} styles={styles}/>)
+        form = <VerificationCodeForm {...this.props} styles={styles}/>
+        onNext = () => login(fields.get('phoneNumberFormatted'), fields.get('code'))
+        nextText = "Login"
+        break;
       case LOGIN_PROFILE_FORM:
-        return (<ProfileForm {...this.props} styles={styles}/>)
+        form = <ProfileForm {...this.props} styles={styles}/>
+        onNext = () => updateProfile({name: fields.get('name'), birthday: fields.get('birthday')})
+        nextText = "Fertig"
+        break
     }
+
+    return (
+      <View style={{flex: 1}}>
+
+        <StatusBar translucent={true} />
+
+        <View style={styles.navbar}>
+          <NavButton enabled={isValid} onPress={onNext} text={nextText}/>
+        </View>
+        {form}
+      </View>
+    )
   }
 }
 

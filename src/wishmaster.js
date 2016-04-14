@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { AppRegistry, View, PropTypes, Text } from 'react-native';
+import React, { AppRegistry, View, PropTypes, Text} from 'react-native';
 import RNRF, { Scene } from 'react-native-router-flux';
 import { Provider, connect } from 'react-redux';
 import configureStore from './lib/configureStore';
@@ -75,10 +75,8 @@ export default function native(platform) {
           <Router hideNavBar={true}>
             <Scene key="root">
 
-              <Scene key="app"
-                component={App}
-                title="Wishmaster"
-                initial={true}/>
+
+              <Scene key="app" component={App} title="Wishmaster" initial={true}/>
 
               <Scene key="login" panHandlers={null} component={Login} />
 

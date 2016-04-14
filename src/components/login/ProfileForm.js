@@ -41,6 +41,15 @@ export default class ProfileForm extends Component {
       <View style={styles.container}>
         <Icon name="account-circle" style={styles.icon} size={90} />
 
+        <TextInput
+          style={styles.input}
+          editable={!authState.isFetching}
+          placeholder="Wie heist du?"
+          onChangeText={(text) => { actions.onFormFieldChange('name', text)}}
+          autoFocus={true}
+          value={name}
+        />
+
         <Text style={[styles.text, {alignSelf: 'flex-start'}]}>Wann hast du Geburtstag?</Text>
         <View style={{alignSelf: 'flex-start', flexDirection: 'row'}}>
           <Picker
@@ -70,19 +79,6 @@ export default class ProfileForm extends Component {
           </Picker>
         </View>
 
-        <TextInput
-          style={styles.input}
-          editable={!authState.isFetching}
-          placeholder="Wie heist du?"
-          onChangeText={(text) => { actions.onFormFieldChange('name', text)}}
-          autoFocus={true}
-          onSubmitEditing={() => {
-            if (authState.isValid) {
-              actions.updateProfile({name, birthday})
-            }
-          }}
-          value={name}
-        />
 
       </View>
     )

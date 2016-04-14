@@ -14,7 +14,6 @@ export default class PhoneNumberForm extends Component {
 
     const {actions, authState, styles} = this.props
     const phoneNumber = authState.getIn(['fields', 'phoneNumber'])
-    const phoneNumberFormatted = authState.getIn(['fields', 'phoneNumberFormatted'])
     const iconName = authState.isValid ? 'sentiment-satisfied' : 'phone'
 
     return ( 
@@ -28,13 +27,9 @@ export default class PhoneNumberForm extends Component {
           keyboardType="phone-pad"
           autoCorrect={false}
           placeholder="+41 79 123 456"
+          returnKeyType="next"
           onChangeText={(text) => {
             actions.onFormFieldChange('phoneNumber', text)
-          }}
-          onSubmitEditing={() => {
-            if (authState.isValid) {
-              actions.sendCode(phoneNumberFormatted)
-            }
           }}
           value={phoneNumber}
         />
