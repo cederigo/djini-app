@@ -14,8 +14,7 @@ export default class VerificationCodeForm extends Component {
 
     console.log('VerificationCodeForm.render()')
 
-    const {actions, authState, styles} = this.props
-    const phoneNumberFormatted = authState.getIn(['fields', 'phoneNumberFormatted'])
+    const {actions, authState, styles, onNext} = this.props
     const code = authState.getIn(['fields', 'code'])
 
     return ( 
@@ -30,11 +29,7 @@ export default class VerificationCodeForm extends Component {
           onChangeText={(text) => {
             actions.onFormFieldChange('code', text)
           }}
-          onSubmitEditing={() => {
-            if (authState.isValid) {
-              actions.login(phoneNumberFormatted, code)
-            }
-          }}
+          onSubmitEditing={onNext}
           value={code}
         />
       </View>
@@ -45,5 +40,6 @@ export default class VerificationCodeForm extends Component {
 VerificationCodeForm.propTypes = {
   authState: PropTypes.instanceOf(Immutable.Record).isRequired,
   actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired
+  styles: PropTypes.object.isRequired,
+  onNext: PropTypes.func
 }

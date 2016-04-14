@@ -12,7 +12,7 @@ export default class PhoneNumberForm extends Component {
 
   render() {
 
-    const {actions, authState, styles} = this.props
+    const {actions, authState, styles, onNext} = this.props
     const phoneNumber = authState.getIn(['fields', 'phoneNumber'])
     const iconName = authState.isValid ? 'sentiment-satisfied' : 'phone'
 
@@ -28,6 +28,7 @@ export default class PhoneNumberForm extends Component {
           autoCorrect={false}
           placeholder="+41 79 123 456"
           returnKeyType="next"
+          onSubmitEditing={onNext}
           onChangeText={(text) => {
             actions.onFormFieldChange('phoneNumber', text)
           }}
@@ -41,5 +42,6 @@ export default class PhoneNumberForm extends Component {
 PhoneNumberForm.propTypes = {
   authState: PropTypes.instanceOf(Immutable.Record).isRequired,
   actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired
+  styles: PropTypes.object.isRequired,
+  onNext: PropTypes.func
 }

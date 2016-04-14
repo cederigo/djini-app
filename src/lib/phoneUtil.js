@@ -1,21 +1,20 @@
-
 import {PhoneNumberFormat, PhoneNumberUtil} from 'google-libphonenumber'
-
 const phoneUtil = PhoneNumberUtil.getInstance()
 
-export function phoneNumberValidation(state, action) {
-  const {value} = action.payload
-  const country = 'CH' //TODO get country from state (support multiple countries)
-  let numberProto
-  let isValid = false
+export function isValidNumber(number, country = 'CH') {
   try {
-    numberProto = phoneUtil.parse(value, country)
-    isValid = phoneUtil.isValidNumber(numberProto)
+    let numberProto = phoneUtil.parse(number, country)
+    return phoneUtil.isValidNumber(numberProto)
   } catch (e) {
-    //nothing to do
+    return false
   }
+}
 
-  return state.set('isValid', isValid)
-    .setIn(['fields', 'phoneNumber'], value)
-    .setIn(['fields', 'phoneNumberFormatted'], isValid ? phoneUtil.format(numberProto, PhoneNumberFormat.INTERNATIONAL) : '')
+export function formatNumber(number, country = 'CH', format = PhoneNumberFormat.INTERNATIONAL) {
+  try {
+    let numberProto = phoneUtil.parse(number, country)
+    return phoneUtil.format(numberProto, format)
+  } catch (e) {
+    return ''
+  }
 }

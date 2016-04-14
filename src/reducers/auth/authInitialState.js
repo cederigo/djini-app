@@ -14,7 +14,9 @@
  */
 import {Record} from 'immutable';
 
-let now = new Date();
+import {
+  LOGIN_PHONENUMBER_FORM
+} from '../../lib/constants'
 
 /**
  * ## Form
@@ -25,13 +27,15 @@ const InitialState = Record({
   error: null,
   isValid: false,
   isFetching: false,
-  formName: '',
+  formName: LOGIN_PHONENUMBER_FORM,
   fields: new (Record({
     phoneNumber: '',
     phoneNumberFormatted: '', //Properly formatted phone number
     code: '',
-    name: '',
-    birthday: now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate()
+    firstName: '',
+    lastName: '',
+    email: '',
+    birthday: new Date(0)
   }))
 });
 

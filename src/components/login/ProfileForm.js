@@ -35,8 +35,7 @@ export default class ProfileForm extends Component {
   render() {
 
     const {actions, authState, styles} = this.props
-    const {name, birthday} = authState.fields
-    let birthdayDate = new Date(birthday)
+    const {firstName, lastName, email, birthday} = authState.fields
     return ( 
       <View style={styles.container}>
         <Icon name="account-circle" style={styles.icon} size={90} />
@@ -44,20 +43,37 @@ export default class ProfileForm extends Component {
         <TextInput
           style={styles.input}
           editable={!authState.isFetching}
-          placeholder="Wie heist du?"
-          onChangeText={(text) => { actions.onFormFieldChange('name', text)}}
+          placeholder="Vorname"
+          onChangeText={(text) => { actions.onFormFieldChange('firstName', text)}}
           autoFocus={true}
-          value={name}
+          value={firstName}
+        />
+
+        <TextInput
+          style={styles.input}
+          editable={!authState.isFetching}
+          placeholder="Nachname"
+          onChangeText={(text) => { actions.onFormFieldChange('lastName', text)}}
+          value={lastName}
+        />
+
+        <TextInput
+          style={styles.input}
+          editable={!authState.isFetching}
+          placeholder="E-Mail"
+          keyboardType="email-address"
+          onChangeText={(text) => { actions.onFormFieldChange('email', text)}}
+          value={email}
         />
 
         <Text style={[styles.text, {alignSelf: 'flex-start'}]}>Wann hast du Geburtstag?</Text>
         <View style={{alignSelf: 'flex-start', flexDirection: 'row'}}>
           <Picker
             style={{width: 100}}
-            selectedValue={birthdayDate.getDate()}
+            selectedValue={birthday.getDate()}
             onValueChange={(day) => {
-              birthdayDate.setDate(day)
-              actions.onFormFieldChange('birthday', birthdayDate)
+              birthday.setDate(day)
+              actions.onFormFieldChange('birthday', new Date(birthday))
             }}
             >
             {DAYS.map(item => 
@@ -67,10 +83,10 @@ export default class ProfileForm extends Component {
 
           <Picker
             style={{width: 150}}
-            selectedValue={birthdayDate.getMonth()}
+            selectedValue={birthday.getMonth()}
             onValueChange={(month) => {
-              birthdayDate.setMonth(month)
-              actions.onFormFieldChange('birthday', birthdayDate)
+              birthday.setMonth(month)
+              actions.onFormFieldChange('birthday', new Date(birthday))
             }}
             >
             {MONTHS.map(item => 

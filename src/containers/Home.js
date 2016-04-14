@@ -23,7 +23,7 @@ class Home extends Component {
     const {currentUser} = this.props.globalState
     return (
         <View style={styles.container}>
-          <Text>Willkommen {currentUser.name}</Text>
+          <Text>Willkommen {currentUser.firstName}</Text>
         </View>
     )
   }

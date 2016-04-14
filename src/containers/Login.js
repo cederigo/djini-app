@@ -88,19 +88,23 @@ class Login extends Component {
 
     switch(formName) {
       case LOGIN_PHONENUMBER_FORM:
-        form = <PhoneNumberForm {...this.props} styles={styles}/>
         onNext = () => sendCode(fields.get('phoneNumberFormatted'))
         nextText = "Code senden"
+        form = <PhoneNumberForm {...this.props} styles={styles} onNext={isValid ? onNext: null}/>
         break;
       case LOGIN_VERIFICATIONCODE_FORM:
-        form = <VerificationCodeForm {...this.props} styles={styles}/>
         onNext = () => login(fields.get('phoneNumberFormatted'), fields.get('code'))
         nextText = "Login"
+        form = <VerificationCodeForm {...this.props} styles={styles} onNext={isValid ? onNext : null}/>
         break;
       case LOGIN_PROFILE_FORM:
-        form = <ProfileForm {...this.props} styles={styles}/>
-        onNext = () => updateProfile({name: fields.get('name'), birthday: fields.get('birthday')})
+        onNext = () => updateProfile({
+          firstName: fields.get('firstName'),
+          lastName: fields.get('lastName'),
+          email: fields.get('email'),
+          birthday: fields.get('birthday')})
         nextText = "Fertig"
+        form = <ProfileForm {...this.props} styles={styles} />
         break
     }
 

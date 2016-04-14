@@ -8,11 +8,6 @@
  * 
  */
 
-/**
- * ## Imports
- * 
- * The actions supported
- */
 import {
   SESSION_TOKEN_REQUEST,
   SESSION_TOKEN_SUCCESS,
@@ -39,7 +34,6 @@ import {
   PROFILE_UPDATE_SUCCESS,
   PROFILE_UPDATE_FAILURE,
 
-  ON_PHONE_NUMBER_CHANGE,
   ON_FORM_FIELD_CHANGE
 
 } from '../../lib/constants'
@@ -52,35 +46,22 @@ import db from '../../lib/db'
 
 import {Actions} from 'react-native-router-flux'
 
+/*
+ * Show different forms
+ */
 export function phoneNumberForm() {
-  return dispatch => {
-    dispatch({type: LOGIN_PHONENUMBER_FORM})
-    Actions.login()
-  }
+  return {type: LOGIN_PHONENUMBER_FORM}
 }
-
 export function verificationCodeForm() {
-  return dispatch => {
-    dispatch({type: LOGIN_VERIFICATIONCODE_FORM})
-    Actions.login()
-  }
+  return {type: LOGIN_VERIFICATIONCODE_FORM}
 }
-
 export function profileForm() {
-  return dispatch => {
-    dispatch({type: LOGIN_PROFILE_FORM})
-    Actions.login()
-  }
+  return {type: LOGIN_PROFILE_FORM}
 }
 
-
-export function onPhoneNumberChange(text) {
-  return {
-    type: ON_PHONE_NUMBER_CHANGE,
-    payload: text
-  };
-}
-
+/*
+ * On form field change
+ */
 export function onFormFieldChange(field, value) {
   return {
     type: ON_FORM_FIELD_CHANGE,
@@ -88,6 +69,9 @@ export function onFormFieldChange(field, value) {
   }
 }
 
+/*
+ * Get session token
+ */
 export function sessionTokenRequest() {
   return {
     type: SESSION_TOKEN_REQUEST
@@ -105,7 +89,6 @@ export function sessionTokenRequestFailure(error) {
     payload: error
   };
 }
-
 export function getSessionToken() {
   return dispatch => {
     dispatch(sessionTokenRequest());
@@ -126,6 +109,9 @@ export function getSessionToken() {
   };
 }
 
+/*
+ * Get current user
+ */
 export function currentUserRequest() {
   return {
     type: CURRENT_USER_REQUEST
@@ -143,7 +129,6 @@ export function currentUserFailure(error) {
     payload: error
   };
 }
-
 export function getCurrentUser() {
   return dispatch => {
     dispatch(currentUserRequest())
@@ -162,33 +147,26 @@ export function getCurrentUser() {
   }
 }
 
+/*
+ * Send Code
+ */
 export function sendCodeRequest() {
   return {
     type: SEND_CODE_REQUEST
   };
 }
-
 export function sendCodeSuccess(json) {
   return {
     type: SEND_CODE_SUCCESS,
     payload: json
   };
 }
-
 export function sendCodeFailure(error) {
   return {
     type: SEND_CODE_FAILURE,
     payload: error
   };
 }
-
-/**
- * ## Send Code
- * @param {string} phonenumber - user's phonenumber
- *
- * If successful, set the state to login
- * otherwise, dispatch a failure
- */
 export function sendCode(phoneNumber) {
   return dispatch => {
     dispatch(sendCodeRequest())
@@ -199,30 +177,32 @@ export function sendCode(phoneNumber) {
       })
       .catch((error) => {
         dispatch(sendCodeFailure(error))
+        //start over
+        dispatch(phoneNumberForm())
       });
   };
 }
 
+/*
+ * Login
+ */
 export function loginRequest() {
   return {
     type: LOGIN_REQUEST
   };
 }
-
 export function loginSuccess(json) {
   return {
     type: LOGIN_SUCCESS,
     payload: json
   };
 }
-
 export function loginFailure(error) {
   return {
     type: LOGIN_FAILURE,
     payload: error
   };
 }
-
 export function login(phoneNumber, code) {
   return dispatch => {
     dispatch(loginRequest())
@@ -242,26 +222,26 @@ export function login(phoneNumber, code) {
   }
 }
 
+/*
+ * Update Profile
+ */
 export function profileUpdateRequest() {
   return {
     type: PROFILE_UPDATE_REQUEST
   };
 }
-
 export function profileUpdateSuccess(json) {
   return {
     type: PROFILE_UPDATE_SUCCESS,
     payload: json
   };
 }
-
 export function profileUpdateFailure(error) {
   return {
     type: PROFILE_UPDATE_FAILURE,
     payload: error
   };
 }
-
 export function updateProfile(data) {
 
   return (dispatch, getState) => {
@@ -269,7 +249,7 @@ export function updateProfile(data) {
     const {currentUser, sessionToken} = getState().global;
 
     if (!(currentUser && sessionToken)) {
-      dispatch(profileUpdateFailure(new Error('Du bist nich mehr eingeloggt')))
+      dispatch(profileUpdateFailure(new Error('Should not happen')))
       dispatch(phoneNumberForm())
       return;
     }
@@ -283,6 +263,7 @@ export function updateProfile(data) {
       })
       .catch(error => {
         dispatch(profileUpdateFailure(error))
+        dispatch(phoneNumberForm()) //start over
       })
   }
 }

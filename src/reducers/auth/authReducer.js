@@ -1,11 +1,5 @@
-/**
- * # authReducer.js
- * 
- */
-
 import InitialState from './authInitialState'
-import {phoneNumberValidation} from '../../lib/phoneUtil'
-
+import authFormValidation from './authFormValidation'
 
 /**
  * ## Auth actions
@@ -56,43 +50,20 @@ export default function authReducer(state = initialState, {type, payload}) {
       .set('error', null);
 
   case LOGIN_PHONENUMBER_FORM:
-    return state.setIn(['fields', 'phoneNumber'], '')
-      .set('isValid', false)
-      .set('formName', type)
-      .set('error', null)
+  case LOGIN_PROFILE_FORM:
+    return authFormValidation(state.set('formName', type))
 
   case LOGIN_VERIFICATIONCODE_FORM:
     return state.setIn(['fields', 'code'], '')
       .set('isValid', false)
       .set('formName', type)
-      .set('error', null)
-
-  case LOGIN_PROFILE_FORM:
-    return state.setIn(['fields', 'name'], '')
-      .set('isValid', false)
-      .set('formName', type)
-      .set('error', null)
 
   case ON_FORM_FIELD_CHANGE: {
     const {field, value} = payload
-
+    //clear error and set field value
     state = state.set('error', null)
-
-    switch (field) {
-    case 'phoneNumber': 
-      return phoneNumberValidation(state, {type, payload})
-    case 'code':
-    case 'name':
-      return state.setIn(['fields', field], value)
-        .set('isValid', value.length ? true : false)
-    case 'birthday': {
-      let formatted = value.getFullYear() + '/' + (value.getMonth() + 1) + '/' + value.getDate();
-      return state.setIn(['fields', field], formatted)
-    }
-    default:
-      return state
-    }
-
+      .setIn(['fields', field], value)
+    return authFormValidation(state)
   }
 
   case SESSION_TOKEN_SUCCESS:

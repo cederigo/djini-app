@@ -26,9 +26,9 @@ class App extends Component {
   componentDidMount() {
     this.props.actions.getSessionToken()
       .then(() => this.props.actions.getCurrentUser())
-      .then(() => this.props.actions.phoneNumberForm())
+      .then(() => Actions.login())
       .catch(() => {
-        this.props.actions.phoneNumberForm()
+        Actions.login()
       })
   }
 
