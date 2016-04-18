@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   dayPicker: {
-    flex: 1
+    width: 100
   },
   monthPicker: {
-    flex: 4
+    flex: 1
   }
 })
 
