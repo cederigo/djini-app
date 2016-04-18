@@ -16,10 +16,9 @@ const styles = StyleSheet.create({
   }
 })
 
-class Home extends Component {
+class Wishes extends Component {
 
   render() {
-    console.log('Home.render()')
     const {currentUser} = this.props.globalState
     return (
         <View style={styles.container}>
@@ -29,7 +28,7 @@ class Home extends Component {
   }
 }
 
-Home.propTypes = {
+Wishes.propTypes = {
   globalState: PropTypes.instanceOf(Immutable.Record).isRequired
 }
 
@@ -40,4 +39,4 @@ function mapStateToProps(state) {
   return { globalState: state.global};
 }
 
-export default connect(mapStateToProps, null)(Home)
+export default connect(mapStateToProps, null)(Wishes)

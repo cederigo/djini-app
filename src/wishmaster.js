@@ -4,11 +4,13 @@ import React, { AppRegistry, View, PropTypes, Text} from 'react-native';
 import RNRF, { Scene } from 'react-native-router-flux';
 import { Provider, connect } from 'react-redux';
 import configureStore from './lib/configureStore';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 /*  Containers */
 import App from './containers/App';
 import Login from './containers/Login';
-import Home from './containers/Home';
+import Wishes from './containers/Wishes';
+import Friends from './containers/Friends';
 
 /* Actions */
 import * as deviceActions from './reducers/device/deviceActions';
@@ -31,22 +33,16 @@ function getInitialState() {
 
 class TabIcon extends React.Component {
   render(){
-    var color = this.props.selected ? '#FF3366' : '#FFB3B3';
+    const {selected, iconName, title} = this.props
+    var color = selected ? '#FF3366' : '#FFB3B3';
     return (
       <View style={{flex:1, flexDirection:'column', alignItems:'center', alignSelf:'center'}}>
-        <Icon style={{color: color}} name={this.props.iconName} size={30} />
-        <Text style={{color: color}}>{this.props.title}</Text>
+        <Icon style={{color: color}} name={iconName} size={30} />
+        <Text style={{color: color}}>{title}</Text>
       </View>
       );
   }
 }
-
-TabIcon.propTypes = {
-  selected: PropTypes.boolean,
-  iconName: PropTypes.string,
-  title: PropTypes.string
-}
-
 /**
  * ## Native
  *
@@ -80,7 +76,10 @@ export default function native(platform) {
 
               <Scene key="login" panHandlers={null} component={Login} />
 
-              <Scene key="home" panHandlers={null} component={Home} />
+              <Scene key="home" panHandlers={null} tabs={true} hideNavBar={false} >
+                <Scene key="wishes" initial={true} component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
+                <Scene key="friends" component={Friends} title="Meine Freunde" icon={TabIcon} iconName="accessibility"/>
+              </Scene>
 
             </Scene>
           </Router>

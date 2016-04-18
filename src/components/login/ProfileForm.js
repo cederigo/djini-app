@@ -4,11 +4,8 @@ import React, {
   Component,
   PropTypes,
   View,
-  TextInput,
-  Text
+  TextInput
 } from 'react-native';
-import BirthdayInput from '../BirthdayInput'
-
 
 export default class ProfileForm extends Component {
 
