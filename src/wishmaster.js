@@ -89,5 +89,5 @@ export default function native(platform) {
     }
   });
 
-  AppRegistry.registerComponent('wishmaster', () => Wishmaster);
+  AppRegistry.registerComponent('Wishmaster', () => Wishmaster);
 }

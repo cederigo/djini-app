@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "wishmaster.app"
-               BlueprintName = "wishmaster"
-               ReferencedContainer = "container:wishmaster.xcodeproj">
+               BuildableName = "Wishmaster.app"
+               BlueprintName = "Wishmaster"
+               ReferencedContainer = "container:Wishmaster.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "wishmasterTests.xctest"
-               BlueprintName = "wishmasterTests"
-               ReferencedContainer = "container:wishmaster.xcodeproj">
+               BuildableName = "WishmasterTests.xctest"
+               BlueprintName = "WishmasterTests"
+               ReferencedContainer = "container:Wishmaster.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "wishmasterTests.xctest"
-               BlueprintName = "wishmasterTests"
-               ReferencedContainer = "container:wishmaster.xcodeproj">
+               BuildableName = "WishmasterTests.xctest"
+               BlueprintName = "WishmasterTests"
+               ReferencedContainer = "container:Wishmaster.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "wishmaster.app"
-            BlueprintName = "wishmaster"
-            ReferencedContainer = "container:wishmaster.xcodeproj">
+            BuildableName = "Wishmaster.app"
+            BlueprintName = "Wishmaster"
+            ReferencedContainer = "container:Wishmaster.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -77,9 +77,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "wishmaster.app"
-            BlueprintName = "wishmaster"
-            ReferencedContainer = "container:wishmaster.xcodeproj">
+            BuildableName = "Wishmaster.app"
+            BlueprintName = "Wishmaster"
+            ReferencedContainer = "container:Wishmaster.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -96,9 +96,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "wishmaster.app"
-            BlueprintName = "wishmaster"
-            ReferencedContainer = "container:wishmaster.xcodeproj">
+            BuildableName = "Wishmaster.app"
+            BlueprintName = "Wishmaster"
+            ReferencedContainer = "container:Wishmaster.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
