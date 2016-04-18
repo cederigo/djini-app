@@ -31,6 +31,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
 
+  LOGOUT,
+
   // PROFILE_UPDATE_REQUEST,
   // PROFILE_UPDATE_SUCCESS,
   // PROFILE_UPDATE_FAILURE,
@@ -223,6 +225,19 @@ export function login(phoneNumber, code, details = {}) {
       })
       .catch((error) => {
         dispatch(loginFailure(error))
+      })
+  }
+}
+
+/*
+ * Logout. Very simplistic (used for dev)
+ */
+export function logout() {
+  return dispatch => {
+    return Promise.all([db.deleteSessionToken(), db.deleteCurrentUser()])
+      .then(() => {
+        dispatch({type: LOGOUT})
+        Actions.login()
       })
   }
 }

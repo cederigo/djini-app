@@ -6,7 +6,8 @@ import {
   SESSION_TOKEN_SUCCESS,
   PROFILE_UPDATE_SUCCESS,
   LOGIN_SUCCESS,
-  CURRENT_USER_SUCCESS
+  CURRENT_USER_SUCCESS,
+  LOGOUT
 } from '../../lib/constants'
 
 import InitialState from './globalInitialState';
@@ -26,6 +27,10 @@ export default function globalReducer(state = initialState, {type, payload}) {
     case CURRENT_USER_SUCCESS:
     case PROFILE_UPDATE_SUCCESS:
       return state.set('currentUser', payload);
+
+    case LOGOUT:
+      return state.set('currentUser', null)
+        .set('sessionToken', '')
   }
 
   return state;

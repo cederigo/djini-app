@@ -84,10 +84,6 @@ class Login extends Component {
 
     let form, onNext, nextText
 
-    if (error) {
-      Alert.alert('Error', error.message)
-    }
-
     switch(formName) {
       case LOGIN_PROFILE_FORM: /* 1. Screen */
         onNext = () => birthdayForm()
@@ -114,7 +110,7 @@ class Login extends Component {
           )
         }
         nextText = "Login"
-        form = <VerificationCodeForm {...this.props} styles={styles} onNext={isValid ? onNext : null}/>
+        form = <VerificationCodeForm {...this.props} styles={styles} error={error} onNext={isValid ? onNext : null}/>
         break;
     }
 

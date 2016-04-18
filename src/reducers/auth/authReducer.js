@@ -26,7 +26,9 @@ import {
   LOGIN_PROFILE_FORM,
   LOGIN_BIRTHDAY_FORM,
   
-  ON_FORM_FIELD_CHANGE
+  ON_FORM_FIELD_CHANGE,
+
+  LOGOUT
 
 } from '../../lib/constants'
 
@@ -66,6 +68,10 @@ export default function authReducer(state = initialState, {type, payload}) {
     state = state.set('error', null)
       .setIn(['fields', field], value)
     return authFormValidation(state)
+  }
+
+  case LOGOUT: {
+    return new InitialState
   }
 
   case SESSION_TOKEN_SUCCESS:

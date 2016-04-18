@@ -2,6 +2,7 @@ import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {
   Component,
+  Alert,
   PropTypes,
   View,
   Text,
@@ -14,8 +15,12 @@ export default class VerificationCodeForm extends Component {
 
     console.log('VerificationCodeForm.render()')
 
-    const {actions, authState, styles, onNext} = this.props
+    const {actions, authState, styles, onNext, error} = this.props
     const code = authState.getIn(['fields', 'code'])
+
+    if (error) {
+      Alert.alert('Falscher Code', 'Bitte nochmals eingeben')
+    }
 
     return ( 
       <View style={styles.container}>

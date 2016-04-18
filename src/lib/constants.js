@@ -28,3 +28,5 @@ export const PROFILE_UPDATE_SUCCESS = 'profile-update-success'
 export const PROFILE_UPDATE_FAILURE = 'profile-update-failure'
 
 export const ON_FORM_FIELD_CHANGE = 'on-form-field-change'
+
+export const LOGOUT = 'logout'
