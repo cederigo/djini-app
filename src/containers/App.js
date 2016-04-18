@@ -26,7 +26,7 @@ class App extends Component {
   componentDidMount() {
     this.props.actions.getSessionToken()
       .then(() => this.props.actions.getCurrentUser())
-      .then(() => Actions.login())
+      .then(() => Actions.home())
       .catch(() => {
         Actions.login()
       })

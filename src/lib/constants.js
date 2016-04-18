@@ -13,6 +13,7 @@ export const SET_VERSION = 'set-version'
 export const LOGIN_PHONENUMBER_FORM = 'login-phonenumber-form'
 export const LOGIN_VERIFICATIONCODE_FORM = 'login-verificationcode-form'
 export const LOGIN_PROFILE_FORM = 'login-profile-form'
+export const LOGIN_BIRTHDAY_FORM = 'login-birthday-form'
 
 export const SEND_CODE_REQUEST = 'send-code-request'
 export const SEND_CODE_SUCCESS = 'send-code-success'

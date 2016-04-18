@@ -13,8 +13,8 @@ export default class PhoneNumberForm extends Component {
   render() {
 
     const {actions, authState, styles, onNext} = this.props
-    const phoneNumber = authState.getIn(['fields', 'phoneNumber'])
     const iconName = authState.isValid ? 'sentiment-satisfied' : 'phone'
+    const {phoneNumber} = authState.fields
 
     return ( 
       <View style={styles.container}>
@@ -24,10 +24,9 @@ export default class PhoneNumberForm extends Component {
           style={styles.input}
           editable={!authState.isFetching}
           autoFocus={true}
-          keyboardType="phone-pad"
           autoCorrect={false}
+          keyboardType="phone-pad"
           placeholder="+41 79 123 456"
-          returnKeyType="next"
           onSubmitEditing={onNext}
           onChangeText={(text) => {
             actions.onFormFieldChange('phoneNumber', text)

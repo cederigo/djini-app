@@ -24,6 +24,7 @@ import {
   PROFILE_UPDATE_FAILURE,
 
   LOGIN_PROFILE_FORM,
+  LOGIN_BIRTHDAY_FORM,
   
   ON_FORM_FIELD_CHANGE
 
@@ -51,6 +52,7 @@ export default function authReducer(state = initialState, {type, payload}) {
 
   case LOGIN_PHONENUMBER_FORM:
   case LOGIN_PROFILE_FORM:
+  case LOGIN_BIRTHDAY_FORM:
     return authFormValidation(state.set('formName', type))
 
   case LOGIN_VERIFICATIONCODE_FORM:

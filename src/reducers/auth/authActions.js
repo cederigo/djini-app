@@ -21,6 +21,7 @@ import {
   LOGIN_PHONENUMBER_FORM,
   LOGIN_VERIFICATIONCODE_FORM,
   LOGIN_PROFILE_FORM,
+  LOGIN_BIRTHDAY_FORM,
 
   SEND_CODE_REQUEST,
   SEND_CODE_SUCCESS,
@@ -30,9 +31,9 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
 
-  PROFILE_UPDATE_REQUEST,
-  PROFILE_UPDATE_SUCCESS,
-  PROFILE_UPDATE_FAILURE,
+  // PROFILE_UPDATE_REQUEST,
+  // PROFILE_UPDATE_SUCCESS,
+  // PROFILE_UPDATE_FAILURE,
 
   ON_FORM_FIELD_CHANGE
 
@@ -57,6 +58,9 @@ export function verificationCodeForm() {
 }
 export function profileForm() {
   return {type: LOGIN_PROFILE_FORM}
+}
+export function birthdayForm() {
+  return {type: LOGIN_BIRTHDAY_FORM}
 }
 
 /*
@@ -203,18 +207,19 @@ export function loginFailure(error) {
     payload: error
   };
 }
-export function login(phoneNumber, code) {
+export function login(phoneNumber, code, details = {}) {
   return dispatch => {
     dispatch(loginRequest())
-    return new Parse().runCloudFunction('logIn', {phoneNumber, code})
+    return new Parse().runCloudFunction('logIn', {phoneNumber, code, details})
       .then((json) => {
-        //not interested in promise result
+        //not interested in promise results
         db.saveSessionToken(json.sessionToken)
+        db.saveCurrentUser(json)
         return json;
       })
       .then((json) => {
         dispatch(loginSuccess(json))
-        dispatch(profileForm())
+        Actions.home()
       })
       .catch((error) => {
         dispatch(loginFailure(error))
@@ -225,45 +230,45 @@ export function login(phoneNumber, code) {
 /*
  * Update Profile
  */
-export function profileUpdateRequest() {
-  return {
-    type: PROFILE_UPDATE_REQUEST
-  };
-}
-export function profileUpdateSuccess(json) {
-  return {
-    type: PROFILE_UPDATE_SUCCESS,
-    payload: json
-  };
-}
-export function profileUpdateFailure(error) {
-  return {
-    type: PROFILE_UPDATE_FAILURE,
-    payload: error
-  };
-}
-export function updateProfile(data) {
+// export function profileUpdateRequest() {
+//   return {
+//     type: PROFILE_UPDATE_REQUEST
+//   };
+// }
+// export function profileUpdateSuccess(json) {
+//   return {
+//     type: PROFILE_UPDATE_SUCCESS,
+//     payload: json
+//   };
+// }
+// export function profileUpdateFailure(error) {
+//   return {
+//     type: PROFILE_UPDATE_FAILURE,
+//     payload: error
+//   };
+// }
+// export function updateProfile(data) {
 
-  return (dispatch, getState) => {
-    dispatch(profileUpdateRequest());
-    const {currentUser, sessionToken} = getState().global;
+//   return (dispatch, getState) => {
+//     dispatch(profileUpdateRequest());
+//     const {currentUser, sessionToken} = getState().global;
 
-    if (!(currentUser && sessionToken)) {
-      dispatch(profileUpdateFailure(new Error('Should not happen')))
-      dispatch(phoneNumberForm())
-      return;
-    }
+//     if (!(currentUser && sessionToken)) {
+//       dispatch(profileUpdateFailure(new Error('Should not happen')))
+//       dispatch(phoneNumberForm())
+//       return;
+//     }
 
-    return new Parse(sessionToken).updateProfile(currentUser.objectId, data)
-      .then(() => new Parse(sessionToken).getProfile())
-      .then((json) => {
-        db.saveCurrentUser(json)
-        dispatch(profileUpdateSuccess(json))
-        Actions.home()
-      })
-      .catch(error => {
-        dispatch(profileUpdateFailure(error))
-        dispatch(phoneNumberForm()) //start over
-      })
-  }
-}
+//     return new Parse(sessionToken).updateProfile(currentUser.objectId, data)
+//       .then(() => new Parse(sessionToken).getProfile())
+//       .then((json) => {
+//         db.saveCurrentUser(json)
+//         dispatch(profileUpdateSuccess(json))
+//         Actions.home()
+//       })
+//       .catch(error => {
+//         dispatch(profileUpdateFailure(error))
+//         dispatch(phoneNumberForm()) //start over
+//       })
+//   }
+// }

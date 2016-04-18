@@ -17,10 +17,12 @@ import * as authActions from '../reducers/auth/authActions'
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
 import ProfileForm from '../components/login/ProfileForm'
+import BirthdayForm from '../components/login/BirthdayForm'
 import {
   LOGIN_PHONENUMBER_FORM,
   LOGIN_VERIFICATIONCODE_FORM,
-  LOGIN_PROFILE_FORM
+  LOGIN_PROFILE_FORM,
+  LOGIN_BIRTHDAY_FORM
 } from '../lib/constants'
 
 
@@ -29,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 10,
-    alignItems: 'center'
+    alignItems: 'flex-start'
   },
   navbar: {
     marginTop: 20,
@@ -46,14 +48,14 @@ const styles = StyleSheet.create({
   },
   text: {},
   icon: {
+    alignSelf: 'center',
     marginBottom: 30
   },
 
   input: {
     marginLeft: Platform.OS === 'android' ? -5 : 0,
     height: 50,
-    marginTop: 10,
-    marginBottom: 10
+    marginTop: 10
   }
 });
 
@@ -78,7 +80,7 @@ class Login extends Component {
     console.log('Login.render()')
 
     const {formName, error, isValid, fields} = this.props.authState
-    const {sendCode, login, updateProfile} = this.props.actions
+    const {phoneNumberForm, birthdayForm, sendCode, login} = this.props.actions
 
     let form, onNext, nextText
 
@@ -87,25 +89,33 @@ class Login extends Component {
     }
 
     switch(formName) {
-      case LOGIN_PHONENUMBER_FORM:
+      case LOGIN_PROFILE_FORM: /* 1. Screen */
+        onNext = () => birthdayForm()
+        nextText = "Weiter"
+        form = <ProfileForm {...this.props} styles={styles} />
+        break
+      case LOGIN_BIRTHDAY_FORM: /* 2. Screen */
+        onNext = () => phoneNumberForm()
+        nextText = "Weiter"
+        form = <BirthdayForm {...this.props} styles={styles} />
+        break
+      case LOGIN_PHONENUMBER_FORM: /* 3. Screen */
         onNext = () => sendCode(fields.get('phoneNumberFormatted'))
         nextText = "Code senden"
         form = <PhoneNumberForm {...this.props} styles={styles} onNext={isValid ? onNext: null}/>
         break;
-      case LOGIN_VERIFICATIONCODE_FORM:
-        onNext = () => login(fields.get('phoneNumberFormatted'), fields.get('code'))
+      case LOGIN_VERIFICATIONCODE_FORM: /* 4. Screen */
+        onNext = () => {
+          const {name, email, birthday} = fields
+          login(
+            fields.get('phoneNumberFormatted'), /* username */
+            fields.get('code'), /* password */
+            { name, email, birthday } /* additional fields */
+          )
+        }
         nextText = "Login"
         form = <VerificationCodeForm {...this.props} styles={styles} onNext={isValid ? onNext : null}/>
         break;
-      case LOGIN_PROFILE_FORM:
-        onNext = () => updateProfile({
-          firstName: fields.get('firstName'),
-          lastName: fields.get('lastName'),
-          email: fields.get('email'),
-          birthday: fields.get('birthday')})
-        nextText = "Fertig"
-        form = <ProfileForm {...this.props} styles={styles} />
-        break
     }
 
     return (
