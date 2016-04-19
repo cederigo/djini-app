@@ -1,17 +1,9 @@
-import {Record, List} from 'immutable';
-
-var Friend = Record({
-  name: '',
-  phoneNumber: '',
-  phoneType: 'mobile',
-  registered: false
-})
+import {Record, Map} from 'immutable';
 
 var InitialState = Record({
   isFetching: false,
   error: null,
-  contactsAccessAllowed: false,
-  friends: List.of(Friend)
+  friends: Map()
 });
 
 export default InitialState;

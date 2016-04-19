@@ -22,7 +22,7 @@ class Contacts {
     return new Promise((resolve, reject) => {
       contacts.getAll((err, records) => {
         if (err) {
-          return reject(err)
+          return reject(new Error(err.type))
         }
 
         let result = {} //contacts dictionary with phoneNumber as key

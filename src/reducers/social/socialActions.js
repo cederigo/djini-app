@@ -1,36 +1,68 @@
 import {
-  SYNC_FRIENDS_REQUEST,
-  SYNC_FRIENDS_SUCCESS,
-  SYNC_FRIENDS_FAILURE
+  FRIENDS_REQUEST,
+  FRIENDS_SUCCESS,
+  FRIENDS_FAILURE,
+
+  CONTACTS_REQUEST,
+  CONTACTS_SUCCESS,
+  CONTACTS_FAILURE
 } from '../../lib/constants'
 
 import contacts from '../../lib/contacts'
 import Parse from '../../lib/Parse'
-
+import db from '../../lib/db'
 
 /*
- * Sync Friends
+ * Friends (local)
  */
-export function syncFriendsRequest() {
+export function friendsRequest() {
   return {
-    type: SYNC_FRIENDS_REQUEST
+    type: FRIENDS_REQUEST
   }
 }
-export function syncFriendsSuccess(friends) {
+export function friendsSuccess(friends) {
   return {
-    type: SYNC_FRIENDS_SUCCESS,
+    type: FRIENDS_SUCCESS,
     payload: friends
   }
 }
-export function syncFriendsFailure(error) {
+export function friendsFailure(error) {
   return {
-    type: SYNC_FRIENDS_FAILURE,
+    type: FRIENDS_FAILURE,
     payload: error
   }
 }
+export function getFriends() {
+  return dispatch => {
+    dispatch(friendsRequest())
+    return db.getFriends()
+      .then((friends) => dispatch(friendsSuccess(friends)))
+      .catch(error => dispatch(friendsFailure(error)))
+  }
+}
 
+/*
+ * Contacts (Read from phonebook and enhance on server)
+ */
+export function contactsRequest() {
+  return {
+    type: CONTACTS_REQUEST
+  }
+}
+export function contactsSuccess(friends) {
+  return {
+    type: CONTACTS_SUCCESS,
+    payload: friends
+  }
+}
+export function contactsFailure(error) {
+  return {
+    type: CONTACTS_FAILURE,
+    payload: error
+  }
+}
 /**
- * HELPER
+ * refresh Contacts
  *
  * Given our local/phonebook contact records  (name & phoneNumber)
  * contact the server and enhance each record with the following attributes:
@@ -39,16 +71,13 @@ export function syncFriendsFailure(error) {
  *
  *  enhanced contact records are called `friends` ;-)
  */
-function enhanceContacts(contacts) {
-  return new Parse().runCloudFunction('enhanceContacts', {contacts})
-}
-
-export function syncFriends() {
-  return dispatch => {
-    dispatch(syncFriendsRequest())
+export function refreshContacts() {
+  return (dispatch, getState) => {
+    dispatch(contactsRequest())
     return contacts.getAll()
-      .then((contacts) => enhanceContacts(contacts))
-      .then((friends) => dispatch(syncFriendsSuccess(friends)))
-      .catch((error) => dispatch(syncFriendsFailure(error)))
+      .then((contacts) => new Parse().runCloudFunction('enhanceContacts', {contacts}))
+      .then((friends) => dispatch(contactsSuccess(friends)))
+      .then(() => db.saveFriends(getState().social.friends))
+      .catch((error) => dispatch(contactsFailure(error)))
   }
 }

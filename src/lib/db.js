@@ -31,6 +31,19 @@ class Database {
   deleteCurrentUser() {
     return AsyncStorage.removeItem('current-user');
   }
+
+  saveFriends(friends) {
+    return AsyncStorage.setItem('friends', JSON.stringify(friends))
+  }
+
+  getFriends() {
+    return AsyncStorage.getItem('friends')
+      .then(json => JSON.parse(json))
+  }
+
+  deleteFriends() {
+    return AsyncStorage.removeItem('friends');
+  }
 }
 
 export default new Database()

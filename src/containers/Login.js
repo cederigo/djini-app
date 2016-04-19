@@ -13,6 +13,7 @@ import React, {
 } from 'react-native';
 
 import * as authActions from '../reducers/auth/authActions'
+import {refreshContacts} from '../reducers/social/socialActions'
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
 import ProfileForm from '../components/login/ProfileForm'
@@ -100,7 +101,10 @@ class Login extends Component {
         form = <BirthdayForm {...this.props} styles={formStyles} />
         break
       case LOGIN_PHONENUMBER_FORM: /* 3. Screen */
-        onNext = () => sendCode(fields.get('phoneNumberFormatted'))
+        onNext = () => {
+          refreshContacts() //permission dialog (IOS)
+          sendCode(fields.get('phoneNumberFormatted'))
+        }
         nextText = "Code senden"
         form = <PhoneNumberForm {...this.props} styles={formStyles} onNext={isValid ? onNext: null}/>
         break;

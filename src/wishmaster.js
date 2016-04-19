@@ -58,17 +58,16 @@ export default function native(platform) {
   let Wishmaster = React.createClass( {
     render() {
       
-      const store = configureStore(getInitialState());
-
-      //Connect w/ the Router
-      const Router = connect()(RNRF.Router);
-      
       // configureStore will combine reducers from snowflake and main application
       // it will then create the store based on aggregate state from all reducers
-      store.dispatch(deviceActions.setPlatform(platform));
-      store.dispatch(deviceActions.setVersion(VERSION));
+      const store = configureStore(getInitialState())
 
-      store.dispatch(socialActions.syncFriends());
+      //Connect w/ the Router
+      const Router = connect()(RNRF.Router)
+      
+      store.dispatch(deviceActions.setPlatform(platform))
+      store.dispatch(deviceActions.setVersion(VERSION))
+      store.dispatch(socialActions.getFriends())
 
       // setup the router table with App selected as the initial component
       return (

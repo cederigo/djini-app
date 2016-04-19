@@ -33,6 +33,10 @@ export const ON_FORM_FIELD_CHANGE = 'on-form-field-change'
 export const LOGOUT = 'logout'
 
 //social
-export const SYNC_FRIENDS_REQUEST = 'sync-friends-request'
-export const SYNC_FRIENDS_SUCCESS = 'sync-friends-success'
-export const SYNC_FRIENDS_FAILURE = 'sync-friends-failure'
+export const FRIENDS_REQUEST = 'friends-request'
+export const FRIENDS_SUCCESS = 'friends-success'
+export const FRIENDS_FAILURE = 'friends-failure'
+
+export const CONTACTS_REQUEST = 'contacts-request'
+export const CONTACTS_SUCCESS = 'contacts-success'
+export const CONTACTS_FAILURE = 'contacts-failure'
