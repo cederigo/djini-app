@@ -1,4 +1,5 @@
 
+//auth
 export const SESSION_TOKEN_REQUEST = 'session-token-request'
 export const SESSION_TOKEN_SUCCESS = 'session-token-success'
 export const SESSION_TOKEN_FAILURE = 'sessoin-token-failure'
@@ -30,3 +31,8 @@ export const PROFILE_UPDATE_FAILURE = 'profile-update-failure'
 export const ON_FORM_FIELD_CHANGE = 'on-form-field-change'
 
 export const LOGOUT = 'logout'
+
+//social
+export const SYNC_FRIENDS_REQUEST = 'sync-friends-request'
+export const SYNC_FRIENDS_SUCCESS = 'sync-friends-success'
+export const SYNC_FRIENDS_FAILURE = 'sync-friends-failure'
