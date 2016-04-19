@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import {Actions} from 'react-native-router-flux'
 import Immutable from 'immutable';
 import React, {
   Component,
@@ -9,6 +10,9 @@ import React, {
 } from 'react-native';
 
 import * as authActions from '../reducers/auth/authActions'
+import * as wishActions from '../reducers/wish/wishActions'
+
+import ProfileForm from '../components/login/ProfileForm'
 
 const styles = StyleSheet.create({
   container: {
@@ -26,13 +30,18 @@ const styles = StyleSheet.create({
 })
 
 class Wishes extends Component {
-
+  
   render() {
     const {actions, globalState} = this.props
     const {currentUser} = globalState
     return (
         <View style={styles.container}>
           <Text>Willkommen {currentUser.name}</Text>
+          <TouchableOpacity
+            onPress={Actions.wish}
+            style={styles.button}>
+            <Text style={styles.buttonText}>Neuen Wunsch erfassen</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => { actions.logout()}}>

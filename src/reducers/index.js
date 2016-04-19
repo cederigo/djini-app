@@ -8,6 +8,7 @@
 import global from './global/globalReducer';
 import device from './device/deviceReducer';
 import auth from './auth/authReducer';
+import wish from './wish/wishReducer';
 
 import { combineReducers } from 'redux';
 
@@ -20,7 +21,8 @@ import { combineReducers } from 'redux';
 const rootReducer = combineReducers({
   global,
   device,
-  auth
+  auth,
+  wish
 });
 
 export default rootReducer;

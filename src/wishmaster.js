@@ -11,6 +11,7 @@ import App from './containers/App';
 import Login from './containers/Login';
 import Wishes from './containers/Wishes';
 import Friends from './containers/Friends';
+import Wish from './containers/Wish';
 
 /* Actions */
 import * as deviceActions from './reducers/device/deviceActions';
@@ -75,6 +76,8 @@ export default function native(platform) {
               <Scene key="app" component={App} title="Wishmaster" initial={true}/>
 
               <Scene key="login" panHandlers={null} component={Login} />
+
+              <Scene key="wish" component={Wish} title="Wunsch"/>
 
               <Scene key="home" panHandlers={null} tabs={true} hideNavBar={false} >
                 <Scene key="wishes" initial={true} component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
