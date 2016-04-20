@@ -9,7 +9,7 @@ class Contacts {
 
   _formatContact(raw) {
     return {
-      name: raw.givenName + ' ' + raw.familyName,
+      name: raw.givenName + (raw.familyName ? ' ' + raw.familyName : ''),
       phoneNumber: formatNumber(raw.phoneNumbers[0].number)
     }
   }
