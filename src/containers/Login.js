@@ -13,7 +13,7 @@ import React, {
 } from 'react-native';
 
 import * as authActions from '../reducers/auth/authActions'
-import {refreshContacts} from '../reducers/social/socialActions'
+import * as socialActions from '../reducers/social/socialActions'
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
 import ProfileForm from '../components/login/ProfileForm'
@@ -85,7 +85,7 @@ class Login extends Component {
     console.log('Login.render()')
 
     const {formName, error, isValid, fields} = this.props.authState
-    const {phoneNumberForm, birthdayForm, sendCode, login} = this.props.actions
+    const {phoneNumberForm, birthdayForm, sendCode, login, refreshContacts} = this.props.actions
 
     let form, onNext, nextText
 
@@ -148,7 +148,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(authActions, dispatch) };
+  return { actions: bindActionCreators({...authActions, ...socialActions}, dispatch) };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

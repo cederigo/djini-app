@@ -15,6 +15,12 @@ import {
 
 const initialState = new InitialState;
 
+const sortFriends = function (f1, f2) {
+  const n1 = f1.registered ? '0' + f1.name : f1.name
+  const n2 = f2.registered ? '0' + f2.name : f2.name
+  return n1 == n2 ? 0 : (n1 < n2 ? -1 : 1)
+}
+
 export default function socialReducer(state = initialState, {type, payload}) {
   switch(type) {
     case FRIENDS_REQUEST:
@@ -23,12 +29,13 @@ export default function socialReducer(state = initialState, {type, payload}) {
 
     case FRIENDS_SUCCESS:
       return state.set('isFetching', false)
-        .set('friends', Map(payload))
+        .set('friends', Map(payload).sort(sortFriends))
 
     case CONTACTS_SUCCESS: {
-      const friends = Map(payload)
+      const existingFriends = state.get('friends')
+      const friends = Map(payload).sort(sortFriends) //eager operation
       return state.set('isFetching', false)
-        .set('friends', friends.mergeDeep(state.get('friends')))
+        .set('friends', friends.mergeDeep(existingFriends))
     }
 
     case FRIENDS_FAILURE:
