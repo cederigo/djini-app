@@ -8,7 +8,9 @@ import {
 
   CONTACTS_REQUEST,
   CONTACTS_SUCCESS,
-  CONTACTS_FAILURE
+  CONTACTS_FAILURE,
+
+  SEARCH_FRIENDS
 } from '../../lib/constants'
 
 const initialState = new InitialState;
@@ -33,6 +35,9 @@ export default function socialReducer(state = initialState, {type, payload}) {
     case CONTACTS_FAILURE:
       return state.set('isFetching', false)
         .set('error', payload)
+
+    case SEARCH_FRIENDS:
+        return state.set('filterText', payload)
   
   }
   return state;

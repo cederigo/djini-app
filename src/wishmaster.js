@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { AppRegistry, View, PropTypes, Text} from 'react-native';
+import React, { AppRegistry, View, StatusBar, Text} from 'react-native';
 import RNRF, { Scene } from 'react-native-router-flux';
 import { Provider, connect } from 'react-redux';
 import configureStore from './lib/configureStore';

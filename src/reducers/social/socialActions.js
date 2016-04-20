@@ -5,7 +5,9 @@ import {
 
   CONTACTS_REQUEST,
   CONTACTS_SUCCESS,
-  CONTACTS_FAILURE
+  CONTACTS_FAILURE,
+
+  SEARCH_FRIENDS
 } from '../../lib/constants'
 
 import contacts from '../../lib/contacts'
@@ -79,5 +81,12 @@ export function refreshContacts() {
       .then((friends) => dispatch(contactsSuccess(friends)))
       .then(() => db.saveFriends(getState().social.friends))
       .catch((error) => dispatch(contactsFailure(error)))
+  }
+}
+
+export function searchFriends(text) {
+  return {
+    type: SEARCH_FRIENDS,
+    payload: text
   }
 }
