@@ -1,4 +1,6 @@
-export const SAVE_WISH = 'save-wish'
+export const SAVE_WISH_REQUEST = 'save-wish-request'
+export const SAVE_WISH_REQUEST_SUCCESS = 'save-wish-request-success'
+export const SAVE_WISH_REQUEST_FAILURE = 'save-wish-request-failure'
 export const ON_WISH_FIELD_CHANGE = 'on-wish-field-change'
 
 export const SESSION_TOKEN_REQUEST = 'session-token-request'

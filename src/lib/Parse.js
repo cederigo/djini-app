@@ -142,6 +142,31 @@ export default class Parse {
       .then(json => json.result)
   }
   /**
+   * ### createObject
+   * Create Parse Object
+   *
+   * @param className the class of the object
+   * @param data object: {}
+   */
+  createObject(className, data) {
+    return this._fetch({ method: 'POST', url: '/classes/' + className, body: data })
+      .then(this._handleResponse)
+      .then(json => json.result)
+  }
+    /**
+   * ### updateObject
+   * Update Parse Object
+   *
+   * @param className the class of the object
+   * @param parseId the id of the object on parse
+   * @param data object: {}
+   */
+  updateObject(className, parseId, data) {
+    return this._fetch({ method: 'PUT', url: '/classes/' + className + '/' + parseId, body: data })
+      .then(this._handleResponse)
+      .then(json => json.result)
+  }
+  /**
    * ### _fetch
    * A generic function that prepares the request to Parse.com
    */  
