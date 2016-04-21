@@ -1,20 +1,20 @@
-import {Map} from 'immutable';
+import {OrderedMap} from 'immutable';
 import {Alert} from 'react-native'
+import Share from 'react-native-share';
 import {
-  FRIENDS_REQUEST,
-  FRIENDS_SUCCESS,
-  FRIENDS_FAILURE,
+  SOCIAL_STATE_REQUEST,
+  SOCIAL_STATE_SUCCESS,
+  SOCIAL_STATE_FAILURE,
 
   CONTACTS_REQUEST,
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
 
-  SEARCH_FRIENDS,
-  UPDATE_FRIENDS,
-  SAVE_FRIENDS,
+  ON_SEARCH_FIELD_CHANGE,
+  SAVE_SOCIAL_STATE,
 
-  INVITE_FRIEND,
-  SHOW_FRIEND
+  INVITE_CONTACT,
+  SHOW_CONTACT
 } from '../../lib/constants'
 
 import contacts from '../../lib/contacts'
@@ -22,43 +22,35 @@ import Parse from '../../lib/Parse'
 import db from '../../lib/db'
 
 /*
- * Helpers
+ * Restore state from ./lib/db
  */
-const sortFriends = function (f1, f2) {
-  const now = Date.now()
-  const n1 = f1.accessedAt ? (' ' + (now - f1.accessedAt) + f1.name) : f1.name
-  const n2 = f2.accessedAt ? (' ' + (now - f2.accessedAt) + f2.name): f2.name
-  return n1 == n2 ? 0 : (n1 < n2 ? -1 : 1)
-}
-
-
-/*
- * Friends (local)
- */
-export function friendsRequest() {
+export function restoreStateRequest() {
   return {
-    type: FRIENDS_REQUEST
+    type: SOCIAL_STATE_REQUEST
   }
 }
-export function friendsSuccess(friends) {
+export function restoreStateSuccess(state) {
   return {
-    type: FRIENDS_SUCCESS,
-    payload: friends
+    type: SOCIAL_STATE_SUCCESS,
+    payload: state
   }
 }
-export function friendsFailure(error) {
+export function restoreStateFailure(error) {
   return {
-    type: FRIENDS_FAILURE,
+    type: SOCIAL_STATE_FAILURE,
     payload: error
   }
 }
-export function getFriends() {
+/**
+ * Funny name ;-)
+ */
+export function restoreSocialState() {
   return dispatch => {
-    dispatch(friendsRequest())
-    return db.getFriends()
-      .then((friends) => Map(friends).sort(sortFriends))
-      .then((friends) => dispatch(friendsSuccess(friends)))
-      .catch(error => dispatch(friendsFailure(error)))
+    dispatch(restoreStateRequest())
+    return db.getSocialState()
+      .then((state) => ({contacts: OrderedMap(state.contacts), favorites: OrderedMap(state.favorites)}))
+      .then((state) => dispatch(restoreStateSuccess(state)))
+      .catch(error => dispatch(restoreStateFailure(error)))
   }
 }
 
@@ -70,10 +62,10 @@ export function contactsRequest() {
     type: CONTACTS_REQUEST
   }
 }
-export function contactsSuccess(friends) {
+export function contactsSuccess(contacts) {
   return {
     type: CONTACTS_SUCCESS,
-    payload: friends
+    payload: contacts
   }
 }
 export function contactsFailure(error) {
@@ -88,72 +80,71 @@ export function contactsFailure(error) {
  * Read local contacts from phonebook (name & phoneNumber)
  * and merge with users on server.
  *
- * The following attributes are added for a matching contact <-> user
+ * For each matching <contact, user> pair the server adds these attributes:
  *  - id 
  *  - birthday
- *
- *  Merged contacts are called `friends` ;-)
  */
 export function refreshContacts() {
   return (dispatch) => {
     dispatch(contactsRequest())
     return contacts.getAll()
       .then((contacts) => new Parse().runCloudFunction('mergeWithUsers', {contacts}))
-      .then((friends) => dispatch(contactsSuccess(Map(friends))))
-      .then(() => dispatch(updateFriends()))
+      .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
+      .then((contacts) => dispatch(contactsSuccess(contacts)))
+      .then(() => dispatch(saveState()))
       .catch((error) => dispatch(contactsFailure(error)))
   }
 }
 
-export function updateFriends() {
+export function saveState() {
   return (dispatch, getState) => {
     const state = getState().social
 
-    const updatedFriends = state.friends.sort(sortFriends)
-    dispatch({type: UPDATE_FRIENDS, payload: updatedFriends})
-
-    //dont save to often
+    //dont save too often
     if ((Date.now() - state.lastSavedAt) < 60 * 1000) {
       return;
     }
 
-    dispatch({type: SAVE_FRIENDS, payload: Date.now()})
-    db.saveFriends(updatedFriends)
+    dispatch({type: SAVE_SOCIAL_STATE, payload: Date.now()})
+    db.saveSocialState({contacts: state.contacts.entrySeq(), favorites: state.favorites.entrySeq()})
       .catch(e => {
-        console.log('Could not save friends. error: ', e)
+        console.log('Could not save state. error: ', e)
       })
   }
 }
 
-export function searchFriends(text) {
+export function onSearchFieldChange(text) {
   return {
-    type: SEARCH_FRIENDS,
+    type: ON_SEARCH_FIELD_CHANGE,
     payload: text
   }
 }
 
-export function inviteFriend(friend) {
+export function invite(contact) {
   return dispatch => {
-    const timestamp = Date.now()
+    const inviteText = 'Ich möchte dir etwas schenken, weis aber nicht was ;-) https://wishmaster.ch/download'
 
-    dispatch({type: INVITE_FRIEND, payload: {phoneNumber: friend.phoneNumber, timestamp}})
-    //TODO: dispatch global invite activity action
-    //TODO: Share dialog to invite a friend
-
-    Alert.alert('Invite', 'Invite ' + friend.name)
-    dispatch(updateFriends())
+    dispatch({type: INVITE_CONTACT, payload: contact})
+    //TODO: dispatch global invite activity action (to server too)
+    dispatch(saveState())
+    Share.open({
+      share_text: inviteText,
+      share_URL: inviteText,
+      title: inviteText 
+    },(e) => {
+      console.log(e);
+    });
   }
 }
 
-export function showFriend(friend) {
+export function show(contact) {
   return dispatch => {
-    const timestamp = Date.now()
 
-    dispatch({type: SHOW_FRIEND, payload: {phoneNumber: friend.phoneNumber, timestamp}})
+    dispatch({type: SHOW_CONTACT, payload: contact})
 
     //TODO: dispatch global invite activity action
-    Alert.alert('Show', 'View profile of ' + friend.name)
+    Alert.alert('Show', 'View profile of ' + contact.name)
 
-    dispatch(updateFriends())
+    dispatch(saveState())
   }
 }

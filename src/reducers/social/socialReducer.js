@@ -1,65 +1,72 @@
 import InitialState from './socialInitialState';
 
 import {
-  FRIENDS_REQUEST,
-  FRIENDS_SUCCESS,
-  FRIENDS_FAILURE,
+  SOCIAL_STATE_REQUEST,
+  SOCIAL_STATE_SUCCESS,
+  SOCIAL_STATE_FAILURE,
 
   CONTACTS_REQUEST,
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
 
-  SEARCH_FRIENDS,
-  UPDATE_FRIENDS,
-  SAVE_FRIENDS,
+  ON_SEARCH_FIELD_CHANGE,
+  SAVE_SOCIAL_STATE,
 
-  INVITE_FRIEND,
-  SHOW_FRIEND
+  INVITE_CONTACT,
+  SHOW_CONTACT
 } from '../../lib/constants'
 
 const initialState = new InitialState;
 
-
 export default function socialReducer(state = initialState, {type, payload}) {
   switch(type) {
-    case FRIENDS_REQUEST:
+    case SOCIAL_STATE_REQUEST:
     case CONTACTS_REQUEST:
       return state.set('isFetching', true)
 
-    case FRIENDS_SUCCESS:
+    case SOCIAL_STATE_SUCCESS: {
+      const {contacts, favorites} = payload
       return state.set('isFetching', false)
-        .set('friends', payload)
-
-    case UPDATE_FRIENDS: {
-      return state.set('friends', payload)
+        .set('contacts', contacts)
+        .set('favorites', favorites)
     }
 
-    case SAVE_FRIENDS: {
+    case SAVE_SOCIAL_STATE: {
       return state.set('lastSavedAt', payload)
     }
 
     case CONTACTS_SUCCESS: {
-      const existingFriends = state.get('friends')
-      const friends = payload
+      const contacts = payload
+      let favorites = state.get('favorites')
+      if (favorites.size) {
+        //duplicate data not so nice ...
+        favorites = favorites.filter(f => contacts.has(f.phoneNumber)) //handle deletions
+        favorites = favorites.map(f => contacts.get(f.phoneNumber))
+      }
       return state.set('isFetching', false)
-        .set('friends', friends.mergeDeep(existingFriends))
+        .set('contacts', contacts)
+        .set('favorites', favorites)
     }
 
-    case FRIENDS_FAILURE:
+    case SOCIAL_STATE_FAILURE:
     case CONTACTS_FAILURE:
       return state.set('isFetching', false)
         .set('error', payload)
 
-    case SEARCH_FRIENDS:
+    case ON_SEARCH_FIELD_CHANGE:
         return state.set('filterText', payload)
 
-    case SHOW_FRIEND:
-    case INVITE_FRIEND: {
-      const {phoneNumber, timestamp} = payload
-      return state.updateIn(['friends', phoneNumber], friend => {
-        friend.accessedAt = timestamp
-        return friend
-      })
+    case SHOW_CONTACT:
+    case INVITE_CONTACT: {
+      const contact = payload
+      let favorites = state.get('favorites')
+      return state
+        .set('favorites',
+          favorites
+            .set(contact.phoneNumber, contact)
+            .take(10)
+            .sortBy(f => f.name)
+        ) 
     }
   
   }

@@ -5,10 +5,9 @@ import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
 import React, {
   Component,
-  View, Text,
+  View,
   PropTypes,
   StyleSheet,
-  Alert,
   StatusBar,
   TextInput
 } from 'react-native';
@@ -53,27 +52,24 @@ class Friends extends Component {
 
   constructor(props) {
     super(props);
-    console.log('Friends.constructor() ')
   }
 
   render() {
-    console.log('Friends.render()')
     const {socialState, actions} = this.props
-    let {friends, filterText} = socialState
-    console.log('filterText: ', filterText)
+    let {contacts, favorites, filterText} = socialState
 
     return (
         <View style={styles.container}>
           <StatusBar translucent={true} />
           <View style={styles.toolbar}>
             <TextInput
-              onChangeText={(text) => actions.searchFriends(text)}
+              onChangeText={(text) => actions.onSearchFieldChange(text)}
               style={styles.searchBar}
               placeholder="Freunde suchen ..."
               value={filterText}
             />
           </View>
-          <FriendsList friends={friends} actions={actions} filterText={filterText}/>
+          <FriendsList friends={contacts} favorites={favorites} actions={actions} filterText={filterText}/>
         </View>
     )
   }

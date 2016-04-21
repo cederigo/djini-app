@@ -55,20 +55,22 @@ export default class FriendsList extends Component {
     super(props);
 
     const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 != r2
+      rowHasChanged: (r1, r2) => r1 != r2,
+      sectionHeaderHasChanged: (s1, s2) => s1 != s2
     })
 
     this._renderRow = this._renderRow.bind(this)
 
     this.state = {
-      dataSource: ds.cloneWithRows(this._getListViewData(this.props.friends, this.props.filterText))
+      dataSource: ds.cloneWithRowsAndSections(this._getListViewData(this.props))
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.filterText !== this.props.filterText) {
+    if (nextProps.filterText !== this.props.filterText 
+        || nextProps.favorites != this.props.favorites) {
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this._getListViewData(nextProps.friends, nextProps.filterText))
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(this._getListViewData(nextProps))
       })
       this.refs.listView.scrollTo({animated: false})
     }
@@ -83,9 +85,11 @@ export default class FriendsList extends Component {
         scrollRenderAheadDistance={2000}
         keyboardShouldPersistTaps={true}
         keyboardDismissMode="on-drag"
+        enableEmptySections={true}
         pageSize={5}
         renderRow={this._renderRow}
         renderSeparator={this._renderSeparator}
+        renderSectionHeader={this._renderSectionHeader}
       />
     )
   }
@@ -95,8 +99,12 @@ export default class FriendsList extends Component {
     return friend => r.test(friend.name)
   }
 
-  _getListViewData(friends, filterText = '') {
-    return filterText ? friends.filter(this._getFriendFilter(filterText)).toArray() : friends.toArray()
+  _getListViewData(props) {
+    const {filterText, favorites, friends} = props
+    return {
+      'Favoriten': filterText ? favorites.filter(this._getFriendFilter(filterText)).toArray() : favorites.toArray(),
+      'Kontakte': filterText ? friends.filter(this._getFriendFilter(filterText)).toArray() : friends.toArray()
+    }
   }
 
   _renderRow (friend) {
@@ -104,18 +112,26 @@ export default class FriendsList extends Component {
     const {actions} = this.props
 
     return (
-      <TouchableHighlight onPress={() => actions.showFriend(friend)}>
+      <TouchableHighlight onPress={() => actions.show(friend)}>
         <View style={styles.row}>
           <Text style={styles.text}>
             {friend.name}
           </Text>
           {friend.registered ? null : 
-            <TouchableOpacity style={styles.actions} onPress={() => actions.inviteFriend(friend)}>
+            <TouchableOpacity style={styles.actions} onPress={() => actions.invite(friend)}>
               <Text>Invite</Text>
             </TouchableOpacity>
           }
         </View>
       </TouchableHighlight>
+    );
+  }
+
+  _renderSectionHeader(data, sectionId) {
+    return (
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionHeaderText}>{sectionId}</Text>
+      </View>
     );
   }
 
@@ -127,6 +143,7 @@ export default class FriendsList extends Component {
 }
 
 FriendsList.propTypes = {
+  favorites: PropTypes.instanceOf(Immutable.OrderedMap).isRequired,
   friends: PropTypes.instanceOf(Immutable.OrderedMap).isRequired,
   actions: PropTypes.object.isRequired,
   filterText: PropTypes.string

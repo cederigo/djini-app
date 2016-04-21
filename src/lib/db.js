@@ -32,17 +32,18 @@ class Database {
     return AsyncStorage.removeItem('current-user');
   }
 
-  saveFriends(friends) {
-    return AsyncStorage.setItem('friends', JSON.stringify(friends))
+  saveSocialState(state) {
+    return AsyncStorage.setItem('social-state', JSON.stringify(state))
   }
 
-  getFriends() {
-    return AsyncStorage.getItem('friends')
-      .then(json => JSON.parse(json))
-  }
-
-  deleteFriends() {
-    return AsyncStorage.removeItem('friends');
+  getSocialState() {
+    return AsyncStorage.getItem('social-state')
+      .then(json => {
+        if (!json) {
+          throw('no data')
+        }
+        return JSON.parse(json)
+      })
   }
 }
 

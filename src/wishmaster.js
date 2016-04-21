@@ -67,7 +67,7 @@ export default function native(platform) {
       
       store.dispatch(deviceActions.setPlatform(platform))
       store.dispatch(deviceActions.setVersion(VERSION))
-      store.dispatch(socialActions.getFriends())
+      store.dispatch(socialActions.restoreSocialState())
 
       // setup the router table with App selected as the initial component
       return (
