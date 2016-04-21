@@ -67,8 +67,7 @@ export default class FriendsList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.filterText !== this.props.filterText 
-        || nextProps.favorites != this.props.favorites) {
+    if (nextProps.filterText !== this.props.filterText) {
       this.setState({
         dataSource: this.state.dataSource.cloneWithRowsAndSections(this._getListViewData(nextProps))
       })
@@ -85,7 +84,6 @@ export default class FriendsList extends Component {
         scrollRenderAheadDistance={2000}
         keyboardShouldPersistTaps={true}
         keyboardDismissMode="on-drag"
-        enableEmptySections={true}
         pageSize={5}
         renderRow={this._renderRow}
         renderSeparator={this._renderSeparator}
@@ -101,10 +99,12 @@ export default class FriendsList extends Component {
 
   _getListViewData(props) {
     const {filterText, favorites, friends} = props
-    return {
-      'Favoriten': filterText ? favorites.filter(this._getFriendFilter(filterText)).toArray() : favorites.toArray(),
-      'Kontakte': filterText ? friends.filter(this._getFriendFilter(filterText)).toArray() : friends.toArray()
+    const data = {}
+    if (favorites.size) {
+      data['Favoriten'] = filterText ? favorites.filter(this._getFriendFilter(filterText)).toArray() : favorites.toArray()
     }
+    data['Kontakte'] = filterText ? friends.filter(this._getFriendFilter(filterText)).toArray() : friends.toArray()
+    return data
   }
 
   _renderRow (friend) {

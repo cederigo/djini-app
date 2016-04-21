@@ -13,8 +13,7 @@ import {
   ON_SEARCH_FIELD_CHANGE,
   SAVE_SOCIAL_STATE,
 
-  INVITE_CONTACT,
-  SHOW_CONTACT
+  ADD_FAVORITE 
 } from '../../lib/constants'
 
 import contacts from '../../lib/contacts'
@@ -101,7 +100,7 @@ export function saveState() {
     const state = getState().social
 
     //dont save too often
-    if ((Date.now() - state.lastSavedAt) < 60 * 1000) {
+    if ((Date.now() - state.lastSavedAt) < 10 * 1000) {
       return;
     }
 
@@ -120,11 +119,18 @@ export function onSearchFieldChange(text) {
   }
 }
 
+export function addFavorite(contact) {
+  return {
+    type: ADD_FAVORITE,
+    payload: {contact, accessedAt: Date.now()}
+  
+  }
+}
+
 export function invite(contact) {
   return dispatch => {
     const inviteText = 'Ich möchte dir etwas schenken, weis aber nicht was ;-) https://wishmaster.ch/download'
-
-    dispatch({type: INVITE_CONTACT, payload: contact})
+    dispatch(addFavorite(contact))
     //TODO: dispatch global invite activity action (to server too)
     dispatch(saveState())
     Share.open({
@@ -139,8 +145,7 @@ export function invite(contact) {
 
 export function show(contact) {
   return dispatch => {
-
-    dispatch({type: SHOW_CONTACT, payload: contact})
+    dispatch(addFavorite(contact))
 
     //TODO: dispatch global invite activity action
     Alert.alert('Show', 'View profile of ' + contact.name)

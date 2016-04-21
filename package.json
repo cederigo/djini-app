@@ -3,13 +3,29 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest --no-cache",
+    "test:watch": "npm run test -- --watch"
+  },
+  "jest": {
+    "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "packager/react-packager/src/Activity/"
+    ],
+    "testFileExtensions": [
+      "js"
+    ],
+    "unmockedModulePathPatterns": [
+      "promise",
+      "source-map",
+      "immutable"
+    ]
   },
   "dependencies": {
     "google-libphonenumber": "^1.0.17",
     "immutable": "^3.7.6",
     "lodash": "^4.8.2",
-    "react": "^0.14.8",
     "react-native": "^0.24.0",
     "react-native-contacts": "^0.2.4",
     "react-native-router-flux": "^3.24.0",
@@ -19,5 +35,11 @@
     "redux": "^3.3.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.0.1"
+  },
+  "devDependencies": {
+    "babel-jest": "^11.0.2",
+    "babel-preset-react-native": "^1.5.7",
+    "jest-cli": "^11.0.2",
+    "react": "^0.14.8"
   }
 }

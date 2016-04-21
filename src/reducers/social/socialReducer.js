@@ -13,7 +13,8 @@ import {
   SAVE_SOCIAL_STATE,
 
   INVITE_CONTACT,
-  SHOW_CONTACT
+  SHOW_CONTACT,
+  ADD_FAVORITE
 } from '../../lib/constants'
 
 const initialState = new InitialState;
@@ -38,11 +39,9 @@ export default function socialReducer(state = initialState, {type, payload}) {
     case CONTACTS_SUCCESS: {
       const contacts = payload
       let favorites = state.get('favorites')
-      if (favorites.size) {
-        //duplicate data not so nice ...
-        favorites = favorites.filter(f => contacts.has(f.phoneNumber)) //handle deletions
-        favorites = favorites.map(f => contacts.get(f.phoneNumber))
-      }
+      //duplicate data not so nice ...
+      favorites = favorites.filter(f => contacts.has(f.phoneNumber)) //handle deletions
+      favorites = favorites.map(f => contacts.get(f.phoneNumber))
       return state.set('isFetching', false)
         .set('contacts', contacts)
         .set('favorites', favorites)
@@ -56,17 +55,22 @@ export default function socialReducer(state = initialState, {type, payload}) {
     case ON_SEARCH_FIELD_CHANGE:
         return state.set('filterText', payload)
 
+    case ADD_FAVORITE: {
+      const {contact, accessedAt} = payload
+        const favorites = state.get('favorites')
+      return state.set('favorites', 
+        favorites
+          .set(contact.phoneNumber, {...contact, accessedAt})
+          .sortBy(c => c.accessedAt)
+          .takeLast(10) //max 10 favorites
+          .sortBy(c => c.name)
+      )
+    }
+
     case SHOW_CONTACT:
     case INVITE_CONTACT: {
-      const contact = payload
-      let favorites = state.get('favorites')
+      //TODO: maybe mark as invited?
       return state
-        .set('favorites',
-          favorites
-            .set(contact.phoneNumber, contact)
-            .take(10)
-            .sortBy(f => f.name)
-        ) 
     }
   
   }
