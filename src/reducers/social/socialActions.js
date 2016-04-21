@@ -63,7 +63,7 @@ export function getFriends() {
 }
 
 /*
- * Contacts (Read from phonebook and enhance on server)
+ * Contacts (Read from phonebook and merge with users on server)
  */
 export function contactsRequest() {
   return {
@@ -85,18 +85,20 @@ export function contactsFailure(error) {
 /**
  * refresh Contacts
  *
- * Given our local/phonebook contact records  (name & phoneNumber)
- * contact the server and enhance each record with the following attributes:
- *  - registered (Is the contact a registered user)
+ * Read local contacts from phonebook (name & phoneNumber)
+ * and merge with users on server.
+ *
+ * The following attributes are added for a matching contact <-> user
+ *  - id 
  *  - birthday
  *
- *  enhanced contact records are called `friends` ;-)
+ *  Merged contacts are called `friends` ;-)
  */
 export function refreshContacts() {
   return (dispatch) => {
     dispatch(contactsRequest())
     return contacts.getAll()
-      .then((contacts) => new Parse().runCloudFunction('enhanceContacts', {contacts}))
+      .then((contacts) => new Parse().runCloudFunction('mergeWithUsers', {contacts}))
       .then((friends) => dispatch(contactsSuccess(Map(friends))))
       .then(() => dispatch(updateFriends()))
       .catch((error) => dispatch(contactsFailure(error)))
