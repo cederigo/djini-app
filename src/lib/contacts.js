@@ -8,14 +8,17 @@ import {formatNumber} from './phoneUtil'
 class Contacts {
 
   _formatContact(raw) {
+    const firstName = raw.givenName ? raw.givenName : ''
+    const lastName = raw.familyName ? raw.familyName : ''
     return {
-      name: raw.givenName + (raw.familyName ? ' ' + raw.familyName : ''),
+      name: firstName + ' ' + lastName,
       phoneNumber: formatNumber(raw.phoneNumbers[0].number)
     }
   }
 
   _isValidContact(raw) {
     return raw.phoneNumbers && raw.phoneNumbers.length
+      && (raw.givenName || raw.familyName)
   }
 
   getAll() {

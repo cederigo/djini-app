@@ -56,10 +56,6 @@ class Friends extends Component {
     console.log('Friends.constructor() ')
   }
 
-  _pressRow (friend) {
-    Alert.alert('Friend pressed:', friend.name);
-  }
-
   render() {
     console.log('Friends.render()')
     const {socialState, actions} = this.props
@@ -77,7 +73,7 @@ class Friends extends Component {
               value={filterText}
             />
           </View>
-          <FriendsList friends={friends} onPress={this._pressRow} filterText={filterText}/>
+          <FriendsList friends={friends} actions={actions} filterText={filterText}/>
         </View>
     )
   }

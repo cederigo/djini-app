@@ -1,4 +1,3 @@
-import {Map} from 'immutable';
 import InitialState from './socialInitialState';
 
 import {
@@ -10,16 +9,16 @@ import {
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
 
-  SEARCH_FRIENDS
+  SEARCH_FRIENDS,
+  UPDATE_FRIENDS,
+  SAVE_FRIENDS,
+
+  INVITE_FRIEND,
+  SHOW_FRIEND
 } from '../../lib/constants'
 
 const initialState = new InitialState;
 
-const sortFriends = function (f1, f2) {
-  const n1 = f1.registered ? '0' + f1.name : f1.name
-  const n2 = f2.registered ? '0' + f2.name : f2.name
-  return n1 == n2 ? 0 : (n1 < n2 ? -1 : 1)
-}
 
 export default function socialReducer(state = initialState, {type, payload}) {
   switch(type) {
@@ -29,11 +28,19 @@ export default function socialReducer(state = initialState, {type, payload}) {
 
     case FRIENDS_SUCCESS:
       return state.set('isFetching', false)
-        .set('friends', Map(payload).sort(sortFriends))
+        .set('friends', payload)
+
+    case UPDATE_FRIENDS: {
+      return state.set('friends', payload)
+    }
+
+    case SAVE_FRIENDS: {
+      return state.set('lastSavedAt', payload)
+    }
 
     case CONTACTS_SUCCESS: {
       const existingFriends = state.get('friends')
-      const friends = Map(payload).sort(sortFriends) //eager operation
+      const friends = payload
       return state.set('isFetching', false)
         .set('friends', friends.mergeDeep(existingFriends))
     }
@@ -45,6 +52,15 @@ export default function socialReducer(state = initialState, {type, payload}) {
 
     case SEARCH_FRIENDS:
         return state.set('filterText', payload)
+
+    case SHOW_FRIEND:
+    case INVITE_FRIEND: {
+      const {phoneNumber, timestamp} = payload
+      return state.updateIn(['friends', phoneNumber], friend => {
+        friend.accessedAt = timestamp
+        return friend
+      })
+    }
   
   }
   return state;

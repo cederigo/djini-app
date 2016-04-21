@@ -6,6 +6,7 @@ import React, {
   View,
   ListView,
   TouchableHighlight,
+  TouchableOpacity,
   Text
 } from 'react-native';
 
@@ -80,12 +81,13 @@ export default class FriendsList extends Component {
         style={styles.container}
         dataSource={this.state.dataSource}
         scrollRenderAheadDistance={2000}
+        keyboardShouldPersistTaps={true}
+        keyboardDismissMode="on-drag"
         pageSize={5}
         renderRow={this._renderRow}
         renderSeparator={this._renderSeparator}
       />
     )
-
   }
 
   _getFriendFilter(filterText) {
@@ -98,16 +100,19 @@ export default class FriendsList extends Component {
   }
 
   _renderRow (friend) {
+
+    const {actions} = this.props
+
     return (
-      <TouchableHighlight onPress={() => this.props.onPress(friend)}>
+      <TouchableHighlight onPress={() => actions.showFriend(friend)}>
         <View style={styles.row}>
           <Text style={styles.text}>
             {friend.name}
           </Text>
           {friend.registered ? null : 
-            <View style={styles.actions}>
+            <TouchableOpacity style={styles.actions} onPress={() => actions.inviteFriend(friend)}>
               <Text>Invite</Text>
-            </View>
+            </TouchableOpacity>
           }
         </View>
       </TouchableHighlight>
@@ -123,6 +128,6 @@ export default class FriendsList extends Component {
 
 FriendsList.propTypes = {
   friends: PropTypes.instanceOf(Immutable.OrderedMap).isRequired,
-  onPress: PropTypes.func.isRequired,
+  actions: PropTypes.object.isRequired,
   filterText: PropTypes.string
 }
