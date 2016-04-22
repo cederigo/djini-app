@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import React, {
   Platform,
-  Alert,
   Component,
   TouchableOpacity,
   View,
@@ -14,6 +13,7 @@ import React, {
 } from 'react-native';
 
 import * as authActions from '../reducers/auth/authActions'
+import * as socialActions from '../reducers/social/socialActions'
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
 import ProfileForm from '../components/login/ProfileForm'
@@ -26,12 +26,28 @@ import {
 } from '../lib/constants'
 
 
-const styles = StyleSheet.create({
+const formStyles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'flex-start',
     backgroundColor: 'white',
-    padding: 10,
-    alignItems: 'flex-start'
+    padding: 10
+  },
+  text: {},
+  icon: {
+    alignSelf: 'center',
+    marginBottom: 30
+  },
+  input: {
+    marginLeft: Platform.OS === 'android' ? -5 : 0,
+    height: 50,
+    marginTop: 10
+  }
+})
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
   },
   navbar: {
     marginTop: 20,
@@ -45,19 +61,8 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 17,
     fontWeight: '500'
-  },
-  text: {},
-  icon: {
-    alignSelf: 'center',
-    marginBottom: 30
-  },
-
-  input: {
-    marginLeft: Platform.OS === 'android' ? -5 : 0,
-    height: 50,
-    marginTop: 10
   }
-});
+})
 
 class NavButton extends React.Component {
   render() {
@@ -80,7 +85,7 @@ class Login extends Component {
     console.log('Login.render()')
 
     const {formName, error, isValid, fields} = this.props.authState
-    const {phoneNumberForm, birthdayForm, sendCode, login} = this.props.actions
+    const {phoneNumberForm, birthdayForm, sendCode, login, refreshContacts} = this.props.actions
 
     let form, onNext, nextText
 
@@ -88,17 +93,20 @@ class Login extends Component {
       case LOGIN_PROFILE_FORM: /* 1. Screen */
         onNext = () => birthdayForm()
         nextText = "Weiter"
-        form = <ProfileForm {...this.props} styles={styles} />
+        form = <ProfileForm {...this.props} styles={formStyles} />
         break
       case LOGIN_BIRTHDAY_FORM: /* 2. Screen */
         onNext = () => phoneNumberForm()
         nextText = "Weiter"
-        form = <BirthdayForm {...this.props} styles={styles} />
+        form = <BirthdayForm {...this.props} styles={formStyles} />
         break
       case LOGIN_PHONENUMBER_FORM: /* 3. Screen */
-        onNext = () => sendCode(fields.get('phoneNumberFormatted'))
+        onNext = () => {
+          refreshContacts() //permission dialog (IOS)
+          sendCode(fields.get('phoneNumberFormatted'))
+        }
         nextText = "Code senden"
-        form = <PhoneNumberForm {...this.props} styles={styles} onNext={isValid ? onNext: null}/>
+        form = <PhoneNumberForm {...this.props} styles={formStyles} onNext={isValid ? onNext: null}/>
         break;
       case LOGIN_VERIFICATIONCODE_FORM: /* 4. Screen */
         onNext = () => {
@@ -110,13 +118,12 @@ class Login extends Component {
           )
         }
         nextText = "Login"
-        form = <VerificationCodeForm {...this.props} styles={styles} error={error} onNext={isValid ? onNext : null}/>
+        form = <VerificationCodeForm {...this.props} styles={formStyles} error={error} onNext={isValid ? onNext : null}/>
         break;
     }
 
     return (
-      <View style={{flex: 1}}>
-
+      <View style={styles.container}>
         <StatusBar translucent={true} />
 
         <View style={styles.navbar}>
@@ -141,7 +148,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(authActions, dispatch) };
+  return { actions: bindActionCreators({...authActions, ...socialActions}, dispatch) };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

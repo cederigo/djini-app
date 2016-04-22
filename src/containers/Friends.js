@@ -1,41 +1,93 @@
+/* @flow */
+
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
 import React, {
   Component,
-  View, Text,
+  View,
   PropTypes,
-  StyleSheet
+  StyleSheet,
+  StatusBar,
+  TextInput
 } from 'react-native';
+
+import FriendsList from '../components/FriendsList'
+import * as socialActions from '../reducers/social/socialActions'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 50
+  },
+  toolbar: {
+    marginTop: 20,
+    padding: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#CDCDCD'
+  },
+  searchBar: {
+    height: 50
+  },
+  list: {
     backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center'
+    flex: 1
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#F6F6F6'
+  },
+  rowText: {
+    flex: 1
+  },
+  rowActions: {
+    width: 50,
+    backgroundColor: 'red'
   }
 })
 
 class Friends extends Component {
 
+  constructor(props) {
+    super(props);
+  }
+
   render() {
+    const {socialState, actions} = this.props
+    let {contacts, favorites, filterText} = socialState
+
     return (
         <View style={styles.container}>
-          <Text>Meine Freunde</Text>
+          <StatusBar translucent={true} />
+          <View style={styles.toolbar}>
+            <TextInput
+              onChangeText={(text) => actions.onSearchFieldChange(text)}
+              style={styles.searchBar}
+              placeholder="Freunde suchen ..."
+              value={filterText}
+            />
+          </View>
+          <FriendsList friends={contacts} favorites={favorites} actions={actions} filterText={filterText}/>
         </View>
     )
   }
 }
 
 Friends.propTypes = {
-  globalState: PropTypes.instanceOf(Immutable.Record).isRequired
+  socialState: PropTypes.instanceOf(Immutable.Record).isRequired,
+  actions: PropTypes.object.isRequired
 }
 
 /**
  * Redux boilerplate
  */
 function mapStateToProps(state) {
-  return { globalState: state.global};
+  return { socialState: state.social};
+}
+function mapDispatchToProps(dispatch) {
+  return { actions: bindActionCreators(socialActions, dispatch) };
 }
 
-export default connect(mapStateToProps, null)(Friends)
+export default connect(mapStateToProps, mapDispatchToProps)(Friends)

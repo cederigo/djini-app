@@ -1,4 +1,5 @@
 
+//auth
 export const SESSION_TOKEN_REQUEST = 'session-token-request'
 export const SESSION_TOKEN_SUCCESS = 'session-token-success'
 export const SESSION_TOKEN_FAILURE = 'sessoin-token-failure'
@@ -30,3 +31,18 @@ export const PROFILE_UPDATE_FAILURE = 'profile-update-failure'
 export const ON_FORM_FIELD_CHANGE = 'on-form-field-change'
 
 export const LOGOUT = 'logout'
+
+//social
+export const SOCIAL_STATE_REQUEST = 'social-state-request'
+export const SOCIAL_STATE_SUCCESS = 'social-state-success'
+export const SOCIAL_STATE_FAILURE = 'social-state-failure'
+
+export const CONTACTS_REQUEST = 'contacts-request'
+export const CONTACTS_SUCCESS = 'contacts-success'
+export const CONTACTS_FAILURE = 'contacts-failure'
+export const ON_SEARCH_FIELD_CHANGE = 'on-search-field-change'
+export const SAVE_SOCIAL_STATE = 'save-social-state'
+export const INVITE_CONTACT = 'invite-contact'
+export const ADD_FAVORITE = 'add-favorite'
+export const SHOW_CONTACT = 'show-contact'
+
