@@ -77,7 +77,7 @@ export default function native(platform) {
 
               <Scene key="app" component={App} title="Wishmaster" initial={true}/>
 
-              <Scene key="login" panHandlers={null} component={Login} />
+              <Scene key="login" type="replace" component={Login} />
 
               <Scene key="home" panHandlers={null} tabs={true} hideNavBar={false} >
                 <Scene key="wishes" initial={true} component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
