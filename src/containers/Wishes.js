@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {Actions} from 'react-native-router-flux'
-import {Immutable, OrderedMap} from 'immutable';
+import {Immutable, List} from 'immutable';
 import React, {
   Component, ListView,
   View, Text, TouchableOpacity,
@@ -56,7 +56,7 @@ class Wishes extends Component {
       console.log(response);
       self.setState({
         isFetching: false,
-        wishes: OrderedMap(response)
+        wishes: List(response)
       });
     }, (error) => {
       console.log(error);
@@ -74,8 +74,8 @@ class Wishes extends Component {
     } else {
       if (this.state.wishes.size > 0) {
         console.log(this.state.wishes);
-        // wishList = <WishList wishes={this.state.wishes}/>
-        wishList = <View style={styles.container}><Text>Viele Wünsche sind geladen! {this.state.wishes.size}</Text></View>
+        wishList = <WishList wishes={this.state.wishes}/>
+        //wishList = <View style={styles.container}><Text>Viele Wünsche sind geladen! {this.state.wishes.size}</Text></View>
       } else {
         wishList = <View style={styles.container}><Text>Keine Wünsche sind geladen!</Text></View>
       }

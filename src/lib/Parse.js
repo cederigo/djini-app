@@ -176,8 +176,8 @@ export default class Parse {
   getObjects(className, constraints) {
     console.log('Parse.getObjects');
     const params = encodeURIComponent(constraints);
-    console.log('url: ' + this.API_BASE_URL + '/classes/' + className + '/' + params);
-    // TODO: Fix params
+    console.log('url: ' + this.API_BASE_URL + '/classes/' + className + '/');
+    // TODO: Use params
     return this._fetch({ method: 'GET', url: '/classes/' + className + '/'})
       .then(this._handleResponse)
       .then(json => json.results);
