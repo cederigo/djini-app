@@ -22,6 +22,8 @@ import deviceInitialState from './reducers/device/deviceInitialState';
 import globalInitialState from './reducers/global/globalInitialState';
 import authInitialState from './reducers/auth/authInitialState';
 import socialInitialState from './reducers/social/socialInitialState';
+import wishInitialState from './reducers/wish/wishInitialState';
+import wishesInitialState from './reducers/wishes/wishesInitialState';
 
 const VERSION='0.0.1';
 
@@ -30,7 +32,9 @@ function getInitialState() {
     global: new globalInitialState,
     device: new deviceInitialState,
     auth: new authInitialState,
-    social: new socialInitialState
+    social: new socialInitialState,
+    wish: new wishInitialState,
+    wishes: new wishesInitialState
   };
   return _initState;
 }

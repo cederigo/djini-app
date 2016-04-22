@@ -1,18 +1,21 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {Actions} from 'react-native-router-flux'
-import Immutable from 'immutable';
+import {Immutable, OrderedMap} from 'immutable';
 import React, {
-  Component,
+  Component, ListView,
   View, Text, TouchableOpacity,
-  PropTypes,
+  PropTypes, StatusBar,
   StyleSheet
 } from 'react-native';
 
-import * as authActions from '../reducers/auth/authActions'
-import * as wishActions from '../reducers/wish/wishActions'
+import * as wishesActions from '../reducers/wishes/wishesActions'
+import WishList from '../components/WishList'
 
-import ProfileForm from '../components/login/ProfileForm'
+import wishesInitialState from '../reducers/wishes/wishesInitialState'
+
+/* Parse */
+import Parse from '../lib/Parse'
 
 const styles = StyleSheet.create({
   container: {
@@ -31,29 +34,64 @@ const styles = StyleSheet.create({
 
 class Wishes extends Component {
   
+  constructor(props) {
+    super(props);
+    this.state = new wishesInitialState;
+  }
+  
+  componentDidMount() {
+    this.fetchWishes();  
+  }
+  
+  fetchWishes() {
+    this.setState({
+      isFetching: true
+    })
+    console.log('fetch wishes')
+    let self = this;
+    // use getState().global.currentUser.objectId
+    new Parse().getObjects('Wish', 'where={"user":{"__type":"Pointer","className":"_User","objectId":"' + 'qf9WmUpTd3' + '"}}')
+    .then((response) => {
+      console.log('response');
+      console.log(response);
+      self.setState({
+        isFetching: false,
+        wishes: OrderedMap(response)
+      });
+    }, (error) => {
+      console.log(error);
+      self.setState({
+        isFetching: false,
+        error: error
+      });
+    })
+  }
+  
   render() {
-    const {actions, globalState} = this.props
-    const {currentUser} = globalState
+    let wishList
+    if (this.state.isFetching) {
+      wishList = <View style={styles.container}><Text>Wünsche werden geladen</Text></View>
+    } else {
+      if (this.state.wishes.size > 0) {
+        console.log(this.state.wishes);
+        // wishList = <WishList wishes={this.state.wishes}/>
+        wishList = <View style={styles.container}><Text>Viele Wünsche sind geladen! {this.state.wishes.size}</Text></View>
+      } else {
+        wishList = <View style={styles.container}><Text>Keine Wünsche sind geladen!</Text></View>
+      }
+    }
+    
     return (
-        <View style={styles.container}>
-          <Text>Willkommen {currentUser.name}</Text>
-          <TouchableOpacity
-            onPress={Actions.wish}
-            style={styles.button}>
-            <Text style={styles.buttonText}>Neuen Wunsch erfassen</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => { actions.logout()}}>
-            <Text style={styles.buttonText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.container}>
+        <Text>Willkommen</Text>
+        {wishList} 
+      </View>
     )
   }
 }
 
 Wishes.propTypes = {
-  globalState: PropTypes.instanceOf(Immutable.Record).isRequired,
+  // wishesState: PropTypes.instanceOf(Immutable.Record).isRequired
   actions: PropTypes.object.isRequired
 }
 
@@ -61,10 +99,11 @@ Wishes.propTypes = {
  * Redux boilerplate
  */
 function mapStateToProps(state) {
-  return { globalState: state.global};
+  return { wishesState: state.wishes};
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(authActions, dispatch) };
+  return { actions: bindActionCreators(wishesActions, dispatch) };
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(Wishes)

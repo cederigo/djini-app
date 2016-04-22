@@ -1,5 +1,5 @@
 /**
- * # authActions.js
+ * # wishActions.js
  * 
  * All the request actions have 3 variations, the request, a success
  * and a failure. They all follow the pattern that the request will
@@ -11,8 +11,8 @@
 import {
     ON_WISH_FIELD_CHANGE,
   SAVE_WISH_REQUEST, 
-  SAVE_WISH_REQUEST_FAILURE, 
-  SAVE_WISH_REQUEST_SUCCESS
+  SAVE_WISH_FAILURE, 
+  SAVE_WISH_SUCCESS
 } from '../../lib/constants'
 
 /**
@@ -42,12 +42,12 @@ export function saveWishRequest() {
 }
 export function saveWishRequestSuccess() {
   return {
-    type: SAVE_WISH_REQUEST_SUCCESS
+    type: SAVE_WISH_SUCCESS
   };
 }
 export function sessionTokenRequestFailure(error) {
   return {
-    type: SAVE_WISH_REQUEST_FAILURE,
+    type: SAVE_WISH_FAILURE,
     payload: error
   };
 }

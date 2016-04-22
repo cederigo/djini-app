@@ -1,6 +1,10 @@
+export const GET_USER_WISHES_REQUEST = 'get-user-wishes-request'
+export const GET_USER_WISHES_SUCCESS = 'get-user-wishes-success'
+export const GET_USER_WISHES_FAILURE = 'get-user-wishes-failure'
+
 export const SAVE_WISH_REQUEST = 'save-wish-request'
-export const SAVE_WISH_REQUEST_SUCCESS = 'save-wish-request-success'
-export const SAVE_WISH_REQUEST_FAILURE = 'save-wish-request-failure'
+export const SAVE_WISH_SUCCESS = 'save-wish-success'
+export const SAVE_WISH_FAILURE = 'save-wish-failure'
 export const ON_WISH_FIELD_CHANGE = 'on-wish-field-change'
 
 //auth

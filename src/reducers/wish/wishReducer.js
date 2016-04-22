@@ -4,7 +4,10 @@ import InitialState from './wishInitialState'
  * ## Wish actions
  */
 import {
-    SAVE_WISH_REQUEST, SAVE_WISH_REQUEST_SUCCESS, SAVE_WISH_REQUEST_FAILURE, ON_WISH_FIELD_CHANGE
+    SAVE_WISH_REQUEST, 
+    SAVE_WISH_SUCCESS, 
+    SAVE_WISH_FAILURE, 
+    ON_WISH_FIELD_CHANGE
 } from '../../lib/constants'
 
 const initialState = new InitialState;
@@ -17,9 +20,9 @@ export default function wishReducer(state = initialState, {type, payload}) {
     switch (type) {
         case SAVE_WISH_REQUEST:
             // TODO
-        case SAVE_WISH_REQUEST_SUCCESS:
+        case SAVE_WISH_SUCCESS:
             // TODO
-        case SAVE_WISH_REQUEST_FAILURE:
+        case SAVE_WISH_FAILURE:
             // TODO
             return state
 

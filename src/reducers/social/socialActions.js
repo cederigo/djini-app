@@ -129,7 +129,7 @@ export function addFavorite(contact) {
 
 export function invite(contact) {
   return dispatch => {
-    const inviteText = 'Ich möchte dir etwas schenken, weis aber nicht was ;-) https://wishmaster.ch/download'
+    const inviteText = 'Ich möchte dir etwas schenken, weiss aber nicht was ;-) https://wishmaster.ch/download'
     dispatch(addFavorite(contact))
     //TODO: dispatch global invite activity action (to server too)
     dispatch(saveState())

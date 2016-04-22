@@ -13,6 +13,7 @@ export default class AddWishForm extends Component {
   render() {
     const {wishState, actions, styles} = this.props
     const {title, description, url} = wishState.fields
+    
     return ( 
       <View style={styles.container}>
         <Text style={styles.text}>Erfasse einen Wunsch</Text>
@@ -46,7 +47,7 @@ export default class AddWishForm extends Component {
         />
         <TouchableOpacity
             style={styles.button}
-            onPress={() => { actions.saveWish(title, description, url)}}>
+            onPress={() => { actions.saveWish(title, description, url, user, owner)}}>
             <Text style={styles.buttonText}>Wunsch erfassen</Text>
         </TouchableOpacity>
       </View>
