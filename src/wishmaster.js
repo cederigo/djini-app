@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { AppRegistry, View, PropTypes, Text} from 'react-native';
+import React, { AppRegistry, View, StatusBar, Text} from 'react-native';
 import RNRF, { Scene } from 'react-native-router-flux';
 import { Provider, connect } from 'react-redux';
 import configureStore from './lib/configureStore';
@@ -15,19 +15,22 @@ import Wish from './containers/Wish';
 
 /* Actions */
 import * as deviceActions from './reducers/device/deviceActions';
+import * as socialActions from './reducers/social/socialActions';
 
 /* Initial States */
 import deviceInitialState from './reducers/device/deviceInitialState';
 import globalInitialState from './reducers/global/globalInitialState';
 import authInitialState from './reducers/auth/authInitialState';
+import socialInitialState from './reducers/social/socialInitialState';
 
 const VERSION='0.0.1';
 
 function getInitialState() {
   const _initState = {
-    global: (new globalInitialState),
-    device: (new deviceInitialState).set('isMobile',true),
-    auth: new authInitialState
+    global: new globalInitialState,
+    device: new deviceInitialState,
+    auth: new authInitialState,
+    social: new socialInitialState
   };
   return _initState;
 }
@@ -56,22 +59,22 @@ export default function native(platform) {
   let Wishmaster = React.createClass( {
     render() {
       
-      const store = configureStore(getInitialState());
-
-      //Connect w/ the Router
-      const Router = connect()(RNRF.Router);
-      
       // configureStore will combine reducers from snowflake and main application
       // it will then create the store based on aggregate state from all reducers
-      store.dispatch(deviceActions.setPlatform(platform));
-      store.dispatch(deviceActions.setVersion(VERSION));
+      const store = configureStore(getInitialState())
+
+      //Connect w/ the Router
+      const Router = connect()(RNRF.Router)
+      
+      store.dispatch(deviceActions.setPlatform(platform))
+      store.dispatch(deviceActions.setVersion(VERSION))
+      store.dispatch(socialActions.restoreSocialState())
 
       // setup the router table with App selected as the initial component
       return (
         <Provider store={store}>
           <Router hideNavBar={true}>
             <Scene key="root">
-
 
               <Scene key="app" component={App} title="Wishmaster" initial={true}/>
 
