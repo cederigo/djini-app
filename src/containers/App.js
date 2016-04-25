@@ -7,7 +7,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
 import React, { Component, StyleSheet, View, Text, PropTypes } from 'react-native';
-import * as authActions from '../reducers/auth/authActions';
+import {getSessionToken, getCurrentUser} from '../reducers/auth/authActions';
+import {refreshContacts} from '../reducers/social/socialActions';
 
 var styles = StyleSheet.create({
   container: {
@@ -24,9 +25,12 @@ var styles = StyleSheet.create({
 class App extends Component {
 
   componentDidMount() {
-    this.props.actions.getSessionToken()
-      .then(() => this.props.actions.getCurrentUser())
-      .then(() => Actions.home())
+    this.props.dispatch(getSessionToken())
+      .then(() => this.props.dispatch(getCurrentUser()))
+      .then(() => {
+        this.props.dispatch(refreshContacts())
+        Actions.home()
+      })
       .catch(() => {
         Actions.login()
       })
@@ -46,10 +50,4 @@ App.propTypes = {
   actions: PropTypes.object.isRequired
 }
 
-/**
- * ## Redux boilerplate
- */
-function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(authActions, dispatch) };
-}
-export default connect(null, mapDispatchToProps)(App);
+export default connect()(App);
