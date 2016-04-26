@@ -1,10 +1,17 @@
 'use strict';
 
-import React, { AppRegistry, View, StatusBar, Text} from 'react-native';
+import React, { AppRegistry, View, Text} from 'react-native';
 import RNRF, { Scene } from 'react-native-router-flux';
 import { Provider, connect } from 'react-redux';
 import configureStore from './lib/configureStore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Parse from 'parse/react-native';
+
+/* Config */
+import {
+  PARSE_APP_ID,
+  PARSE_BASE_URL,
+} from './lib/config'
 
 /*  Containers */
 import App from './containers/App';
@@ -13,8 +20,8 @@ import Wishes from './containers/Wishes';
 import Friends from './containers/Friends';
 
 /* Actions */
-import * as deviceActions from './reducers/device/deviceActions';
-import * as socialActions from './reducers/social/socialActions';
+import * as deviceActions from './actions/deviceActions';
+import * as socialActions from './actions/socialActions';
 
 /* Initial States */
 import deviceInitialState from './reducers/device/deviceInitialState';
@@ -55,8 +62,13 @@ class TabIcon extends React.Component {
  */
 export default function native(platform) {
 
+  //init parse sdk
+  Parse.initialize(PARSE_APP_ID);
+  Parse.serverURL = `${PARSE_BASE_URL}`;
+
   let Wishmaster = React.createClass( {
     render() {
+
       
       // configureStore will combine reducers from snowflake and main application
       // it will then create the store based on aggregate state from all reducers

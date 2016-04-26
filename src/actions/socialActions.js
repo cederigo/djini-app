@@ -14,11 +14,11 @@ import {
   SAVE_SOCIAL_STATE,
 
   ADD_FAVORITE 
-} from '../../lib/constants'
+} from '../lib/constants'
 
-import contacts from '../../lib/contacts'
-import Parse from '../../lib/Parse'
-import db from '../../lib/db'
+import contacts from '../lib/contacts'
+import Parse from 'parse/react-native'
+import db from '../lib/db'
 
 /*
  * Restore state from ./lib/db
@@ -87,7 +87,7 @@ export function refreshContacts() {
   return (dispatch) => {
     dispatch(contactsRequest())
     return contacts.getAll()
-      .then((contacts) => new Parse().runCloudFunction('mergeWithUsers', {contacts}))
+      .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
       .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
       .then((contacts) => dispatch(contactsSuccess(contacts)))
       .then(() => dispatch(saveState()))

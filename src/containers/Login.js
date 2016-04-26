@@ -1,19 +1,26 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
 import React, {
   Platform,
   Component,
   TouchableOpacity,
   View,
   Text,
-  PropTypes,
   StyleSheet,
-  StatusBar
+  StatusBar,
 } from 'react-native';
 
-import * as authActions from '../reducers/auth/authActions'
-import * as socialActions from '../reducers/social/socialActions'
+import {
+  profileForm,
+  birthdayForm,
+  phoneNumberForm,
+  login,
+  sendCode,
+  onFormFieldChange
+} from '../actions/authActions'
+
+import {
+  refreshContacts,
+} from '../actions/socialActions'
 
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
@@ -23,7 +30,7 @@ import {
   LOGIN_PHONENUMBER_FORM,
   LOGIN_VERIFICATIONCODE_FORM,
   LOGIN_PROFILE_FORM,
-  LOGIN_BIRTHDAY_FORM
+  LOGIN_BIRTHDAY_FORM,
 } from '../lib/constants'
 
 
@@ -32,30 +39,30 @@ const formStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     backgroundColor: 'white',
-    padding: 10
+    padding: 10,
   },
   text: {},
   icon: {
     alignSelf: 'center',
-    marginBottom: 30
+    marginBottom: 30,
   },
   input: {
     marginLeft: Platform.OS === 'android' ? -5 : 0,
     height: 50,
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
 })
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   navbar: {
     marginTop: 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#CDCDCD',
     flexDirection: 'row',
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   nextButton: {
     padding: 15,
@@ -65,12 +72,12 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 15,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   buttonText: {
     fontSize: 17,
-    fontWeight: '500'
-  }
+    fontWeight: '500',
+  },
 })
 
 class NavButton extends React.Component {
@@ -89,49 +96,68 @@ class NavButton extends React.Component {
 
 class Login extends Component {
 
+  props: {
+    authState: any
+  }
+
   render() {
 
-    console.log('Login.render()')
-
-    const {formName, isValid, fields, isFetching} = this.props.authState
-    const {profileForm, phoneNumberForm, birthdayForm, sendCode, login, refreshContacts} = this.props.actions
+    const {authState, dispatch} = this.props
+    const {formName, isValid, fields, isFetching} = authState
 
     let form, onNext, nextText, onBack
 
     switch(formName) {
       case LOGIN_PROFILE_FORM: /* 1. Screen */
         onBack = undefined
-        onNext = () => birthdayForm()
+        onNext = () => dispatch(birthdayForm())
         nextText = "Weiter"
-        form = <ProfileForm {...this.props} styles={formStyles} onNext={isValid? onNext: null} />
+        form = <ProfileForm 
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          styles={formStyles}
+          onNext={isValid? onNext: null}
+        />
         break
       case LOGIN_BIRTHDAY_FORM: /* 2. Screen */
-        onBack = () => profileForm()
-        onNext = () => phoneNumberForm()
+        onBack = () => dispatch(profileForm())
+        onNext = () => dispatch(phoneNumberForm())
         nextText = "Weiter"
-        form = <BirthdayForm {...this.props} styles={formStyles} />
+        form = <BirthdayForm 
+          styles={formStyles}
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+        />
         break
       case LOGIN_PHONENUMBER_FORM: /* 3. Screen */
-        onBack = () => birthdayForm()
+        onBack = () => dispatch(birthdayForm())
         onNext = () => {
-          refreshContacts() //permission dialog (IOS)
-          sendCode(fields.get('phoneNumberFormatted'))
+          dispatch(refreshContacts()) //permission dialog (IOS)
+          dispatch(sendCode(fields.get('phoneNumberFormatted')))
         }
         nextText = "Code senden"
-        form = <PhoneNumberForm {...this.props} styles={formStyles} onNext={isValid ? onNext: null}/>
+        form = <PhoneNumberForm 
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          styles={formStyles}
+          onNext={isValid ? onNext: null}/>
         break;
       case LOGIN_VERIFICATIONCODE_FORM: /* 4. Screen */
-        onBack = () => phoneNumberForm()
+        onBack = () => dispatch(phoneNumberForm())
         onNext = () => {
           const {name, email, birthday} = fields
-          login(
+          dispatch(login(
             fields.get('phoneNumberFormatted'), /* username */
             fields.get('code'), /* password */
             { name, email, birthday } /* additional fields */
-          )
+          ))
         }
         nextText = "Login"
-        form = <VerificationCodeForm {...this.props} styles={formStyles} onNext={isValid ? onNext : null}/>
+        form = <VerificationCodeForm 
+          styles={formStyles}
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          onNext={isValid ? onNext : null}/>
         break;
     }
 
@@ -153,20 +179,10 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired
-}
-
 /**
  * Redux boilerplate
  */
-function mapStateToProps(state) {
-  return { authState: state.auth};
+function select(state) {
+  return { authState: state.auth };
 }
-
-function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators({...authActions, ...socialActions}, dispatch) };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(select)(Login)

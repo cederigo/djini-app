@@ -1,14 +1,11 @@
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import Immutable from 'immutable';
 import React, {
   Component,
   View, Text, TouchableOpacity,
-  PropTypes,
   StyleSheet
 } from 'react-native';
 
-import * as authActions from '../reducers/auth/authActions'
+import {logout} from '../actions/authActions'
 
 const styles = StyleSheet.create({
   container: {
@@ -27,15 +24,18 @@ const styles = StyleSheet.create({
 
 class Wishes extends Component {
 
+  props: {
+    user: any
+  }
+
   render() {
-    const {actions, globalState} = this.props
-    const {currentUser} = globalState
+    const {user} = this.props
     return (
         <View style={styles.container}>
-          <Text>Willkommen {currentUser.name}</Text>
+          <Text>Willkommen {user.name}</Text>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => { actions.logout()}}>
+            onPress={() => { this.props.dispatch(logout())}}>
             <Text style={styles.buttonText}>Logout</Text>
           </TouchableOpacity>
         </View>
@@ -43,19 +43,11 @@ class Wishes extends Component {
   }
 }
 
-Wishes.propTypes = {
-  globalState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired
-}
-
 /**
  * Redux boilerplate
  */
-function mapStateToProps(state) {
-  return { globalState: state.global};
+function select(state) {
+  return { user: state.global.currentUser};
 }
 
-function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(authActions, dispatch) };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Wishes)
+export default connect(select)(Wishes)

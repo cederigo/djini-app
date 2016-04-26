@@ -1,13 +1,4 @@
 
-//auth
-export const SESSION_TOKEN_REQUEST = 'session-token-request'
-export const SESSION_TOKEN_SUCCESS = 'session-token-success'
-export const SESSION_TOKEN_FAILURE = 'sessoin-token-failure'
-
-export const CURRENT_USER_REQUEST = 'current-user-request'
-export const CURRENT_USER_SUCCESS = 'current-user-success'
-export const CURRENT_USER_FAILURE = 'current-user-failure'
-
 export const SET_PLATFORM = 'set-platform'
 export const SET_VERSION = 'set-version'
 
@@ -45,4 +36,3 @@ export const SAVE_SOCIAL_STATE = 'save-social-state'
 export const INVITE_CONTACT = 'invite-contact'
 export const ADD_FAVORITE = 'add-favorite'
 export const SHOW_CONTACT = 'show-contact'
-

@@ -3,12 +3,19 @@
  *  Display startup screen and navigate according to auth state
  */
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
-import React, { Component, StyleSheet, View, Text, PropTypes } from 'react-native';
-import {getSessionToken, getCurrentUser} from '../reducers/auth/authActions';
-import {refreshContacts} from '../reducers/social/socialActions';
+import Parse from 'parse/react-native'
+import React, { 
+  Component,
+  StyleSheet,
+  View,
+  Text,
+} from 'react-native';
+
+/* actions */
+import {loginSuccess, loginFailure} from '../actions/authActions';
+import {refreshContacts} from '../actions/socialActions';
 
 var styles = StyleSheet.create({
   container: {
@@ -25,29 +32,28 @@ var styles = StyleSheet.create({
 class App extends Component {
 
   componentDidMount() {
-    this.props.dispatch(getSessionToken())
-      .then(() => this.props.dispatch(getCurrentUser()))
-      .then(() => {
-        this.props.dispatch(refreshContacts())
-        Actions.home()
+    const {dispatch} = this.props
+    Parse.User.currentAsync()
+      .then((parseUser) => {
+        if (!parseUser) {
+          throw ('User not logged in')
+        }
+        dispatch(refreshContacts())
+        dispatch(loginSuccess(parseUser))
       })
-      .catch(() => {
+      .catch((error) => {
+        dispatch(loginFailure(error))
         Actions.login()
       })
   }
 
   render() {
-    console.log('App.render()')
     return(
       <View style={ styles.container }>
         <Text style={ styles.summary }>Wishmaster</Text>
       </View>
     );
   }
-}
-
-App.propTypes = {
-  actions: PropTypes.object.isRequired
 }
 
 export default connect()(App);
