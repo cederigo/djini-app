@@ -5,6 +5,13 @@ import RNRF, { Scene } from 'react-native-router-flux';
 import { Provider, connect } from 'react-redux';
 import configureStore from './lib/configureStore';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Parse from 'parse/react-native';
+
+/* Config */
+import {
+  PARSE_APP_ID,
+  PARSE_BASE_URL
+} from './lib/config'
 
 /*  Containers */
 import App from './containers/App';
@@ -59,6 +66,9 @@ class TabIcon extends React.Component {
  *
  */
 export default function native(platform) {
+
+  Parse.initialize(PARSE_APP_ID);
+  Parse.serverURL = `${PARSE_BASE_URL}`;
 
   let Wishmaster = React.createClass( {
     render() {

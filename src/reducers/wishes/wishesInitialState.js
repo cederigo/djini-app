@@ -1,4 +1,4 @@
-import {Record, List} from 'immutable';
+import {Record, List} from 'immutable'
 
 var InitialState = Record({
     isFetching: false,
@@ -6,4 +6,4 @@ var InitialState = Record({
     wishes: List()
 })
 
-export default InitialState;
+export default InitialState

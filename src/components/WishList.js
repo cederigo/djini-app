@@ -78,14 +78,17 @@ export default class WishList extends Component {
   }
 
   _renderRow (wish) {
+    console.log(wish)
     return (
-      <Text style={styles.text}>
-        {wish.title}
-      </Text>
+      <TouchableOpacity>
+        <Text style={styles.text}>
+          {wish.get('title')}
+        </Text>
+       </TouchableOpacity>
     );
   }
 }
 
 WishList.propTypes = {
-  wishes: PropTypes.instanceOf(Immutable.OrderedMap).isRequired
+  wishes: PropTypes.instanceOf(Immutable.List).isRequired
 }

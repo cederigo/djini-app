@@ -12,13 +12,22 @@ import {
   GET_USER_WISHES_REQUEST,
   GET_USER_WISHES_SUCCESS, 
   GET_USER_WISHES_FAILURE 
-} from '../../lib/constants'
+} from '../lib/constants'
 
 /**
  * Project requirements
  */
-import Parse from '../../lib/Parse'
+import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
+import {Immutable, List, Record} from 'immutable'
+
+const Wish = Record({
+  title: '',
+  url: '',
+  description: '',
+  userId: '',
+  ownerId: ''
+})
 
 /*
  * Get user wishes
@@ -26,43 +35,53 @@ import {Actions} from 'react-native-router-flux'
 export function getUserWishesRequest() {
   return {
     type: GET_USER_WISHES_REQUEST
-  };
+  }
 }
 
 export function getUserWishesSuccess(wishes) {
+  console.log(wishes)
   return {
     type: GET_USER_WISHES_SUCCESS,
     payload: wishes
-  };
+  }
 }
 
 export function getUserWishesFailure() {
   return {
     type: GET_USER_WISHES_FAILURE
-  };
+  }
 }
 
 export function getUserWishes() {
-  console.log('wishesActions.getUserWishes');
+  console.log('get user wishes')
+  let wishes
   return (dispatch, getState) => {
     dispatch(getUserWishesRequest())
-    
-    return new Parse().getObjects('Wish', {   
-      where: {
-        owner: {
-          __type: 'Pointer',
-          className: '_User',
-          objectId: getState().global.currentUser.objectId
-        }
-      } 
-    })
+    let query = new Parse.Query('Wish')
+    const userPointer = {
+      __type: 'Pointer',
+      className: '_User',
+      objectId: getState().global.currentUser.objectId
+    }
+    query.equalTo('user', userPointer)
+    return query.find()
     .then((response) => {
-      dispatch(getUserWishesSuccess(response))
-      //return response
+      wishes = List(response.map((wish) => {
+        console.log('wish.attributes')
+        console.log(wish.attributes)
+        return new Wish({
+          title: wish.attributes.title,
+          url: wish.attributes.url,
+          description: wish.attributes.description,
+          userId: '', // TODO
+          ownerId: '' // TODO
+        })
+      }))
+      console.log(wishes)
+      dispatch(getUserWishesSuccess(wishes))
     })
     .catch(error => {
       dispatch(getUserWishesFailure(error))
-      //return Promise.reject(error)
     })
   }
 }
