@@ -15,7 +15,8 @@ import {
   SAVE_WISH_SUCCESS,
   RESET_WISH,
   EDIT_WISH,
-  WISH_SET_USERID
+  WISH_SET_USERID,
+  SET_PRIVATE
 } from '../lib/constants'
 
 /**
@@ -64,7 +65,13 @@ export function newWish(userId) {
     Actions.wish()
   }
 }
-
+/*Set Private*/
+export function setPrivate(value) {
+  return {
+    type: SET_PRIVATE,
+    payload: value
+  }
+}
 /*
  * Save Wish
  */

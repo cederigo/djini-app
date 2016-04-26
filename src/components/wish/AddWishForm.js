@@ -3,6 +3,7 @@ import React, {
   Component,
   PropTypes,
   View,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity
@@ -64,6 +65,9 @@ export default class AddWishForm extends Component {
           autoCorrect={false}
           value={wish.url}
         />
+        <Switch
+          onValueChange={(value) => setPrivate(value)}
+          value={wish.private} />
         {ActionButton}
       </View>
     )
@@ -74,5 +78,6 @@ AddWishForm.propTypes = {
   wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
   styles: PropTypes.object.isRequired,
   onWishFieldChange: PropTypes.func.isRequired,
+  setPrivate: PropTypes.func.isRequired,
   saveWish: PropTypes.func.isRequired
 }
