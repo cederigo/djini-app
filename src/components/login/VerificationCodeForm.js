@@ -1,9 +1,7 @@
-import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {
   Component,
   Alert,
-  PropTypes,
   View,
   Text,
   TextInput
@@ -11,9 +9,16 @@ import React, {
 
 export default class VerificationCodeForm extends Component {
 
+  props: {
+    onFormFieldChange: (name: string, text: string) => void,
+    onNext: () => void,
+    authState: any,
+    styles: any,
+  }
+
   render() {
 
-    const {actions, authState, styles, onNext} = this.props
+    const {onFormFieldChange, authState, styles, onNext} = this.props
     const code = authState.getIn(['fields', 'code'])
 
     if (authState.error) {
@@ -29,20 +34,11 @@ export default class VerificationCodeForm extends Component {
           editable={!authState.isFetching}
           autoFocus={true}
           keyboardType="numeric"
-          onChangeText={(text) => {
-            actions.onFormFieldChange('code', text)
-          }}
+          onChangeText={(text) => onFormFieldChange('code', text)}
           onSubmitEditing={onNext}
           value={code}
         />
       </View>
     )
   }
-}
-
-VerificationCodeForm.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired,
-  onNext: PropTypes.func
 }

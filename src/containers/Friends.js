@@ -14,7 +14,7 @@ import React, {
 
 import NoContactsPermission from '../components/NoContactsPermission'
 import FriendsList from '../components/FriendsList'
-import * as socialActions from '../reducers/social/socialActions'
+import * as socialActions from '../actions/socialActions'
 
 
 class Friends extends Component {

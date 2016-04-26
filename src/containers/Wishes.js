@@ -11,14 +11,17 @@ import React, {
 
 import {getUserWishes, show} from '../actions/wishes'
 import {newWish} from '../actions/wish'
+import {logout} from '../actions/authActions'
 import WishList from '../components/WishList'
 import NewWishButton from '../components/NewWishButton'
 import LogoutButton from '../components/LogoutButton'
 
-/* Parse */
-import Parse from '../lib/Parse'
-
 class Wishes extends Component {
+  
+  props {
+    wishesState: any,
+    user: User
+  }
   
   componentDidMount() {
     this.props.dispatch(getUserWishes())
@@ -67,9 +70,6 @@ const styles = StyleSheet.create({
   }
 })
 
-Wishes.propTypes = {
-  wishesState: PropTypes.instanceOf(Immutable.Record).isRequired
-}
 
 /**
  * Redux boilerplate
@@ -77,7 +77,7 @@ Wishes.propTypes = {
 function select(state) {
   return { 
     wishesState: state.wishes,
-    globalState: state.global
+    user: state.global.currentUser
   };
 }
 

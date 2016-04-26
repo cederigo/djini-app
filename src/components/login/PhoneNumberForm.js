@@ -1,8 +1,6 @@
-import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {
   Component,
-  PropTypes,
   View,
   Text,
   TextInput,
@@ -11,9 +9,16 @@ import React, {
 
 export default class PhoneNumberForm extends Component {
 
+  props: {
+    onFormFieldChange: (name: string, text: string) => void,
+    onNext: () => void,
+    authState: any,
+    styles: any,
+  }
+
   render() {
 
-    const {actions, authState, styles, onNext} = this.props
+    const {onFormFieldChange, authState, styles, onNext} = this.props
     const iconName = authState.isValid ? 'sentiment-satisfied' : 'phone'
     const {phoneNumber} = authState.fields
 
@@ -34,18 +39,11 @@ export default class PhoneNumberForm extends Component {
           placeholder="+41 79 123 456"
           onSubmitEditing={onNext}
           onChangeText={(text) => {
-            actions.onFormFieldChange('phoneNumber', text)
+            onFormFieldChange('phoneNumber', text)
           }}
           value={phoneNumber}
         />
       </View>
     )
   }
-}
-
-PhoneNumberForm.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired,
-  onNext: PropTypes.func
 }

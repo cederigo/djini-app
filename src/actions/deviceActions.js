@@ -1,7 +1,7 @@
 import {
   SET_PLATFORM,
   SET_VERSION
-} from '../../lib/constants'
+} from '../lib/constants'
 
 export function setPlatform(platform) {
   return {

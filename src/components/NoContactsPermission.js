@@ -5,7 +5,7 @@ import React, {
   StyleSheet,
 } from 'react-native';
 
-import {refreshContacts} from '../reducers/social/socialActions'
+import {refreshContacts} from '../actions/socialActions'
 import WMButton from './WMButton'
 
 class NoContactsPermission extends Component {

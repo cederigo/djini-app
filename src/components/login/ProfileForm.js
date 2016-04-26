@@ -1,17 +1,22 @@
-import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {
-  Component,
-  PropTypes,
   View,
+  Component,
   TextInput
 } from 'react-native';
 
 export default class ProfileForm extends Component {
 
+  props: {
+    onFormFieldChange: (name: string, text: string) => void,
+    onNext: () => void,
+    authState: any,
+    styles: any,
+  }
+
   render() {
 
-    const {actions, authState, styles, onNext} = this.props
+    const {onFormFieldChange, authState, styles, onNext} = this.props
     const {name, email} = authState.fields
     return ( 
       <View style={styles.container}>
@@ -21,7 +26,7 @@ export default class ProfileForm extends Component {
           style={styles.input}
           editable={!authState.isFetching}
           placeholder="Username"
-          onChangeText={(text) => { actions.onFormFieldChange('name', text)}}
+          onChangeText={(text) => { onFormFieldChange('name', text)}}
           autoFocus={true}
           autoCapitalize="none"
           autoCorrect={false}
@@ -36,7 +41,7 @@ export default class ProfileForm extends Component {
           editable={!authState.isFetching}
           placeholder="E-Mail"
           keyboardType="email-address"
-          onChangeText={(text) => { actions.onFormFieldChange('email', text)}}
+          onChangeText={(text) => { onFormFieldChange('email', text)}}
           autoCapitalize="none"
           autoCorrect={false}
           returnKeyType="next"
@@ -47,11 +52,4 @@ export default class ProfileForm extends Component {
       </View>
     )
   }
-}
-
-ProfileForm.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired,
-  onNext: PropTypes.func
 }
