@@ -10,8 +10,9 @@ import React, {
 } from 'react-native';
 
 import {getUserWishes, show} from '../actions/wishes'
+import {newWish} from '../actions/wish'
 import WishList from '../components/WishList'
-import AddWishButton from '../components/AddWishButton'
+import NewWishButton from '../components/NewWishButton'
 import LogoutButton from '../components/LogoutButton'
 
 /* Parse */
@@ -25,7 +26,7 @@ class Wishes extends Component {
   
   render() {
     let wishList
-    const {dispatch, wishesState} = this.props
+    const {dispatch, wishesState, globalState} = this.props
     if (wishesState.isFetching) {
       wishList = <Text>Wünsche werden geladen</Text>
     } else {
@@ -44,7 +45,7 @@ class Wishes extends Component {
       <View style={styles.container}>
         <Text>Willkommen</Text>
         <LogoutButton/>
-        <AddWishButton/>
+        <NewWishButton newWish={() => dispatch(newWish(globalState.currentUser.objectId))}/>
         {wishList}    
       </View>
     )
@@ -75,7 +76,8 @@ Wishes.propTypes = {
  */
 function select(state) {
   return { 
-    wishesState: state.wishes
+    wishesState: state.wishes,
+    globalState: state.global
   };
 }
 

@@ -20,11 +20,16 @@ import {Record} from 'immutable';
  * fields it contains.
  */
 const InitialState = Record({
+    isFetching: false,
+    error: null,
     isEditable: false,
-    fields: new (Record({
+    wish: new (Record({
         title: '',
         description: '',
-        url: ''
+        url: '',
+        userId: '',
+        ownerId: '',
+        private: false
   }))
 })
 

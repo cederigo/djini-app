@@ -15,7 +15,31 @@ import React, {
 } from 'react-native';
 
 import AddWishForm from '../components/wish/AddWishForm'
-import * as wishActions from '../reducers/wish/wishActions'
+import {onWishFieldChange, saveWish} from '../actions/wish'
+
+class Wish extends Component {
+
+  render() {
+    console.log('Wish.render()')
+    const {wishState, dispatch} = this.props
+    return (
+      <View style={{flex: 1}}>
+
+        <StatusBar translucent={true} />
+
+        <AddWishForm 
+          wishState={wishState} 
+          onWishFieldChange={(field, value) => dispatch(onWishFieldChange(field, value))} 
+          saveWish={(wish) => dispatch(saveWish(wish))} 
+          styles={styles}/>
+      </View>
+    )
+  }
+}
+
+Wish.propTypes = {
+  wishState: PropTypes.instanceOf(Immutable.Record).isRequired
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -45,40 +69,11 @@ const styles = StyleSheet.create({
   }
 });
 
-class Wish extends Component {
-
-  render() {
-    console.log('Wish.render()')
-    
-    return (
-      <View style={{flex: 1}}>
-
-        <StatusBar translucent={true} />
-
-        <AddWishForm {...this.props} styles={styles}/>
-        
-        <TouchableOpacity
-            onPress={Actions.home}>
-            <Text>zurück</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-}
-
-Wish.propTypes = {
-  wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired
-}
-
 /**
  * Redux boilerplate
  */
-function mapStateToProps(state) {
+function select(state) {
   return { wishState: state.wish};
 }
 
-function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(wishActions, dispatch) };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Wish)
+export default connect(select)(Wish)

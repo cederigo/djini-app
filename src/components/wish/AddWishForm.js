@@ -8,55 +8,71 @@ import React, {
   TouchableOpacity
 } from 'react-native';
 
+import {Actions} from 'react-native-router-flux'
+
 export default class AddWishForm extends Component {
 
   render() {
-    const {wishState, actions, styles} = this.props
-    const {title, description, url} = wishState.fields
-    
+    const {wishState, onWishFieldChange, saveWish, styles} = this.props
+    const {wish} = wishState
+    const editable = wishState.isEditable && !wishState.isFetching
+    let ActionButton
+    if (editable) {
+      ActionButton = <TouchableOpacity
+            style={styles.button}
+            onPress={() => { saveWish(wish)}}>
+            <Text style={styles.buttonText}>Wunsch speichern</Text>
+        </TouchableOpacity>
+    } else {
+      if (wishState.isFetching) {
+        ActionButton = <Text>Wunsch wird gespeichert.</Text>
+      } else {
+        ActionButton = <TouchableOpacity
+            style={styles.button}
+            onPress={Actions.pop}>
+            <Text style={styles.buttonText}>Zurück</Text>
+        </TouchableOpacity>
+      }
+    }
     return ( 
       <View style={styles.container}>
-        <Text style={styles.text}>Erfasse einen Wunsch</Text>
         <TextInput
           style={styles.input}
-          editable={wishState.isEditable}
+          editable={editable}
           placeholder="Titel"
-          onChangeText={(text) => { actions.onWishFieldChange('title', text)}}
+          onChangeText={(text) => {onWishFieldChange('title', text)}}
           autoCapitalize="none"
           autoCorrect={false}
-          value={title}
+          value={wish.title}
         />
         <TextInput
           style={styles.input}
-          editable={wishState.isEditable}
+          editable={editable}
           placeholder="Beschreibung"
-          onChangeText={(text) => { actions.onWishFieldChange('description', text)}}
+          onChangeText={(text) => { onWishFieldChange('description', text)}}
           autoCapitalize="none"
           autoCorrect={false}
-          value={description}
+          value={wish.description}
         />
         <TextInput
           style={styles.input}
-          editable={wishState.isEditable}
+          editable={editable}
           placeholder="URL"
           keyboardType="url"   
-          onChangeText={(text) => { actions.onWishFieldChange('url', text)}}
+          onChangeText={(text) => { onWishFieldChange('url', text)}}
           autoCapitalize="none"
           autoCorrect={false}
-          value={url}
+          value={wish.url}
         />
-        <TouchableOpacity
-            style={styles.button}
-            onPress={() => { actions.saveWish(title, description, url, user, owner)}}>
-            <Text style={styles.buttonText}>Wunsch erfassen</Text>
-        </TouchableOpacity>
+        {ActionButton}
       </View>
     )
   }
 }
 
 AddWishForm.propTypes = {
-    wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired
+  wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
+  styles: PropTypes.object.isRequired,
+  onWishFieldChange: PropTypes.func.isRequired,
+  saveWish: PropTypes.func.isRequired
 }
