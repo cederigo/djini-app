@@ -20,7 +20,7 @@ import {Record} from 'immutable';
  * fields it contains.
  */
 const InitialState = Record({
-    isEditable: true,
+    isEditable: false,
     fields: new (Record({
         title: '',
         description: '',

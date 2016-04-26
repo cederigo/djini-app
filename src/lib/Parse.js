@@ -166,22 +166,6 @@ export default class Parse {
       .then(this._handleResponse)
       .then(json => json.result)
   }
-    /**
-   * ### getObjects
-   * Get Parse Objects 
-   *
-   * @param className the class of the object
-   * @param constraints the query constraints
-   */
-  getObjects(className, constraints) {
-    console.log('Parse.getObjects');
-    const params = encodeURIComponent(constraints);
-    console.log('url: ' + this.API_BASE_URL + '/classes/' + className + '%3F%s' + params);
-    // TODO: Use params
-    return this._fetch({ method: 'GET', url: '/classes/' + className + '%3F%s' + params})
-      .then(this._handleResponse)
-      .then(json => json.results);
-  }
   /**
    * ### _fetch
    * A generic function that prepares the request to Parse.com

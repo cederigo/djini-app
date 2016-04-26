@@ -28,7 +28,7 @@ export default function wishesReducer(state = initialState, {type, payload}) {
                 
         case GET_USER_WISHES_FAILURE:
             return state.set('isFetching', false)
-            .set('error', payload)
+            .set('error', payload) 
     }
     /**
     * ## Default

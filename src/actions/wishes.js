@@ -11,7 +11,8 @@
 import {
   GET_USER_WISHES_REQUEST,
   GET_USER_WISHES_SUCCESS, 
-  GET_USER_WISHES_FAILURE 
+  GET_USER_WISHES_FAILURE,
+  SET_WISH
 } from '../lib/constants'
 
 /**
@@ -39,7 +40,6 @@ export function getUserWishesRequest() {
 }
 
 export function getUserWishesSuccess(wishes) {
-  console.log(wishes)
   return {
     type: GET_USER_WISHES_SUCCESS,
     payload: wishes
@@ -52,8 +52,21 @@ export function getUserWishesFailure() {
   }
 }
 
+export function setWish(wish) {
+  return {
+    type: SET_WISH,
+    payload: wish
+  }
+}
+
+export function show(wish) {
+  return dispatch => {
+    dispatch(setWish(wish))
+    Actions.wish()
+  }
+}
+
 export function getUserWishes() {
-  console.log('get user wishes')
   let wishes
   return (dispatch, getState) => {
     dispatch(getUserWishesRequest())
@@ -63,12 +76,16 @@ export function getUserWishes() {
       className: '_User',
       objectId: getState().global.currentUser.objectId
     }
+    const ownerPointer = {
+      __type: 'Pointer',
+      className: '_User',
+      objectId: getState().global.currentUser.objectId
+    }
     query.equalTo('user', userPointer)
+    query.equalTo('owner', ownerPointer)
     return query.find()
     .then((response) => {
       wishes = List(response.map((wish) => {
-        console.log('wish.attributes')
-        console.log(wish.attributes)
         return new Wish({
           title: wish.attributes.title,
           url: wish.attributes.url,
@@ -77,7 +94,6 @@ export function getUserWishes() {
           ownerId: '' // TODO
         })
       }))
-      console.log(wishes)
       dispatch(getUserWishesSuccess(wishes))
     })
     .catch(error => {

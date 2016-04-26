@@ -9,7 +9,7 @@ import React, {
   StyleSheet
 } from 'react-native';
 
-import {getUserWishes} from '../actions/wishes'
+import {getUserWishes, show} from '../actions/wishes'
 import WishList from '../components/WishList'
 import AddWishButton from '../components/AddWishButton'
 import LogoutButton from '../components/LogoutButton'
@@ -25,15 +25,14 @@ class Wishes extends Component {
   
   render() {
     let wishList
-    console.log(this.props)
-    if (this.props.wishesState.isFetching) {
+    const {dispatch, wishesState} = this.props
+    if (wishesState.isFetching) {
       wishList = <Text>Wünsche werden geladen</Text>
     } else {
-      if (this.props.wishesState.wishes.size > 0) {
-        wishList = <WishList wishes={this.props.wishesState.wishes}/>
+      if (wishesState.wishes.size > 0) {
+        wishList = <WishList wishes={wishesState.wishes} show={(wish) => dispatch(show(wish))}/>
       } else {
-        console.log(this.props.wishesState.error)
-        if (this.props.wishesState.error !== null) {
+        if (wishesState.error !== null) {
           wishList = <View><Text>Du hast keine Wünsche!</Text>
           <Text>(Aber beim Laden gab's einen Fehler)</Text></View>
         } else {

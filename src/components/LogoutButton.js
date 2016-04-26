@@ -20,7 +20,7 @@ export default class LogoutButton extends Component {
   render() {
     return (
       <TouchableOpacity
-        onPress={logout}
+        onPress={() => this.props.dispatch(logout)}
         style={styles.button}>
         <Text style={styles.buttonText}>LOGOUT</Text>
       </TouchableOpacity>

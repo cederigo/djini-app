@@ -1,6 +1,9 @@
+//wishes
 export const GET_USER_WISHES_REQUEST = 'get-user-wishes-request'
 export const GET_USER_WISHES_SUCCESS = 'get-user-wishes-success'
 export const GET_USER_WISHES_FAILURE = 'get-user-wishes-failure'
+
+export const SET_WISH = 'set-wish'
 
 export const SAVE_WISH_REQUEST = 'save-wish-request'
 export const SAVE_WISH_SUCCESS = 'save-wish-success'

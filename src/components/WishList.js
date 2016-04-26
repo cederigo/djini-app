@@ -10,7 +10,50 @@ import React, {
   Text
 } from 'react-native';
 
-// taken from FriendsList
+// actions
+import show from '../actions/wishes'
+import {Actions} from 'react-native-router-flux'
+
+export default class WishList extends Component {
+  constructor(props) {
+      super(props)
+      const {wishes} = props
+      const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 != r2
+    })
+
+    this._renderRow = this._renderRow.bind(this)
+    
+    this.state = {
+      dataSource: ds.cloneWithRows(wishes.toArray())
+    }
+  }
+
+  render() {
+    return (
+      <ListView
+        ref="listView"
+        style={styles.container}
+        dataSource={this.state.dataSource}
+        renderRow={this._renderRow}
+      />
+    )
+  }
+
+  _renderRow (wish) {
+    const {show} = this.props
+    return (
+      <TouchableOpacity
+        onPress={() => show(wish)}>
+        <Text style={styles.text}>
+          {wish.get('title')}
+        </Text>
+       </TouchableOpacity>
+    );
+  }
+}
+
+// styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -49,46 +92,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class WishList extends Component {
-  constructor(props) {
-      super(props)
-      const {wishes} = props
-      console.log('Make WishList');
-      console.log(wishes.toArray());
-      const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 != r2
-    })
-
-    this._renderRow = this._renderRow.bind(this)
-    
-    this.state = {
-      dataSource: ds.cloneWithRows(wishes.toArray())
-    }
-  }
-
-  render() {
-    return (
-      <ListView
-        ref="listView"
-        style={styles.container}
-        dataSource={this.state.dataSource}
-        renderRow={this._renderRow}
-      />
-    )
-  }
-
-  _renderRow (wish) {
-    console.log(wish)
-    return (
-      <TouchableOpacity>
-        <Text style={styles.text}>
-          {wish.get('title')}
-        </Text>
-       </TouchableOpacity>
-    );
-  }
-}
-
 WishList.propTypes = {
-  wishes: PropTypes.instanceOf(Immutable.List).isRequired
+  wishes: PropTypes.instanceOf(Immutable.List).isRequired,
+  show: PropTypes.func.isRequired
 }

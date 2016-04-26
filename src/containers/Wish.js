@@ -47,10 +47,9 @@ const styles = StyleSheet.create({
 
 class Wish extends Component {
 
-    // TODO load existing wish
-
   render() {
     console.log('Wish.render()')
+    
     return (
       <View style={{flex: 1}}>
 
