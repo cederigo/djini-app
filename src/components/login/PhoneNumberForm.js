@@ -5,7 +5,8 @@ import React, {
   PropTypes,
   View,
   Text,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 
 export default class PhoneNumberForm extends Component {
@@ -15,6 +16,10 @@ export default class PhoneNumberForm extends Component {
     const {actions, authState, styles, onNext} = this.props
     const iconName = authState.isValid ? 'sentiment-satisfied' : 'phone'
     const {phoneNumber} = authState.fields
+
+    if (authState.error) {
+      Alert.alert('Ungültige Nummer', 'Dies ist keine Natel-Nummer')
+    }
 
     return ( 
       <View style={styles.container}>

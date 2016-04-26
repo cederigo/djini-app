@@ -11,7 +11,7 @@ export default class ProfileForm extends Component {
 
   render() {
 
-    const {actions, authState, styles} = this.props
+    const {actions, authState, styles, onNext} = this.props
     const {name, email} = authState.fields
     return ( 
       <View style={styles.container}>
@@ -40,6 +40,7 @@ export default class ProfileForm extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           returnKeyType="next"
+          onSubmitEditing={onNext}
           value={email}
         />
 
@@ -51,5 +52,6 @@ export default class ProfileForm extends Component {
 ProfileForm.propTypes = {
   authState: PropTypes.instanceOf(Immutable.Record).isRequired,
   actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired
+  styles: PropTypes.object.isRequired,
+  onNext: PropTypes.func
 }

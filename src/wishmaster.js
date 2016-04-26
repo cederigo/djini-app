@@ -92,7 +92,7 @@ export default function native(platform) {
 
               <Scene key="app" component={App} title="Wishmaster" initial={true}/>
 
-              <Scene key="login" panHandlers={null} component={Login} />
+              <Scene key="login" type="replace" component={Login} />
 
               <Scene key="wish" component={Wish} title="Wunsch"/>
 

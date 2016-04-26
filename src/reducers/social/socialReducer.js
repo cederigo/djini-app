@@ -14,7 +14,7 @@ import {
 
   INVITE_CONTACT,
   SHOW_CONTACT,
-  ADD_FAVORITE
+  ADD_FAVORITE,
 } from '../../lib/constants'
 
 const initialState = new InitialState;
@@ -50,6 +50,7 @@ export default function socialReducer(state = initialState, {type, payload}) {
     case SOCIAL_STATE_FAILURE:
     case CONTACTS_FAILURE:
       return state.set('isFetching', false)
+        .set('noContactsPermission', payload.message === 'permissionDenied')
         .set('error', payload)
 
     case ON_SEARCH_FIELD_CHANGE:

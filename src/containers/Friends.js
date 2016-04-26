@@ -9,54 +9,23 @@ import React, {
   PropTypes,
   StyleSheet,
   StatusBar,
-  TextInput
+  TextInput,
 } from 'react-native';
 
+import NoContactsPermission from '../components/NoContactsPermission'
 import FriendsList from '../components/FriendsList'
 import * as socialActions from '../reducers/social/socialActions'
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingBottom: 50
-  },
-  toolbar: {
-    marginTop: 20,
-    padding: 10,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#CDCDCD'
-  },
-  searchBar: {
-    height: 50
-  },
-  list: {
-    backgroundColor: 'white',
-    flex: 1
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#F6F6F6'
-  },
-  rowText: {
-    flex: 1
-  },
-  rowActions: {
-    width: 50,
-    backgroundColor: 'red'
-  }
-})
 
 class Friends extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const {socialState, actions} = this.props
     let {contacts, favorites, filterText} = socialState
+
+    if (socialState.noContactsPermission) {
+      return (<NoContactsPermission/>)
+    }
 
     return (
         <View style={styles.container}>
@@ -77,8 +46,41 @@ class Friends extends Component {
 
 Friends.propTypes = {
   socialState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingBottom: 50,
+  },
+  toolbar: {
+    marginTop: 20,
+    padding: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#CDCDCD',
+  },
+  searchBar: {
+    height: 50,
+  },
+  list: {
+    backgroundColor: 'white',
+    flex: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#F6F6F6',
+  },
+  rowText: {
+    flex: 1,
+  },
+  rowActions: {
+    width: 50,
+    backgroundColor: 'red',
+  },
+})
 
 /**
  * Redux boilerplate

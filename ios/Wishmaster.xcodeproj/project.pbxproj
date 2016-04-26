@@ -120,6 +120,13 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		8C37A7371CCE5F7300BF43DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EE9F9304DC94445F8F0517B0 /* RNShare.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNShare;
+		};
 		8CD150761CC511E50028C73F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D73732F2BCDF4FA8B078F098 /* RNVectorIcons.xcodeproj */;
@@ -380,6 +387,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8C37A7291CCE5F7100BF43DD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8C37A7381CCE5F7300BF43DD /* libRNShare.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		8CD150691CC511E40028C73F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -507,7 +522,7 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = 0C4456131CCA145C001A9B09 /* Products */;
+					ProductGroup = 8C37A7291CCE5F7100BF43DD /* Products */;
 					ProjectRef = EE9F9304DC94445F8F0517B0 /* RNShare.xcodeproj */;
 				},
 				{
@@ -599,6 +614,13 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8C37A7381CCE5F7300BF43DD /* libRNShare.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNShare.a;
+			remoteRef = 8C37A7371CCE5F7300BF43DD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		8CD150771CC511E50028C73F /* libRNVectorIcons.a */ = {
@@ -764,7 +786,9 @@
 				INFOPLIST_FILE = Wishmaster/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "ch.soom-it.wishmaster";
 				PRODUCT_NAME = Wishmaster;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -783,7 +807,9 @@
 				INFOPLIST_FILE = Wishmaster/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "ch.soom-it.wishmaster";
 				PRODUCT_NAME = Wishmaster;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

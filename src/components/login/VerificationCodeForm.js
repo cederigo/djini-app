@@ -13,12 +13,10 @@ export default class VerificationCodeForm extends Component {
 
   render() {
 
-    console.log('VerificationCodeForm.render()')
-
-    const {actions, authState, styles, onNext, error} = this.props
+    const {actions, authState, styles, onNext} = this.props
     const code = authState.getIn(['fields', 'code'])
 
-    if (error) {
+    if (authState.error) {
       Alert.alert('Falscher Code', 'Bitte nochmals eingeben')
     }
 

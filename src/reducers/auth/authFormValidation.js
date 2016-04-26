@@ -21,7 +21,8 @@ export default function authFormValidation(state) {
     case LOGIN_VERIFICATIONCODE_FORM:
       return state.set('isValid', code ? true : false)
     case LOGIN_PROFILE_FORM: {
-      return state.set('isValid', name && email)
+      const isValidEmail = /.+@.+/.test(email)
+      return state.set('isValid', name && isValidEmail)
     }
   }
 }

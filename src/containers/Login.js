@@ -14,6 +14,7 @@ import React, {
 
 import * as authActions from '../reducers/auth/authActions'
 import * as socialActions from '../reducers/social/socialActions'
+
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
 import ProfileForm from '../components/login/ProfileForm'
@@ -52,11 +53,19 @@ const styles = StyleSheet.create({
   navbar: {
     marginTop: 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#CDCDCD'
+    borderBottomColor: '#CDCDCD',
+    flexDirection: 'row',
+    alignSelf: 'stretch'
   },
-  button: {
+  nextButton: {
     padding: 15,
-    alignSelf: 'flex-end'
+  },
+  title: {
+    flex: 1,
+  },
+  backButton: {
+    padding: 15,
+    alignSelf: 'flex-start'
   },
   buttonText: {
     fontSize: 17,
@@ -66,11 +75,11 @@ const styles = StyleSheet.create({
 
 class NavButton extends React.Component {
   render() {
-    const {enabled, onPress, text} = this.props
+    const {enabled, onPress, text, style} = this.props
     return (
       <TouchableOpacity
         activeOpacity={enabled ? 0 : 1}
-        style={styles.button}
+        style={style}
         onPress={() => { if (enabled) { onPress() }}}>
         <Text style={[styles.buttonText, {color: enabled ? 'rgb(0, 122, 155)' : 'grey'}]}>{text}</Text>
       </TouchableOpacity>
@@ -84,23 +93,26 @@ class Login extends Component {
 
     console.log('Login.render()')
 
-    const {formName, error, isValid, fields} = this.props.authState
-    const {phoneNumberForm, birthdayForm, sendCode, login, refreshContacts} = this.props.actions
+    const {formName, isValid, fields, isFetching} = this.props.authState
+    const {profileForm, phoneNumberForm, birthdayForm, sendCode, login, refreshContacts} = this.props.actions
 
-    let form, onNext, nextText
+    let form, onNext, nextText, onBack
 
     switch(formName) {
       case LOGIN_PROFILE_FORM: /* 1. Screen */
+        onBack = undefined
         onNext = () => birthdayForm()
         nextText = "Weiter"
-        form = <ProfileForm {...this.props} styles={formStyles} />
+        form = <ProfileForm {...this.props} styles={formStyles} onNext={isValid? onNext: null} />
         break
       case LOGIN_BIRTHDAY_FORM: /* 2. Screen */
+        onBack = () => profileForm()
         onNext = () => phoneNumberForm()
         nextText = "Weiter"
         form = <BirthdayForm {...this.props} styles={formStyles} />
         break
       case LOGIN_PHONENUMBER_FORM: /* 3. Screen */
+        onBack = () => birthdayForm()
         onNext = () => {
           refreshContacts() //permission dialog (IOS)
           sendCode(fields.get('phoneNumberFormatted'))
@@ -109,6 +121,7 @@ class Login extends Component {
         form = <PhoneNumberForm {...this.props} styles={formStyles} onNext={isValid ? onNext: null}/>
         break;
       case LOGIN_VERIFICATIONCODE_FORM: /* 4. Screen */
+        onBack = () => phoneNumberForm()
         onNext = () => {
           const {name, email, birthday} = fields
           login(
@@ -118,7 +131,7 @@ class Login extends Component {
           )
         }
         nextText = "Login"
-        form = <VerificationCodeForm {...this.props} styles={formStyles} error={error} onNext={isValid ? onNext : null}/>
+        form = <VerificationCodeForm {...this.props} styles={formStyles} onNext={isValid ? onNext : null}/>
         break;
     }
 
@@ -127,7 +140,12 @@ class Login extends Component {
         <StatusBar translucent={true} />
 
         <View style={styles.navbar}>
-          <NavButton enabled={isValid} onPress={onNext} text={nextText}/>
+          {onBack ? 
+            <NavButton enabled={true} onPress={onBack} text="Zurück" style={styles.backButton}/> :
+            undefined
+          }
+          <Text style={styles.title}></Text>
+          <NavButton enabled={isValid && !isFetching} onPress={onNext} text={nextText} style={styles.nextButton}/>
         </View>
         {form}
       </View>
