@@ -16,7 +16,8 @@
     "fetch": false
   },
   "rules": {
-    "prop-types": {"ignore": ["dispatch"]}
+    "react/prop-types": [2, {"ignore": ["dispatch"]}],
+    "comma-dangle": [2, "always-multiline"]
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"]
 }
