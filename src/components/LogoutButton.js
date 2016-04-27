@@ -5,7 +5,7 @@ import React, {
   Text
 } from 'react-native';
 
-import logout from '../reducers/auth/authActions'
+import logout from '../actions/authActions'
 
 const styles = StyleSheet.create({
   button: {

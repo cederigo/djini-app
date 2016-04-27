@@ -18,9 +18,9 @@ import LogoutButton from '../components/LogoutButton'
 
 class Wishes extends Component {
   
-  props {
+  props: {
     wishesState: any,
-    user: User
+    user: any
   }
   
   componentDidMount() {
