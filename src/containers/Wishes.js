@@ -20,7 +20,7 @@ class Wishes extends Component {
   
   props: {
     wishesState: any,
-    user: any
+    currentUser: any
   }
   
   componentDidMount() {
@@ -29,7 +29,7 @@ class Wishes extends Component {
   
   render() {
     let wishList
-    const {dispatch, wishesState, globalState} = this.props
+    const {dispatch, wishesState, currentUser} = this.props
     if (wishesState.isFetching) {
       wishList = <Text>Wünsche werden geladen</Text>
     } else {
@@ -48,7 +48,7 @@ class Wishes extends Component {
       <View style={styles.container}>
         <Text>Willkommen</Text>
         <LogoutButton/>
-        <NewWishButton newWish={() => dispatch(newWish(globalState.currentUser.objectId))}/>
+        <NewWishButton newWish={() => dispatch(newWish(currentUser.id))}/>
         {wishList}    
       </View>
     )
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 function select(state) {
   return { 
     wishesState: state.wishes,
-    user: state.global.currentUser
+    currentUser: state.global.currentUser
   };
 }
 

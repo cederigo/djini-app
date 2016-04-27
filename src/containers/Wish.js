@@ -15,7 +15,10 @@ import React, {
 } from 'react-native';
 
 import AddWishForm from '../components/wish/AddWishForm'
-import {onWishFieldChange, saveWish} from '../actions/wish'
+import {
+  onWishFieldChange, 
+  saveWish, 
+  setPrivate} from '../actions/wish'
 
 class Wish extends Component {
 
@@ -31,6 +34,7 @@ class Wish extends Component {
           wishState={wishState} 
           onWishFieldChange={(field, value) => dispatch(onWishFieldChange(field, value))} 
           saveWish={(wish) => dispatch(saveWish(wish))} 
+          setPrivate={(value) => dispatch(setPrivate(value))}
           styles={styles}/>
       </View>
     )

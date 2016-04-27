@@ -37,6 +37,7 @@ export default function wishReducer(state = initialState, {type, payload}) {
             return state
         case SET_PRIVATE:
             state = state.setIn(['wish','private'], payload)
+            return state
         case SAVE_WISH_REQUEST:
             state = state.set('isFetching', true)
                 .set('isEditable', false)

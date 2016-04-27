@@ -14,7 +14,7 @@ import {Actions} from 'react-native-router-flux'
 export default class AddWishForm extends Component {
 
   render() {
-    const {wishState, onWishFieldChange, saveWish, styles} = this.props
+    const {wishState, onWishFieldChange, saveWish, setPrivate, styles} = this.props
     const {wish} = wishState
     const editable = wishState.isEditable && !wishState.isFetching
     let ActionButton
@@ -66,6 +66,7 @@ export default class AddWishForm extends Component {
           value={wish.url}
         />
         <Switch
+          disabled={!editable}
           onValueChange={(value) => setPrivate(value)}
           value={wish.private} />
         {ActionButton}

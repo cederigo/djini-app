@@ -74,12 +74,12 @@ export function getUserWishes() {
     const userPointer = {
       __type: 'Pointer',
       className: '_User',
-      objectId: getState().global.currentUser.objectId
+      objectId: getState().global.currentUser.id
     }
     const ownerPointer = {
       __type: 'Pointer',
       className: '_User',
-      objectId: getState().global.currentUser.objectId
+      objectId: getState().global.currentUser.id
     }
     query.equalTo('user', userPointer)
     query.equalTo('owner', ownerPointer)

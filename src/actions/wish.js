@@ -108,7 +108,7 @@ export function saveWish(wish) {
       owner: {
         __type: 'Pointer',
         className: '_User',
-        objectId: getState().global.currentUser.objectId
+        objectId: getState().global.currentUser.id // owner is always the current user
       } 
     })
     newParseWish.save()
