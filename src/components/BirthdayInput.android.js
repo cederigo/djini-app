@@ -3,6 +3,7 @@ import React, {
   Component,
   PropTypes,
   View,
+  DatePickerIOS,
   Picker } from 'react-native';
 
 //Picker Items
