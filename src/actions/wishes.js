@@ -26,6 +26,7 @@ const Wish = Record({
   title: '',
   url: '',
   description: '',
+  private: false,
   userId: '',
   ownerId: ''
 })
@@ -90,8 +91,9 @@ export function getUserWishes() {
           title: wish.attributes.title,
           url: wish.attributes.url,
           description: wish.attributes.description,
-          userId: '', // TODO
-          ownerId: '' // TODO
+          private: wish.attributes.private,
+          userId: wish.attributes.user.objectId,
+          ownerId: wish.attributes.owner.objectId
         })
       }))
       dispatch(getUserWishesSuccess(wishes))

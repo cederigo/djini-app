@@ -99,7 +99,7 @@ export function saveWish(wish) {
       title: wish.title, 
       description: wish.description, 
       url: wish.url,
-      private: false, // TODO: set this from AddWish form
+      private: wish.private,
       user: {
         __type: 'Pointer',
         className: '_User',
