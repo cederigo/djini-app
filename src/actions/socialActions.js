@@ -1,5 +1,5 @@
 import {OrderedMap} from 'immutable';
-import {Alert} from 'react-native'
+import {Alert, ActionSheetIOS, Platform} from 'react-native'
 import Share from 'react-native-share';
 import {
   SOCIAL_STATE_REQUEST,
@@ -129,17 +129,24 @@ export function addFavorite(contact) {
 
 export function invite(contact) {
   return dispatch => {
-    const inviteText = 'Ich möchte dir etwas schenken, weiss aber nicht was ;-) https://wishmaster.ch/download'
+    const url = 'https://tsfr.io/j9n6rp'
+    const message = 'Ich möchte dir etwas schenken, weis aber nicht was...';
     dispatch(addFavorite(contact))
     //TODO: dispatch global invite activity action (to server too)
     dispatch(saveState())
-    Share.open({
-      share_text: inviteText,
-      share_URL: inviteText,
-      title: inviteText 
-    },(e) => {
-      console.log(e);
-    });
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showShareActionSheetWithOptions(
+        {message, url},
+        () => console.log('show share success'),
+        (e) => console.log('show share error: ', e)
+      );
+    } else {
+      Share.open({
+        share_text: message,
+        share_URL: url,
+        title: 'Wishmaster Einladung',
+      }, (e) => console.log(e))
+    }
   }
 }
 
