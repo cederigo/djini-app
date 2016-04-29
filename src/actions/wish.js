@@ -20,6 +20,8 @@ import {
   SET_PRIVATE
 } from '../lib/constants'
 
+import * as wishesActions from './wishes'
+
 /**
  * Project requirements
  */
@@ -124,13 +126,14 @@ export function saveWish(wish) {
     })
     newParseWish.save()
       .then((response) => {
-        console.log(response)
         dispatch(saveWishSuccess())
-        return response
+        // update my wishes
+        if (wish.ownerId === getState().global.currentUser.id) {
+          dispatch(wishesActions.getUserWishes())
+        }
       })
       .catch(error => {
         dispatch(saveWishFailure(error))
-        return Promise.reject(error)
       })
     } else {
       // existing wish
@@ -158,20 +161,24 @@ export function updateWishFailure(error) {
   };
 }
 export function updateWish(wish) {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(saveWishRequest())
     let ParseWish = Parse.Object.extend('Wish')
     let query = new Parse.Query(ParseWish)
     query.get(wish.id)
     .then((parseWish) => {
       parseWish.set('title', wish.title)
-      parseWish.set('url', wish.title)
-      parseWish.set('description', wish.title)
+      parseWish.set('url', wish.url)
+      parseWish.set('description', wish.description)
       parseWish.set('private', wish.private)
       return parseWish.save()
     })
     .then((response) => {
       dispatch(saveWishSuccess())
+      // update my wishes
+      if (wish.ownerId === getState().global.currentUser.id) {
+        dispatch(wishesActions.getUserWishes())
+      }
     })
     .catch(error => {
       dispatch(saveWishError(error))
