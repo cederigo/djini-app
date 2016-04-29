@@ -14,12 +14,11 @@ import {Actions} from 'react-native-router-flux'
 export default class AddWishForm extends Component {
 
   render() {
-    const {currentUser, wishState, onWishFieldChange, saveWish, setEditable, styles} = this.props
+    const {currentUser, wishState, onWishFieldChange, saveWish, deleteWish, setEditable, styles} = this.props
     const {wish} = wishState
     const editable = wishState.isEditable && !wishState.isFetching
     const allowEdit = wish.ownerId === currentUser.id && !wishState.isFetching
-    let SaveButton, BackButton, EditButton
-    console.log('wish', wish)
+    let SaveButton, BackButton, EditButton, DeleteButton
     if (editable) {
       SaveButton = <TouchableOpacity
             style={styles.button}
@@ -32,6 +31,11 @@ export default class AddWishForm extends Component {
             style={styles.button}
             onPress={() => { setEditable()}}>
             <Text style={styles.buttonText}>Wunsch bearbeiten</Text>
+        </TouchableOpacity>
+      DeleteButton = <TouchableOpacity
+            style={styles.button}
+            onPress={() => { deleteWish(wish)}}>
+            <Text style={styles.buttonText}>Wunsch löschen</Text>
         </TouchableOpacity>
     }
     if (!wishState.isFetching) {
@@ -82,6 +86,7 @@ export default class AddWishForm extends Component {
           value={wish.private} />
         {SaveButton}
         {EditButton}
+        {DeleteButton}
         {BackButton}
       </View>
     )
@@ -94,5 +99,6 @@ AddWishForm.propTypes = {
   styles: PropTypes.object.isRequired,
   onWishFieldChange: PropTypes.func.isRequired,
   saveWish: PropTypes.func.isRequired,
+  deleteWish: PropTypes.func.isRequired,
   setEditable: PropTypes.func.isRequired
 }

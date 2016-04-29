@@ -18,6 +18,7 @@ import AddWishForm from '../components/wish/AddWishForm'
 import {
   onWishFieldChange, 
   saveWish,
+  deleteWish,
   setEditable
 } from '../actions/wishes'
 
@@ -36,6 +37,10 @@ class Wish extends Component {
           wishState={wishState} 
           onWishFieldChange={(field, value) => dispatch(onWishFieldChange(field, value))} 
           saveWish={(wish) => dispatch(saveWish(wish))} 
+          deleteWish = {(wish) => {
+            dispatch(deleteWish(wish))
+            Actions.pop()
+          }}
           setEditable={() => dispatch(setEditable(true))}
           styles={styles}/>
       </View>

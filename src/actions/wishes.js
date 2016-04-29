@@ -212,22 +212,6 @@ export function saveWish(wish) {
 /*
  * Update Wish
  */
-export function updateWishRequest() {
-  return {
-    type: UPDATE_WISH_REQUEST
-  };
-}
-export function updateWishSuccess() {
-  return {
-    type: UPDATE_WISH_SUCCESS
-  };
-}
-export function updateWishFailure(error) {
-  return {
-    type: UPDATE_WISH_FAILURE,
-    payload: error
-  };
-}
 export function updateWish(wish) {
   return (dispatch, getState) => {
     dispatch(saveWishRequest())
@@ -256,34 +240,14 @@ export function updateWish(wish) {
 /*
  * Delete Wish
  */
-export function updateWishRequest() {
-  return {
-    type: UPDATE_WISH_REQUEST
-  };
-}
-export function updateWishSuccess() {
-  return {
-    type: UPDATE_WISH_SUCCESS
-  };
-}
-export function updateWishFailure(error) {
-  return {
-    type: UPDATE_WISH_FAILURE,
-    payload: error
-  };
-}
-export function updateWish(wish) {
+export function deleteWish(wish) {
   return (dispatch, getState) => {
     dispatch(saveWishRequest())
     let ParseWish = Parse.Object.extend('Wish')
     let query = new Parse.Query(ParseWish)
     query.get(wish.id)
     .then((parseWish) => {
-      parseWish.set('title', wish.title)
-      parseWish.set('url', wish.url)
-      parseWish.set('description', wish.description)
-      parseWish.set('private', wish.private)
-      return parseWish.save()
+      return parseWish.destroy()
     })
     .then((response) => {
       dispatch(saveWishSuccess())
@@ -292,8 +256,8 @@ export function updateWish(wish) {
         dispatch(getUserWishes())
       }
     })
-    .catch(error => {
-      dispatch(saveWishError(error))
+    .catch((error) => {
+      dispatch(saveWishSuccess(error))
     })
   }
 }
