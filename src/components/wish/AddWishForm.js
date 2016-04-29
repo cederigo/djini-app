@@ -75,6 +75,7 @@ export default class AddWishForm extends Component {
           autoCorrect={false}
           value={wish.url}
         />
+        <Text>{wish.private ? 'Privat' : 'Öffentlich'}</Text>
         <Switch
           disabled={!editable}
           onValueChange={(value) => setPrivate(value)}
