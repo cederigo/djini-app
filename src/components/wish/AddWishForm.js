@@ -14,7 +14,7 @@ import {Actions} from 'react-native-router-flux'
 export default class AddWishForm extends Component {
 
   render() {
-    const {currentUser, wishState, onWishFieldChange, saveWish, editWish, setPrivate, styles} = this.props
+    const {currentUser, wishState, onWishFieldChange, saveWish, setEditable, styles} = this.props
     const {wish} = wishState
     const editable = wishState.isEditable && !wishState.isFetching
     const allowEdit = wish.ownerId === currentUser.id && !wishState.isFetching
@@ -30,7 +30,7 @@ export default class AddWishForm extends Component {
     if (allowEdit && !editable) {
       EditButton = <TouchableOpacity
             style={styles.button}
-            onPress={() => { editWish()}}>
+            onPress={() => { setEditable()}}>
             <Text style={styles.buttonText}>Wunsch bearbeiten</Text>
         </TouchableOpacity>
     }
@@ -78,7 +78,7 @@ export default class AddWishForm extends Component {
         <Text>{wish.private ? 'Privat' : 'Öffentlich'}</Text>
         <Switch
           disabled={!editable}
-          onValueChange={(value) => setPrivate(value)}
+          onValueChange={(value) => onWishFieldChange('private', value)}
           value={wish.private} />
         {SaveButton}
         {EditButton}
@@ -93,7 +93,6 @@ AddWishForm.propTypes = {
   wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
   styles: PropTypes.object.isRequired,
   onWishFieldChange: PropTypes.func.isRequired,
-  setPrivate: PropTypes.func.isRequired,
   saveWish: PropTypes.func.isRequired,
-  editWish: PropTypes.func.isRequired
+  setEditable: PropTypes.func.isRequired
 }

@@ -9,8 +9,7 @@ import React, {
   StyleSheet
 } from 'react-native';
 
-import {getUserWishes, show} from '../actions/wishes'
-import {newWish} from '../actions/wish'
+import {getUserWishes, newWish, show} from '../actions/wishes'
 import {logout} from '../actions/authActions'
 import WishList from '../components/WishList'
 import NewWishButton from '../components/NewWishButton'

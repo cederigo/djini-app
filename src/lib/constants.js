@@ -5,11 +5,7 @@ export const GET_USER_WISHES_FAILURE = 'get-user-wishes-failure'
 
 export const SET_WISH = 'set-wish'
 export const RESET_WISH = 'reset-wish'
-export const EDIT_WISH = 'edit-wish'
-export const WISH_SET_USERID = 'wish-set-userid'
-export const WISH_SET_OWNERID = 'wish-set-ownerid'
-export const SET_PRIVATE = 'set-private'
-export const SET_EDITABLE_FALSE = 'set-editable-false'
+export const SET_EDITABLE = 'set-editable'
 
 export const SAVE_WISH_REQUEST = 'save-wish-request'
 export const SAVE_WISH_SUCCESS = 'save-wish-success'

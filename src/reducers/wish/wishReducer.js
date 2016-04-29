@@ -8,12 +8,8 @@ import {
     SAVE_WISH_SUCCESS, 
     SAVE_WISH_FAILURE, 
     SET_WISH,
-    SET_PRIVATE,
-    SET_EDITABLE_FALSE,
+    SET_EDITABLE,
     RESET_WISH,
-    EDIT_WISH,
-    WISH_SET_USERID,
-    WISH_SET_OWNERID,
     ON_WISH_FIELD_CHANGE
 } from '../../lib/constants'
 
@@ -31,20 +27,8 @@ export default function wishReducer(state = initialState, {type, payload}) {
         case RESET_WISH:
             state = initialState
             return state
-        case EDIT_WISH:
-            state = state.set('isEditable', true)
-            return state
-        case WISH_SET_USERID:
-            state = state.setIn(['wish', 'userId'], payload)
-            return state
-        case WISH_SET_OWNERID:
-            state = state.setIn(['wish', 'ownerId'], payload)
-            return state
-        case SET_PRIVATE:
-            state = state.setIn(['wish','private'], payload)
-            return state
-        case SET_EDITABLE_FALSE:
-            state = state.set('isEditable', false)
+        case SET_EDITABLE:
+            state = state.set('isEditable', payload)
             return state
         case SAVE_WISH_REQUEST:
             state = state.set('isFetching', true)
@@ -61,7 +45,6 @@ export default function wishReducer(state = initialState, {type, payload}) {
             return state
 
         case ON_WISH_FIELD_CHANGE: {
-            console.log('wish field change')
             const {field, value} = payload
             state = state.setIn(['wish', field], value)
             return state // TODO: validation ?

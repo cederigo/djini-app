@@ -18,8 +18,8 @@ import AddWishForm from '../components/wish/AddWishForm'
 import {
   onWishFieldChange, 
   saveWish,
-  editWish, 
-  setPrivate} from '../actions/wish'
+  setEditable
+} from '../actions/wishes'
 
 class Wish extends Component {
 
@@ -36,8 +36,7 @@ class Wish extends Component {
           wishState={wishState} 
           onWishFieldChange={(field, value) => dispatch(onWishFieldChange(field, value))} 
           saveWish={(wish) => dispatch(saveWish(wish))} 
-          editWish={() => dispatch(editWish())}
-          setPrivate={(value) => dispatch(setPrivate(value))}
+          setEditable={() => dispatch(setEditable(true))}
           styles={styles}/>
       </View>
     )
