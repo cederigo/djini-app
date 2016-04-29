@@ -14,27 +14,37 @@ import {Actions} from 'react-native-router-flux'
 export default class AddWishForm extends Component {
 
   render() {
-    const {wishState, onWishFieldChange, saveWish, setPrivate, styles} = this.props
+    const {currentUser, wishState, onWishFieldChange, saveWish, editWish, setPrivate, styles} = this.props
     const {wish} = wishState
     const editable = wishState.isEditable && !wishState.isFetching
-    let ActionButton
+    const allowEdit = wish.ownerId === currentUser.id && !wishState.isFetching
+    let SaveButton, BackButton, EditButton
+    console.log('wish', wish)
     if (editable) {
-      ActionButton = <TouchableOpacity
+      SaveButton = <TouchableOpacity
             style={styles.button}
             onPress={() => { saveWish(wish)}}>
             <Text style={styles.buttonText}>Wunsch speichern</Text>
         </TouchableOpacity>
-    } else {
-      if (wishState.isFetching) {
-        ActionButton = <Text>Wunsch wird gespeichert.</Text>
-      } else {
-        ActionButton = <TouchableOpacity
+    } 
+    if (allowEdit && !editable) {
+      EditButton = <TouchableOpacity
+            style={styles.button}
+            onPress={() => { editWish()}}>
+            <Text style={styles.buttonText}>Wunsch bearbeiten</Text>
+        </TouchableOpacity>
+    }
+    if (!wishState.isFetching) {
+      BackButton = <TouchableOpacity
             style={styles.button}
             onPress={Actions.pop}>
             <Text style={styles.buttonText}>Zurück</Text>
         </TouchableOpacity>
-      }
     }
+    if (wishState.isFetching) {
+      SaveButton = <Text>Wunsch wird gespeichert.</Text>
+    }
+   
     return ( 
       <View style={styles.container}>
         <TextInput
@@ -69,16 +79,20 @@ export default class AddWishForm extends Component {
           disabled={!editable}
           onValueChange={(value) => setPrivate(value)}
           value={wish.private} />
-        {ActionButton}
+        {SaveButton}
+        {EditButton}
+        {BackButton}
       </View>
     )
   }
 }
 
 AddWishForm.propTypes = {
+  currentUser: PropTypes.object.isRequired,
   wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
   styles: PropTypes.object.isRequired,
   onWishFieldChange: PropTypes.func.isRequired,
   setPrivate: PropTypes.func.isRequired,
-  saveWish: PropTypes.func.isRequired
+  saveWish: PropTypes.func.isRequired,
+  editWish: PropTypes.func.isRequired
 }

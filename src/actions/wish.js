@@ -16,6 +16,7 @@ import {
   RESET_WISH,
   EDIT_WISH,
   WISH_SET_USERID,
+  WISH_SET_OWNERID,
   SET_PRIVATE
 } from '../lib/constants'
 
@@ -57,10 +58,18 @@ export function wishSetUserId(userId) {
   }
 }
 
+export function wishSetOwnerId(ownerId) {
+  return {
+    type: WISH_SET_OWNERID,
+    payload: ownerId
+  }
+}
+
 export function newWish(userId) {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(resetWish())
     dispatch(wishSetUserId(userId))
+    dispatch(wishSetOwnerId(getState().global.currentUser.id))
     dispatch(editWish())
     Actions.wish()
   }
@@ -93,6 +102,8 @@ export function saveWishFailure(error) {
 }
 export function saveWish(wish) {
   return (dispatch, getState) => {
+    if (!wish.id) {
+      // new wish
     dispatch(saveWishRequest())
     let ParseWish = Parse.Object.extend('Wish')
     let newParseWish = new ParseWish({
@@ -121,5 +132,49 @@ export function saveWish(wish) {
         dispatch(saveWishFailure(error))
         return Promise.reject(error)
       })
+    } else {
+      // existing wish
+      dispatch(updateWish(wish))
+    }
+  }
+}
+/*
+ * Update Wish
+ */
+export function updateWishRequest() {
+  return {
+    type: UPDATE_WISH_REQUEST
+  };
+}
+export function updateWishSuccess() {
+  return {
+    type: UPDATE_WISH_SUCCESS
+  };
+}
+export function updateWishFailure(error) {
+  return {
+    type: UPDATE_WISH_FAILURE,
+    payload: error
+  };
+}
+export function updateWish(wish) {
+  return dispatch => {
+    dispatch(saveWishRequest())
+    let ParseWish = Parse.Object.extend('Wish')
+    let query = new Parse.Query(ParseWish)
+    query.get(wish.id)
+    .then((parseWish) => {
+      parseWish.set('title', wish.title)
+      parseWish.set('url', wish.title)
+      parseWish.set('description', wish.title)
+      parseWish.set('private', wish.private)
+      return parseWish.save()
+    })
+    .then((response) => {
+      dispatch(saveWishSuccess())
+    })
+    .catch(error => {
+      dispatch(saveWishError(error))
+    })
   }
 }

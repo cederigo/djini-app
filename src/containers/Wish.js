@@ -17,23 +17,26 @@ import React, {
 import AddWishForm from '../components/wish/AddWishForm'
 import {
   onWishFieldChange, 
-  saveWish, 
+  saveWish,
+  editWish, 
   setPrivate} from '../actions/wish'
 
 class Wish extends Component {
 
   render() {
     console.log('Wish.render()')
-    const {wishState, dispatch} = this.props
+    const {wishState, globalState, dispatch} = this.props
     return (
       <View style={{flex: 1}}>
 
         <StatusBar translucent={true} />
 
-        <AddWishForm 
+        <AddWishForm
+          currentUser={globalState.currentUser} 
           wishState={wishState} 
           onWishFieldChange={(field, value) => dispatch(onWishFieldChange(field, value))} 
           saveWish={(wish) => dispatch(saveWish(wish))} 
+          editWish={() => dispatch(editWish())}
           setPrivate={(value) => dispatch(setPrivate(value))}
           styles={styles}/>
       </View>
@@ -77,7 +80,10 @@ const styles = StyleSheet.create({
  * Redux boilerplate
  */
 function select(state) {
-  return { wishState: state.wish};
+  return { 
+    wishState: state.wish,
+    globalState: state.global
+  };
 }
 
 export default connect(select)(Wish)

@@ -12,6 +12,7 @@ import {
     RESET_WISH,
     EDIT_WISH,
     WISH_SET_USERID,
+    WISH_SET_OWNERID,
     ON_WISH_FIELD_CHANGE
 } from '../../lib/constants'
 
@@ -34,6 +35,9 @@ export default function wishReducer(state = initialState, {type, payload}) {
             return state
         case WISH_SET_USERID:
             state = state.setIn(['wish', 'userId'], payload)
+            return state
+        case WISH_SET_OWNERID:
+            state = state.setIn(['wish', 'ownerId'], payload)
             return state
         case SET_PRIVATE:
             state = state.setIn(['wish','private'], payload)

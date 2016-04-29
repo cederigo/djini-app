@@ -24,6 +24,7 @@ const InitialState = Record({
     error: null,
     isEditable: false,
     wish: new (Record({
+        // id: undefined,
         title: '',
         description: '',
         url: '',

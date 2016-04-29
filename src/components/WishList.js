@@ -24,9 +24,7 @@ export default class WishList extends Component {
 
     this._renderRow = this._renderRow.bind(this)
     
-    this.state = {
-      dataSource: ds.cloneWithRows(wishes.toArray())
-    }
+    this.dataSource = ds.cloneWithRows(wishes.toArray())
   }
 
   render() {
@@ -34,7 +32,7 @@ export default class WishList extends Component {
       <ListView
         ref="listView"
         style={styles.container}
-        dataSource={this.state.dataSource}
+        dataSource={this.dataSource}
         renderRow={this._renderRow}
       />
     )

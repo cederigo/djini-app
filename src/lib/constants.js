@@ -7,6 +7,7 @@ export const SET_WISH = 'set-wish'
 export const RESET_WISH = 'reset-wish'
 export const EDIT_WISH = 'edit-wish'
 export const WISH_SET_USERID = 'wish-set-userid'
+export const WISH_SET_OWNERID = 'wish-set-ownerid'
 export const SET_PRIVATE = 'set-private'
 
 export const SAVE_WISH_REQUEST = 'save-wish-request'

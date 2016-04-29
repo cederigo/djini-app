@@ -23,6 +23,7 @@ import {Actions} from 'react-native-router-flux'
 import {Immutable, List, Record} from 'immutable'
 
 const Wish = Record({
+  id: '',
   title: '',
   url: '',
   description: '',
@@ -88,12 +89,13 @@ export function getUserWishes() {
     .then((response) => {
       wishes = List(response.map((wish) => {
         return new Wish({
+          id: wish.id,
           title: wish.attributes.title,
           url: wish.attributes.url,
           description: wish.attributes.description,
           private: wish.attributes.private,
-          userId: wish.attributes.user.objectId,
-          ownerId: wish.attributes.owner.objectId
+          userId: wish.attributes.user.id,
+          ownerId: wish.attributes.owner.id
         })
       }))
       dispatch(getUserWishesSuccess(wishes))
