@@ -1,11 +1,59 @@
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {Actions} from 'react-native-router-flux'
+import Immutable from 'immutable';
 import React, {
-  Component,
+  Component, ListView,
   View, Text, TouchableOpacity,
+  PropTypes, StatusBar,
   StyleSheet
 } from 'react-native';
 
+import {getUserWishes, show} from '../actions/wishes'
+import {newWish} from '../actions/wish'
 import {logout} from '../actions/authActions'
+import WishList from '../components/WishList'
+import NewWishButton from '../components/NewWishButton'
+import LogoutButton from '../components/LogoutButton'
+
+class Wishes extends Component {
+  
+  props: {
+    wishesState: any,
+    currentUser: any
+  }
+  
+  componentDidMount() {
+    this.props.dispatch(getUserWishes())
+  }
+  
+  render() {
+    let wishList
+    const {dispatch, wishesState, currentUser} = this.props
+    if (wishesState.isFetching) {
+      wishList = <Text>Wünsche werden geladen</Text>
+    } else {
+      if (wishesState.wishes.size > 0) {
+        wishList = <WishList wishes={wishesState.wishes} show={(wish) => dispatch(show(wish))}/>
+      } else {
+        if (wishesState.error !== null) {
+          wishList = <View><Text>Du hast keine Wünsche!</Text>
+          <Text>(Aber beim Laden gab's einen Fehler)</Text></View>
+        } else {
+          wishList = <Text>Du hast keine Wünsche!</Text>
+        }
+      }
+    }
+    return (
+      <View style={styles.container}>
+        <Text>Willkommen</Text>
+        <LogoutButton/>
+        <NewWishButton newWish={() => dispatch(newWish(currentUser.id))}/>
+        {wishList}    
+      </View>
+    )
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -22,32 +70,15 @@ const styles = StyleSheet.create({
   }
 })
 
-class Wishes extends Component {
-
-  props: {
-    user: any
-  }
-
-  render() {
-    const {user} = this.props
-    return (
-        <View style={styles.container}>
-          <Text>Willkommen {user.name}</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => { this.props.dispatch(logout())}}>
-            <Text style={styles.buttonText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
-    )
-  }
-}
 
 /**
  * Redux boilerplate
  */
 function select(state) {
-  return { user: state.global.currentUser};
+  return { 
+    wishesState: state.wishes,
+    currentUser: state.global.currentUser
+  };
 }
 
 export default connect(select)(Wishes)

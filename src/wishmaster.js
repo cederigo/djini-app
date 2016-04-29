@@ -10,7 +10,7 @@ import Parse from 'parse/react-native';
 /* Config */
 import {
   PARSE_APP_ID,
-  PARSE_BASE_URL,
+  PARSE_BASE_URL
 } from './lib/config'
 
 /*  Containers */
@@ -18,6 +18,7 @@ import App from './containers/App';
 import Login from './containers/Login';
 import Wishes from './containers/Wishes';
 import Friends from './containers/Friends';
+import Wish from './containers/Wish';
 
 /* Actions */
 import * as deviceActions from './actions/deviceActions';
@@ -28,6 +29,8 @@ import deviceInitialState from './reducers/device/deviceInitialState';
 import globalInitialState from './reducers/global/globalInitialState';
 import authInitialState from './reducers/auth/authInitialState';
 import socialInitialState from './reducers/social/socialInitialState';
+import wishInitialState from './reducers/wish/wishInitialState';
+import wishesInitialState from './reducers/wishes/wishesInitialState';
 
 const VERSION='0.0.1';
 
@@ -36,7 +39,9 @@ function getInitialState() {
     global: new globalInitialState,
     device: new deviceInitialState,
     auth: new authInitialState,
-    social: new socialInitialState
+    social: new socialInitialState,
+    wish: new wishInitialState,
+    wishes: new wishesInitialState
   };
   return _initState;
 }
@@ -90,6 +95,8 @@ export default function native(platform) {
               <Scene key="app" component={App} title="Wishmaster" initial={true}/>
 
               <Scene key="login" type="replace" component={Login} />
+
+              <Scene key="wish" component={Wish} title="Wunsch"/>
 
               <Scene key="home" panHandlers={null} tabs={true} hideNavBar={false} >
                 <Scene key="wishes" initial={true} component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
