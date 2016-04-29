@@ -22,32 +22,30 @@ const initialState = new InitialState;
 export default function wishReducer(state = initialState, {type, payload}) {
     switch (type) {
         case SET_WISH:
-            state = state.set('wish', payload)
-            return state
+            return state.set('wish', payload)
+            
         case RESET_WISH:
-            state = initialState
-            return state
+            return initialState
+            
         case SET_EDITABLE:
-            state = state.set('isEditable', payload)
-            return state
+            return state.set('isEditable', payload)
+
         case SAVE_WISH_REQUEST:
-            state = state.set('isFetching', true)
+            return state.set('isFetching', true)
                 .set('isEditable', false)
                 .set('error', null)
-            return state
+
         case SAVE_WISH_SUCCESS:
-            state = state.set('isFetching', false)
+            return state.set('isFetching', false)
                 .set('error', null)
-            return state
+
         case SAVE_WISH_FAILURE:
-            state = state.set('isFetching', false)
+            return state.set('isFetching', false)
                 .set('error', payload)
-            return state
 
         case ON_WISH_FIELD_CHANGE: {
             const {field, value} = payload
-            state = state.setIn(['wish', field], value)
-            return state // TODO: validation ?
+            return state.setIn(['wish', field], value)
         }
     }
     /**
