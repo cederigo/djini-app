@@ -4,9 +4,9 @@ import InitialState from './wishesInitialState'
  * ## Wishes actions
  */
 import {
-    GET_USER_WISHES_REQUEST,
-    GET_USER_WISHES_SUCCESS,
-    GET_USER_WISHES_FAILURE
+    GET_WISHES_REQUEST,
+    GET_WISHES_SUCCESS,
+    GET_WISHES_FAILURE
 } from '../../lib/constants'
 
 const initialState = new InitialState
@@ -17,16 +17,16 @@ const initialState = new InitialState
  */
 export default function wishesReducer(state = initialState, {type, payload}) {
     switch (type) {
-        case GET_USER_WISHES_REQUEST:
+        case GET_WISHES_REQUEST:
             return state.set('isFetching', true)
             .set('error', null)
                 
-        case GET_USER_WISHES_SUCCESS:
+        case GET_WISHES_SUCCESS:
             return state.set('isFetching', false)
             .set('wishes', payload)
             .set('error', null)
                 
-        case GET_USER_WISHES_FAILURE:
+        case GET_WISHES_FAILURE:
             return state.set('isFetching', false)
             .set('error', payload) 
     }

@@ -9,7 +9,7 @@ import React, {
   StyleSheet
 } from 'react-native';
 
-import {getUserWishes, newWish, show} from '../actions/wishes'
+import {getCurrentUserWishes, newWish, show} from '../actions/wishes'
 import {logout} from '../actions/authActions'
 import WishList from '../components/WishList'
 import NewWishButton from '../components/NewWishButton'
@@ -23,7 +23,7 @@ class Wishes extends Component {
   }
   
   componentDidMount() {
-    this.props.dispatch(getUserWishes())
+    this.props.dispatch(getCurrentUserWishes())
   }
   
   render() {
@@ -56,6 +56,7 @@ class Wishes extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 100,
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',

@@ -1,6 +1,8 @@
 import {OrderedMap} from 'immutable';
 import {Alert, ActionSheetIOS, Platform} from 'react-native'
 import Share from 'react-native-share';
+import {Actions} from 'react-native-router-flux'
+
 import {
   SOCIAL_STATE_REQUEST,
   SOCIAL_STATE_SUCCESS,
@@ -13,8 +15,12 @@ import {
   ON_SEARCH_FIELD_CHANGE,
   SAVE_SOCIAL_STATE,
 
-  ADD_FAVORITE 
+  ADD_FAVORITE,
+  
+  SET_PROFILE
 } from '../lib/constants'
+
+import {getWishes} from './wishes'
 
 import contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
@@ -153,10 +159,22 @@ export function invite(contact) {
 export function show(contact) {
   return dispatch => {
     dispatch(addFavorite(contact))
-
+    
     //TODO: dispatch global invite activity action
-    Alert.alert('Show', 'View profile of ' + contact.name)
-
+    // Alert.alert('Show', 'View profile of ' + contact.name)
+    dispatch(setProfile(contact))
+    if (contact.registered) {
+      dispatch(getWishes(contact.id))
+    }
+    // 
     dispatch(saveState())
+    Actions.profile()
+  }
+}
+
+export function setProfile(contact) {
+  return {
+    type: SET_PROFILE,
+    payload: contact
   }
 }

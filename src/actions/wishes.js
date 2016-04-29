@@ -9,9 +9,9 @@
  */
 
 import {
-  GET_USER_WISHES_REQUEST,
-  GET_USER_WISHES_SUCCESS, 
-  GET_USER_WISHES_FAILURE,
+  GET_WISHES_REQUEST,
+  GET_WISHES_SUCCESS, 
+  GET_WISHES_FAILURE,
   SAVE_WISH_REQUEST, 
   SAVE_WISH_FAILURE, 
   SAVE_WISH_SUCCESS,
@@ -39,44 +39,40 @@ const Wish = Record({
 })
 
 /*
- * Get user wishes
+ * Get wishes
  */
-export function getUserWishesRequest() {
+export function getWishesRequest() {
   return {
-    type: GET_USER_WISHES_REQUEST
+    type: GET_WISHES_REQUEST
   }
 }
 
-export function getUserWishesSuccess(wishes) {
+export function getWishesSuccess(wishes) {
   return {
-    type: GET_USER_WISHES_SUCCESS,
+    type: GET_WISHES_SUCCESS,
     payload: wishes
   }
 }
 
-export function getUserWishesFailure() {
+export function getWishesFailure() {
   return {
-    type: GET_USER_WISHES_FAILURE
+    type: GET_WISHES_FAILURE
   }
 }
 
-export function getUserWishes() {
+export function getCurrentUserWishes() {
+  return (dispatch, getState) => {
+    dispatch(getWishes(getState().global.currentUser.id))
+  }
+}
+
+export function getWishes(userId) {
   let wishes
   return (dispatch, getState) => {
-    dispatch(getUserWishesRequest())
+    dispatch(getWishesRequest())
     let query = new Parse.Query('Wish')
-    const userPointer = {
-      __type: 'Pointer',
-      className: '_User',
-      objectId: getState().global.currentUser.id
-    }
-    const ownerPointer = {
-      __type: 'Pointer',
-      className: '_User',
-      objectId: getState().global.currentUser.id
-    }
-    query.equalTo('user', userPointer)
-    query.equalTo('owner', ownerPointer)
+    query.equalTo('user', parseUserPointer(userId))
+    query.equalTo('owner', parseUserPointer(getState().global.currentUser.id))
     return query.find()
     .then((response) => {
       wishes = List(response.map((wish) => {
@@ -90,10 +86,10 @@ export function getUserWishes() {
           ownerId: wish.attributes.owner.id
         })
       }))
-      dispatch(getUserWishesSuccess(wishes))
+      dispatch(getWishesSuccess(wishes))
     })
     .catch(error => {
-      dispatch(getUserWishesFailure(error))
+      dispatch(getWishesFailure(error))
     })
   }
 }
@@ -174,30 +170,23 @@ export function saveWish(wish) {
   return (dispatch, getState) => {
     if (!wish.id) {
       // new wish
-    dispatch(saveWishRequest())
-    let ParseWish = Parse.Object.extend('Wish')
-    let newParseWish = new ParseWish({
-      title: wish.title, 
-      description: wish.description, 
-      url: wish.url,
-      private: wish.private,
-      user: {
-        __type: 'Pointer',
-        className: '_User',
-        objectId: wish.userId
-      },
-      owner: {
-        __type: 'Pointer',
-        className: '_User',
-        objectId: getState().global.currentUser.id // owner is always the current user
-      } 
-    })
-    newParseWish.save()
+      dispatch(saveWishRequest())
+      // Todo: check if user exists
+        let ParseWish = Parse.Object.extend('Wish')
+        let newParseWish = new ParseWish({
+          title: wish.title, 
+          description: wish.description, 
+          url: wish.url,
+          private: wish.private,
+          user: parseUserPointer(wish.userId),
+          owner: parseUserPointer(getState().global.currentUser.id)
+        })
+        return newParseWish.save()
       .then((response) => {
         dispatch(saveWishSuccess())
         // update my wishes
         if (wish.ownerId === getState().global.currentUser.id) {
-          dispatch(getUserWishes())
+          dispatch(getCurrentUserWishes())
         }
       })
       .catch(error => {
@@ -209,6 +198,18 @@ export function saveWish(wish) {
     }
   }
 }
+
+export function checkUser(phoneNumber) {
+  let query = new Parse.Query(Parse.User)
+  query.equalTo('username', phoneNumber)
+  return query.first()
+  .then((user) => {
+    if (!user) {
+      console.log('no user with username ' + phoneNumber + ' found!')      
+    }
+  })
+}
+
 /*
  * Update Wish
  */
@@ -229,7 +230,7 @@ export function updateWish(wish) {
       dispatch(saveWishSuccess())
       // update my wishes
       if (wish.ownerId === getState().global.currentUser.id) {
-        dispatch(getUserWishes())
+        dispatch(getCurrentUserWishes())
       }
     })
     .catch(error => {
@@ -253,11 +254,20 @@ export function deleteWish(wish) {
       dispatch(saveWishSuccess())
       // update my wishes
       if (wish.ownerId === getState().global.currentUser.id) {
-        dispatch(getUserWishes())
+        dispatch(getCurrentUserWishes())
       }
     })
     .catch((error) => {
       dispatch(saveWishSuccess(error))
     })
+  }
+}
+
+/* Helper */
+function parseUserPointer(userId) {
+  return {
+    __type: 'Pointer',
+    className: '_User',
+    objectId: userId 
   }
 }
