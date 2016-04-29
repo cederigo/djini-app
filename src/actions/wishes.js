@@ -12,6 +12,7 @@ import {
   GET_USER_WISHES_REQUEST,
   GET_USER_WISHES_SUCCESS, 
   GET_USER_WISHES_FAILURE,
+  SET_EDITABLE_FALSE,
   SET_WISH
 } from '../lib/constants'
 
@@ -61,8 +62,15 @@ export function setWish(wish) {
   }
 }
 
+export function setEditableFalse() {
+  return {
+    type: SET_EDITABLE_FALSE
+  }
+}
+
 export function show(wish) {
   return dispatch => {
+    dispatch(setEditableFalse())
     dispatch(setWish(wish))
     Actions.wish()
   }

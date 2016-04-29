@@ -9,6 +9,7 @@ import {
     SAVE_WISH_FAILURE, 
     SET_WISH,
     SET_PRIVATE,
+    SET_EDITABLE_FALSE,
     RESET_WISH,
     EDIT_WISH,
     WISH_SET_USERID,
@@ -41,6 +42,9 @@ export default function wishReducer(state = initialState, {type, payload}) {
             return state
         case SET_PRIVATE:
             state = state.setIn(['wish','private'], payload)
+            return state
+        case SET_EDITABLE_FALSE:
+            state = state.set('isEditable', false)
             return state
         case SAVE_WISH_REQUEST:
             state = state.set('isFetching', true)

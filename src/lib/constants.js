@@ -9,6 +9,7 @@ export const EDIT_WISH = 'edit-wish'
 export const WISH_SET_USERID = 'wish-set-userid'
 export const WISH_SET_OWNERID = 'wish-set-ownerid'
 export const SET_PRIVATE = 'set-private'
+export const SET_EDITABLE_FALSE = 'set-editable-false'
 
 export const SAVE_WISH_REQUEST = 'save-wish-request'
 export const SAVE_WISH_SUCCESS = 'save-wish-success'
