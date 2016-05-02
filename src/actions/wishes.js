@@ -138,10 +138,15 @@ export function setEditable(value) {
   }
 }
 
-export function newWish(userId) {
+// user.id or user.phoneNumber must be set
+export function newWish(user) {
   return (dispatch, getState) => {
     dispatch(resetWish())
-    dispatch(onWishFieldChange('userId', userId))
+    if (user.id) {
+      dispatch(onWishFieldChange('userId', user.id))
+    } else {
+      dispatch(onWishFieldChange('userPhoneNumber', user.phoneNumber))
+    }
     dispatch(onWishFieldChange('ownerId', getState().global.currentUser.id))
     dispatch(setEditable(true))
     Actions.wish()
@@ -171,17 +176,21 @@ export function saveWish(wish) {
     if (!wish.id) {
       // new wish
       dispatch(saveWishRequest())
-      // Todo: check if user exists
+      // make sure user exists
+      _getUserId(wish)
+      .then((userId) => {
+        console.log('add wish for user ' + userId)
         let ParseWish = Parse.Object.extend('Wish')
         let newParseWish = new ParseWish({
           title: wish.title, 
           description: wish.description, 
           url: wish.url,
           private: wish.private,
-          user: parseUserPointer(wish.userId),
+          user: parseUserPointer(userId),
           owner: parseUserPointer(getState().global.currentUser.id)
         })
         return newParseWish.save()
+      })
       .then((response) => {
         dispatch(saveWishSuccess())
         // update my wishes
@@ -199,14 +208,37 @@ export function saveWish(wish) {
   }
 }
 
-export function checkUser(phoneNumber) {
+// make sure user exists
+function _getUserId(wish) {
+  if (wish.userId) {
+    // user exists on parse
+    return Parse.Promise.as(wish.userId)
+  }
+  // user might exist on parse
+  const phoneNumber = wish.userPhoneNumber
   let query = new Parse.Query(Parse.User)
   query.equalTo('username', phoneNumber)
   return query.first()
   .then((user) => {
     if (!user) {
-      console.log('no user with username ' + phoneNumber + ' found!')      
+      // user does not exist on parse => add as new user
+      console.log('no user with username ' + phoneNumber + ' found!')
+      
+      // TODO: this should be done on parse because of the secretPasswordToken
+      const secretPasswordToken = 'NOTAREALTOKEN' // just for testing
+      var user = new Parse.User()
+      user.setUsername(phoneNumber)
+      user.setPassword(secretPasswordToken)
+      return user.save()
+      .then((_user) => {
+        console.log(_user.id)
+        return _user.id 
+      })
+      
+      //return Parse.Cloud.run('addUser', {phoneNumber})
     }
+    // user exists on parse
+    return user.id
   })
 }
 

@@ -30,7 +30,7 @@ class Wish extends Component {
       <View style={styles.container}>
 
         <StatusBar translucent={true} />
-
+        <Text style={styles.text}>Wunsch für {wishState.wish.get('userId') ? 'userId ' + wishState.wish.get('userId') : 'phoneNumber ' + wishState.wish.get('userPhoneNumber')}</Text>
         <AddWishForm
           currentUser={globalState.currentUser} 
           wishState={wishState} 
@@ -67,12 +67,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '500'
   },
-  text: {},
+  text: {
+    paddingTop: 30
+  },
   icon: {
     alignSelf: 'center',
     marginBottom: 30
   },
-
   input: {
     marginLeft: Platform.OS === 'android' ? -5 : 0,
     height: 50,

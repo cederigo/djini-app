@@ -12,13 +12,18 @@ import React, {
   Text
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
+import {newWish} from '../actions/wishes'
+
+import NewWishButton from '../components/NewWishButton'
 
 // import WishList from '../components/WishList'
 
 class Profile extends Component {
   render() {
-    const {user} = this.props.profileState
-    
+    const {profileState, dispatch} = this.props
+    const {user} = profileState
+    let BackButton
+         
     BackButton = <TouchableOpacity
             style={styles.button}
             onPress={Actions.pop}>
@@ -28,6 +33,7 @@ class Profile extends Component {
     return (
         <View style={styles.container}>
           <Text style={styles.title}>Profil von {user.name}</Text>
+          <NewWishButton newWish={() => dispatch(newWish(user))}/>
           {BackButton}
         </View>
     )

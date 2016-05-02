@@ -47,7 +47,7 @@ class Wishes extends Component {
       <View style={styles.container}>
         <Text>Willkommen</Text>
         <LogoutButton/>
-        <NewWishButton newWish={() => dispatch(newWish(currentUser.id))}/>
+        <NewWishButton newWish={() => dispatch(newWish(currentUser))}/>
         {wishList}    
       </View>
     )

@@ -28,7 +28,8 @@ const InitialState = Record({
         title: '',
         description: '',
         url: '',
-        userId: '',
+        userId: null,
+        userPhoneNumber: null,
         ownerId: '',
         private: false
   }))
