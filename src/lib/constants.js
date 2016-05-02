@@ -1,7 +1,13 @@
 //wishes
-export const GET_WISHES_REQUEST = 'get-wishes-request'
-export const GET_WISHES_SUCCESS = 'get-wishes-success'
-export const GET_WISHES_FAILURE = 'get-wishes-failure'
+export const GET_MY_WISHES_REQUEST = 'get-my-wishes-request'
+export const GET_MY_WISHES_SUCCESS = 'get-my-wishes-success'
+export const GET_MY_WISHES_FAILURE = 'get-my-wishes-failure'
+export const GET_THEIR_WISHES_REQUEST = 'get-their-wishes-request'
+export const GET_THEIR_WISHES_SUCCESS = 'get-their-wishes-success'
+export const GET_THEIR_WISHES_FAILURE = 'get-their-wishes-failure'
+export const GET_MY_IDEAS_REQUEST = 'get-my-ideas-request'
+export const GET_MY_IDEAS_SUCCESS = 'get-my-ideas-success'
+export const GET_MY_IDEAS_FAILURE = 'get-my-ideas-failure'
 
 export const SET_WISH = 'set-wish'
 export const RESET_WISH = 'reset-wish'

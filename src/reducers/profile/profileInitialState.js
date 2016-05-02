@@ -5,7 +5,7 @@
 /**
  * ## Import
  */
-import {Record} from 'immutable'
+import {Record, List} from 'immutable'
 
 /**
  * ## Form
@@ -13,9 +13,12 @@ import {Record} from 'immutable'
  * fields it contains.
  */
 const InitialState = Record({
-    isFetching: false,
+    isFetchingWishes: false,
+    isFetchingIdeas: false,
     error: null,
-    user: null
+    user: null,
+    theirWishes: List(),
+    myIdeas: List()
 })
 
 export default InitialState;

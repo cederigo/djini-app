@@ -9,7 +9,7 @@ import React, {
   StyleSheet
 } from 'react-native';
 
-import {getCurrentUserWishes, newWish, show} from '../actions/wishes'
+import {getMyWishes, newWish, show} from '../actions/wishes'
 import {logout} from '../actions/authActions'
 import WishList from '../components/WishList'
 import NewWishButton from '../components/NewWishButton'
@@ -23,7 +23,7 @@ class Wishes extends Component {
   }
   
   componentDidMount() {
-    this.props.dispatch(getCurrentUserWishes())
+    this.props.dispatch(getMyWishes())
   }
   
   render() {

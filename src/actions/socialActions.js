@@ -20,7 +20,7 @@ import {
   SET_PROFILE
 } from '../lib/constants'
 
-import {getWishes} from './wishes'
+import {getTheirWishes, getMyIdeas} from './wishes'
 
 import contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
@@ -164,7 +164,8 @@ export function show(contact) {
     // Alert.alert('Show', 'View profile of ' + contact.name)
     dispatch(setProfile(contact))
     if (contact.registered) {
-      dispatch(getWishes(contact.id))
+      dispatch(getTheirWishes(contact.id))
+      dispatch(getMyIdeas(contact.id))
     }
     // 
     dispatch(saveState())

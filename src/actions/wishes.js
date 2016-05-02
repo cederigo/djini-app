@@ -9,9 +9,15 @@
  */
 
 import {
-  GET_WISHES_REQUEST,
-  GET_WISHES_SUCCESS, 
-  GET_WISHES_FAILURE,
+  GET_MY_WISHES_REQUEST,
+  GET_MY_WISHES_SUCCESS, 
+  GET_MY_WISHES_FAILURE,
+  GET_MY_IDEAS_REQUEST,
+  GET_MY_IDEAS_SUCCESS, 
+  GET_MY_IDEAS_FAILURE,
+  GET_THEIR_WISHES_REQUEST,
+  GET_THEIR_WISHES_SUCCESS, 
+  GET_THEIR_WISHES_FAILURE,
   SAVE_WISH_REQUEST, 
   SAVE_WISH_FAILURE, 
   SAVE_WISH_SUCCESS,
@@ -39,59 +45,144 @@ const Wish = Record({
 })
 
 /*
- * Get wishes
+ * Get my wishes
  */
-export function getWishesRequest() {
+function getMyWishesRequest() {
   return {
-    type: GET_WISHES_REQUEST
+    type: GET_MY_WISHES_REQUEST
   }
 }
 
-export function getWishesSuccess(wishes) {
+function getMyWishesSuccess(wishes) {
   return {
-    type: GET_WISHES_SUCCESS,
+    type: GET_MY_WISHES_SUCCESS,
     payload: wishes
   }
 }
 
-export function getWishesFailure() {
+function getMyWishesFailure(error) {
   return {
-    type: GET_WISHES_FAILURE
+    type: GET_MY_WISHES_FAILURE,
+    payload: error
   }
 }
 
-export function getCurrentUserWishes() {
+export function getMyWishes() {
   return (dispatch, getState) => {
-    dispatch(getWishes(getState().global.currentUser.id))
-  }
-}
-
-export function getWishes(userId) {
-  let wishes
-  return (dispatch, getState) => {
-    dispatch(getWishesRequest())
-    let query = new Parse.Query('Wish')
-    query.equalTo('user', parseUserPointer(userId))
-    query.equalTo('owner', parseUserPointer(getState().global.currentUser.id))
-    return query.find()
-    .then((response) => {
-      wishes = List(response.map((wish) => {
-        return new Wish({
-          id: wish.id,
-          title: wish.attributes.title,
-          url: wish.attributes.url,
-          description: wish.attributes.description,
-          private: wish.attributes.private,
-          userId: wish.attributes.user.id,
-          ownerId: wish.attributes.owner.id
-        })
-      }))
-      dispatch(getWishesSuccess(wishes))
+    dispatch(getMyWishesRequest())
+    const myId = getState().global.currentUser.id
+    // from: me, to: me
+    _getWishes(myId, myId)
+    .then(wishes => {
+      dispatch(getMyWishesSuccess(wishes))
     })
     .catch(error => {
-      dispatch(getWishesFailure(error))
+      dispatch(getMyWishesFailure(error))
     })
   }
+}
+
+/*
+* Get my ideas for them 
+*/
+
+function getMyIdeasRequest() {
+  return {
+    type: GET_MY_IDEAS_REQUEST
+  }
+}
+
+function getMyIdeasSuccess(wishes) {
+  return {
+    type: GET_MY_IDEAS_SUCCESS,
+    payload: wishes
+  }
+}
+
+function getMyIdeasFailure(error) {
+  return {
+    type: GET_MY_IDEAS_FAILURE,
+    payload: error
+  }
+}
+
+export function getMyIdeas(userId) {
+  return (dispatch, getState) => {
+    dispatch(getMyIdeasRequest())
+    const myId = getState().global.currentUser.id
+    // from: me, to: user
+    _getWishes(myId, userId)
+    .then(wishes => {
+      dispatch(getMyIdeasSuccess(wishes))
+    })
+    .catch(error => {
+      dispatch(getMyIdeasFailure(error))
+    })
+  }
+}
+
+/*
+* Get their wishes
+*/
+
+function getTheirWishesRequest() {
+  return {
+    type: GET_THEIR_WISHES_REQUEST
+  }
+}
+
+function getTheirWishesSuccess(wishes) {
+  return {
+    type: GET_THEIR_WISHES_SUCCESS,
+    payload: wishes
+  }
+}
+
+function getTheirWishesFailure(error) {
+  return {
+    type: GET_THEIR_WISHES_FAILURE,
+    payload: error
+  }
+}
+
+export function getTheirWishes(userId) {
+  return (dispatch, getState) => {
+    dispatch(getTheirWishesRequest())
+    // from: user, to: user
+    _getWishes(userId, userId)
+    .then(wishes => {
+      dispatch(getTheirWishesSuccess(wishes))
+    })
+    .catch(error => {
+      dispatch(getTheirWishesFailure(error))
+    })
+  }
+}
+
+/*
+* Get wishes
+*/
+
+function _getWishes(ownerId, userId) {
+  console.log('get wishes of ' + userId + ' by ' + ownerId)
+  let query = new Parse.Query('Wish')
+  query.equalTo('user', parseUserPointer(userId))
+  query.equalTo('owner', parseUserPointer(ownerId))
+  return query.find()
+  .then((response) => {
+    console.log('got', response)
+    return List(response.map((wish) => {
+      return new Wish({
+        id: wish.id,
+        title: wish.attributes.title,
+        url: wish.attributes.url,
+        description: wish.attributes.description,
+        private: wish.attributes.private,
+        userId: wish.attributes.user.id,
+        ownerId: wish.attributes.owner.id
+      })
+    }))
+  })
 }
 /*
  * set wish
@@ -195,7 +286,7 @@ export function saveWish(wish) {
         dispatch(saveWishSuccess())
         // update my wishes
         if (wish.ownerId === getState().global.currentUser.id) {
-          dispatch(getCurrentUserWishes())
+          dispatch(getMyWishes())
         }
       })
       .catch(error => {
@@ -262,7 +353,7 @@ export function updateWish(wish) {
       dispatch(saveWishSuccess())
       // update my wishes
       if (wish.ownerId === getState().global.currentUser.id) {
-        dispatch(getCurrentUserWishes())
+        dispatch(getMyWishes())
       }
     })
     .catch(error => {
@@ -286,7 +377,7 @@ export function deleteWish(wish) {
       dispatch(saveWishSuccess())
       // update my wishes
       if (wish.ownerId === getState().global.currentUser.id) {
-        dispatch(getCurrentUserWishes())
+        dispatch(getMyWishes())
       }
     })
     .catch((error) => {
