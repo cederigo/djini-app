@@ -22,7 +22,8 @@ export default class AddWishForm extends Component {
     if (editable) {
       SaveButton = <TouchableOpacity
             style={styles.button}
-            onPress={() => { saveWish(wish)}}>
+            onPress={() => { saveWish(wish)}}
+            disabled={!wish.title}>
             <Text style={styles.buttonText}>Wunsch speichern</Text>
         </TouchableOpacity>
     } 
