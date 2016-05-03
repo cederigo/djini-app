@@ -30,6 +30,7 @@ const InitialState = Record({
         url: '',
         userId: null,
         userPhoneNumber: null,
+        seenAt: '',
         ownerId: '',
         private: false
   }))

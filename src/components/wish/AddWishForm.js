@@ -22,7 +22,8 @@ export default class AddWishForm extends Component {
     if (editable) {
       SaveButton = <TouchableOpacity
             style={styles.button}
-            onPress={() => { saveWish(wish)}}>
+            onPress={() => { saveWish(wish)}}
+            disabled={!wish.title}>
             <Text style={styles.buttonText}>Wunsch speichern</Text>
         </TouchableOpacity>
     } 
@@ -79,7 +80,16 @@ export default class AddWishForm extends Component {
           autoCorrect={false}
           value={wish.url}
         />
-        <Text>{wish.private ? 'Privat' : 'Öffentlich'}</Text>
+        <TextInput
+          style={styles.input}
+          editable={editable}
+          placeholder="Gesehen bei"
+          onChangeText={(text) => { onWishFieldChange('seenAt', text)}}
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={wish.seenAt}
+        />
+        <Text>{wish.private ? 'Der Wunsch ist privat' : 'Der Wunsch ist öffentlich'}</Text>
         <Switch
           disabled={!editable}
           onValueChange={(value) => onWishFieldChange('private', value)}
