@@ -33,6 +33,7 @@ const Wish = Record({
   title: '',
   url: '',
   description: '',
+  seenAt: '',
   private: false,
   userId: '',
   ownerId: ''
@@ -85,6 +86,7 @@ export function getUserWishes() {
           title: wish.attributes.title,
           url: wish.attributes.url,
           description: wish.attributes.description,
+          seenAt: wish.attributes.seenAt,
           private: wish.attributes.private,
           userId: wish.attributes.user.id,
           ownerId: wish.attributes.owner.id
@@ -180,6 +182,7 @@ export function saveWish(wish) {
       title: wish.title, 
       description: wish.description, 
       url: wish.url,
+      seenAt: wish.seenAt,
       private: wish.private,
       user: {
         __type: 'Pointer',
@@ -222,6 +225,7 @@ export function updateWish(wish) {
       parseWish.set('title', wish.title)
       parseWish.set('url', wish.url)
       parseWish.set('description', wish.description)
+      parseWish.set('seenAt', wish.seenAt)
       parseWish.set('private', wish.private)
       return parseWish.save()
     })
