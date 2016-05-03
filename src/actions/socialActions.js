@@ -167,7 +167,6 @@ export function show(contact) {
       dispatch(getTheirWishes(contact.id))
       dispatch(getMyIdeas(contact.id))
     }
-    // 
     dispatch(saveState())
     Actions.profile()
   }
