@@ -1,8 +1,11 @@
+import {Record} from 'immutable'
+
 export type User = {
   id: string,
   name: string,
   phoneNumber: any, //TODO
-  birthday: Date
+  birthday: Date,
+  registered: boolean
 }
 
 export type Wish = {
@@ -15,3 +18,13 @@ export type Wish = {
   userPhoneNumber: any, // only used if userId is not set 
   ownerId: string
 }
+
+export const ImmutableWish = Record({
+  id: '',
+  title: '',
+  url: '',
+  description: '',
+  seenAt: '',
+  private: false,
+  fullfiller: {}
+})

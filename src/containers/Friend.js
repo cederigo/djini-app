@@ -12,38 +12,28 @@ import React, {
   Text
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {newWish, getTheirWishes, getMyIdeas} from '../actions/wishes'
+import {newWish, show} from '../actions/wishes'
 
 import NewWishButton from '../components/NewWishButton'
 
 import WishList from '../components/WishList'
 
-class Profile extends Component {
-  
-  componentDidMount() {
-    const {profileState, dispatch} = this.props
-    const {user} = profileState
-    // TODO: user might not yet have an id
-    if (user.id) {
-      dispatch(getTheirWishes(user.id))
-      dispatch(getMyIdeas(user.id))
-    } else {
-      console.log('no user.id => TODO')
-    }
-  }
+class Friend extends Component {
   
   render() {
-    const {profileState, dispatch} = this.props
-    const {user} = profileState
+    const {friendState, dispatch} = this.props
+    const {user} = friendState
+    console.log(friendState)
+    console.log(user)
     let BackButton
     
-    if (profileState.isFetchingWishes) {
+    if (friendState.isFetching) {
       theirWishes = <Text>Wünsche werden geladen</Text>
     } else {
-      if (profileState.theirWishes.size > 0) {
-        theirWishes = <WishList wishes={profileState.theirWishes} show={(wish) => dispatch(show(wish))}/>
+      if (friendState.wishes.size > 0) {
+        theirWishes = <WishList wishes={friendState.wishes} show={(wish) => dispatch(show(wish))}/>
       } else {
-        if (profileState.error !== null) {
+        if (friendState.error !== null) {
           theirWishes = <View><Text>Keine Wünsche!</Text>
           <Text>(Aber beim Laden gab's einen Fehler)</Text></View>
         } else {
@@ -51,13 +41,13 @@ class Profile extends Component {
         }
       }
     }
-    if (profileState.isFetchingIdeas) {
+    if (friendState.isFetching) {
       myIdeas = <Text>Ideen werden geladen</Text>
     } else {
-      if (profileState.myIdeas.size > 0) {
-        myIdeas = <WishList wishes={profileState.myIdeas} show={(wish) => dispatch(show(wish))}/>
+      if (friendState.ideas.size > 0) {
+        myIdeas = <WishList wishes={friendState.ideas} show={(wish) => dispatch(show(wish))}/>
       } else {
-        if (profileState.error !== null) {
+        if (friendState.error !== null) {
           myIdeas = <View><Text>Keine Ideen!</Text>
           <Text>(Aber beim Laden gab's einen Fehler)</Text></View>
         } else {
@@ -75,17 +65,19 @@ class Profile extends Component {
     return (
         <View style={styles.container}>
           <Text style={styles.title}>Profil von {user.name}</Text>
-          <NewWishButton newWish={() => dispatch(newWish(user))}/>
           {BackButton}
+          <Text style={styles.title}>Wünsche von {user.name}</Text>
           {theirWishes}
+          <Text style={styles.title}>Meine Ideen für {user.name}</Text>
+          <NewWishButton newWish={() => dispatch(newWish(user))}/>
           {myIdeas}
         </View>
     )
   }
 }
 
-Profile.propTypes = {
-  profileState: PropTypes.instanceOf(Immutable.Record).isRequired
+Friend.propTypes = {
+  friendState: PropTypes.instanceOf(Immutable.Record).isRequired
 }
 
 const styles = StyleSheet.create({
@@ -108,8 +100,8 @@ const styles = StyleSheet.create({
  */
 function select(state) {
   return {
-    profileState: state.profile
+    friendState: state.friend
   }
 }
 
-export default connect(select)(Profile)
+export default connect(select)(Friend)

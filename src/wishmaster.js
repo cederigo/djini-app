@@ -18,7 +18,7 @@ import App from './containers/App'
 import Login from './containers/Login'
 import Wishes from './containers/Wishes'
 import Friends from './containers/Friends'
-import Profile from './containers/Profile'
+import Friend from './containers/Friend'
 import Wish from './containers/Wish'
 
 /* Actions */
@@ -30,7 +30,7 @@ import deviceInitialState from './reducers/device/deviceInitialState'
 import globalInitialState from './reducers/global/globalInitialState'
 import authInitialState from './reducers/auth/authInitialState'
 import socialInitialState from './reducers/social/socialInitialState'
-import profileInitialState from './reducers/profile/profileInitialState'
+import friendInitialState from './reducers/friend/friendInitialState'
 import wishInitialState from './reducers/wish/wishInitialState'
 import wishesInitialState from './reducers/wishes/wishesInitialState'
 
@@ -42,7 +42,7 @@ function getInitialState() {
     device: new deviceInitialState,
     auth: new authInitialState,
     social: new socialInitialState,
-    profile: new profileInitialState,
+    friend: new friendInitialState,
     wish: new wishInitialState,
     wishes: new wishesInitialState
   }
@@ -99,7 +99,7 @@ export default function native(platform) {
 
               <Scene key="login" type="replace" component={Login} />
               
-              <Scene key="profile" component={Profile} title="Profil"/>
+              <Scene key="friend" component={Friend} title="Freund"/>
 
               <Scene key="wish" component={Wish} title="Wunsch"/>
 

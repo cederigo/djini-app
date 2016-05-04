@@ -1,5 +1,5 @@
 /**
- * # profileInitialState.js
+ * # friendInitialState.js
  */
 
 /**
@@ -13,12 +13,11 @@ import {Record, List} from 'immutable'
  * fields it contains.
  */
 const InitialState = Record({
-    isFetchingWishes: false,
-    isFetchingIdeas: false,
+    isFetching: false,
     error: null,
     user: null,
-    theirWishes: List(),
-    myIdeas: List()
+    wishes: List(),
+    ideas: List()
 })
 
 export default InitialState;
