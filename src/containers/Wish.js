@@ -28,6 +28,7 @@ class Wish extends Component {
 
   render() {
     const {wishState, globalState, dispatch} = this.props
+  
     return (
       <View style={styles.container}>
 

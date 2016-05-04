@@ -50,7 +50,7 @@ export default class AddWishForm extends Component {
             onPress={() => { fullfillWish(wish)}}>
             <Text style={styles.buttonText}>Wunsch erfüllen</Text>
         </TouchableOpacity>
-    } else if (wish.fullfillerId === currentUser.id) {
+    } else if (wish.fullfillerId === currentUser.id && !wishState.isFetching) {
       // fullfilled by me => unFullfillButton
       FullfillButton = <TouchableOpacity
             style={styles.button}

@@ -33,6 +33,7 @@ import {
 import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
 import {Immutable, List, Record} from 'immutable'
+import {Alert} from 'react-native'
 
 import {updateFriendProfile} from './socialActions'
 
@@ -269,7 +270,7 @@ export function updateWish(wish) {
       }        
     })
     .catch(error => {
-      dispatch(saveWishError(error))
+      dispatch(saveWishFailure(error))
     })
   }
 }
@@ -304,11 +305,7 @@ export function deleteWish(wish) {
 export function fullfillWish(wish) {
   return (dispatch, getState) => {
     dispatch(saveWishRequest())
-    _getWish(wish)
-    .then((parseWish) => {
-      parseWish.set('fullfiller', parseUserPointer(getState().global.currentUser.id))
-      return parseWish.save()
-    })
+    Parse.Cloud.run('fullfillWish', {wishId: wish.id})
     .then((response) => {
       dispatch(saveWishSuccess())
       // local update
@@ -322,7 +319,12 @@ export function fullfillWish(wish) {
       }        
     })
     .catch(error => {
-      dispatch(saveWishError(error))
+      dispatch(saveWishFailure(error))
+      if (error.message.code === 'Wish is already fullfilled.') {
+        dispatch(onWishFieldChange('fullfillerId', 'XXXX'))
+        dispatch(updateFriendProfile())
+        Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
+      }
     })
   }
 }
@@ -350,7 +352,7 @@ export function unfullfillWish(wish) {
       }        
     })
     .catch(error => {
-      dispatch(saveWishError(error))
+      dispatch(saveWishFailure(error))
     })
   }
 }
