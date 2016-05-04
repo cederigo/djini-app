@@ -200,6 +200,21 @@ function getFriendProfileFailure(error) {
   }
 }
 
+export function updateFriendProfile() {
+  return (dispatch, getState) => {
+    dispatch(getFriendProfileRequest())
+    const {user} = getState().friend
+    _getFriendProfile(user)
+    .then(friend => {
+      dispatch(getFriendProfileSuccess(friend))
+      dispatch(saveState()) // is this needed?
+    })
+    .catch(error => {
+      dispatch(getFriendProfileFailure(error))
+    })
+  }
+}
+
 function _getFriendProfile(contact) {
   return Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
     .then((response) => {

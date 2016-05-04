@@ -65,6 +65,7 @@ class Friend extends Component {
     return (
         <View style={styles.container}>
           <Text style={styles.title}>Profil von {user.name}</Text>
+          <Text style={styles.title}>{user.birthday}</Text>
           {BackButton}
           <Text style={styles.title}>Wünsche von {user.name}</Text>
           {theirWishes}

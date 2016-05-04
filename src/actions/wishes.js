@@ -34,6 +34,8 @@ import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
 import {Immutable, List, Record} from 'immutable'
 
+import {updateFriendProfile} from './socialActions'
+
 import {ImmutableWish} from '../lib/types'
 
 /*
@@ -190,9 +192,12 @@ export function saveWish(wish) {
       .then((response) => {
         dispatch(saveWishSuccess())
         // update my wishes
-        if (wish.ownerId === getState().global.currentUser.id) {
+        if (wish.userId === getState().global.currentUser.id) {
           dispatch(getMyWishes())
-        }
+        } else {
+          // update friend wishes
+          dispatch(updateFriendProfile())  
+        }        
       })
       .catch(error => {
         dispatch(saveWishFailure(error))
@@ -258,9 +263,12 @@ export function updateWish(wish) {
     .then((response) => {
       dispatch(saveWishSuccess())
       // update my wishes
-      if (wish.ownerId === getState().global.currentUser.id) {
+      if (wish.userId === getState().global.currentUser.id) {
         dispatch(getMyWishes())
-      }
+      } else {
+        // update friend wishes
+        dispatch(updateFriendProfile())  
+      }        
     })
     .catch(error => {
       dispatch(saveWishError(error))
@@ -282,9 +290,12 @@ export function deleteWish(wish) {
     .then((response) => {
       dispatch(saveWishSuccess())
       // update my wishes
-      if (wish.ownerId === getState().global.currentUser.id) {
+      if (wish.userId === getState().global.currentUser.id) {
         dispatch(getMyWishes())
-      }
+      } else {
+        // update friend wishes
+        dispatch(updateFriendProfile())  
+      }  
     })
     .catch((error) => {
       dispatch(saveWishSuccess(error))
