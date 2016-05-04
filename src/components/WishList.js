@@ -31,7 +31,7 @@ export default class WishList extends Component {
     return (
       <ListView
         ref="listView"
-        style={styles.container}
+        style={styles.list}
         dataSource={this.dataSource}
         renderRow={this._renderRow}
       />

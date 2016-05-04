@@ -5,14 +5,15 @@
  * 
  */
 
-import global from './global/globalReducer';
-import device from './device/deviceReducer';
-import auth from './auth/authReducer';
-import wish from './wish/wishReducer';
-import social from './social/socialReducer';
-import wishes from './wishes/wishesReducer';
+import global from './global/globalReducer'
+import device from './device/deviceReducer'
+import auth from './auth/authReducer'
+import wish from './wish/wishReducer'
+import social from './social/socialReducer'
+import friend from './friend/friendReducer'
+import wishes from './wishes/wishesReducer'
 
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
 /**
  * ## CombineReducers
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   auth,
   wish,
   social,
+  friend,
   wishes
-});
+})
 
-export default rootReducer;
+export default rootReducer

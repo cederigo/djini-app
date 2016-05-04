@@ -9,9 +9,15 @@
  */
 
 import {
-  GET_USER_WISHES_REQUEST,
-  GET_USER_WISHES_SUCCESS, 
-  GET_USER_WISHES_FAILURE,
+  GET_MY_WISHES_REQUEST,
+  GET_MY_WISHES_SUCCESS, 
+  GET_MY_WISHES_FAILURE,
+  GET_MY_IDEAS_REQUEST,
+  GET_MY_IDEAS_SUCCESS, 
+  GET_MY_IDEAS_FAILURE,
+  GET_THEIR_WISHES_REQUEST,
+  GET_THEIR_WISHES_SUCCESS, 
+  GET_THEIR_WISHES_FAILURE,
   SAVE_WISH_REQUEST, 
   SAVE_WISH_FAILURE, 
   SAVE_WISH_SUCCESS,
@@ -28,76 +34,61 @@ import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
 import {Immutable, List, Record} from 'immutable'
 
-const Wish = Record({
-  id: '',
-  title: '',
-  url: '',
-  description: '',
-  seenAt: '',
-  private: false,
-  userId: '',
-  ownerId: ''
-})
+import {updateFriendProfile} from './socialActions'
+
+import {ImmutableWish} from '../lib/types'
 
 /*
- * Get user wishes
+ * Get my wishes
  */
-export function getUserWishesRequest() {
+function getMyWishesRequest() {
   return {
-    type: GET_USER_WISHES_REQUEST
+    type: GET_MY_WISHES_REQUEST
   }
 }
 
-export function getUserWishesSuccess(wishes) {
+function getMyWishesSuccess(wishes) {
   return {
-    type: GET_USER_WISHES_SUCCESS,
+    type: GET_MY_WISHES_SUCCESS,
     payload: wishes
   }
 }
 
-export function getUserWishesFailure() {
+function getMyWishesFailure(error) {
   return {
-    type: GET_USER_WISHES_FAILURE
+    type: GET_MY_WISHES_FAILURE,
+    payload: error
   }
 }
 
-export function getUserWishes() {
-  let wishes
+export function getMyWishes() {
   return (dispatch, getState) => {
-    dispatch(getUserWishesRequest())
-    let query = new Parse.Query('Wish')
-    const userPointer = {
-      __type: 'Pointer',
-      className: '_User',
-      objectId: getState().global.currentUser.id
-    }
-    const ownerPointer = {
-      __type: 'Pointer',
-      className: '_User',
-      objectId: getState().global.currentUser.id
-    }
-    query.equalTo('user', userPointer)
-    query.equalTo('owner', ownerPointer)
-    return query.find()
-    .then((response) => {
-      wishes = List(response.map((wish) => {
-        return new Wish({
-          id: wish.id,
-          title: wish.attributes.title,
-          url: wish.attributes.url,
-          description: wish.attributes.description,
-          seenAt: wish.attributes.seenAt,
-          private: wish.attributes.private,
-          userId: wish.attributes.user.id,
-          ownerId: wish.attributes.owner.id
-        })
-      }))
-      dispatch(getUserWishesSuccess(wishes))
+    dispatch(getMyWishesRequest())
+    const myId = getState().global.currentUser.id
+    // from: me, to: me
+    _getWishes(myId, myId)
+    .then(wishes => {
+      dispatch(getMyWishesSuccess(wishes))
     })
     .catch(error => {
-      dispatch(getUserWishesFailure(error))
+      dispatch(getMyWishesFailure(error))
     })
   }
+}
+
+/*
+* Get wishes
+*/
+
+function _getWishes(ownerId, userId) {
+  console.log('get wishes of ' + userId + ' by ' + ownerId)
+  return Parse.Cloud.run('getMyProfile')
+  .then((response) => {
+    console.log(response.wishes)
+    return List(response.wishes.map((wish) => {
+      return new ImmutableWish(wish)}
+    ))
+  })
 }
 /*
  * set wish
@@ -144,10 +135,15 @@ export function setEditable(value) {
   }
 }
 
-export function newWish(userId) {
+// user.id or user.phoneNumber must be set
+export function newWish(user) {
   return (dispatch, getState) => {
     dispatch(resetWish())
-    dispatch(onWishFieldChange('userId', userId))
+    if (user.id) {
+      dispatch(onWishFieldChange('userId', user.id))
+    } else {
+      dispatch(onWishFieldChange('userPhoneNumber', user.phoneNumber))
+    }
     dispatch(onWishFieldChange('ownerId', getState().global.currentUser.id))
     dispatch(setEditable(true))
     Actions.wish()
@@ -176,32 +172,32 @@ export function saveWish(wish) {
   return (dispatch, getState) => {
     if (!wish.id) {
       // new wish
-    dispatch(saveWishRequest())
-    let ParseWish = Parse.Object.extend('Wish')
-    let newParseWish = new ParseWish({
-      title: wish.title, 
-      description: wish.description, 
-      url: wish.url,
-      seenAt: wish.seenAt,
-      private: wish.private,
-      user: {
-        __type: 'Pointer',
-        className: '_User',
-        objectId: wish.userId
-      },
-      owner: {
-        __type: 'Pointer',
-        className: '_User',
-        objectId: getState().global.currentUser.id // owner is always the current user
-      } 
-    })
-    newParseWish.save()
+      dispatch(saveWishRequest())
+      // make sure user exists
+      _getUserId(wish)
+      .then((userId) => {
+        console.log('add wish for user ' + userId)
+        let ParseWish = Parse.Object.extend('Wish')
+        let newParseWish = new ParseWish({
+          title: wish.title, 
+          description: wish.description, 
+          url: wish.url,
+          seenAt: wish.seenAt,
+          private: wish.private,
+          user: parseUserPointer(userId),
+          owner: parseUserPointer(getState().global.currentUser.id)
+        })
+        return newParseWish.save()
+      })
       .then((response) => {
         dispatch(saveWishSuccess())
         // update my wishes
-        if (wish.ownerId === getState().global.currentUser.id) {
-          dispatch(getUserWishes())
-        }
+        if (wish.userId === getState().global.currentUser.id) {
+          dispatch(getMyWishes())
+        } else {
+          // update friend wishes
+          dispatch(updateFriendProfile())  
+        }        
       })
       .catch(error => {
         dispatch(saveWishFailure(error))
@@ -212,6 +208,41 @@ export function saveWish(wish) {
     }
   }
 }
+
+// make sure user exists
+function _getUserId(wish) {
+  if (wish.userId) {
+    // user exists on parse
+    return Parse.Promise.as(wish.userId)
+  }
+  // user might exist on parse
+  const phoneNumber = wish.userPhoneNumber
+  let query = new Parse.Query(Parse.User)
+  query.equalTo('username', phoneNumber)
+  return query.first()
+  .then((user) => {
+    if (!user) {
+      // user does not exist on parse => add as new user
+      console.log('no user with username ' + phoneNumber + ' found!')
+      
+      // TODO: this should be done on parse because of the secretPasswordToken
+      const secretPasswordToken = 'NOTAREALTOKEN' // just for testing
+      var user = new Parse.User()
+      user.setUsername(phoneNumber)
+      user.setPassword(secretPasswordToken)
+      return user.save()
+      .then((_user) => {
+        console.log(_user.id)
+        return _user.id 
+      })
+      
+      //return Parse.Cloud.run('addUser', {phoneNumber})
+    }
+    // user exists on parse
+    return user.id
+  })
+}
+
 /*
  * Update Wish
  */
@@ -232,9 +263,12 @@ export function updateWish(wish) {
     .then((response) => {
       dispatch(saveWishSuccess())
       // update my wishes
-      if (wish.ownerId === getState().global.currentUser.id) {
-        dispatch(getUserWishes())
-      }
+      if (wish.userId === getState().global.currentUser.id) {
+        dispatch(getMyWishes())
+      } else {
+        // update friend wishes
+        dispatch(updateFriendProfile())  
+      }        
     })
     .catch(error => {
       dispatch(saveWishError(error))
@@ -256,12 +290,24 @@ export function deleteWish(wish) {
     .then((response) => {
       dispatch(saveWishSuccess())
       // update my wishes
-      if (wish.ownerId === getState().global.currentUser.id) {
-        dispatch(getUserWishes())
-      }
+      if (wish.userId === getState().global.currentUser.id) {
+        dispatch(getMyWishes())
+      } else {
+        // update friend wishes
+        dispatch(updateFriendProfile())  
+      }  
     })
     .catch((error) => {
       dispatch(saveWishSuccess(error))
     })
+  }
+}
+
+/* Helper */
+function parseUserPointer(userId) {
+  return {
+    __type: 'Pointer',
+    className: '_User',
+    objectId: userId 
   }
 }

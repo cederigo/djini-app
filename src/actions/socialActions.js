@@ -1,6 +1,8 @@
-import {OrderedMap} from 'immutable';
+import {OrderedMap, List, Record} from 'immutable';
 import {Alert, ActionSheetIOS, Platform} from 'react-native'
 import Share from 'react-native-share';
+import {Actions} from 'react-native-router-flux'
+
 import {
   SOCIAL_STATE_REQUEST,
   SOCIAL_STATE_SUCCESS,
@@ -10,15 +12,21 @@ import {
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
 
+  GET_FRIEND_PROFILE_REQUEST,
+  GET_FRIEND_PROFILE_SUCCESS,
+  GET_FRIEND_PROFILE_FAILURE,
+
   ON_SEARCH_FIELD_CHANGE,
   SAVE_SOCIAL_STATE,
 
-  ADD_FAVORITE 
+  ADD_FAVORITE  
 } from '../lib/constants'
 
 import contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
+
+import {ImmutableWish} from '../lib/types'
 
 /*
  * Restore state from ./lib/db
@@ -153,10 +161,78 @@ export function invite(contact) {
 export function show(contact) {
   return dispatch => {
     dispatch(addFavorite(contact))
-
+    
     //TODO: dispatch global invite activity action
-    Alert.alert('Show', 'View profile of ' + contact.name)
-
-    dispatch(saveState())
+    // Alert.alert('Show', 'View profile of ' + contact.name)
+    dispatch(getFriendProfileRequest)
+    _getFriendProfile(contact)
+    .then(friend => {
+      dispatch(getFriendProfileSuccess(friend))
+      dispatch(saveState())
+      Actions.friend()
+    })
+    .catch(error => {
+      dispatch(getFriendProfileFailure(error))
+    })
   }
+}
+
+/*
+* Get Friend profile
+*/
+function getFriendProfileRequest() {
+  return {
+    type: GET_FRIEND_PROFILE_REQUEST
+  }
+}
+
+function getFriendProfileSuccess(friendProfile) {
+  return {
+    type: GET_FRIEND_PROFILE_SUCCESS,
+    payload: friendProfile
+  }
+}
+
+function getFriendProfileFailure(error) {
+  return {
+    type: GET_FRIEND_PROFILE_FAILURE,
+    payload: error
+  }
+}
+
+export function updateFriendProfile() {
+  return (dispatch, getState) => {
+    dispatch(getFriendProfileRequest())
+    const {user} = getState().friend
+    _getFriendProfile(user)
+    .then(friend => {
+      dispatch(getFriendProfileSuccess(friend))
+      dispatch(saveState()) // is this needed?
+    })
+    .catch(error => {
+      dispatch(getFriendProfileFailure(error))
+    })
+  }
+}
+
+function _getFriendProfile(contact) {
+  return Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
+    .then((response) => {
+      let friend = {
+        user: {
+          phoneNumber: contact.phoneNumber,
+          name: contact.name,
+          id: response.user.id,
+          birthday: response.user.birthday,
+          registered: response.user.registered
+        },
+        wishes: List(response.wishes.map((wish) => {
+          return new ImmutableWish(wish)
+        })),
+        ideas: List(response.ideas.map((wish) => {
+          return new ImmutableWish(wish)
+        })) 
+      }
+      return friend
+    })
 }

@@ -1,7 +1,7 @@
 //wishes
-export const GET_USER_WISHES_REQUEST = 'get-user-wishes-request'
-export const GET_USER_WISHES_SUCCESS = 'get-user-wishes-success'
-export const GET_USER_WISHES_FAILURE = 'get-user-wishes-failure'
+export const GET_MY_WISHES_REQUEST = 'get-my-wishes-request'
+export const GET_MY_WISHES_SUCCESS = 'get-my-wishes-success'
+export const GET_MY_WISHES_FAILURE = 'get-my-wishes-failure'
 
 export const SET_WISH = 'set-wish'
 export const RESET_WISH = 'reset-wish'
@@ -49,3 +49,7 @@ export const SAVE_SOCIAL_STATE = 'save-social-state'
 export const INVITE_CONTACT = 'invite-contact'
 export const ADD_FAVORITE = 'add-favorite'
 export const SHOW_CONTACT = 'show-contact'
+
+export const GET_FRIEND_PROFILE_REQUEST = 'get-friend-profile-request'
+export const GET_FRIEND_PROFILE_SUCCESS = 'get-friend-profile-success'
+export const GET_FRIEND_PROFILE_FAILURE = 'get-friend-profile-failure'

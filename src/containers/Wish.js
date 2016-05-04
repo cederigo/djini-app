@@ -25,13 +25,12 @@ import {
 class Wish extends Component {
 
   render() {
-    console.log('Wish.render()')
     const {wishState, globalState, dispatch} = this.props
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.container}>
 
         <StatusBar translucent={true} />
-
+        <Text style={styles.text}>Wunsch für {wishState.wish.get('userId') ? 'userId ' + wishState.wish.get('userId') : 'phoneNumber ' + wishState.wish.get('userPhoneNumber')}</Text>
         <AddWishForm
           currentUser={globalState.currentUser} 
           wishState={wishState} 
@@ -57,22 +56,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 10,
-    alignItems: 'flex-start'
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   },
   button: {
     padding: 15,
-    alignSelf: 'flex-end'
+    alignSelf: 'center'
   },
   buttonText: {
     fontSize: 17,
     fontWeight: '500'
   },
-  text: {},
+  text: {
+    paddingTop: 30
+  },
   icon: {
     alignSelf: 'center',
     marginBottom: 30
   },
-
   input: {
     marginLeft: Platform.OS === 'android' ? -5 : 0,
     height: 50,

@@ -10,46 +10,6 @@ import React, {
   Text
 } from 'react-native';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingLeft: 10,
-    backgroundColor: '#F6F6F6',
-    height: 60,
-    padding: 10
-  },
-  rowSeparator: {
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    height: 1,
-    marginHorizontal: 10,
-  },
-  sectionHeader: {
-    backgroundColor: '#48D1CC',
-    paddingLeft: 10
-  },
-  sectionHeaderText: {
-    fontSize: 16,
-    color: 'white',
-  },
-  text: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-  actions: {
-    width: 50,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-})
-
-
-
 export default class FriendsList extends Component {
   constructor(props) {
     super(props);
@@ -148,3 +108,41 @@ FriendsList.propTypes = {
   actions: PropTypes.object.isRequired,
   filterText: PropTypes.string
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingLeft: 10,
+    backgroundColor: '#F6F6F6',
+    height: 60,
+    padding: 10
+  },
+  rowSeparator: {
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    height: 1,
+    marginHorizontal: 10,
+  },
+  sectionHeader: {
+    backgroundColor: '#48D1CC',
+    paddingLeft: 10
+  },
+  sectionHeaderText: {
+    fontSize: 16,
+    color: 'white',
+  },
+  text: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  actions: {
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+})
