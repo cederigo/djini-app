@@ -19,6 +19,8 @@ import {
   onWishFieldChange, 
   saveWish,
   deleteWish,
+  fullfillWish,
+  unfullfillWish,
   setEditable
 } from '../actions/wishes'
 
@@ -30,7 +32,6 @@ class Wish extends Component {
       <View style={styles.container}>
 
         <StatusBar translucent={true} />
-        <Text style={styles.text}>Wunsch für {wishState.wish.get('userId') ? 'userId ' + wishState.wish.get('userId') : 'phoneNumber ' + wishState.wish.get('userPhoneNumber')}</Text>
         <AddWishForm
           currentUser={globalState.currentUser} 
           wishState={wishState} 
@@ -40,9 +41,8 @@ class Wish extends Component {
             dispatch(deleteWish(wish))
             Actions.pop()
           }}
-          fullfillWish = {(wish) => {
-            console.log('not implemented yet')
-          }}
+          fullfillWish = {(wish) => {dispatch(fullfillWish(wish))}}
+          unfullfillWish = {(wish) => {dispatch(unfullfillWish(wish))}}
           setEditable={() => dispatch(setEditable(true))}
           styles={styles}/>
       </View>

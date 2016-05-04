@@ -249,9 +249,7 @@ function _getUserId(wish) {
 export function updateWish(wish) {
   return (dispatch, getState) => {
     dispatch(saveWishRequest())
-    let ParseWish = Parse.Object.extend('Wish')
-    let query = new Parse.Query(ParseWish)
-    query.get(wish.id)
+    _getWish(wish)
     .then((parseWish) => {
       parseWish.set('title', wish.title)
       parseWish.set('url', wish.url)
@@ -281,9 +279,7 @@ export function updateWish(wish) {
 export function deleteWish(wish) {
   return (dispatch, getState) => {
     dispatch(saveWishRequest())
-    let ParseWish = Parse.Object.extend('Wish')
-    let query = new Parse.Query(ParseWish)
-    query.get(wish.id)
+    _getWish(wish)
     .then((parseWish) => {
       return parseWish.destroy()
     })
@@ -302,6 +298,62 @@ export function deleteWish(wish) {
     })
   }
 }
+/* 
+* fullfill wish 
+*/
+export function fullfillWish(wish) {
+  return (dispatch, getState) => {
+    dispatch(saveWishRequest())
+    _getWish(wish)
+    .then((parseWish) => {
+      parseWish.set('fullfiller', parseUserPointer(getState().global.currentUser.id))
+      return parseWish.save()
+    })
+    .then((response) => {
+      dispatch(saveWishSuccess())
+      // local update
+      dispatch(onWishFieldChange('fullfillerId', getState().global.currentUser.id))
+      // update my wishes
+      if (wish.userId === getState().global.currentUser.id) {
+        dispatch(getMyWishes())
+      } else {
+        // update friend wishes
+        dispatch(updateFriendProfile())  
+      }        
+    })
+    .catch(error => {
+      dispatch(saveWishError(error))
+    })
+  }
+}
+/* 
+* unfullfill wish 
+*/
+export function unfullfillWish(wish) {
+  return (dispatch, getState) => {
+    dispatch(saveWishRequest())
+    _getWish(wish)
+    .then((parseWish) => {
+      parseWish.set('fullfiller', null)
+      return parseWish.save()
+    })
+    .then((response) => {
+      dispatch(saveWishSuccess())
+      // local update
+      dispatch(onWishFieldChange('fullfillerId', ''))
+      // update my wishes
+      if (wish.userId === getState().global.currentUser.id) {
+        dispatch(getMyWishes())
+      } else {
+        // update friend wishes
+        dispatch(updateFriendProfile())  
+      }        
+    })
+    .catch(error => {
+      dispatch(saveWishError(error))
+    })
+  }
+}
 
 /* Helper */
 function parseUserPointer(userId) {
@@ -310,4 +362,10 @@ function parseUserPointer(userId) {
     className: '_User',
     objectId: userId 
   }
+}
+
+function _getWish(wish) {
+  let ParseWish = Parse.Object.extend('Wish')
+  let query = new Parse.Query(ParseWish)
+  return query.get(wish.id)
 }

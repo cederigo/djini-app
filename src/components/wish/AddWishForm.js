@@ -14,11 +14,11 @@ import {Actions} from 'react-native-router-flux'
 export default class AddWishForm extends Component {
 
   render() {
-    const {currentUser, wishState, onWishFieldChange, saveWish, deleteWish, fullfillWish, setEditable, styles} = this.props
+    const {currentUser, wishState, onWishFieldChange, saveWish, deleteWish, fullfillWish, unfullfillWish, setEditable, styles} = this.props
     const {wish} = wishState
     const editable = wishState.isEditable && !wishState.isFetching
     const allowEdit = wish.ownerId === currentUser.id && !wishState.isFetching
-    const fullfillable = !wish.fullfillerId && wish.userId !== currentUser.id && wish.ownerId !== currentUser.id
+    const fullfillable = !wish.fullfillerId && wish.userId !== currentUser.id && wish.ownerId !== currentUser.id && !wishState.isFetching
     let SaveButton, BackButton, EditButton, DeleteButton, FullfillButton, FullfillmentStatus
     
     // Save, edit & delete
@@ -51,7 +51,12 @@ export default class AddWishForm extends Component {
             <Text style={styles.buttonText}>Wunsch erfüllen</Text>
         </TouchableOpacity>
     } else if (wish.fullfillerId === currentUser.id) {
-      // fullfilled by me
+      // fullfilled by me => unFullfillButton
+      FullfillButton = <TouchableOpacity
+            style={styles.button}
+            onPress={() => { unfullfillWish(wish)}}>
+            <Text style={styles.buttonText}>Wunsch unerfüllen ^^</Text>
+        </TouchableOpacity>
       FullfillmentStatus = <Text style={styles.buttonText}>Dieser Wunsch wird von mir erfüllt</Text>
     } else if (wish.fullfillerId && wish.userId !== currentUser.id) {
       // fullfilled by other (and not my wish!)
@@ -116,8 +121,8 @@ export default class AddWishForm extends Component {
         {SaveButton}
         {EditButton}
         {DeleteButton}
-        {FullfillButton}
         {FullfillmentStatus}
+        {FullfillButton}
         {BackButton}
       </View>
     )
@@ -132,5 +137,6 @@ AddWishForm.propTypes = {
   saveWish: PropTypes.func.isRequired,
   deleteWish: PropTypes.func.isRequired,
   fullfillWish: PropTypes.func.isRequired,
+  unfullfillWish: PropTypes.func.isRequired,
   setEditable: PropTypes.func.isRequired
 }
