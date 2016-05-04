@@ -1,19 +1,23 @@
+import { connect } from 'react-redux';
 import React, { 
   StyleSheet,
   Component,
   TouchableOpacity,
-  Text,
-  PropTypes
+  Text
 } from 'react-native';
 
-import {Actions} from 'react-native-router-flux'
+import {User} from '../lib/types'
+import {newWish} from '../actions/wishes'
 
-export default class NewWishButton extends Component {
+class NewWishButton extends Component {
+  props: {
+    user: User
+  }
   render() {
-    const {newWish, userId} = this.props
+    const {dispatch, user} = this.props
     return (
       <TouchableOpacity
-        onPress={() => newWish()}
+        onPress={() => dispatch(newWish(user))}
         style={styles.button}>
         <Text style={styles.buttonText}>Neuen Wunsch erfassen</Text>
       </TouchableOpacity>
@@ -21,15 +25,24 @@ export default class NewWishButton extends Component {
   }
 }
 
-NewWishButton.propTypes = {
-  newWish: PropTypes.func.isRequired
-}
-
 const styles = StyleSheet.create({
   button: {
-    padding: 15
+    height: 200,
+    alignItems: 'center',
+    justifyContent: 'center'
+      
   },
   buttonText: {
     color: 'rgb(0, 122, 155)'
   }
 })
+
+/**
+ * Redux boilerplate
+ */
+function select(state) {
+  return { 
+    user: state.global.currentUser
+  };
+}
+export default connect(select)(NewWishButton)

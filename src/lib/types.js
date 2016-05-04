@@ -3,7 +3,7 @@ import {Record} from 'immutable'
 export type User = {
   id: string,
   name: string,
-  phoneNumber: any, //TODO
+  phoneNumber: string,
   birthday: Date,
   registered: boolean
 }

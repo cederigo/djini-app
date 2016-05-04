@@ -1,54 +1,36 @@
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import {Actions} from 'react-native-router-flux'
-import Immutable from 'immutable';
 import React, {
-  Component, ListView,
-  View, Text, TouchableOpacity,
-  PropTypes, StatusBar,
-  StyleSheet
+  Component,
+  StyleSheet,
+  View,
+  Alert
 } from 'react-native';
 
-import {getMyWishes, newWish, show} from '../actions/wishes'
-import {logout} from '../actions/authActions'
-import WishList from '../components/WishList'
+import MyWishList from '../components/MyWishList'
+//import Loading from '../components/Loading' //TODO: eventually show loading
 import NewWishButton from '../components/NewWishButton'
-import LogoutButton from '../components/LogoutButton'
+import {Wish} from '../lib/types'
 
 class Wishes extends Component {
   
   props: {
-    wishesState: any,
-    currentUser: any
-  }
-  
-  componentDidMount() {
-    this.props.dispatch(getMyWishes())
+    wishes: Array<Wish>,
+    isFetching: bool,
+    error: any,
   }
   
   render() {
-    let wishList
-    const {dispatch, wishesState, currentUser} = this.props
-    if (wishesState.isFetching) {
-      wishList = <Text>Wünsche werden geladen</Text>
-    } else {
-      if (wishesState.wishes.size > 0) {
-        wishList = <WishList wishes={wishesState.wishes} show={(wish) => dispatch(show(wish))}/>
-      } else {
-        if (wishesState.error !== null) {
-          wishList = <View><Text>Du hast keine Wünsche!</Text>
-          <Text>(Aber beim Laden gab's einen Fehler)</Text></View>
-        } else {
-          wishList = <Text>Du hast keine Wünsche!</Text>
-        }
-      }
+
+    const {wishes, isFetching, error} = this.props
+
+    if (error) {
+      Alert.alert('Oops', 'Wünsche konnten nicht geladen werden')
     }
+
     return (
       <View style={styles.container}>
-        <Text>Willkommen</Text>
-        <LogoutButton/>
-        <NewWishButton newWish={() => dispatch(newWish(currentUser))}/>
-        {wishList}    
+        <NewWishButton/>
+        <MyWishList wishes={wishes.toArray()}/>
       </View>
     )
   }
@@ -59,15 +41,7 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     flex: 1,
     backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center'
   },
-  button: {
-    padding: 15
-  },
-  buttonText: {
-    color: 'rgb(0, 122, 155)'
-  }
 })
 
 
@@ -75,9 +49,11 @@ const styles = StyleSheet.create({
  * Redux boilerplate
  */
 function select(state) {
+  const wishesState = state.wishes
   return { 
-    wishesState: state.wishes,
-    currentUser: state.global.currentUser
+    wishes: wishesState.wishes,
+    isFetching: wishesState.isFetching,
+    error: wishesState.error,
   };
 }
 
