@@ -40,6 +40,9 @@ class Wish extends Component {
             dispatch(deleteWish(wish))
             Actions.pop()
           }}
+          fullfillWish = {(wish) => {
+            console.log('not implemented yet')
+          }}
           setEditable={() => dispatch(setEditable(true))}
           styles={styles}/>
       </View>

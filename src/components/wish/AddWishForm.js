@@ -14,11 +14,14 @@ import {Actions} from 'react-native-router-flux'
 export default class AddWishForm extends Component {
 
   render() {
-    const {currentUser, wishState, onWishFieldChange, saveWish, deleteWish, setEditable, styles} = this.props
+    const {currentUser, wishState, onWishFieldChange, saveWish, deleteWish, fullfillWish, setEditable, styles} = this.props
     const {wish} = wishState
     const editable = wishState.isEditable && !wishState.isFetching
     const allowEdit = wish.ownerId === currentUser.id && !wishState.isFetching
-    let SaveButton, BackButton, EditButton, DeleteButton
+    const fullfillable = !wish.fullfillerId && wish.userId !== currentUser.id && wish.ownerId !== currentUser.id
+    let SaveButton, BackButton, EditButton, DeleteButton, FullfillButton, FullfillmentStatus
+    
+    // Save, edit & delete
     if (editable) {
       SaveButton = <TouchableOpacity
             style={styles.button}
@@ -39,6 +42,22 @@ export default class AddWishForm extends Component {
             <Text style={styles.buttonText}>Wunsch löschen</Text>
         </TouchableOpacity>
     }
+    
+    // Fullfillment
+    if (fullfillable) {
+      FullfillButton = <TouchableOpacity
+            style={styles.button}
+            onPress={() => { fullfillWish(wish)}}>
+            <Text style={styles.buttonText}>Wunsch erfüllen</Text>
+        </TouchableOpacity>
+    } else if (wish.fullfillerId === currentUser.id) {
+      // fullfilled by me
+      FullfillmentStatus = <Text style={styles.buttonText}>Dieser Wunsch wird von mir erfüllt</Text>
+    } else if (wish.fullfillerId && wish.userId !== currentUser.id) {
+      // fullfilled by other (and not my wish!)
+      FullfillmentStatus = <Text style={styles.buttonText}>Dieser Wunsch wird erfüllt</Text>
+    }
+    
     if (!wishState.isFetching) {
       BackButton = <TouchableOpacity
             style={styles.button}
@@ -97,6 +116,8 @@ export default class AddWishForm extends Component {
         {SaveButton}
         {EditButton}
         {DeleteButton}
+        {FullfillButton}
+        {FullfillmentStatus}
         {BackButton}
       </View>
     )
@@ -110,5 +131,6 @@ AddWishForm.propTypes = {
   onWishFieldChange: PropTypes.func.isRequired,
   saveWish: PropTypes.func.isRequired,
   deleteWish: PropTypes.func.isRequired,
+  fullfillWish: PropTypes.func.isRequired,
   setEditable: PropTypes.func.isRequired
 }
