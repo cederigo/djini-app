@@ -33,6 +33,7 @@ import {
 import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
 import {Immutable, List, Record} from 'immutable'
+import {Alert} from 'react-native'
 
 import {updateFriendProfile} from './socialActions'
 
@@ -249,9 +250,7 @@ function _getUserId(wish) {
 export function updateWish(wish) {
   return (dispatch, getState) => {
     dispatch(saveWishRequest())
-    let ParseWish = Parse.Object.extend('Wish')
-    let query = new Parse.Query(ParseWish)
-    query.get(wish.id)
+    _getWish(wish)
     .then((parseWish) => {
       parseWish.set('title', wish.title)
       parseWish.set('url', wish.url)
@@ -271,7 +270,7 @@ export function updateWish(wish) {
       }        
     })
     .catch(error => {
-      dispatch(saveWishError(error))
+      dispatch(saveWishFailure(error))
     })
   }
 }
@@ -281,9 +280,7 @@ export function updateWish(wish) {
 export function deleteWish(wish) {
   return (dispatch, getState) => {
     dispatch(saveWishRequest())
-    let ParseWish = Parse.Object.extend('Wish')
-    let query = new Parse.Query(ParseWish)
-    query.get(wish.id)
+    _getWish(wish)
     .then((parseWish) => {
       return parseWish.destroy()
     })
@@ -302,6 +299,63 @@ export function deleteWish(wish) {
     })
   }
 }
+/* 
+* fullfill wish 
+*/
+export function fullfillWish(wish) {
+  return (dispatch, getState) => {
+    dispatch(saveWishRequest())
+    Parse.Cloud.run('fullfillWish', {wishId: wish.id})
+    .then((response) => {
+      dispatch(saveWishSuccess())
+      // local update
+      dispatch(onWishFieldChange('fullfillerId', getState().global.currentUser.id))
+      // update my wishes
+      if (wish.userId === getState().global.currentUser.id) {
+        dispatch(getMyWishes())
+      } else {
+        // update friend wishes
+        dispatch(updateFriendProfile())  
+      }        
+    })
+    .catch(error => {
+      dispatch(saveWishFailure(error))
+      if (error.message.code === 'Wish is already fullfilled.') {
+        dispatch(onWishFieldChange('fullfillerId', 'XXXX'))
+        dispatch(updateFriendProfile())
+        Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
+      }
+    })
+  }
+}
+/* 
+* unfullfill wish 
+*/
+export function unfullfillWish(wish) {
+  return (dispatch, getState) => {
+    dispatch(saveWishRequest())
+    _getWish(wish)
+    .then((parseWish) => {
+      parseWish.set('fullfiller', null)
+      return parseWish.save()
+    })
+    .then((response) => {
+      dispatch(saveWishSuccess())
+      // local update
+      dispatch(onWishFieldChange('fullfillerId', ''))
+      // update my wishes
+      if (wish.userId === getState().global.currentUser.id) {
+        dispatch(getMyWishes())
+      } else {
+        // update friend wishes
+        dispatch(updateFriendProfile())  
+      }        
+    })
+    .catch(error => {
+      dispatch(saveWishFailure(error))
+    })
+  }
+}
 
 /* Helper */
 function parseUserPointer(userId) {
@@ -310,4 +364,10 @@ function parseUserPointer(userId) {
     className: '_User',
     objectId: userId 
   }
+}
+
+function _getWish(wish) {
+  let ParseWish = Parse.Object.extend('Wish')
+  let query = new Parse.Query(ParseWish)
+  return query.get(wish.id)
 }
