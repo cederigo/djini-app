@@ -58,7 +58,7 @@ export default class AddWishForm extends Component {
             <Text style={styles.buttonText}>Wunsch unerfüllen ^^</Text>
         </TouchableOpacity>
       FullfillmentStatus = <Text style={styles.buttonText}>Dieser Wunsch wird von mir erfüllt</Text>
-    } else if (wish.fullfillerId && wish.userId !== currentUser.id) {
+    } else if (wish.fullfillerId && wish.userId !== currentUser.id && !wishState.isFetching) {
       // fullfilled by other (and not my wish!)
       FullfillmentStatus = <Text style={styles.buttonText}>Dieser Wunsch wird erfüllt</Text>
     }
