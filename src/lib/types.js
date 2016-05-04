@@ -26,5 +26,7 @@ export const ImmutableWish = Record({
   description: '',
   seenAt: '',
   private: false,
-  fullfiller: {}
+  fullfillerId: '',
+  ownerId: '',
+  userId: ''
 })
