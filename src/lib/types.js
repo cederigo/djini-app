@@ -11,7 +11,8 @@ export type Wish = {
   title: string,
   url: string,
   description: string,
-  private: bool,
-  userId: string,
-  ownerId: string
+  isPrivate: bool,
+  fromUserId: string,
+  toUserId: string,
+  fullfillerId: string,
 }

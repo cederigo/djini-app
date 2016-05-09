@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
-import React, {
-  Component,
+import React, {Component} from 'react'
+import {
   StyleSheet,
   View,
-  Alert
+  Alert,
+  StatusBar,
+  Text
 } from 'react-native';
 
 import MyWishList from '../components/MyWishList'
-//import Loading from '../components/Loading' //TODO: eventually show loading
 import NewWishButton from '../components/NewWishButton'
 import {Wish, User} from '../lib/types'
 
@@ -30,6 +31,7 @@ class Wishes extends Component {
 
     return (
       <View style={styles.container}>
+        <StatusBar translucent={true} />
         <NewWishButton toUser={user}/>
         <MyWishList wishes={wishes.toArray()}/>
       </View>
@@ -39,7 +41,6 @@ class Wishes extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 100,
     flex: 1,
     backgroundColor: 'white',
   },

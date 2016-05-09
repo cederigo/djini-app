@@ -12,26 +12,31 @@ import {newWish} from '../actions/wishes'
 class NewWishButton extends Component {
   props: {
     fromUser: User,
-    toUser: User
+    toUser: User,
+    text: string,
   }
   render() {
-    const {dispatch, fromUser, toUser} = this.props
+    const {dispatch, fromUser, toUser, style, text} = this.props
+    
     return (
       <TouchableOpacity
         onPress={() => dispatch(newWish(fromUser, toUser))}
-        style={styles.button}>
-        <Text style={styles.buttonText}>Neuen Wunsch erfassen</Text>
+        style={[styles.button, style]}>
+        <Text style={styles.buttonText}>{text}</Text>
       </TouchableOpacity>
     )
   }
+}
+
+NewWishButton.defaultProps = {
+  text: 'Neuen Wunsch erfassen'
 }
 
 const styles = StyleSheet.create({
   button: {
     height: 200,
     alignItems: 'center',
-    justifyContent: 'center'
-      
+    justifyContent: 'center',
   },
   buttonText: {
     color: 'rgb(0, 122, 155)'

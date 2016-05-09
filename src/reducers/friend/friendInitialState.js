@@ -13,11 +13,11 @@ import {Record, List} from 'immutable'
  * fields it contains.
  */
 const InitialState = Record({
-    isFetching: false,
-    error: null,
-    user: null,
-    wishes: List(),
-    ideas: List()
+  isFetching: false,
+  error: null,
+  user: null,
+  wishes: List(),
+  ideas: List()
 })
 
 export default InitialState;

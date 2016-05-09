@@ -31,7 +31,6 @@ class Wish extends Component {
   
     return (
       <View style={styles.container}>
-
         <StatusBar translucent={true} />
         <AddWishForm
           currentUser={globalState.currentUser} 

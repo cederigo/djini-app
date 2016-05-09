@@ -1,95 +1,86 @@
 /* @flow */
 
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
-import React, {
-  Component,
+import {List} from 'immutable';
+import React, {Component} from 'react'
+import {
   View,
-  PropTypes,
   StyleSheet,
   TouchableOpacity,
-  Text
+  Text,
+  StatusBar,
+  Alert
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
-import {show} from '../actions/wishes'
 
+import {Actions} from 'react-native-router-flux';
+
+import {Wish, User} from '../lib/types'
 import NewWishButton from '../components/NewWishButton'
 
-import WishList from '../components/WishList'
+import MyWishList from '../components/MyWishList'
 
 class Friend extends Component {
+
+  props: {
+    user: User,
+    wishes: List<Wish>,
+    ideas: List<Wish>
+  }
   
   render() {
-    const {friendState, dispatch} = this.props
-    const {user} = friendState
-    let BackButton
-    
-    if (friendState.isFetching) {
-      theirWishes = <Text>Wünsche werden geladen</Text>
-    } else {
-      if (friendState.wishes.size > 0) {
-        theirWishes = <WishList wishes={friendState.wishes} show={(wish) => dispatch(show(wish))}/>
-      } else {
-        if (friendState.error !== null) {
-          theirWishes = <View><Text>Keine Wünsche!</Text>
-          <Text>(Aber beim Laden gab's einen Fehler)</Text></View>
-        } else {
-          theirWishes = <Text>Keine Wünsche!</Text>
-        }
-      }
+    const {user, wishes, ideas, isFetching, error} = this.props
+
+    if (error) {
+      Alert.alert('Oops', 'Profil konnten nicht geladen werden')
     }
-    if (friendState.isFetching) {
-      myIdeas = <Text>Ideen werden geladen</Text>
-    } else {
-      if (friendState.ideas.size > 0) {
-        myIdeas = <WishList wishes={friendState.ideas} show={(wish) => dispatch(show(wish))}/>
-      } else {
-        if (friendState.error !== null) {
-          myIdeas = <View><Text>Keine Ideen!</Text>
-          <Text>(Aber beim Laden gab's einen Fehler)</Text></View>
-        } else {
-          myIdeas = <Text>Keine Ideen!</Text>
-        }
-      }
-    }
-    
-    BackButton = <TouchableOpacity
+
+    return (
+      <View style={styles.container}>
+        <StatusBar translucent={true} />
+
+        <View style={styles.navbar}>
+          <TouchableOpacity 
             style={styles.button}
             onPress={Actions.pop}>
             <Text style={styles.buttonText}>Zurück</Text>
-        </TouchableOpacity>
-    
-    return (
-        <View style={styles.container}>
-          <Text style={styles.title}>Profil von {user.name}</Text>
-          <Text style={styles.title}>{user.birthday}</Text>
-          {BackButton}
-          <Text style={styles.title}>Wünsche von {user.name}</Text>
-          {theirWishes}
-          <Text style={styles.title}>Meine Ideen für {user.name}</Text>
-          <NewWishButton toUser={user}/>
-          {myIdeas}
+          </TouchableOpacity>
         </View>
+
+        <Text style={styles.title}>Profil von {user.name}</Text>
+
+        {user.registered ? 
+          <Text>Geburtstag am: {user.birthday.toString()}</Text> :
+          <Text>Alain ist noch nicht dabei. Lade ihn jetzt ein!</Text>
+        }
+
+
+        <Text style={styles.title}>Wünsche von {user.name}</Text>
+        {wishes.size === 0 ? 
+          <Text>{user.name} hat noch keine Wünsche</Text> :
+          <MyWishList wishes={wishes.toArray()} />
+        }
+
+        <Text style={styles.title}>Meine Ideen für {user.name}</Text>
+        <NewWishButton style={{height: 50}} text="Neue Idee" toUser={user}/>
+        <MyWishList wishes={ideas.toArray()} />
+      </View>
     )
   }
 }
 
-Friend.propTypes = {
-  friendState: PropTypes.instanceOf(Immutable.Record).isRequired
-}
-
 const styles = StyleSheet.create({
+  navbar: {
+    marginTop: 20,
+    height: 50,
+  },
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center'
+    padding: 10,
+    backgroundColor: 'white'
   },
   title: {
-    marginTop: 20,
-    padding: 10,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#CDCDCD',
+    marginTop: 10,
+    fontWeight: 'bold'
   }
 })
 
@@ -97,8 +88,12 @@ const styles = StyleSheet.create({
  * Redux boilerplate
  */
 function select(state) {
+  const friendState = state.friend
   return {
-    friendState: state.friend
+    user: friendState.user,
+    isFetching: friendState.isFetching,
+    wishes: friendState.wishes,
+    ideas: friendState.ideas
   }
 }
 
