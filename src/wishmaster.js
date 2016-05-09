@@ -104,8 +104,8 @@ export default function native(platform) {
               <Scene key="wish" component={Wish} title="Wunsch"/>
 
               <Scene key="home" panHandlers={null} tabs={true} hideNavBar={false} >
-                <Scene key="wishes" component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
-                <Scene key="friends" initial={true} component={Friends} title="Meine Freunde" icon={TabIcon} iconName="accessibility"/>
+                <Scene key="wishes" initial={true} component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
+                <Scene key="friends" component={Friends} title="Meine Freunde" icon={TabIcon} iconName="accessibility"/>
               </Scene>
 
             </Scene>
