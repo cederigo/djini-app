@@ -1,11 +1,9 @@
-import {Record} from 'immutable'
-
 export type User = {
   id: string,
   name: string,
   phoneNumber: string,
   birthday: Date,
-  registered: boolean
+  registered: bool
 }
 
 export type Wish = {
@@ -13,20 +11,7 @@ export type Wish = {
   title: string,
   url: string,
   description: string,
-  private: boolean,
+  private: bool,
   userId: string,
-  userPhoneNumber: any, // only used if userId is not set 
   ownerId: string
 }
-
-export const ImmutableWish = Record({
-  id: '',
-  title: '',
-  url: '',
-  description: '',
-  seenAt: '',
-  private: false,
-  fullfillerId: '',
-  ownerId: '',
-  userId: ''
-})

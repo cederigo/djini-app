@@ -1,5 +1,5 @@
-import {OrderedMap, List, Record} from 'immutable';
-import {Alert, ActionSheetIOS, Platform} from 'react-native'
+import {OrderedMap, List} from 'immutable';
+import {ActionSheetIOS, Platform} from 'react-native'
 import Share from 'react-native-share';
 import {Actions} from 'react-native-router-flux'
 
@@ -26,11 +26,8 @@ import contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
 
-import {ImmutableWish} from '../lib/types'
+import {User, Wish} from '../lib/types'
 
-/*
- * Restore state from ./lib/db
- */
 export function restoreStateRequest() {
   return {
     type: SOCIAL_STATE_REQUEST
@@ -161,9 +158,6 @@ export function invite(contact) {
 export function show(contact) {
   return dispatch => {
     dispatch(addFavorite(contact))
-    
-    //TODO: dispatch global invite activity action
-    // Alert.alert('Show', 'View profile of ' + contact.name)
     dispatch(getFriendProfileRequest)
     _getFriendProfile(contact)
     .then(friend => {
@@ -218,7 +212,7 @@ export function updateFriendProfile() {
 function _getFriendProfile(contact) {
   return Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
     .then((response) => {
-      let friend = {
+      let friend: {user: User, wishes: List<Wish>, ideas: List<Wish>} = {
         user: {
           phoneNumber: contact.phoneNumber,
           name: contact.name,
@@ -226,12 +220,8 @@ function _getFriendProfile(contact) {
           birthday: response.user.birthday,
           registered: response.user.registered
         },
-        wishes: List(response.wishes.map((wish) => {
-          return new ImmutableWish(wish)
-        })),
-        ideas: List(response.ideas.map((wish) => {
-          return new ImmutableWish(wish)
-        })) 
+        wishes: List(response.wishes),
+        ideas: List(response.ideas)
       }
       return friend
     })

@@ -11,13 +11,14 @@ import {newWish} from '../actions/wishes'
 
 class NewWishButton extends Component {
   props: {
-    user: User
+    fromUser: User,
+    toUser: User
   }
   render() {
-    const {dispatch, user} = this.props
+    const {dispatch, fromUser, toUser} = this.props
     return (
       <TouchableOpacity
-        onPress={() => dispatch(newWish(user))}
+        onPress={() => dispatch(newWish(fromUser, toUser))}
         style={styles.button}>
         <Text style={styles.buttonText}>Neuen Wunsch erfassen</Text>
       </TouchableOpacity>
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
  */
 function select(state) {
   return { 
-    user: state.global.currentUser
+    fromUser: state.global.currentUser
   };
 }
 export default connect(select)(NewWishButton)

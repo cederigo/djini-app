@@ -3,6 +3,7 @@
  */
 
 import {
+  MY_PROFILE_LOADED,
   LOGIN_SUCCESS,
   LOGOUT
 } from '../../lib/constants'
@@ -29,6 +30,8 @@ export default function globalReducer(state = initialState, {type, payload}) {
       return state.set('currentUser', fromParseUser(payload))
     case LOGOUT:
       return state.set('currentUser', null)
+    case MY_PROFILE_LOADED:
+      return state.set('currentUser', payload.user)
   }
 
   return state;

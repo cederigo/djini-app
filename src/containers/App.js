@@ -16,6 +16,7 @@ import React, {
 /* actions */
 import {loginSuccess, loginFailure} from '../actions/authActions';
 import {refreshContacts} from '../actions/socialActions';
+import {loadMyProfile} from '../actions/profile'
 
 var styles = StyleSheet.create({
   container: {
@@ -38,6 +39,7 @@ class App extends Component {
         if (!parseUser) {
           throw ('User not logged in')
         }
+        dispatch(loadMyProfile())
         dispatch(refreshContacts())
         dispatch(loginSuccess(parseUser))
       })

@@ -1,8 +1,7 @@
-//wishes
-export const GET_MY_WISHES_REQUEST = 'get-my-wishes-request'
-export const GET_MY_WISHES_SUCCESS = 'get-my-wishes-success'
-export const GET_MY_WISHES_FAILURE = 'get-my-wishes-failure'
+//profile
+export const MY_PROFILE_LOADED = 'my-profile-loaded'
 
+//wish
 export const SET_WISH = 'set-wish'
 export const RESET_WISH = 'reset-wish'
 export const SET_EDITABLE = 'set-editable'
@@ -10,6 +9,9 @@ export const SET_EDITABLE = 'set-editable'
 export const SAVE_WISH_REQUEST = 'save-wish-request'
 export const SAVE_WISH_SUCCESS = 'save-wish-success'
 export const SAVE_WISH_FAILURE = 'save-wish-failure'
+
+export const WISH_DELETED = 'wish-deleted'
+
 export const ON_WISH_FIELD_CHANGE = 'on-wish-field-change'
 
 export const SET_PLATFORM = 'set-platform'

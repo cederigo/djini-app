@@ -7,12 +7,11 @@ import React, {
   View,
   PropTypes,
   StyleSheet,
-  StatusBar,
   TouchableOpacity,
   Text
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {newWish, show} from '../actions/wishes'
+import {show} from '../actions/wishes'
 
 import NewWishButton from '../components/NewWishButton'
 
@@ -23,8 +22,6 @@ class Friend extends Component {
   render() {
     const {friendState, dispatch} = this.props
     const {user} = friendState
-    console.log(friendState)
-    console.log(user)
     let BackButton
     
     if (friendState.isFetching) {
@@ -70,7 +67,7 @@ class Friend extends Component {
           <Text style={styles.title}>Wünsche von {user.name}</Text>
           {theirWishes}
           <Text style={styles.title}>Meine Ideen für {user.name}</Text>
-          <NewWishButton newWish={() => dispatch(newWish(user))}/>
+          <NewWishButton toUser={user}/>
           {myIdeas}
         </View>
     )

@@ -61,7 +61,7 @@ class MyWishList extends Component {
       <TouchableHighlight onPress={() => dispatch(show(wish))}>
         <View style={styles.row}>
           <Text style={styles.text}>
-            {wish.title + (wish.private ? '(Privat)' : '')}
+            {wish.title + (wish.isPrivate ? '(Privat)' : '')}
           </Text>
         </View>
       </TouchableHighlight>

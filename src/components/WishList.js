@@ -44,7 +44,7 @@ export default class WishList extends Component {
       <TouchableOpacity
         onPress={() => show(wish)}>
         <Text style={styles.text}>
-          {wish.get('title')} {wish.get('private') ? '(PRIVAT)' : ''}
+          {wish.title} {wish.isPrivate ? '(PRIVAT)' : ''}
         </Text>
        </TouchableOpacity>
     );

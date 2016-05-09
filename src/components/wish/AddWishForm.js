@@ -17,8 +17,8 @@ export default class AddWishForm extends Component {
     const {currentUser, wishState, onWishFieldChange, saveWish, deleteWish, fullfillWish, unfullfillWish, setEditable, styles} = this.props
     const {wish} = wishState
     const editable = wishState.isEditable && !wishState.isFetching
-    const allowEdit = wish.ownerId === currentUser.id && !wishState.isFetching
-    const fullfillable = !wish.fullfillerId && wish.userId !== currentUser.id && wish.ownerId !== currentUser.id && !wishState.isFetching
+    const allowEdit = wish.fromUserId === currentUser.id && !wishState.isFetching
+    const fullfillable = !wish.fullfillerId && wish.toUserId !== currentUser.id && wish.fromUserId !== currentUser.id && !wishState.isFetching
     let SaveButton, BackButton, EditButton, DeleteButton, FullfillButton, FullfillmentStatus
     
     // Save, edit & delete
@@ -58,7 +58,7 @@ export default class AddWishForm extends Component {
             <Text style={styles.buttonText}>Wunsch unerfüllen ^^</Text>
         </TouchableOpacity>
       FullfillmentStatus = <Text style={styles.buttonText}>Dieser Wunsch wird von mir erfüllt</Text>
-    } else if (wish.fullfillerId && wish.userId !== currentUser.id && !wishState.isFetching) {
+    } else if (wish.fullfillerId && wish.toUserId !== currentUser.id && !wishState.isFetching) {
       // fullfilled by other (and not my wish!)
       FullfillmentStatus = <Text style={styles.buttonText}>Dieser Wunsch wird erfüllt</Text>
     }
@@ -113,11 +113,11 @@ export default class AddWishForm extends Component {
           autoCorrect={false}
           value={wish.seenAt}
         />
-        <Text>{wish.private ? 'Der Wunsch ist privat' : 'Der Wunsch ist öffentlich'}</Text>
+        <Text>{wish.isPrivate ? 'Der Wunsch ist privat' : 'Der Wunsch ist öffentlich'}</Text>
         <Switch
           disabled={!editable}
-          onValueChange={(value) => onWishFieldChange('private', value)}
-          value={wish.private} />
+          onValueChange={(value) => onWishFieldChange('isPrivate', value)}
+          value={wish.isPrivate} />
         {SaveButton}
         {EditButton}
         {DeleteButton}

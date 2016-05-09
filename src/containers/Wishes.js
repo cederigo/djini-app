@@ -9,11 +9,12 @@ import React, {
 import MyWishList from '../components/MyWishList'
 //import Loading from '../components/Loading' //TODO: eventually show loading
 import NewWishButton from '../components/NewWishButton'
-import {Wish} from '../lib/types'
+import {Wish, User} from '../lib/types'
 
 class Wishes extends Component {
   
   props: {
+    user: User,
     wishes: Array<Wish>,
     isFetching: bool,
     error: any,
@@ -21,7 +22,7 @@ class Wishes extends Component {
   
   render() {
 
-    const {wishes, isFetching, error} = this.props
+    const {wishes, isFetching, error, user} = this.props
 
     if (error) {
       Alert.alert('Oops', 'Wünsche konnten nicht geladen werden')
@@ -29,7 +30,7 @@ class Wishes extends Component {
 
     return (
       <View style={styles.container}>
-        <NewWishButton/>
+        <NewWishButton toUser={user}/>
         <MyWishList wishes={wishes.toArray()}/>
       </View>
     )
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
 function select(state) {
   const wishesState = state.wishes
   return { 
+    user: state.global.currentUser,
     wishes: wishesState.wishes,
     isFetching: wishesState.isFetching,
     error: wishesState.error,
