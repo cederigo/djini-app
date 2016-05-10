@@ -14,15 +14,17 @@ import {
 
 import {Actions} from 'react-native-router-flux';
 
-import {Wish, User} from '../lib/types'
+import {Wish, User, Contact} from '../lib/types'
 import NewWishButton from '../components/NewWishButton'
 
-import MyWishList from '../components/MyWishList'
+import FriendWishesList from '../components/FriendWishesList'
+import FriendIdeasList from '../components/FriendIdeasList'
 
 class Friend extends Component {
 
   props: {
     user: User,
+    contact: Contact,
     wishes: List<Wish>,
     ideas: List<Wish>
   }
@@ -53,16 +55,12 @@ class Friend extends Component {
           <Text>{contact.name} ist noch nicht dabei. Lade ihn jetzt ein!</Text>
         }
 
+        <FriendWishesList wishes={wishes.toArray()} />
 
-        <Text style={styles.title}>Wünsche von {contact.name}</Text>
-        {wishes.size === 0 ? 
-          <Text>{contact.name} hat noch keine Wünsche</Text> :
-          <MyWishList wishes={wishes.toArray()} />
-        }
 
         <Text style={styles.title}>Meine Ideen für {contact.name}</Text>
         <NewWishButton style={{height: 50}} text="Neue Idee" toUser={user}/>
-        <MyWishList wishes={ideas.toArray()} />
+        <FriendIdeasList wishes={ideas.toArray()} />
       </View>
     )
   }
@@ -74,9 +72,9 @@ const styles = StyleSheet.create({
     height: 50,
   },
   container: {
-    flex: 1,
     padding: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    flex: 1
   },
   title: {
     marginTop: 10,
