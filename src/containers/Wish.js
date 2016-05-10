@@ -18,7 +18,6 @@ import {
   editWish,
   deleteWish,
   fullfillWish,
-  setWishAttribute
 } from '../actions/wishes'
 
 class Wish extends Component {
@@ -44,7 +43,7 @@ class Wish extends Component {
             Actions.pop()
           }}
           fullfillWish = {(wish) => {dispatch(fullfillWish(wish))}}
-          unfullfillWish = {(wish) => {dispatch(setWishAttribute(wish, 'fullfillerId', null))}}
+          unfullfillWish = {(wish) => {dispatch(saveWish({...wish, fullfillerId: null}))}}
           styles={styles}/>
       </View>
     )
