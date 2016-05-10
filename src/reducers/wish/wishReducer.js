@@ -4,9 +4,9 @@ import {
   SAVE_WISH_REQUEST, 
   SAVE_WISH_SUCCESS, 
   SAVE_WISH_FAILURE, 
-  SET_WISH,
-  SET_EDITABLE,
-  RESET_WISH,
+  SHOW_WISH,
+  EDIT_WISH,
+  NEW_WISH,
   ON_WISH_FIELD_CHANGE
 } from '../../lib/constants'
 
@@ -14,14 +14,22 @@ const initialState = new InitialState;
 
 export default function wishReducer(state = initialState, {type, payload}) {
   switch (type) {
-    case SET_WISH:
+
+    case SHOW_WISH:
       return state.set('wish', payload)
+        .set('isEditable', false)
 
-    case RESET_WISH:
+    case EDIT_WISH:
+      return state.set('wish', payload)
+        .set('isEditable', true)
+
+    case NEW_WISH: {
+     const {fromUser, toUser} = payload
      return initialState
-
-    case SET_EDITABLE:
-     return state.set('isEditable', payload)
+        .set('isEditable', true)
+        .setIn(['wish', 'fromUserId'], fromUser.id)
+        .setIn(['wish', 'toUserId'], toUser.id)
+    }
 
     case SAVE_WISH_REQUEST:
      return state.set('isFetching', true)

@@ -14,8 +14,9 @@ import {Actions} from 'react-native-router-flux'
 export default class AddWishForm extends Component {
 
   render() {
-    const {currentUser, wishState, onWishFieldChange, saveWish, deleteWish, fullfillWish, unfullfillWish, setEditable, styles} = this.props
+    const {currentUser, wishState, onWishFieldChange, saveWish, deleteWish, fullfillWish, unfullfillWish, styles, editWish} = this.props
     const {wish} = wishState
+    //TODO cre: Move this logic to the wish reducer.
     const editable = wishState.isEditable && !wishState.isFetching
     const allowEdit = wish.fromUserId === currentUser.id && !wishState.isFetching
     const fullfillable = !wish.fullfillerId && wish.toUserId !== currentUser.id && wish.fromUserId !== currentUser.id && !wishState.isFetching
@@ -33,7 +34,7 @@ export default class AddWishForm extends Component {
     if (allowEdit && !editable) {
       EditButton = <TouchableOpacity
             style={styles.button}
-            onPress={() => { setEditable()}}>
+            onPress={() => { editWish(wish)}}>
             <Text style={styles.buttonText}>Wunsch bearbeiten</Text>
         </TouchableOpacity>
       DeleteButton = <TouchableOpacity
@@ -135,8 +136,8 @@ AddWishForm.propTypes = {
   styles: PropTypes.object.isRequired,
   onWishFieldChange: PropTypes.func.isRequired,
   saveWish: PropTypes.func.isRequired,
+  editWish: PropTypes.func.isRequired,
   deleteWish: PropTypes.func.isRequired,
   fullfillWish: PropTypes.func.isRequired,
   unfullfillWish: PropTypes.func.isRequired,
-  setEditable: PropTypes.func.isRequired
 }

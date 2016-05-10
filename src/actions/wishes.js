@@ -8,9 +8,9 @@ import {
   SAVE_WISH_SUCCESS,
   WISH_DELETED,
   ON_WISH_FIELD_CHANGE,
-  SET_EDITABLE,
-  SET_WISH,
-  RESET_WISH
+  SHOW_WISH,
+  EDIT_WISH,
+  NEW_WISH
 } from '../lib/constants'
 
 /**
@@ -20,28 +20,20 @@ const ParseWish = Parse.Object.extend('Wish')
 
 import {Wish, User} from '../lib/types'
 
-/*
- * set wish
- */
-export function setWish(wish) {
-  return {
-    type: SET_WISH,
-    payload: new (Record(wish))
-  }
-}
-/*
- * show wish
- */
-export function show(wish) {
+export function showWish(wish) {
   return dispatch => {
-    dispatch(setEditable(false))
-    dispatch(setWish(wish))
+    dispatch({type: SHOW_WISH, payload: new (Record(wish))})
     Actions.wish()
   }
 }
-/*
- * On wish field change
- */
+
+export function editWish(wish) {
+  return dispatch => {
+    dispatch({type: EDIT_WISH, payload: new (Record(wish))})
+    Actions.wish()
+  }
+}
+
 export function onWishFieldChange(field, value) {
   return {
     type: ON_WISH_FIELD_CHANGE,
@@ -49,28 +41,9 @@ export function onWishFieldChange(field, value) {
   }
 }
 
-/* 
-* New Wish
-*/
-export function resetWish() {
-  return {
-    type: RESET_WISH
-  }
-}
-
-export function setEditable(value) {
-  return {
-    type: SET_EDITABLE,
-    payload: value
-  }
-}
-
 export function newWish(fromUser: User, toUser: User) {
   return dispatch => {
-    dispatch(resetWish())
-    dispatch(onWishFieldChange('fromUserId', fromUser.id))
-    dispatch(onWishFieldChange('toUserId', toUser.id))
-    dispatch(setEditable(true))
+    dispatch({type: NEW_WISH, payload: {fromUser, toUser}})
     Actions.wish()
   }
 }
@@ -119,9 +92,6 @@ export function saveWish(wish: Wish) {
   }
 }
 
-/*
- * Delete Wish
- */
 export function deleteWish(wish: Wish) {
   return dispatch => {
     if (!wish.id) {
@@ -148,21 +118,13 @@ export function fullfillWish(wish) {
   }
 }
 
-export function unfullfillWish(wish) {
-  return dispatch => {
-    dispatch(saveWishRequest())
-    saveWish({...wish, fullfillerId: null})
-      .then((data) => {
-        dispatch(saveWishSuccess(fromParseWish(data)))
-      })
-      .catch(error => {
-        dispatch(saveWishFailure(error))
-      })
-  }
-}
 
 /* Helper */
 function parseUserPointer(userId) {
+  if (!userId) {
+    return; //undefined
+  }
+
   return {
     __type: 'Pointer',
     className: '_User',

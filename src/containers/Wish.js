@@ -1,4 +1,3 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import {Actions} from 'react-native-router-flux';
@@ -9,25 +8,27 @@ import React, {
    PropTypes,
    View,
    StyleSheet,
-   StatusBar,
-   TouchableOpacity,
-   Text
+   StatusBar
 } from 'react-native';
 
 import AddWishForm from '../components/wish/AddWishForm'
 import {
   onWishFieldChange, 
   saveWish,
+  editWish,
   deleteWish,
   fullfillWish,
-  unfullfillWish,
-  setEditable
+  setWishAttribute
 } from '../actions/wishes'
 
 class Wish extends Component {
 
   render() {
     const {wishState, globalState, dispatch} = this.props
+    
+
+    //TODO: cre: Introduce ShowWishForm & EditWishForm and "connect" them. Passing around so many
+    //props is error-prone. Decide based on wishState which one to show
   
     return (
       <View style={styles.container}>
@@ -36,14 +37,14 @@ class Wish extends Component {
           currentUser={globalState.currentUser} 
           wishState={wishState} 
           onWishFieldChange={(field, value) => dispatch(onWishFieldChange(field, value))} 
-          saveWish={(wish) => dispatch(saveWish(wish))} 
+          saveWish={(wish) => dispatch(saveWish(wish))}
+          editWish={(wish) => dispatch(editWish(wish))}
           deleteWish = {(wish) => {
             dispatch(deleteWish(wish))
             Actions.pop()
           }}
           fullfillWish = {(wish) => {dispatch(fullfillWish(wish))}}
-          unfullfillWish = {(wish) => {dispatch(unfullfillWish(wish))}}
-          setEditable={() => dispatch(setEditable(true))}
+          unfullfillWish = {(wish) => {dispatch(setWishAttribute(wish, 'fullfillerId', null))}}
           styles={styles}/>
       </View>
     )
@@ -51,7 +52,8 @@ class Wish extends Component {
 }
 
 Wish.propTypes = {
-  wishState: PropTypes.instanceOf(Immutable.Record).isRequired
+  wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
+  globalState: PropTypes.instanceOf(Immutable.Record).isRequired
 }
 
 const styles = StyleSheet.create({

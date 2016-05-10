@@ -2,9 +2,9 @@
 export const MY_PROFILE_LOADED = 'my-profile-loaded'
 
 //wish
-export const SET_WISH = 'set-wish'
-export const RESET_WISH = 'reset-wish'
-export const SET_EDITABLE = 'set-editable'
+export const SHOW_WISH = 'show-wish'
+export const EDIT_WISH = 'edit-wish'
+export const NEW_WISH = 'new-wish'
 
 export const SAVE_WISH_REQUEST = 'save-wish-request'
 export const SAVE_WISH_SUCCESS = 'save-wish-success'
