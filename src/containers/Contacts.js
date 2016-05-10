@@ -13,15 +13,15 @@ import React, {
 } from 'react-native';
 
 import NoContactsPermission from '../components/NoContactsPermission'
-import FriendsList from '../components/FriendsList'
+import ContactsList from '../components/ContactsList'
 import * as socialActions from '../actions/socialActions'
 
 
-class Friends extends Component {
+class Contacts extends Component {
 
   render() {
     const {socialState, actions} = this.props
-    let {contacts, favorites, filterText} = socialState
+    let {contacts, filterText} = socialState
 
     if (socialState.noContactsPermission) {
       return (<NoContactsPermission/>)
@@ -34,17 +34,17 @@ class Friends extends Component {
             <TextInput
               onChangeText={(text) => actions.onSearchFieldChange(text)}
               style={styles.searchBar}
-              placeholder="Freunde suchen ..."
+              placeholder="Kontakte suchen ..."
               value={filterText}
             />
           </View>
-          <FriendsList friends={contacts} favorites={favorites} actions={actions} filterText={filterText}/>
+          <ContactsList contacts={contacts} actions={actions} filterText={filterText}/>
         </View>
     )
   }
 }
 
-Friends.propTypes = {
+Contacts.propTypes = {
   socialState: PropTypes.instanceOf(Immutable.Record).isRequired,
   actions: PropTypes.object.isRequired,
 }
@@ -92,4 +92,4 @@ function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(socialActions, dispatch) };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Friends)
+export default connect(mapStateToProps, mapDispatchToProps)(Contacts)

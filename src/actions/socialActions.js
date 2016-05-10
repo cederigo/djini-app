@@ -19,14 +19,12 @@ import {
   ON_SEARCH_FIELD_CHANGE,
   SAVE_SOCIAL_STATE,
 
-  ADD_FAVORITE  
+  TOGGLE_FAVORITE  
 } from '../lib/constants'
 
 import contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
-
-import {User, Wish} from '../lib/types'
 
 export function restoreStateRequest() {
   return {
@@ -110,7 +108,7 @@ export function saveState() {
     }
 
     dispatch({type: SAVE_SOCIAL_STATE, payload: Date.now()})
-    db.saveSocialState({contacts: state.contacts.entrySeq(), favorites: state.favorites.entrySeq()})
+    db.saveSocialState({contacts: state.contacts.entrySeq()})
       .catch(e => {
         console.log('Could not save state. error: ', e)
       })
@@ -124,11 +122,10 @@ export function onSearchFieldChange(text) {
   }
 }
 
-export function addFavorite(contact) {
-  return {
-    type: ADD_FAVORITE,
-    payload: {contact, accessedAt: Date.now()}
-  
+export function toggleFavorite(contact) {
+  return dispatch => {
+    dispatch({type: TOGGLE_FAVORITE, payload: contact})
+    dispatch(saveState())
   }
 }
 
@@ -136,9 +133,7 @@ export function invite(contact) {
   return dispatch => {
     const url = 'https://tsfr.io/j9n6rp'
     const message = 'Ich möchte dir etwas schenken, weis aber nicht was...';
-    dispatch(addFavorite(contact))
     //TODO: dispatch global invite activity action (to server too)
-    dispatch(saveState())
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showShareActionSheetWithOptions(
         {message, url},

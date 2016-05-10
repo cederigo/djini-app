@@ -9,8 +9,9 @@ import React, {
   TouchableOpacity,
   Text
 } from 'react-native';
+import Swipeout from 'react-native-swipeout'
 
-export default class FriendsList extends Component {
+export default class ContactsList extends Component {
   constructor(props) {
     super(props);
 
@@ -27,7 +28,7 @@ export default class FriendsList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.filterText !== this.props.filterText) {
+    if (nextProps.filterText !== this.props.filterText || nextProps.contacts !== this.props.contacts) {
       this.setState({
         dataSource: this.state.dataSource.cloneWithRowsAndSections(this._getListViewData(nextProps))
       })
@@ -52,38 +53,51 @@ export default class FriendsList extends Component {
     )
   }
 
-  _getFriendFilter(filterText) {
-    const r = new RegExp(filterText, 'i')
-    return friend => r.test(friend.name)
-  }
-
   _getListViewData(props) {
-    const {filterText, favorites, friends} = props
-    const data = {}
-    if (favorites.size) {
-      data['Favoriten'] = filterText ? favorites.filter(this._getFriendFilter(filterText)).toArray() : favorites.toArray()
-    }
-    data['Kontakte'] = filterText ? friends.filter(this._getFriendFilter(filterText)).toArray() : friends.toArray()
+    const {filterText, contacts} = props
+    const r = new RegExp(filterText, 'i')
+
+    var data = {'Favoriten': [], 'Kontakte': []}
+
+    contacts.forEach(contact => {
+      if (r.test(contact.name)) {
+        data[contact.isFavorite ? 'Favoriten' : 'Kontakte'].push(contact)
+      }
+    })
+
     return data
   }
 
-  _renderRow (friend) {
+  _swipeoutBtns (contact) {
+    //TODO icons instead of text
+    const {actions} = this.props
+    return [
+      {
+        text: contact.isFavorite ? 'Not a Fav.' : 'Favorite', 
+        onPress: () => actions.toggleFavorite(contact)
+      }
+    ]
+  }
+
+  _renderRow (contact) {
 
     const {actions} = this.props
 
     return (
-      <TouchableHighlight onPress={() => actions.loadFriendProfile(friend)}>
-        <View style={styles.row}>
-          <Text style={styles.text}>
-            {friend.name}
-          </Text>
-          {friend.registered ? null : 
-            <TouchableOpacity style={styles.actions} onPress={() => actions.invite(friend)}>
-              <Text>Invite</Text>
-            </TouchableOpacity>
-          }
-        </View>
-      </TouchableHighlight>
+      <Swipeout right={this._swipeoutBtns(contact)} autoClose={true}>
+        <TouchableHighlight onPress={() => actions.loadFriendProfile(contact)}>
+          <View style={styles.row}>
+            <Text style={styles.text}>
+              {contact.name}
+            </Text>
+            {contact.registered ? null : 
+              <TouchableOpacity style={styles.actions} onPress={() => actions.invite(contact)}>
+                <Text>Invite</Text>
+              </TouchableOpacity>
+            }
+          </View>
+        </TouchableHighlight>
+      </Swipeout>
     );
   }
 
@@ -102,9 +116,8 @@ export default class FriendsList extends Component {
   }
 }
 
-FriendsList.propTypes = {
-  favorites: PropTypes.instanceOf(Immutable.OrderedMap).isRequired,
-  friends: PropTypes.instanceOf(Immutable.OrderedMap).isRequired,
+ContactsList.propTypes = {
+  contacts: PropTypes.instanceOf(Immutable.OrderedMap).isRequired,
   actions: PropTypes.object.isRequired,
   filterText: PropTypes.string
 }

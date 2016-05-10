@@ -6,7 +6,6 @@ var InitialState = Record({
   filterText: '',
   lastSavedAt: 0,
   noContactsPermission: false,
-  favorites: OrderedMap(),
   contacts: OrderedMap(),
 });
 

@@ -14,7 +14,7 @@ import {
 
   INVITE_CONTACT,
   SHOW_CONTACT,
-  ADD_FAVORITE,
+  TOGGLE_FAVORITE,
 } from '../../lib/constants'
 
 const initialState = new InitialState;
@@ -26,10 +26,9 @@ export default function socialReducer(state = initialState, {type, payload}) {
       return state.set('isFetching', true)
 
     case SOCIAL_STATE_SUCCESS: {
-      const {contacts, favorites} = payload
+      const {contacts} = payload
       return state.set('isFetching', false)
         .set('contacts', contacts)
-        .set('favorites', favorites)
     }
 
     case SAVE_SOCIAL_STATE: {
@@ -37,14 +36,14 @@ export default function socialReducer(state = initialState, {type, payload}) {
     }
 
     case CONTACTS_SUCCESS: {
-      const contacts = payload
-      let favorites = state.get('favorites')
-      //duplicate data not so nice ...
-      favorites = favorites.filter(f => contacts.has(f.phoneNumber)) //handle deletions
-      favorites = favorites.map(f => contacts.get(f.phoneNumber))
+      const newContacts = payload
+      const contacts = state.get('contacts')
       return state.set('isFetching', false)
-        .set('contacts', contacts)
-        .set('favorites', favorites)
+        .set('contacts', newContacts.map(newContact => {
+          //keep local favorites
+          const contact = contacts.get(newContact.phoneNumber)
+          return {...newContact, isFavorite: contact && contact.isFavorite}
+        }))
     }
 
     case SOCIAL_STATE_FAILURE:
@@ -56,16 +55,10 @@ export default function socialReducer(state = initialState, {type, payload}) {
     case ON_SEARCH_FIELD_CHANGE:
         return state.set('filterText', payload)
 
-    case ADD_FAVORITE: {
-      const {contact, accessedAt} = payload
-        const favorites = state.get('favorites')
-      return state.set('favorites', 
-        favorites
-          .set(contact.phoneNumber, {...contact, accessedAt})
-          .sortBy(c => c.accessedAt)
-          .takeLast(10) //max 10 favorites
-          .sortBy(c => c.name)
-      )
+    case TOGGLE_FAVORITE: {
+      const contact = payload
+      const contacts = state.get('contacts')
+      return state.set('contacts', contacts.set(contact.phoneNumber, {...contact, isFavorite: !contact.isFavorite}))
     }
 
     case SHOW_CONTACT:

@@ -17,7 +17,7 @@ import {
 import App from './containers/App'
 import Login from './containers/Login'
 import Wishes from './containers/Wishes'
-import Friends from './containers/Friends'
+import Contacts from './containers/Contacts'
 import Friend from './containers/Friend'
 import Wish from './containers/Wish'
 
@@ -105,7 +105,7 @@ export default function native(platform) {
 
               <Scene key="home" panHandlers={null} tabs={true} hideNavBar={false} >
                 <Scene key="wishes" initial={true} component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
-                <Scene key="friends" component={Friends} title="Meine Freunde" icon={TabIcon} iconName="accessibility"/>
+                <Scene key="contacts" component={Contacts} title="Meine Kontakte" icon={TabIcon} iconName="accessibility"/>
               </Scene>
 
             </Scene>
