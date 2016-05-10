@@ -25,7 +25,6 @@ export function showWish(wish) {
 }
 
 export function editWish(wish) {
-  debugger
   return dispatch => {
     dispatch({type: EDIT_WISH, payload: wish})
     Actions.wish()
@@ -100,6 +99,7 @@ export function deleteWish(wish: Wish) {
     ParseWish.createWithoutData(wish.id).destroy()
       .then(() => {
         dispatch({type: WISH_DELETED, payload: wish})
+        Actions.pop()
       })
   }
 }
