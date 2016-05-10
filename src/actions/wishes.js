@@ -1,4 +1,4 @@
-import {Record} from 'immutable';
+import Record from 'immutable'
 import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
 
@@ -13,23 +13,20 @@ import {
   NEW_WISH
 } from '../lib/constants'
 
-/**
- * Project requirements
- */
 const ParseWish = Parse.Object.extend('Wish')
 
 import {Wish, User} from '../lib/types'
 
 export function showWish(wish) {
   return dispatch => {
-    dispatch({type: SHOW_WISH, payload: new (Record(wish))})
+    dispatch({type: SHOW_WISH, payload: wish})
     Actions.wish()
   }
 }
 
 export function editWish(wish) {
   return dispatch => {
-    dispatch({type: EDIT_WISH, payload: new (Record(wish))})
+    dispatch({type: EDIT_WISH, payload: wish})
     Actions.wish()
   }
 }
@@ -67,28 +64,30 @@ export function saveWishFailure(error) {
     payload: error
   };
 }
-export function saveWish(wish: Wish) {
+export function saveWish(wish: Record<Wish>) {
   return dispatch => {
 
     dispatch(saveWishRequest())
 
-    const {title, description, url, isPrivate, seenAt} = wish
-
-    let parseWish = new ParseWish()
     //use existing id if possible
-    parseWish.id = wish.id
-
-    parseWish.save({
-      title, description, url, isPrivate, seenAt,
+    let parseWish = ParseWish.createWithoutData(wish.id)
+    let attributes = {
+      ...wish.toObject(),
       fromUser: parseUserPointer(wish.fromUserId),
       toUser: parseUserPointer(wish.toUserId),
       fullfiller: parseUserPointer(wish.fullfillerId)
-    }).then((data) => {
-        dispatch(saveWishSuccess(fromParseWish(data)))
-      })
-      .catch((error) => {
-        dispatch(saveWishFailure(error))
-      })
+    }
+
+    delete attributes.fromUserId
+    delete attributes.toUserId
+    delete attributes.fullfillerId
+
+    parseWish.save(attributes).then((data) => {
+      dispatch(saveWishSuccess(data))
+    })
+    .catch((error) => {
+      dispatch(saveWishFailure(error))
+    })
   }
 }
 
@@ -110,14 +109,13 @@ export function fullfillWish(wish) {
     dispatch(saveWishRequest())
     Parse.Cloud.run('fullfillWish', {wishId: wish.id})
     .then(data => {
-      dispatch(saveWishSuccess(fromParseWish(data)))
+      dispatch(saveWishSuccess(data))
     })
     .catch(error => {
       dispatch(saveWishFailure(error))
     })
   }
 }
-
 
 /* Helper */
 function parseUserPointer(userId) {
@@ -129,20 +127,5 @@ function parseUserPointer(userId) {
     __type: 'Pointer',
     className: '_User',
     objectId: userId 
-  }
-}
-
-function fromParseWish(parseWish): Wish {
-  let fullfiller = parseWish.get('fullfiller')
-  return {
-    id: parseWish.id,
-    title: parseWish.get('title'),
-    description: parseWish.get('description'),
-    url: parseWish.get('url'),
-    seenAt: parseWish.get('seenAt'),
-    isPrivate: parseWish.get('isPrivate'),
-    fromUserId: parseWish.get('fromUser').objectId, //pointer
-    toUserId: parseWish.get('toUser').objectId,  //pointer
-    fullfillerId: fullfiller ? fullfiller.objectId : undefined //pointer
   }
 }

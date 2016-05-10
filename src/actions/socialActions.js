@@ -155,21 +155,6 @@ export function invite(contact) {
   }
 }
 
-export function show(contact) {
-  return dispatch => {
-    dispatch(addFavorite(contact))
-    dispatch(getFriendProfileRequest)
-    _getFriendProfile(contact)
-    .then(friend => {
-      dispatch(getFriendProfileSuccess(friend))
-      dispatch(saveState())
-      Actions.friend()
-    })
-    .catch(error => {
-      dispatch(getFriendProfileFailure(error))
-    })
-  }
-}
 
 /*
 * Get Friend profile
@@ -194,35 +179,16 @@ function getFriendProfileFailure(error) {
   }
 }
 
-export function updateFriendProfile() {
-  return (dispatch, getState) => {
+export function loadFriendProfile(contact) {
+  return dispatch => {
     dispatch(getFriendProfileRequest())
-    const {user} = getState().friend
-    _getFriendProfile(user)
-    .then(friend => {
-      dispatch(getFriendProfileSuccess(friend))
-      dispatch(saveState()) // is this needed?
-    })
-    .catch(error => {
-      dispatch(getFriendProfileFailure(error))
-    })
+    Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
+      .then((parseProfile) => {
+        dispatch(getFriendProfileSuccess(parseProfile))
+        Actions.friend()
+      })
+      .catch(error => {
+        dispatch(getFriendProfileFailure(error))
+      })
   }
-}
-
-function _getFriendProfile(contact) {
-  return Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
-    .then((response) => {
-      let friend: {user: User, wishes: List<Wish>, ideas: List<Wish>} = {
-        user: {
-          phoneNumber: contact.phoneNumber,
-          name: contact.name,
-          id: response.user.id,
-          birthday: response.user.birthday,
-          registered: response.user.registered
-        },
-        wishes: List(response.wishes),
-        ideas: List(response.ideas)
-      }
-      return friend
-    })
 }

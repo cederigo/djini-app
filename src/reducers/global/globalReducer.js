@@ -16,7 +16,7 @@ const initialState = new InitialState;
 /**
  * Helpers
  */
-function fromParseUser(user: Object): User {
+export function fromParseUser(user: Object): User {
   return {
     id: user.id,
     name: user.get('name'),
@@ -31,7 +31,7 @@ export default function globalReducer(state = initialState, {type, payload}) {
     case LOGOUT:
       return state.set('currentUser', null)
     case MY_PROFILE_LOADED:
-      return state.set('currentUser', payload.user)
+      return state.set('currentUser', fromParseUser(payload.user))
   }
 
   return state;

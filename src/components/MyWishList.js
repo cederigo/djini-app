@@ -72,11 +72,11 @@ class MyWishList extends Component {
       },
       {
         text: wish.isFavorite ? 'Not a Fav.' : 'Favorite', 
-        onPress: () => dispatch(saveWish({...wish, isFavorite: !wish.isFavorite}))
+        onPress: () => dispatch(saveWish(wish.set('isFavorite', !wish.isFavorite)))
       },
       {
         text: wish.isPrivate ? 'Make public' : 'Make private',
-        onPress: () => dispatch(saveWish({...wish, isPrivate: !wish.isPrivate}))
+        onPress: () => dispatch(saveWish(wish.set('isPrivate', !wish.isPrivate)))
       }
     ]
   }
@@ -88,7 +88,7 @@ class MyWishList extends Component {
         <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
             <Text style={styles.text}>
-              {wish.title + (wish.isPrivate ? '(Privat)' : '')}
+              {wish.title + (wish.isPrivate ? '(Privat)' : '') + (wish.isFavorite ? '(Fav)' : '')}
             </Text>
           </View>
         </TouchableHighlight>
