@@ -16,6 +16,7 @@ const InitialState = Record({
   isFetching: false,
   error: null,
   user: null,
+  contact: null,
   wishes: List(),
   ideas: List()
 })

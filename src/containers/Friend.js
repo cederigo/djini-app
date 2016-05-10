@@ -14,21 +14,23 @@ import {
 
 import {Actions} from 'react-native-router-flux';
 
-import {Wish, User} from '../lib/types'
+import {Wish, User, Contact} from '../lib/types'
 import NewWishButton from '../components/NewWishButton'
 
-import MyWishList from '../components/MyWishList'
+import FriendWishesList from '../components/FriendWishesList'
+import FriendIdeasList from '../components/FriendIdeasList'
 
 class Friend extends Component {
 
   props: {
     user: User,
+    contact: Contact,
     wishes: List<Wish>,
     ideas: List<Wish>
   }
   
   render() {
-    const {user, wishes, ideas, isFetching, error} = this.props
+    const {user, contact, wishes, ideas, error} = this.props
 
     if (error) {
       Alert.alert('Oops', 'Profil konnten nicht geladen werden')
@@ -46,23 +48,19 @@ class Friend extends Component {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.title}>Profil von {user.name}</Text>
+        <Text style={styles.title}>Profil von {contact.name}</Text>
 
         {user.registered ? 
           <Text>Geburtstag am: {user.birthday.toString()}</Text> :
-          <Text>Alain ist noch nicht dabei. Lade ihn jetzt ein!</Text>
+          <Text>{contact.name} ist noch nicht dabei. Lade ihn jetzt ein!</Text>
         }
 
+        <FriendWishesList wishes={wishes.toArray()} />
 
-        <Text style={styles.title}>Wünsche von {user.name}</Text>
-        {wishes.size === 0 ? 
-          <Text>{user.name} hat noch keine Wünsche</Text> :
-          <MyWishList wishes={wishes.toArray()} />
-        }
 
-        <Text style={styles.title}>Meine Ideen für {user.name}</Text>
+        <Text style={styles.title}>Meine Ideen für {contact.name}</Text>
         <NewWishButton style={{height: 50}} text="Neue Idee" toUser={user}/>
-        <MyWishList wishes={ideas.toArray()} />
+        <FriendIdeasList wishes={ideas.toArray()} />
       </View>
     )
   }
@@ -74,9 +72,9 @@ const styles = StyleSheet.create({
     height: 50,
   },
   container: {
-    flex: 1,
     padding: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    flex: 1
   },
   title: {
     marginTop: 10,
@@ -91,6 +89,7 @@ function select(state) {
   const friendState = state.friend
   return {
     user: friendState.user,
+    contact: friendState.contact,
     isFetching: friendState.isFetching,
     wishes: friendState.wishes,
     ideas: friendState.ideas

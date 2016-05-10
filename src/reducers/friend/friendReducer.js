@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import InitialState from './friendInitialState'
 
 /**
@@ -11,6 +12,9 @@ import {
   WISH_DELETED,
 } from '../../lib/constants'
 
+import {fromParseWish} from '../wishes/wishesReducer'
+import {fromParseUser} from '../global/globalReducer'
+
 const initialState = new InitialState
 /**
  * ## friendReducer function
@@ -22,12 +26,15 @@ export default function friendReducer(state = initialState, {type, payload}) {
     case GET_FRIEND_PROFILE_REQUEST:
       return state.set('isFetching', true)
 
-    case GET_FRIEND_PROFILE_SUCCESS:
-        return state.set('isFetching', false)
-          .set('ideas', payload.ideas)
-          .set('wishes', payload.wishes)
-          .set('user', payload.user)
-          .set('error', null)
+    case GET_FRIEND_PROFILE_SUCCESS: {
+      const {profile, contact} = payload
+      return state.set('isFetching', false)
+        .set('ideas', List(profile.ideas.map(fromParseWish)))
+        .set('wishes', List(profile.wishes.map(fromParseWish)))
+        .set('user', fromParseUser(profile.user))
+        .set('contact', contact)
+        .set('error', null)
+    }
 
     case GET_FRIEND_PROFILE_FAILURE:
         return state.set('isFetching', false)
@@ -35,18 +42,19 @@ export default function friendReducer(state = initialState, {type, payload}) {
 
     case SAVE_WISH_SUCCESS: {
       let friend = state.get('user')
-      if (!friend || friend.id !== payload.toUserId) {
+      const wish = fromParseWish(payload)
+      if (!friend || friend.id !== wish.toUserId) {
         return state; //nothing to to
       
       }
 
 
       const ideas = state.get('ideas')
-      let idx = ideas.findIndex((w) => w.id === payload.id)
+      let idx = ideas.findIndex((w) => w.id === wish.id)
       if (idx === -1) {
-        return state.set('ideas', ideas.unshift(payload)) //add
+        return state.set('ideas', ideas.unshift(wish)) //add
       } else {
-        return state.set('ideas', ideas.update(idx, () => payload)) //update
+        return state.set('ideas', ideas.update(idx, () => wish)) //update
       }
     }
 

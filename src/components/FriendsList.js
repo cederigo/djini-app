@@ -72,7 +72,7 @@ export default class FriendsList extends Component {
     const {actions} = this.props
 
     return (
-      <TouchableHighlight onPress={() => actions.show(friend)}>
+      <TouchableHighlight onPress={() => actions.loadFriendProfile(friend)}>
         <View style={styles.row}>
           <Text style={styles.text}>
             {friend.name}
