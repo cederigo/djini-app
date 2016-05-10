@@ -8,7 +8,9 @@ import React, {
    PropTypes,
    View,
    StyleSheet,
-   StatusBar
+   StatusBar,
+   Text,
+   TouchableOpacity
 } from 'react-native';
 
 import AddWishForm from '../components/wish/AddWishForm'
@@ -32,6 +34,15 @@ class Wish extends Component {
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
+        
+        <View style={styles.navbar}>
+          <TouchableOpacity 
+            style={styles.button}
+            onPress={Actions.pop}>
+            <Text style={styles.buttonText}>Zurück</Text>
+          </TouchableOpacity>
+        </View>
+        
         <AddWishForm
           currentUser={globalState.currentUser} 
           wishState={wishState} 
