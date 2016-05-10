@@ -26,12 +26,15 @@ export default function friendReducer(state = initialState, {type, payload}) {
     case GET_FRIEND_PROFILE_REQUEST:
       return state.set('isFetching', true)
 
-    case GET_FRIEND_PROFILE_SUCCESS:
-        return state.set('isFetching', false)
-          .set('ideas', List(payload.ideas.map(fromParseWish)))
-          .set('wishes', List(payload.wishes.map(fromParseWish)))
-          .set('user', fromParseUser(payload.user))
-          .set('error', null)
+    case GET_FRIEND_PROFILE_SUCCESS: {
+      const {profile, contact} = payload
+      return state.set('isFetching', false)
+        .set('ideas', List(profile.ideas.map(fromParseWish)))
+        .set('wishes', List(profile.wishes.map(fromParseWish)))
+        .set('user', fromParseUser(profile.user))
+        .set('contact', contact)
+        .set('error', null)
+    }
 
     case GET_FRIEND_PROFILE_FAILURE:
         return state.set('isFetching', false)

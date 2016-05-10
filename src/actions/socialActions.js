@@ -183,8 +183,8 @@ export function loadFriendProfile(contact) {
   return dispatch => {
     dispatch(getFriendProfileRequest())
     Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
-      .then((parseProfile) => {
-        dispatch(getFriendProfileSuccess(parseProfile))
+      .then((profile) => {
+        dispatch(getFriendProfileSuccess({profile, contact}))
         Actions.friend()
       })
       .catch(error => {

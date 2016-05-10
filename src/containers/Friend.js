@@ -28,7 +28,7 @@ class Friend extends Component {
   }
   
   render() {
-    const {user, wishes, ideas, isFetching, error} = this.props
+    const {user, contact, wishes, ideas, error} = this.props
 
     if (error) {
       Alert.alert('Oops', 'Profil konnten nicht geladen werden')
@@ -46,21 +46,21 @@ class Friend extends Component {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.title}>Profil von {user.name}</Text>
+        <Text style={styles.title}>Profil von {contact.name}</Text>
 
         {user.registered ? 
           <Text>Geburtstag am: {user.birthday.toString()}</Text> :
-          <Text>Alain ist noch nicht dabei. Lade ihn jetzt ein!</Text>
+          <Text>{contact.name} ist noch nicht dabei. Lade ihn jetzt ein!</Text>
         }
 
 
-        <Text style={styles.title}>Wünsche von {user.name}</Text>
+        <Text style={styles.title}>Wünsche von {contact.name}</Text>
         {wishes.size === 0 ? 
-          <Text>{user.name} hat noch keine Wünsche</Text> :
+          <Text>{contact.name} hat noch keine Wünsche</Text> :
           <MyWishList wishes={wishes.toArray()} />
         }
 
-        <Text style={styles.title}>Meine Ideen für {user.name}</Text>
+        <Text style={styles.title}>Meine Ideen für {contact.name}</Text>
         <NewWishButton style={{height: 50}} text="Neue Idee" toUser={user}/>
         <MyWishList wishes={ideas.toArray()} />
       </View>
@@ -91,6 +91,7 @@ function select(state) {
   const friendState = state.friend
   return {
     user: friendState.user,
+    contact: friendState.contact,
     isFetching: friendState.isFetching,
     wishes: friendState.wishes,
     ideas: friendState.ideas
