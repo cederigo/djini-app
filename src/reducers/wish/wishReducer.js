@@ -17,23 +17,23 @@ export default function wishReducer(state = initialState, {type, payload}) {
 
     case SHOW_WISH:
       return state.set('wish', payload)
-        .set('isEditable', false)
+        .set('editMode', false)
 
     case EDIT_WISH:
       return state.set('wish', payload)
-        .set('isEditable', true)
+        .set('editMode', true)
 
     case NEW_WISH: {
      const {fromUser, toUser} = payload
      return initialState
-        .set('isEditable', true)
+        .set('editMode', true)
         .setIn(['wish', 'fromUserId'], fromUser.id)
         .setIn(['wish', 'toUserId'], toUser.id)
     }
 
     case SAVE_WISH_REQUEST:
      return state.set('isFetching', true)
-       .set('isEditable', false)
+       .set('editMode', false)
        .set('error', null)
 
     case SAVE_WISH_SUCCESS:

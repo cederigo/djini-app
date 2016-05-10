@@ -28,6 +28,7 @@ export function showWish(wish) {
 }
 
 export function editWish(wish) {
+  debugger
   return dispatch => {
     dispatch({type: EDIT_WISH, payload: new (Record(wish))})
     Actions.wish()
@@ -69,7 +70,6 @@ export function saveWishFailure(error) {
 }
 export function saveWish(wish: Wish) {
   return dispatch => {
-
     dispatch(saveWishRequest())
 
     const {title, description, url, isPrivate, seenAt} = wish
@@ -77,7 +77,6 @@ export function saveWish(wish: Wish) {
     let parseWish = new ParseWish()
     //use existing id if possible
     parseWish.id = wish.id
-
     parseWish.save({
       title, description, url, isPrivate, seenAt,
       fromUser: parseUserPointer(wish.fromUserId),

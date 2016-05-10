@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
-import {Actions} from 'react-native-router-flux';
 
+// components
 import React, {
-    Platform,
+   Platform,
    Component,
    PropTypes,
    View,
@@ -12,29 +12,27 @@ import React, {
    Text,
    TouchableOpacity
 } from 'react-native';
+import EditWishForm from '../components/wish/EditWishForm'
+import ShowWishForm from '../components/wish/ShowWishForm'
 
-import AddWishForm from '../components/wish/AddWishForm'
-import {
-  onWishFieldChange, 
-  saveWish,
-  editWish,
-  deleteWish,
-  fullfillWish,
-} from '../actions/wishes'
+//Actions
+import {Actions} from 'react-native-router-flux';
 
 class Wish extends Component {
 
   render() {
     const {wishState, globalState, dispatch} = this.props
     
-
-    //TODO: cre: Introduce ShowWishForm & EditWishForm and "connect" them. Passing around so many
-    //props is error-prone. Decide based on wishState which one to show
+    let WishForm
+    if (wishState.editMode) {
+      WishForm = <EditWishForm styles={styles}/>
+    } else {
+      WishForm = <ShowWishForm styles={styles}/>
+    }
   
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-        
         <View style={styles.navbar}>
           <TouchableOpacity 
             style={styles.button}
@@ -42,20 +40,7 @@ class Wish extends Component {
             <Text style={styles.buttonText}>Zurück</Text>
           </TouchableOpacity>
         </View>
-        
-        <AddWishForm
-          currentUser={globalState.currentUser} 
-          wishState={wishState} 
-          onWishFieldChange={(field, value) => dispatch(onWishFieldChange(field, value))} 
-          saveWish={(wish) => dispatch(saveWish(wish))}
-          editWish={(wish) => dispatch(editWish(wish))}
-          deleteWish = {(wish) => {
-            dispatch(deleteWish(wish))
-            Actions.pop()
-          }}
-          fullfillWish = {(wish) => {dispatch(fullfillWish(wish))}}
-          unfullfillWish = {(wish) => {dispatch(saveWish({...wish, fullfillerId: null}))}}
-          styles={styles}/>
+        {WishForm}
       </View>
     )
   }
