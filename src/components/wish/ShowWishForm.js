@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import {Actions} from 'react-native-router-flux'
 
 import React, {
   Component,
@@ -33,7 +34,9 @@ export default class ShowWishForm extends Component {
       if (allowDelete(wish, currentUser)) {
         DeleteButton = <TouchableOpacity
          style={styles.button}
-          onPress={() => dispatch(deleteWish(wish))}>
+          onPress={() => { 
+            dispatch(deleteWish(wish))
+            Actions.pop()}}>
           <Text style={styles.buttonText}>Wunsch löschen</Text>
         </TouchableOpacity>
       }

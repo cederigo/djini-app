@@ -99,7 +99,6 @@ export function deleteWish(wish: Wish) {
     ParseWish.createWithoutData(wish.id).destroy()
       .then(() => {
         dispatch({type: WISH_DELETED, payload: wish})
-        Actions.pop()
       })
   }
 }
