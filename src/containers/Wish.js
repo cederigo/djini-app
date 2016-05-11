@@ -7,7 +7,8 @@ import React, {
    PropTypes,
    View,
    StyleSheet,
-   StatusBar
+   StatusBar,
+   Platform
 } from 'react-native';
 import EditWishForm from '../components/wish/EditWishForm'
 import ShowWishForm from '../components/wish/ShowWishForm'
@@ -48,6 +49,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 10,
+  },
+  navbar: {
+    marginTop: 20,
+    height: 50,
+  },
+  button: {
+    padding: 15
+  },
+  buttonText: {
+    fontSize: 17,
+    fontWeight: '500'
+  },
+  text: {
+    paddingTop: 30
+  },
+  icon: {
+    alignSelf: 'center',
+    marginBottom: 30
+  },
+  input: {
+    marginLeft: Platform.OS === 'android' ? -5 : 0,
+    height: 50,
+    marginTop: 10
   }
 });
 
