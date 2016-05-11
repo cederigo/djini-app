@@ -10,6 +10,8 @@ import {
   ON_WISH_FIELD_CHANGE
 } from '../../lib/constants'
 
+import {fromParseWish} from '../wishes/wishesReducer'
+
 const initialState = new InitialState;
 
 export default function wishReducer(state = initialState, {type, payload}) {
@@ -37,7 +39,9 @@ export default function wishReducer(state = initialState, {type, payload}) {
        .set('error', null)
 
     case SAVE_WISH_SUCCESS:
+      const wish = fromParseWish(payload)
       return state.set('isFetching', false)
+       .set('wish', wish)
        .set('error', null)
 
     case SAVE_WISH_FAILURE:

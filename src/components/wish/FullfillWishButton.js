@@ -9,6 +9,7 @@ import React, {
   Text,
   Alert
 } from 'react-native';
+import WMButton from '../WMButton'
 
 // Actions
 import {fullfillWish, saveWish} from '../../actions/wishes'
@@ -56,25 +57,13 @@ class FullfillWishButton extends Component {
     }
     
     return (
-      <TouchableOpacity
-          style={styles.button}
-          onPress={_onPress}>
-          <Text style={styles.buttonText}>{_text}</Text>
-        </TouchableOpacity>
+      <WMButton 
+          onPress={_onPress}
+          caption={_text}
+        />
     )
   }
 }
-
-const styles = StyleSheet.create({
-  button: {
-    height: 200,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: 'rgb(0, 122, 155)'
-  }
-})
 
 /**
  * Redux boilerplate

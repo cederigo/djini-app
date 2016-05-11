@@ -10,6 +10,7 @@ export default class WMButton extends Component {
   props: {
     // type: 'primary' | 'secondary' | 'bordered';
     // icon: number;
+    disabled: boolean;
     caption: string;
     style: any;
     onPress: () => void;
@@ -21,6 +22,7 @@ export default class WMButton extends Component {
       <TouchableOpacity
         accessibilityTraits="button"
         onPress={this.props.onPress}
+        disabled={this.props.disabled}
         activeOpacity={0.8}
         style={[styles.container, this.props.style]}>
         <Text style={[styles.button, styles.caption, styles.primaryCaption]}>
@@ -36,16 +38,16 @@ const styles = StyleSheet.create({
   container: {
     padding: 15,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   button: {
   },
   icon: {
-    marginRight: 12,
+    marginRight: 12
   },
   caption: {
     letterSpacing: 1,
-    fontSize: 12,
+    fontSize: 12
   },
   primaryCaption: {
     color: 'rgb(0, 122, 155)',

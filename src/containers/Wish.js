@@ -26,7 +26,7 @@ class Wish extends Component {
     if (wishState.editMode) {
       WishForm = <EditWishForm styles={styles}/>
     } else {
-      WishForm = <ShowWishForm styles={styles}/>
+      WishForm = <ShowWishForm/>
     }
     
     return (
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 10,
+    padding: 10
   },
   navbar: {
     marginTop: 20,

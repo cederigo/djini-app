@@ -20,12 +20,11 @@ export default class EditWishForm extends Component {
     const {wish} = wishState
     let SaveButton
    
-    SaveButton = <TouchableOpacity
-      style={styles.button}
-      onPress={() => dispatch(saveWish(wish))}
-      disabled={!wish.title}>
-      <Text style={styles.buttonText}>Wunsch speichern</Text>
-    </TouchableOpacity>
+    SaveButton = <WMButton 
+          onPress={() => dispatch(saveWish(wish))}
+          caption="Wunsch speichern"
+          disabled={!wish.title}
+        />
   
     return ( 
       <View style={styles.container}>
