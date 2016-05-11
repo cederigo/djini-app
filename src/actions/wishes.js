@@ -2,6 +2,10 @@ import Record from 'immutable'
 import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
 
+import React, {
+  Alert
+} from 'react-native';
+
 import {
   SAVE_WISH_REQUEST, 
   SAVE_WISH_FAILURE, 
@@ -112,6 +116,9 @@ export function fullfillWish(wish) {
     })
     .catch(error => {
       dispatch(saveWishFailure(error))
+      if (error.message.code === 'Wish is already fullfilled.') {
+        Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
+      }
     })
   }
 }
@@ -119,7 +126,7 @@ export function fullfillWish(wish) {
 /* Helper */
 function parseUserPointer(userId) {
   if (!userId) {
-    return; //undefined
+    return null
   }
 
   return {

@@ -56,12 +56,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'flex-start'
+  },
+  navbar: {
+    marginTop: 20,
+    height: 50,
   },
   button: {
-    padding: 15,
-    alignSelf: 'center'
+    padding: 15
   },
   buttonText: {
     fontSize: 17,

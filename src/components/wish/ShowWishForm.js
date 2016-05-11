@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import {Actions} from 'react-native-router-flux'
 
+// Components
 import React, {
   Component,
   PropTypes,
@@ -8,11 +8,13 @@ import React, {
   Text,
   TouchableOpacity
 } from 'react-native';
+import FullfillWishButton from './FullfillWishButton'
 
 // Utils
 import {allowEdit, allowDelete, fullfillable, fullfilledByUser, fullfilled} from '../../lib/wishUtil'
 
 // Actions
+import {Actions} from 'react-native-router-flux'
 import {editWish, deleteWish, fullfillWish, unfullfillWish} from '../../actions/wishes'
 
 export default class ShowWishForm extends Component {
@@ -40,21 +42,10 @@ export default class ShowWishForm extends Component {
           <Text style={styles.buttonText}>Wunsch löschen</Text>
         </TouchableOpacity>
       }
-      // Fullfillment
-      if (fullfillable(wish, currentUser)) {
-        FullfillButton = <TouchableOpacity
-          style={styles.button}
-          onPress={() => dispatch(fullfillWish(wish))}>
-          <Text style={styles.buttonText}>Wunsch erfüllen</Text>
-        </TouchableOpacity>
-      } 
-      if (fullfilledByUser(wish, currentUser)) {
-        // fullfilled by me => unFullfillButton
-        FullfillButton = <TouchableOpacity
-          style={styles.button}
-          onPress={() => dispatch(unfullfillWish(wish))}>
-          <Text style={styles.buttonText}>Wunsch unerfüllen ^^</Text>
-          </TouchableOpacity>
+      //FullfillButton
+      //if (fullfillable(wish, currentUser) || fullfilledByUser(wish, currentUser)) {
+      if (fullfillable(wish, currentUser) || fullfilledByUser(wish, currentUser)) {
+        FullfillButton = <FullfillWishButton wish={wish}/>
       }
       //FullfillmentStatus
       if (fullfilledByUser(wish, currentUser)) {
