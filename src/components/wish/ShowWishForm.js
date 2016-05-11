@@ -13,7 +13,7 @@ import FullfillWishButton from './FullfillWishButton'
 import WMButton from '../WMButton'
 
 // Utils
-import {allowEdit, allowDelete, fullfillable, fullfilledByUser, fullfilled, toUser, fromUser} from '../../lib/wishUtil'
+import {allowEdit, allowDelete, fullfillable, fullfilledByUser, fullfilled, toUser, fromUser, type} from '../../lib/wishUtil'
 
 // Actions
 import {Actions} from 'react-native-router-flux'
@@ -31,7 +31,7 @@ export default class ShowWishForm extends Component {
       if (allowEdit(wish, currentUser)) {
         EditButton = <WMButton 
           onPress={() => dispatch(editWish(wish))}
-          caption="Wunsch bearbeiten"
+          caption={type(wish) + " bearbeiten"}
         />
       }
       if (allowDelete(wish, currentUser)) {
@@ -39,7 +39,7 @@ export default class ShowWishForm extends Component {
           onPress={() => { 
             dispatch(deleteWish(wish))
             Actions.pop()}}
-          caption="Wunsch löschen"
+          caption={type(wish) + " löschen"}
         />
       }
       //PrivacyStatus
@@ -62,7 +62,7 @@ export default class ShowWishForm extends Component {
     }
         
     if (isFetching) {
-      SaveStatus = <Text style={styles.status}>Wunsch wird gespeichert.</Text>
+      SaveStatus = <Text style={styles.status}>{type(wish) + " wird gespeichert."}</Text>
     }
    
     return ( 

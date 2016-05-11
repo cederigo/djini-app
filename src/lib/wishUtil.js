@@ -25,3 +25,14 @@ export function toUser(wish, user) {
 export function fromUser(wish, user) {
   return wish.fromUserId === user.id
 }
+
+export function isIdea(wish) {
+  return wish.fromUserId !== wish.toUserId
+}
+
+export function type(wish) {
+  if (isIdea(wish)) {
+    return 'Idee'
+  } 
+  return 'Wunsch'
+}
