@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import { connect } from 'react-redux';
 import React, { 
   StyleSheet,
   Component,
@@ -11,7 +12,9 @@ import React, {
 } from 'react-native';
 import Swipeout from 'react-native-swipeout'
 
-export default class ContactsList extends Component {
+import {toggleFavorite, invite, loadFriendProfile} from '../actions/contacts'
+
+class ContactsList extends Component {
   constructor(props) {
     super(props);
 
@@ -70,28 +73,28 @@ export default class ContactsList extends Component {
 
   _swipeoutBtns (contact) {
     //TODO icons instead of text
-    const {actions} = this.props
+    const {dispatch} = this.props
     return [
       {
         text: contact.isFavorite ? 'Not a Fav.' : 'Favorite', 
-        onPress: () => actions.toggleFavorite(contact)
+        onPress: () => dispatch(toggleFavorite(contact))
       }
     ]
   }
 
   _renderRow (contact) {
 
-    const {actions} = this.props
+    const {dispatch} = this.props
 
     return (
       <Swipeout right={this._swipeoutBtns(contact)} autoClose={true}>
-        <TouchableHighlight onPress={() => actions.loadFriendProfile(contact)}>
+        <TouchableHighlight onPress={() => dispatch(loadFriendProfile(contact))}>
           <View style={styles.row}>
             <Text style={styles.text}>
               {contact.name}
             </Text>
             {contact.registered ? null : 
-              <TouchableOpacity style={styles.actions} onPress={() => actions.invite(contact)}>
+              <TouchableOpacity style={styles.actions} onPress={() => dispatch(invite(contact))}>
                 <Text>Invite</Text>
               </TouchableOpacity>
             }
@@ -118,7 +121,6 @@ export default class ContactsList extends Component {
 
 ContactsList.propTypes = {
   contacts: PropTypes.instanceOf(Immutable.OrderedMap).isRequired,
-  actions: PropTypes.object.isRequired,
   filterText: PropTypes.string
 }
 
@@ -159,3 +161,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 })
+
+export default connect()(ContactsList)

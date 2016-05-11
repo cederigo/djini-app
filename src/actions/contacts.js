@@ -1,12 +1,12 @@
-import {OrderedMap, List} from 'immutable';
+import {OrderedMap} from 'immutable';
 import {ActionSheetIOS, Platform} from 'react-native'
 import Share from 'react-native-share';
 import {Actions} from 'react-native-router-flux'
 
 import {
-  SOCIAL_STATE_REQUEST,
-  SOCIAL_STATE_SUCCESS,
-  SOCIAL_STATE_FAILURE,
+  RESTORE_CONTACTS_REQUEST,
+  RESTORE_CONTACTS_SUCCESS,
+  RESTORE_CONTACTS_FAILURE,
 
   CONTACTS_REQUEST,
   CONTACTS_SUCCESS,
@@ -17,7 +17,7 @@ import {
   GET_FRIEND_PROFILE_FAILURE,
 
   ON_SEARCH_FIELD_CHANGE,
-  SAVE_SOCIAL_STATE,
+  SAVE_CONTACTS,
 
   TOGGLE_FAVORITE  
 } from '../lib/constants'
@@ -26,33 +26,32 @@ import contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
 
-export function restoreStateRequest() {
+/*
+ * Restore contacts
+ */
+export function restoreContactsRequest() {
   return {
-    type: SOCIAL_STATE_REQUEST
+    type: RESTORE_CONTACTS_REQUEST
   }
 }
-export function restoreStateSuccess(state) {
+export function restoreContactsSuccess(contacts) {
   return {
-    type: SOCIAL_STATE_SUCCESS,
-    payload: state
+    type: RESTORE_CONTACTS_SUCCESS,
+    payload: contacts
   }
 }
-export function restoreStateFailure(error) {
+export function restoreContactsFailure(error) {
   return {
-    type: SOCIAL_STATE_FAILURE,
+    type: RESTORE_CONTACTS_FAILURE,
     payload: error
   }
 }
-/**
- * Funny name ;-)
- */
-export function restoreSocialState() {
+export function restoreContacts() {
   return dispatch => {
-    dispatch(restoreStateRequest())
-    return db.getSocialState()
-      .then((state) => ({contacts: OrderedMap(state.contacts), favorites: OrderedMap(state.favorites)}))
-      .then((state) => dispatch(restoreStateSuccess(state)))
-      .catch(error => dispatch(restoreStateFailure(error)))
+    dispatch(restoreContactsRequest())
+    return db.getContacts()
+      .then((contacts) => dispatch(restoreContactsSuccess(contacts)))
+      .catch(error => dispatch(restoreContactsFailure(error)))
   }
 }
 
@@ -93,22 +92,16 @@ export function refreshContacts() {
       .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
       .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
       .then((contacts) => dispatch(contactsSuccess(contacts)))
-      .then(() => dispatch(saveState()))
+      .then(() => dispatch(saveContacts()))
       .catch((error) => dispatch(contactsFailure(error)))
   }
 }
 
-export function saveState() {
+export function saveContacts() {
   return (dispatch, getState) => {
-    const state = getState().social
-
-    //dont save too often
-    if ((Date.now() - state.lastSavedAt) < 10 * 1000) {
-      return;
-    }
-
-    dispatch({type: SAVE_SOCIAL_STATE, payload: Date.now()})
-    db.saveSocialState({contacts: state.contacts.entrySeq()})
+    const state = getState().contacts
+    dispatch({type: SAVE_CONTACTS, payload: Date.now()})
+    db.saveContacts(state.contacts.entrySeq())
       .catch(e => {
         console.log('Could not save state. error: ', e)
       })
@@ -125,7 +118,7 @@ export function onSearchFieldChange(text) {
 export function toggleFavorite(contact) {
   return dispatch => {
     dispatch({type: TOGGLE_FAVORITE, payload: contact})
-    dispatch(saveState())
+    dispatch(saveContacts())
   }
 }
 

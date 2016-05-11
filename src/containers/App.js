@@ -17,7 +17,7 @@ import {version} from '../lib/config'
 
 /* actions */
 import {loginSuccess, loginFailure} from '../actions/authActions';
-import {refreshContacts} from '../actions/socialActions';
+import {refreshContacts} from '../actions/contacts';
 import {loadMyProfile} from '../actions/profile'
 import {updateInstallation} from '../actions/installation'
 

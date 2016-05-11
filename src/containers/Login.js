@@ -20,7 +20,7 @@ import {
 
 import {
   refreshContacts,
-} from '../actions/socialActions'
+} from '../actions/contacts'
 
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'

@@ -1,16 +1,17 @@
-import InitialState from './socialInitialState';
+import {OrderedMap} from 'immutable';
+import InitialState from './contactsInitialState';
 
 import {
-  SOCIAL_STATE_REQUEST,
-  SOCIAL_STATE_SUCCESS,
-  SOCIAL_STATE_FAILURE,
+  RESTORE_CONTACTS_REQUEST,
+  RESTORE_CONTACTS_SUCCESS,
+  RESTORE_CONTACTS_FAILURE,
 
   CONTACTS_REQUEST,
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
 
   ON_SEARCH_FIELD_CHANGE,
-  SAVE_SOCIAL_STATE,
+  SAVE_CONTACTS,
 
   INVITE_CONTACT,
   SHOW_CONTACT,
@@ -19,19 +20,19 @@ import {
 
 const initialState = new InitialState;
 
-export default function socialReducer(state = initialState, {type, payload}) {
+export default function contactsReducer(state = initialState, {type, payload}) {
   switch(type) {
-    case SOCIAL_STATE_REQUEST:
+    case RESTORE_CONTACTS_REQUEST:
     case CONTACTS_REQUEST:
       return state.set('isFetching', true)
 
-    case SOCIAL_STATE_SUCCESS: {
-      const {contacts} = payload
+    case RESTORE_CONTACTS_SUCCESS: {
+      const contacts = OrderedMap(payload)
       return state.set('isFetching', false)
         .set('contacts', contacts)
     }
 
-    case SAVE_SOCIAL_STATE: {
+    case SAVE_CONTACTS: {
       return state.set('lastSavedAt', payload)
     }
 
@@ -46,7 +47,7 @@ export default function socialReducer(state = initialState, {type, payload}) {
         }))
     }
 
-    case SOCIAL_STATE_FAILURE:
+    case RESTORE_CONTACTS_FAILURE:
     case CONTACTS_FAILURE:
       return state.set('isFetching', false)
         .set('noContactsPermission', payload.message === 'permissionDenied')

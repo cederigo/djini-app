@@ -1,7 +1,6 @@
 /* @flow */
 
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import Immutable from 'immutable';
 import React, {
   Component,
@@ -14,16 +13,16 @@ import React, {
 
 import NoContactsPermission from '../components/NoContactsPermission'
 import ContactsList from '../components/ContactsList'
-import * as socialActions from '../actions/socialActions'
 
+import {onSearchFieldChange} from '../actions/contacts'
 
 class Contacts extends Component {
 
   render() {
-    const {socialState, actions} = this.props
-    let {contacts, filterText} = socialState
+    const {contactsState, dispatch} = this.props
+    let {contacts, filterText} = contactsState
 
-    if (socialState.noContactsPermission) {
+    if (contactsState.noContactsPermission) {
       return (<NoContactsPermission/>)
     }
 
@@ -32,21 +31,20 @@ class Contacts extends Component {
           <StatusBar translucent={true} />
           <View style={styles.toolbar}>
             <TextInput
-              onChangeText={(text) => actions.onSearchFieldChange(text)}
+              onChangeText={(text) => dispatch(onSearchFieldChange(text))}
               style={styles.searchBar}
               placeholder="Kontakte suchen ..."
               value={filterText}
             />
           </View>
-          <ContactsList contacts={contacts} actions={actions} filterText={filterText}/>
+          <ContactsList contacts={contacts} filterText={filterText}/>
         </View>
     )
   }
 }
 
 Contacts.propTypes = {
-  socialState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired,
+  contactsState: PropTypes.instanceOf(Immutable.Record).isRequired,
 }
 
 const styles = StyleSheet.create({
@@ -85,11 +83,7 @@ const styles = StyleSheet.create({
 /**
  * Redux boilerplate
  */
-function mapStateToProps(state) {
-  return { socialState: state.social};
+function select(state) {
+  return { contactsState: state.contacts};
 }
-function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(socialActions, dispatch) };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Contacts)
+export default connect(select)(Contacts)

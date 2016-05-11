@@ -7,12 +7,12 @@ import {AsyncStorage} from 'react-native'
 
 class Database {
 
-  saveSocialState(state) {
-    return AsyncStorage.setItem('social-state', JSON.stringify(state))
+  saveContacts(contacts) {
+    return AsyncStorage.setItem('contacts', JSON.stringify(contacts))
   }
 
-  getSocialState() {
-    return AsyncStorage.getItem('social-state')
+  getContacts() {
+    return AsyncStorage.getItem('contacts')
       .then(json => {
         if (!json) {
           throw('no data')

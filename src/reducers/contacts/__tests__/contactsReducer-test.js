@@ -8,9 +8,9 @@ const {
 /**
  * ## Class under test
  */
-var socialReducer = require('../socialReducer').default
+var contactsReducer = require('../contactsReducer').default
 
-describe('socialReducer', () => {
+describe('contactsReducer', () => {
   describe('ADD_FAVORITE', () => {
 
     it('adds one favorite', () => {
@@ -19,7 +19,7 @@ describe('socialReducer', () => {
         payload: {contact: {phoneNumber: '1', name: 'Fav 1'}}
       };
 
-      let next = socialReducer(undefined, action)
+      let next = contactsReducer(undefined, action)
 
       expect(next).toBeDefined()
       expect(next.favorites.size).toBe(1)
@@ -30,7 +30,7 @@ describe('socialReducer', () => {
       const actions = []
       let next = undefined
       for (let i = 0; i < 12; i++) {
-        next = socialReducer(next, { 
+        next = contactsReducer(next, { 
             type: ADD_FAVORITE,
             payload: {
               contact: {phoneNumber: '' + i, name: (10 + i) + 'Fav'},

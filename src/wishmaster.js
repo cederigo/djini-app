@@ -22,12 +22,12 @@ import Friend from './containers/Friend'
 import Wish from './containers/Wish'
 
 /* Actions */
-import * as socialActions from './actions/socialActions'
+import {restoreContacts} from './actions/contacts'
 
 /* Initial States */
 import globalInitialState from './reducers/global/globalInitialState'
 import authInitialState from './reducers/auth/authInitialState'
-import socialInitialState from './reducers/social/socialInitialState'
+import contactsInitialState from './reducers/contacts/contactsInitialState'
 import friendInitialState from './reducers/friend/friendInitialState'
 import wishInitialState from './reducers/wish/wishInitialState'
 import wishesInitialState from './reducers/wishes/wishesInitialState'
@@ -36,7 +36,7 @@ function getInitialState() {
   const _initState = {
     global: new globalInitialState,
     auth: new authInitialState,
-    social: new socialInitialState,
+    contacts: new contactsInitialState,
     friend: new friendInitialState,
     wish: new wishInitialState,
     wishes: new wishesInitialState
@@ -74,7 +74,7 @@ export default function native(platform) {
       //Connect w/ the Router
       const Router = connect()(RNRF.Router)
       
-      store.dispatch(socialActions.restoreSocialState())
+      store.dispatch(restoreContacts())
 
       // setup the router table with App selected as the initial component
       return (
