@@ -12,6 +12,8 @@ import {
 
 import {Wish} from '../../lib/types'
 
+import {isIdea} from '../../lib/wishUtil'
+
 const initialState = new InitialState
 
 export function fromParseWish(parseWish): Record<Wish> {
@@ -48,6 +50,11 @@ export default function wishesReducer(state = initialState, {type, payload}) {
     case SAVE_WISH_SUCCESS: {
       const wishes = state.get('wishes')
       const wish = fromParseWish(payload)
+      if (isIdea(wish)) {
+        // nothing to do
+        return state   
+      }
+      // Add/update wish to my profile
       let idx = wishes.findIndex((w) => w.id === wish.id)
       if (idx === -1) {
         return state.set('wishes', wishes.push(wish).sortBy(sortWishBy).reverse()) //add

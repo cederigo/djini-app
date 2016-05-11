@@ -45,9 +45,7 @@ export default function friendReducer(state = initialState, {type, payload}) {
       const wish = fromParseWish(payload)
       if (!friend || friend.id !== wish.toUserId) {
         return state; //nothing to to
-      
       }
-
 
       const ideas = state.get('ideas')
       let idx = ideas.findIndex((w) => w.id === wish.id)
