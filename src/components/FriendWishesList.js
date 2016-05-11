@@ -10,7 +10,9 @@ import {
 import PureListView from './PureListView'
 
 //types
-import {Wish} from '../lib/types'
+import {Wish, User} from '../lib/types'
+
+import {fullfilled, fullfilledByUser} from '../lib/wishUtil'
 
 // actions
 import {showWish} from '../actions/wishes'
@@ -18,7 +20,8 @@ import {showWish} from '../actions/wishes'
 class FriendWishesList extends Component {
 
   props: {
-    wishes: Array<Wish>
+    wishes: Array<Wish>,
+    user: User
   }
   _innerRef: ?PureListView;
 
@@ -44,12 +47,18 @@ class FriendWishesList extends Component {
   }
   
   renderRow (wish) {
-    const {dispatch} = this.props
+    const {dispatch, user} = this.props
+    let title = wish.title
+    if (fullfilledByUser(wish, user)) {
+      title += '(von mir)'
+    } else if (fullfilled(wish)) {
+      title += '(erfüllt)'
+    }
     return (
       <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
         <View style={styles.row}>
           <Text style={styles.text}>
-            {wish.title}
+            {title}
           </Text>
         </View>
       </TouchableHighlight>
