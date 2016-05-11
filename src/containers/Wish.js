@@ -3,17 +3,15 @@ import Immutable from 'immutable';
 
 // components
 import React, {
-   Platform,
    Component,
    PropTypes,
    View,
    StyleSheet,
-   StatusBar,
-   Text,
-   TouchableOpacity
+   StatusBar
 } from 'react-native';
 import EditWishForm from '../components/wish/EditWishForm'
 import ShowWishForm from '../components/wish/ShowWishForm'
+import NavBar from '../components/NavBar'
 
 //Actions
 import {Actions} from 'react-native-router-flux';
@@ -29,17 +27,11 @@ class Wish extends Component {
     } else {
       WishForm = <ShowWishForm styles={styles}/>
     }
-  
+    
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-        <View style={styles.navbar}>
-          <TouchableOpacity 
-            style={styles.button}
-            onPress={Actions.pop}>
-            <Text style={styles.buttonText}>Zurück</Text>
-          </TouchableOpacity>
-        </View>
+        <NavBar/>
         {WishForm}
       </View>
     )
@@ -56,29 +48,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     padding: 10,
-  },
-  navbar: {
-    marginTop: 20,
-    height: 50,
-  },
-  button: {
-    padding: 15
-  },
-  buttonText: {
-    fontSize: 17,
-    fontWeight: '500'
-  },
-  text: {
-    paddingTop: 30
-  },
-  icon: {
-    alignSelf: 'center',
-    marginBottom: 30
-  },
-  input: {
-    marginLeft: Platform.OS === 'android' ? -5 : 0,
-    height: 50,
-    marginTop: 10
   }
 });
 

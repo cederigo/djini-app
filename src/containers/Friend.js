@@ -6,7 +6,6 @@ import React, {Component} from 'react'
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   Text,
   StatusBar,
   Alert
@@ -19,6 +18,7 @@ import NewWishButton from '../components/NewWishButton'
 
 import FriendWishesList from '../components/FriendWishesList'
 import FriendIdeasList from '../components/FriendIdeasList'
+import NavBar from '../components/NavBar'
 
 class Friend extends Component {
 
@@ -40,13 +40,7 @@ class Friend extends Component {
       <View style={styles.container}>
         <StatusBar translucent={true} />
 
-        <View style={styles.navbar}>
-          <TouchableOpacity 
-            style={styles.button}
-            onPress={Actions.pop}>
-            <Text style={styles.buttonText}>Zurück</Text>
-          </TouchableOpacity>
-        </View>
+        <NavBar/>
 
         <Text style={styles.title}>Profil von {contact.name}</Text>
 
@@ -67,10 +61,6 @@ class Friend extends Component {
 }
 
 const styles = StyleSheet.create({
-  navbar: {
-    marginTop: 20,
-    height: 50,
-  },
   container: {
     padding: 10,
     backgroundColor: 'white',
