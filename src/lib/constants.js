@@ -7,8 +7,9 @@ export const EDIT_WISH = 'edit-wish'
 export const NEW_WISH = 'new-wish'
 
 export const SAVE_WISH_REQUEST = 'save-wish-request'
-export const SAVE_WISH_SUCCESS = 'save-wish-success'
 export const SAVE_WISH_FAILURE = 'save-wish-failure'
+export const WISH_ADDED = 'wish-added'
+export const WISH_UPDATED = 'wish-updated'
 
 export const WISH_DELETED = 'wish-deleted'
 

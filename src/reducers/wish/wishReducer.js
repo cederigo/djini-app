@@ -2,7 +2,8 @@ import InitialState from './wishInitialState'
 
 import {
   SAVE_WISH_REQUEST, 
-  SAVE_WISH_SUCCESS, 
+  WISH_ADDED, 
+  WISH_UPDATED, 
   SAVE_WISH_FAILURE, 
   SHOW_WISH,
   EDIT_WISH,
@@ -38,11 +39,13 @@ export default function wishReducer(state = initialState, {type, payload}) {
        .set('editMode', false)
        .set('error', null)
 
-    case SAVE_WISH_SUCCESS:
+    case WISH_UPDATED:
+    case WISH_ADDED: {
       const wish = fromParseWish(payload)
       return state.set('isFetching', false)
        .set('wish', wish)
        .set('error', null)
+    }
 
     case SAVE_WISH_FAILURE:
       return state.set('isFetching', false)

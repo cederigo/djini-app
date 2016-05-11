@@ -9,7 +9,10 @@ import React, {
 import {
   SAVE_WISH_REQUEST, 
   SAVE_WISH_FAILURE, 
-  SAVE_WISH_SUCCESS,
+  WISH_ADDED,
+  WISH_UPDATED,
+  IDEA_ADDED,
+  IDEA_UPDATED,
   WISH_DELETED,
   ON_WISH_FIELD_CHANGE,
   SHOW_WISH,
@@ -56,9 +59,15 @@ export function saveWishRequest() {
     type: SAVE_WISH_REQUEST
   };
 }
-export function saveWishSuccess(wish) {
+export function wishAdded(wish) {
   return {
-    type: SAVE_WISH_SUCCESS,
+    type: WISH_ADDED,
+    payload: wish
+  };
+}
+export function wishUpdated(wish) {
+  return {
+    type: WISH_UPDATED,
     payload: wish
   };
 }
@@ -86,7 +95,11 @@ export function saveWish(wish: Record<Wish>) {
     delete attributes.fullfillerId
 
     parseWish.save(attributes).then((data) => {
-      dispatch(saveWishSuccess(data))
+      if (wish.id) {
+        dispatch(wishUpdated(data))
+      } else {
+        dispatch(wishAdded(data))
+      }
     })
     .catch((error) => {
       dispatch(saveWishFailure(error))
@@ -112,7 +125,7 @@ export function fullfillWish(wish) {
     dispatch(saveWishRequest())
     Parse.Cloud.run('fullfillWish', {wishId: wish.id})
     .then(data => {
-      dispatch(saveWishSuccess(data))
+      dispatch(wishUpdated(data))
     })
     .catch(error => {
       dispatch(saveWishFailure(error))

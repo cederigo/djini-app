@@ -6,8 +6,9 @@ import InitialState from './wishesInitialState'
  */
 import {
     MY_PROFILE_LOADED,
-    SAVE_WISH_SUCCESS,
     WISH_DELETED,
+    WISH_ADDED,
+    WISH_UPDATED,
 } from '../../lib/constants'
 
 import {Wish} from '../../lib/types'
@@ -47,20 +48,25 @@ export default function wishesReducer(state = initialState, {type, payload}) {
         .set('error', null)
         .set('wishes', List(payload.wishes.map(fromParseWish)))
 
-    case SAVE_WISH_SUCCESS: {
+    case WISH_ADDED: {
       const wishes = state.get('wishes')
       const wish = fromParseWish(payload)
       if (isIdea(wish)) {
         // nothing to do
         return state   
       }
-      // Add/update wish to my profile
+      return state.set('wishes', wishes.push(wish).sortBy(sortWishBy).reverse()) //add
+    }
+
+    case WISH_UPDATED: {
+      const wishes = state.get('wishes')
+      const wish = fromParseWish(payload)
       let idx = wishes.findIndex((w) => w.id === wish.id)
-      if (idx === -1) {
-        return state.set('wishes', wishes.push(wish).sortBy(sortWishBy).reverse()) //add
-      } else {
-        return state.set('wishes', wishes.update(idx, () => wish).sortBy(sortWishBy).reverse()) //update
+      if (isIdea(wish) || idx === -1) {
+        // nothing to do
+        return state   
       }
+      return state.set('wishes', wishes.update(idx, () => wish).sortBy(sortWishBy).reverse()) //update
     }
 
     case WISH_DELETED: {

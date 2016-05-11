@@ -8,9 +8,12 @@ import {
   GET_FRIEND_PROFILE_REQUEST,
   GET_FRIEND_PROFILE_SUCCESS,
   GET_FRIEND_PROFILE_FAILURE,
-  SAVE_WISH_SUCCESS,
   WISH_DELETED,
+  WISH_ADDED,
+  WISH_UPDATED,
 } from '../../lib/constants'
+
+import {isIdea} from '../../lib/wishUtil'
 
 import {fromParseWish} from '../wishes/wishesReducer'
 import {fromParseUser} from '../global/globalReducer'
@@ -40,35 +43,34 @@ export default function friendReducer(state = initialState, {type, payload}) {
         return state.set('isFetching', false)
           .set('error', payload)
 
-    case SAVE_WISH_SUCCESS: {
-      let friend = state.get('user')
+    case WISH_UPDATED: {
       const wish = fromParseWish(payload)
-      if (!friend || friend.id !== wish.toUserId) {
+      const key = isIdea(wish) ? 'ideas' : 'wishes'
+      const collection = state.get(key)
+      let idx = collection.findIndex((w) => w.id === wish.id)
+      if (idx === -1) {
+        return state //nothing to do
+      }
+      return state.set(key, collection.update(idx, () => wish)) //update
+    }
+
+    case WISH_ADDED: {
+      const wish = fromParseWish(payload)
+      const ideas = state.get('ideas')
+      if (!isIdea(wish)) {
         return state; //nothing to to
       }
-
-      const ideas = state.get('ideas')
-      let idx = ideas.findIndex((w) => w.id === wish.id)
-      if (idx === -1) {
-        return state.set('ideas', ideas.unshift(wish)) //add
-      } else {
-        return state.set('ideas', ideas.update(idx, () => wish)) //update
-      }
+      return state.set('ideas', ideas.unshift(wish)) //add
     }
 
     case WISH_DELETED: {
-      let friend = state.get('user')
-      if (!friend || friend.id !== payload.toUserId) {
-        return state; //nothing to to
-      }
-
-
+      const wish = payload
       const ideas = state.get('ideas')
       let idx = ideas.findIndex((w) => w.id === payload.id)
-      if (idx === -1) {
-        return state; //no change
+      if (!isIdea(wish) || idx === -1) {
+        return state; //nothing to to
       }
-      return state.set('ideas', ideas.delete(idx))
+      return state.set('ideas', ideas.delete(idx)) //delete
     }
 
   }
