@@ -22,11 +22,9 @@ import Friend from './containers/Friend'
 import Wish from './containers/Wish'
 
 /* Actions */
-import * as deviceActions from './actions/deviceActions'
 import * as socialActions from './actions/socialActions'
 
 /* Initial States */
-import deviceInitialState from './reducers/device/deviceInitialState'
 import globalInitialState from './reducers/global/globalInitialState'
 import authInitialState from './reducers/auth/authInitialState'
 import socialInitialState from './reducers/social/socialInitialState'
@@ -34,12 +32,9 @@ import friendInitialState from './reducers/friend/friendInitialState'
 import wishInitialState from './reducers/wish/wishInitialState'
 import wishesInitialState from './reducers/wishes/wishesInitialState'
 
-const VERSION='0.0.1'
-
 function getInitialState() {
   const _initState = {
     global: new globalInitialState,
-    device: new deviceInitialState,
     auth: new authInitialState,
     social: new socialInitialState,
     friend: new friendInitialState,
@@ -61,13 +56,7 @@ class TabIcon extends React.Component {
       )
   }
 }
-/**
- * ## Native
- *
- * ```configureStore``` with the ```initialState``` and set the
- * ```platform``` and ```version``` into the store by ```dispatch```.
- *
- */
+
 export default function native(platform) {
 
   //init parse sdk
@@ -85,8 +74,6 @@ export default function native(platform) {
       //Connect w/ the Router
       const Router = connect()(RNRF.Router)
       
-      store.dispatch(deviceActions.setPlatform(platform))
-      store.dispatch(deviceActions.setVersion(VERSION))
       store.dispatch(socialActions.restoreSocialState())
 
       // setup the router table with App selected as the initial component

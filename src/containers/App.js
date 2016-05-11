@@ -13,10 +13,13 @@ import React, {
   Text,
 } from 'react-native';
 
+import {version} from '../lib/config'
+
 /* actions */
 import {loginSuccess, loginFailure} from '../actions/authActions';
 import {refreshContacts} from '../actions/socialActions';
 import {loadMyProfile} from '../actions/profile'
+import {updateInstallation} from '../actions/installation'
 
 var styles = StyleSheet.create({
   container: {
@@ -47,6 +50,8 @@ class App extends Component {
         dispatch(loginFailure(error))
         Actions.login()
       })
+
+    updateInstallation({version})
   }
 
   render() {
