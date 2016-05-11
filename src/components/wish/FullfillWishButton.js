@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import {Record} from 'immutable'
+import {Wish, User} from '../../lib/types'
 
 // Components
 import React, { 
@@ -15,13 +15,19 @@ import WMButton from '../WMButton'
 import {fullfillWish, saveWish} from '../../actions/wishes'
 
 // Utils
-import {fullfillable, fullfilledByUser, fullfilled} from '../../lib/wishUtil'
+import {fullfillable, fullfilledByUser} from '../../lib/wishUtil'
 
 class FullfillWishButton extends Component {
+
+  props: {
+    currentUser: User,
+    wish: Wish
+  }
+
   render() {
     const {dispatch, currentUser, wish} = this.props
     
-    let _FullfillWishButton
+    let _text, _onPress
     
     if (fullfillable(wish, currentUser)) {
       _text = 'Wunsch erfüllen'
