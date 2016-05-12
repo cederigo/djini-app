@@ -1,5 +1,7 @@
+import Parse from 'parse/react-native'
+import {Actions} from 'react-native-router-flux'
+
 import {
-  
   LOGIN_PHONENUMBER_FORM,
   LOGIN_VERIFICATIONCODE_FORM,
   LOGIN_PROFILE_FORM,
@@ -20,16 +22,9 @@ import {
   // PROFILE_UPDATE_FAILURE,
 
   ON_FORM_FIELD_CHANGE
-
 } from '../lib/constants'
 
-/**
- * Project requirements
- */
-import Parse from 'parse/react-native'
-
-import {Actions} from 'react-native-router-flux'
-
+import {loadMyProfile} from './profile'
 
 /*
  * Show different forms
@@ -103,6 +98,7 @@ export function loginRequest() {
 export function loginSuccess(parseUser) {
   return (dispatch) => {
     dispatch({ type: LOGIN_SUCCESS, payload: parseUser })
+    dispatch(loadMyProfile())
     Actions.home()
   } 
 }

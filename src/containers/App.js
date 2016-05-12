@@ -18,7 +18,6 @@ import {version} from '../lib/config'
 /* actions */
 import {loginSuccess, loginFailure} from '../actions/authActions';
 import {refreshContacts} from '../actions/contacts';
-import {loadMyProfile} from '../actions/profile'
 import {updateInstallation} from '../actions/installation'
 
 var styles = StyleSheet.create({
@@ -42,7 +41,6 @@ class App extends Component {
         if (!parseUser) {
           throw ('User not logged in')
         }
-        dispatch(loadMyProfile())
         dispatch(refreshContacts())
         dispatch(loginSuccess(parseUser))
       })
