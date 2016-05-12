@@ -5,6 +5,8 @@ import InitialState from './wishesInitialState'
  * ## Wishes actions
  */
 import {
+    MY_PROFILE_REQUEST,
+    MY_PROFILE_FAILURE,
     MY_PROFILE_LOADED,
     WISH_DELETED,
     WISH_ADDED,
@@ -43,6 +45,13 @@ function sortWishBy(wish) {
 
 export default function wishesReducer(state = initialState, {type, payload}) {
   switch (type) {
+    case MY_PROFILE_REQUEST:
+      return state.set('isFetching', true)
+
+    case MY_PROFILE_FAILURE:
+      return state.set('isFetching', false)
+        .set('error', payload)
+
     case MY_PROFILE_LOADED:
       return state.set('isFetching', false)
         .set('error', null)

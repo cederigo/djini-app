@@ -33,7 +33,10 @@ class Wishes extends Component {
       <View style={styles.container}>
         <StatusBar translucent={true} />
         <NewWishButton toUser={user}/>
-        <MyWishList wishes={wishes.toArray()}/>
+        {isFetching ? 
+          <Text>Laden..</Text> :
+          <MyWishList wishes={wishes.toArray()} />
+        }
       </View>
     )
   }
@@ -43,6 +46,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    alignItems: 'center'
   },
 })
 

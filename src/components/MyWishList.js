@@ -4,7 +4,6 @@ import React, {Component} from 'react'
 import { 
   StyleSheet,
   View,
-  ListView,
   TouchableHighlight,
   Text
 } from 'react-native';
@@ -15,49 +14,36 @@ import {Wish} from '../lib/types'
 // actions
 import {showWish, editWish, deleteWish, saveWish} from '../actions/wishes'
 
+import PureListView from './PureListView'
+
 class MyWishList extends Component {
 
   props: {
     wishes: Array<Wish>
   }
+  _innerRef: ?PureListView;
 
   constructor(props) {
     super(props)
-
-    const {wishes} = props
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 != r2
-    })
-
-    this._renderRow = this._renderRow.bind(this)
-    this._swipeoutBtns = this._swipeoutBtns.bind(this)
-
-    this.state = {
-      dataSource: ds.cloneWithRows(wishes)
-    }
+    this.renderRow = this.renderRow.bind(this)
+    this.swipeoutBtns = this.swipeoutBtns.bind(this)
   }
   
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.wishes !== this.props.wishes) {
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(nextProps.wishes)
-      })
-    }
-  }
-
   render() {
     return (
-      <ListView
-        ref="listView"
+      <PureListView
         style={styles.container}
-        dataSource={this.state.dataSource}
-        renderRow={this._renderRow}
-        renderSeparator={this._renderSeparator}
+        ref={this.storeInnerRef}
+        data={this.props.wishes}
+        renderRow={this.renderRow}
+        renderSeparator={this.renderSeparator}
+        renderEmptyList={this.renderEmptyList}
+        {...this.props}
       />
-    )
+    );
   }
 
-  _swipeoutBtns (wish) {
+  swipeoutBtns (wish) {
     //TODO icons instead of text
     const {dispatch} = this.props
     return [
@@ -81,10 +67,10 @@ class MyWishList extends Component {
     ]
   }
 
-  _renderRow (wish) {
+  renderRow (wish) {
     const {dispatch} = this.props
     return (
-      <Swipeout right={this._swipeoutBtns(wish)} autoClose={true}>
+      <Swipeout right={this.swipeoutBtns(wish)} autoClose={true}>
         <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
             <Text style={styles.text}>
@@ -96,10 +82,22 @@ class MyWishList extends Component {
     );
   }
 
-  _renderSeparator(sectionID, rowID) {
+  renderEmptyList() {
+    return (
+      <View style={styles.emptyList}>
+        <Text>Du hast noch keine Wünsche erfasst. Erfasse jetzt einen!</Text>
+      </View>
+    );
+  }
+
+  renderSeparator(sectionID, rowID) {
     return (
       <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}/>
     );
+  }
+
+  storeInnerRef(ref: ?PureListView) {
+    this._innerRef = ref;
   }
 }
 
@@ -108,6 +106,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    alignSelf: 'stretch'
+  },
+  emptyList: {
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   row: {
     flexDirection: 'row',

@@ -1,4 +1,6 @@
 //profile
+export const MY_PROFILE_REQUEST = 'my-profile-request'
+export const MY_PROFILE_FAILURE = 'my-profile-failure'
 export const MY_PROFILE_LOADED = 'my-profile-loaded'
 
 //wish
