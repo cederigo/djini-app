@@ -5,19 +5,12 @@ import React, {
   StyleSheet,
 } from 'react-native';
 
-import {refreshContacts} from '../actions/contacts'
-import WMButton from './WMButton'
-
 class NoContactsPermission extends Component {
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Kein Zugriff auf dein Adressbuch</Text>
         <Text style={styles.text}>Gehe zu Settings > Wishmaster</Text>
-        <WMButton 
-          onPress={() => this.props.dispatch(refreshContacts())}
-          caption="Kontakte neu laden"
-        />
       </View>
     )
   }
