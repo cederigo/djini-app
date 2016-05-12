@@ -78,21 +78,15 @@ class FriendWishesList extends Component {
 
 // styles
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'green'
-  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingLeft: 10,
-    backgroundColor: 'white',
-    padding: 10
+    padding: 10,
+    backgroundColor: '#F6F6F6',
   },
   text: {
     flex: 1,
-    fontSize: 18,
-    fontWeight: 'bold'
+    fontSize: 16,
   }
 })
 

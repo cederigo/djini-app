@@ -11,7 +11,6 @@ import React, {
 } from 'react-native';
 import EditWishForm from '../components/wish/EditWishForm'
 import ShowWishForm from '../components/wish/ShowWishForm'
-import NavBar from '../components/NavBar'
 
 //Actions
 import {Actions} from 'react-native-router-flux';
@@ -31,7 +30,6 @@ class Wish extends Component {
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-        <NavBar/>
         {WishForm}
       </View>
     )
@@ -46,8 +44,6 @@ Wish.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    padding: 10
   }
 });
 

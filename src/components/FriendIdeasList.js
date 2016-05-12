@@ -95,10 +95,6 @@ class FriendIdeasList extends Component {
 
 // styles
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -107,8 +103,7 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    fontSize: 18,
-    fontWeight: 'bold'
+    fontSize: 16,
   }
 })
 

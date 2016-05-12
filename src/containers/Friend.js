@@ -15,7 +15,8 @@ import NewWishButton from '../components/NewWishButton'
 
 import FriendWishesList from '../components/FriendWishesList'
 import FriendIdeasList from '../components/FriendIdeasList'
-import NavBar from '../components/NavBar'
+import InviteButton from '../components/InviteButton'
+import {NavBar} from '../components/NavBar'
 
 class Friend extends Component {
 
@@ -26,28 +27,50 @@ class Friend extends Component {
     wishes: List<Wish>,
     ideas: List<Wish>
   }
+
+  constructor() {
+    super()
+    this.renderProfileView = this.renderProfileView.bind(this)
+    this.renderInviteView = this.renderInviteView.bind(this)
+  }
+
+  renderProfileView() {
+    const {user, friend, wishes, contact} = this.props
+    return (
+      <View>
+        {friend.birthday ? <Text>Geburtstag am: {friend.birthday.toString()}</Text> : undefined}
+        <Text style={styles.title}>{contact.name}s Wünsche</Text>
+        <FriendWishesList wishes={wishes.toArray()} user={user} />
+      </View>
+    )
+  }
+
+  renderInviteView() {
+    const {contact} = this.props
+    return (
+      <View>
+        <Text>{contact.name} ist noch nicht dabei.</Text>
+        <InviteButton contact={contact} />
+      </View>
+    )
+  }
+
   
   render() {
-    const {user, friend, contact, wishes, ideas} = this.props
+    const {friend, contact, ideas} = this.props
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-
         <NavBar/>
 
-        <Text style={styles.title}>Profil von {contact.name}</Text>
+        <View style={styles.content}>
+          <Text style={styles.title}>Profil von {contact.name}</Text>
+          {friend.registered ? this.renderProfileView() : this.renderInviteView() }
 
-        {friend.registered ? 
-          <Text>Geburtstag am: {friend.birthday.toString()}</Text> :
-          <Text>{contact.name} ist noch nicht dabei. Lade ihn jetzt ein!</Text>
-        }
-
-        <FriendWishesList wishes={wishes.toArray()} user={user} />
-
-
-        <Text style={styles.title}>Meine Ideen für {contact.name}</Text>
-        <NewWishButton style={{height: 50}} text="Neue Idee" toUser={friend}/>
-        <FriendIdeasList wishes={ideas.toArray()} />
+          <Text style={styles.title}>Meine Ideen für {contact.name}</Text>
+          <NewWishButton style={{height: 50}} text="Neue Idee" toUser={friend}/>
+          <FriendIdeasList wishes={ideas.toArray()} />
+        </View>
       </View>
     )
   }
@@ -55,6 +78,9 @@ class Friend extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  content: {
     padding: 10,
     backgroundColor: 'white',
     flex: 1

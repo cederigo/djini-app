@@ -1,11 +1,8 @@
 import { connect } from 'react-redux';
-import React, { 
-  StyleSheet,
-  Component,
-  TouchableOpacity,
-  Text
-} from 'react-native';
+import React, {Component} from 'react'
+import { StyleSheet } from 'react-native';
 
+import WMButton from './WMButton'
 import {User} from '../lib/types'
 import {newWish} from '../actions/wishes'
 
@@ -19,11 +16,11 @@ class NewWishButton extends Component {
     const {dispatch, fromUser, toUser, style, text} = this.props
     
     return (
-      <TouchableOpacity
+      <WMButton
         onPress={() => dispatch(newWish(fromUser, toUser))}
-        style={[styles.button, style]}>
-        <Text style={styles.buttonText}>{text}</Text>
-      </TouchableOpacity>
+        style={[styles.button, style]}
+        caption={text}
+      />
     )
   }
 }
@@ -34,7 +31,7 @@ NewWishButton.defaultProps = {
 
 const styles = StyleSheet.create({
   button: {
-    height: 200,
+    height: 100,
     alignItems: 'center',
     justifyContent: 'center',
   },

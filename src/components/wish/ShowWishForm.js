@@ -4,79 +4,66 @@ import { connect } from 'react-redux';
 import React, {
   Component,
   StyleSheet,
-  PropTypes,
   View,
   Text,
-  TouchableOpacity
 } from 'react-native';
+
 import FullfillWishButton from './FullfillWishButton'
 import WMButton from '../WMButton'
+import {NavBar, NavButton} from '../NavBar'
 
 // Utils
-import {allowEdit, allowDelete, fullfillable, fullfilledByUser, fullfilled, toUser, fromUser, type} from '../../lib/wishUtil'
+import {allowEdit, fullfillable, fullfilledByUser, fullfilled, toUser, fromUser, type} from '../../lib/wishUtil'
 
 // Actions
 import {Actions} from 'react-native-router-flux'
-import {editWish, deleteWish, fullfillWish, unfullfillWish} from '../../actions/wishes'
+import {editWish, deleteWish} from '../../actions/wishes'
 
 export default class ShowWishForm extends Component {
   render() {
     const {dispatch, currentUser, wishState} = this.props
     const {wish, isFetching} = wishState
 
-    let EditButton, DeleteButton, FullfillButton, FullfillmentStatus, SaveStatus, PrivacyStatus
-    
-    // Save, edit & delete
-    if (!isFetching) {
-      if (allowEdit(wish, currentUser)) {
-        EditButton = <WMButton 
-          onPress={() => dispatch(editWish(wish))}
-          caption={type(wish) + " bearbeiten"}
-        />
-      }
-      if (allowDelete(wish, currentUser)) {
-        DeleteButton = <WMButton 
-          onPress={() => { 
-            dispatch(deleteWish(wish))
-            Actions.pop()}}
-          caption={type(wish) + " löschen"}
-        />
-      }
-      //PrivacyStatus
-      if (toUser(wish, currentUser) && fromUser(wish, currentUser)) {
-        PrivacyStatus = <Text style={styles.status}>{wish.isPrivate ? 'Dieser Wunsch ist privat' : 'Dieser Wunsch ist öffentlich'}</Text>
-      }
-      //FullfillButton
-      if (fullfillable(wish, currentUser) || fullfilledByUser(wish, currentUser)) {
-        FullfillButton = <FullfillWishButton wish={wish}/>
-      }
-      //FullfillmentStatus
-      if (!toUser(wish, currentUser)) {
-        if (fullfilledByUser(wish, currentUser)) {
-        FullfillmentStatus = <Text style={styles.status}>Dieser Wunsch wird von mir erfüllt</Text>
-      } else if (fullfilled(wish)) {
-        FullfillmentStatus = <Text style={styles.status}>Dieser Wunsch wird erfüllt</Text>
-      } 
-      }
-      
+    let EditButton, DeleteButton, FullfillButton, FullfillmentStatus, PrivacyStatus
+
+    if (allowEdit(wish, currentUser)) {
+      EditButton = <NavButton onPress={() => dispatch(editWish(wish))} enabled={!isFetching} text={"Bearbeiten"} />
+      DeleteButton = <WMButton onPress={() => { dispatch(deleteWish(wish)); Actions.pop()}} caption={type(wish) + " löschen"} />
     }
-        
-    if (isFetching) {
-      SaveStatus = <Text style={styles.status}>{type(wish) + " wird gespeichert."}</Text>
+
+    //PrivacyStatus
+    if (toUser(wish, currentUser) && fromUser(wish, currentUser)) {
+      PrivacyStatus = <Text style={styles.privacy}>{wish.isPrivate ? 'Dieser Wunsch ist privat' : 'Dieser Wunsch ist öffentlich'}</Text>
+    }
+    
+    //FullfillButton
+    if (fullfillable(wish, currentUser) || fullfilledByUser(wish, currentUser)) {
+      FullfillButton = <FullfillWishButton wish={wish}/>
+    }
+    //FullfillmentStatus
+    if (!toUser(wish, currentUser)) {
+      if (fullfilledByUser(wish, currentUser)) {
+        FullfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird von mir erfüllt</Text>
+      } else if (fullfilled(wish)) {
+        FullfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird erfüllt</Text>
+      } 
     }
    
     return ( 
       <View style={styles.container}>
-        <Text style={styles.title}>{wish.title}</Text>
-        <Text style={styles.text}>{wish.description}</Text>
-        <Text style={styles.text}>{wish.url}</Text>
-        <Text style={styles.text}>{wish.seenAt}</Text>
-        {PrivacyStatus}
-        {EditButton}
-        {DeleteButton}
-        {FullfillmentStatus}
-        {FullfillButton}
-        {SaveStatus}
+        <NavBar>
+          {EditButton}
+        </NavBar>
+        <View style={styles.content}>
+          <Text style={styles.title}>{wish.title}</Text>
+          {wish.description ? <Text style={styles.text}>{wish.description}</Text> : undefined}
+          {wish.url ? <Text style={styles.text}>{wish.url}</Text> : undefined}
+          {wish.seenAt ? <Text style={styles.text}>{wish.seenAt}</Text> : undefined}
+          {PrivacyStatus}
+          {DeleteButton}
+          {FullfillmentStatus}
+          {FullfillButton}
+        </View>
       </View>
     )
   }
@@ -85,23 +72,23 @@ export default class ShowWishForm extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
+    flex: 1,
     backgroundColor: 'white',
-    padding: 10
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   },
   title: {
-    marginTop: 10,
     fontWeight: 'bold',
-    alignSelf: 'center'
+    marginBottom: 10
   },
-  text: {
-    paddingTop: 30
+  privacy: {
+    margin: 20
   },
-  status: {
-    letterSpacing: 1,
-    fontSize: 12,
-    padding: 15,
-    alignSelf: 'center'
-  }
+  text: {}
+
 })
 
 /**
