@@ -1,5 +1,6 @@
-import Immutable from 'immutable';
-import { connect } from 'react-redux';
+import Immutable from 'immutable'
+import { connect } from 'react-redux'
+import dismissKeyboard from 'dismissKeyboard'
 import React, { 
   StyleSheet,
   Component,
@@ -8,11 +9,16 @@ import React, {
   ListView,
   TouchableHighlight,
   TouchableOpacity,
-  Text
+  Text,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout'
 
-import {toggleFavorite, invite, loadFriendProfile} from '../actions/contacts'
+import {
+  toggleFavorite,
+  invite,
+  loadFriendProfile,
+  onSearchFieldChange
+} from '../actions/contacts'
 
 class ContactsList extends Component {
   constructor(props) {
@@ -77,9 +83,18 @@ class ContactsList extends Component {
     return [
       {
         text: contact.isFavorite ? 'Not a Fav.' : 'Favorite', 
-        onPress: () => dispatch(toggleFavorite(contact))
+        onPress: () => {
+          dispatch(toggleFavorite(contact))
+          dispatch(onSearchFieldChange('')) //clear search
+        }
       }
     ]
+  }
+
+  showContact(contact) {
+    const {dispatch} = this.props
+    dispatch(loadFriendProfile(contact))
+    dismissKeyboard()
   }
 
   _renderRow (contact) {
@@ -88,7 +103,7 @@ class ContactsList extends Component {
 
     return (
       <Swipeout right={this._swipeoutBtns(contact)} autoClose={true}>
-        <TouchableHighlight onPress={() => dispatch(loadFriendProfile(contact))}>
+        <TouchableHighlight onPress={() => this.showContact(contact)}>
           <View style={styles.row}>
             <Text style={styles.text}>
               {contact.name}
