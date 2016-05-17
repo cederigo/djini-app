@@ -58,7 +58,7 @@ export default function wishesReducer(state = initialState, {type, payload}) {
     case MY_PROFILE_LOADED:
       return state.set('isFetching', false)
         .set('error', null)
-        .set('wishes', List(payload.wishes.map(fromParseWish)))
+        .set('wishes', List(payload.wishes.map((wish) => fromParseWish(wish))))
 
     case WISH_ADDED: {
       const wishes = state.get('wishes')
