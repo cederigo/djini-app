@@ -1,5 +1,5 @@
 import {OrderedMap} from 'immutable';
-import {ActionSheetIOS, Platform} from 'react-native'
+import {ActionSheetIOS, Platform, Linking} from 'react-native'
 import Share from 'react-native-share';
 import {Actions} from 'react-native-router-flux'
 
@@ -19,7 +19,8 @@ import {
   ON_SEARCH_FIELD_CHANGE,
   SAVE_CONTACTS,
 
-  TOGGLE_FAVORITE  
+  TOGGLE_FAVORITE,
+  INVITE_CONTACT
 } from '../lib/constants'
 
 import contacts from '../lib/contacts'
@@ -124,25 +125,19 @@ export function toggleFavorite(contact) {
 
 export function invite(contact) {
   return dispatch => {
+    dispatch({type: INVITE_CONTACT})
     const url = 'https://tsfr.io/j9n6rp'
-    const message = 'Ich möchte dir etwas schenken, weis aber nicht was...';
-    //TODO: dispatch global invite activity action (to server too)
+    const message = 'Ich möchte dir etwas schenken, weis aber nicht was...' + url;
+    //see: http://stackoverflow.com/questions/6480462/how-to-pre-populate-the-sms-body-text-via-an-html-link
     if (Platform.OS === 'ios') {
-      ActionSheetIOS.showShareActionSheetWithOptions(
-        {message, url},
-        () => console.log('show share success'),
-        (e) => console.log('show share error: ', e)
-      );
+      // &
+      Linking.openURL(`sms:${contact.phoneNumber}&body=${message}`)
     } else {
-      Share.open({
-        share_text: message,
-        share_URL: url,
-        title: 'Wishmaster Einladung',
-      }, (e) => console.log(e))
+      // ?
+      Linking.openURL(`sms:${contact.phoneNumber}?body=${message}`)
     }
   }
 }
-
 
 /*
 * Get Friend profile
