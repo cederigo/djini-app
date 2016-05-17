@@ -44,7 +44,11 @@ export default class ShowWishForm extends Component {
     if (!toUser(wish, currentUser)) {
       if (fullfilledByUser(wish, currentUser)) {
         FullfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird von mir erfüllt</Text>
-      } else if (fullfilled(wish)) {
+      } 
+      else if (wish.fulfillerName) {
+        FullfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird von {wish.fulfillerName} erfüllt</Text>
+      } 
+      else if (fullfilled(wish)) {
         FullfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird erfüllt</Text>
       } 
     }

@@ -7,7 +7,7 @@ import {
 } from '../lib/constants'
 
 export function loadMyProfile() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({type: MY_PROFILE_REQUEST})
     Parse.Cloud.run('getMyProfile')
       .then(parseProfile => {

@@ -1,4 +1,4 @@
-import {List, Record} from 'immutable'
+import {List, Record, OrderedMap} from 'immutable'
 import InitialState from './wishesInitialState'
 
 /**
@@ -13,16 +13,18 @@ import {
     WISH_UPDATED,
 } from '../../lib/constants'
 
-import {Wish} from '../../lib/types'
+import {Wish, Contact} from '../../lib/types'
 
 import {isIdea} from '../../lib/wishUtil'
 
 const initialState = new InitialState
 
-export function fromParseWish(parseWish): Record<Wish> {
-  let fullfiller = parseWish.get('fullfiller')
-  let fromUser = parseWish.get('fromUser')
-  let toUser = parseWish.get('toUser')
+export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = OrderedMap()): Record<Wish> {
+  const fulfiller = parseWish.get('fullfiller')
+  const fromUser = parseWish.get('fromUser')
+  const toUser = parseWish.get('toUser')
+  //phoneNumber is stored in username attribute
+  const fulfillerContact = fulfiller ? contacts.get(fulfiller.get('username')) : undefined 
   return new (Record({
     id: parseWish.id,
     title: parseWish.get('title'),
@@ -34,7 +36,8 @@ export function fromParseWish(parseWish): Record<Wish> {
     createdAt: parseWish.get('createdAt'),
     fromUserId: fromUser ? fromUser.id || fromUser.objectId : undefined,
     toUserId: toUser ? toUser.id || toUser.objectId : undefined,
-    fullfillerId: fullfiller ? fullfiller.id || fullfiller.objectId : undefined
+    fullfillerId: fulfiller ? fulfiller.id || fulfiller.objectId : undefined,
+    fulfillerName: fulfillerContact ? fulfillerContact.name : undefined
   }))
 }
 

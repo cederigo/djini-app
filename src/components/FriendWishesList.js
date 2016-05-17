@@ -45,20 +45,29 @@ class FriendWishesList extends Component {
       />
     );
   }
-  
+
+  renderTitle (wish, user) {
+    if (!fullfilled(wish)) {
+      return wish.title
+    }
+    else if (fullfilledByUser(wish, user)) {
+      return wish.title + ' (erfüllt von mir)'
+    }
+    else if (wish.fulfillerName) {
+      return wish.title + ` (erfüllt von ${wish.fulfillerName})`
+    }
+    else {
+      return wish.title + ' (erfüllt)'
+    }
+  }
+
   renderRow (wish) {
     const {dispatch, user} = this.props
-    let title = wish.title
-    if (fullfilledByUser(wish, user)) {
-      title += '(von mir)'
-    } else if (fullfilled(wish)) {
-      title += '(erfüllt)'
-    }
     return (
       <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
         <View style={styles.row}>
           <Text style={styles.text}>
-            {title}
+            {this.renderTitle(wish, user)}
           </Text>
         </View>
       </TouchableHighlight>

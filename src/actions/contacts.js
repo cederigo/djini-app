@@ -163,11 +163,12 @@ function getFriendProfileFailure(error) {
 }
 
 export function loadFriendProfile(contact) {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(getFriendProfileRequest())
     Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
       .then((profile) => {
-        dispatch(getFriendProfileSuccess({profile, contact}))
+        const contacts = getState().contacts.contacts
+        dispatch(getFriendProfileSuccess({profile, contact, contacts}))
         Actions.friend()
       })
       .catch(error => {
