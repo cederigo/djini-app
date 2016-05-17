@@ -12,7 +12,7 @@ import PureListView from './PureListView'
 //types
 import {Wish, User} from '../lib/types'
 
-import {fullfilled, fullfilledByUser} from '../lib/wishUtil'
+import {fulfilled, fulfilledByUser} from '../lib/wishUtil'
 
 // actions
 import {showWish} from '../actions/wishes'
@@ -47,10 +47,10 @@ class FriendWishesList extends Component {
   }
 
   renderTitle (wish, user) {
-    if (!fullfilled(wish)) {
+    if (!fulfilled(wish)) {
       return wish.title
     }
-    else if (fullfilledByUser(wish, user)) {
+    else if (fulfilledByUser(wish, user)) {
       return wish.title + ' (erfüllt von mir)'
     }
     else if (wish.fulfillerName) {

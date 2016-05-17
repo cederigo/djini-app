@@ -4,11 +4,6 @@ const InitialState = Record({
   isFetching: false,
   error: null,
   editMode: false,
-  showFullfillButton: false,
-  showUnfullfillButton: false,
-  showEditButton: false,
-  showSaveButton: false,
-  showDeleteButton: false,
   wish: new (Record({
     id: undefined,
     title: '',
@@ -18,6 +13,8 @@ const InitialState = Record({
     isPrivate: false,
     fromUserId: '',
     toUserId: '',
+    fulfillerId: '',
+    fulfillerName: '',
   }))
 })
 

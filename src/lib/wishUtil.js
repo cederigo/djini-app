@@ -6,16 +6,16 @@ export function allowDelete(wish, user) {
   return allowEdit(wish, user)
 }
 
-export function fullfillable(wish, user) {
-  return !fullfilled(wish) && !toUser(wish, user) && !fromUser(wish, user)
+export function fulfillable(wish, user) {
+  return !fulfilled(wish) && !toUser(wish, user) && !fromUser(wish, user)
 }
 
-export function fullfilledByUser(wish, user) {
-  return wish.fullfillerId === user.id
+export function fulfilledByUser(wish, user) {
+  return wish.fulfillerId === user.id
 }
 
-export function fullfilled(wish) {
-  return !(!wish.fullfillerId)
+export function fulfilled(wish) {
+  return !(!wish.fulfillerId)
 }
 
 export function toUser(wish, user) {

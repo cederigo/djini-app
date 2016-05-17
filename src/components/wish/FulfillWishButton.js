@@ -12,12 +12,12 @@ import React, {
 import WMButton from '../WMButton'
 
 // Actions
-import {fullfillWish, saveWish} from '../../actions/wishes'
+import {fulfillWish, saveWish} from '../../actions/wishes'
 
 // Utils
-import {fullfillable, fullfilledByUser} from '../../lib/wishUtil'
+import {fulfillable, fulfilledByUser} from '../../lib/wishUtil'
 
-class FullfillWishButton extends Component {
+class FulfillWishButton extends Component {
 
   props: {
     currentUser: User,
@@ -29,7 +29,7 @@ class FullfillWishButton extends Component {
     
     let _text, _onPress
     
-    if (fullfillable(wish, currentUser)) {
+    if (fulfillable(wish, currentUser)) {
       _text = 'Wunsch erfüllen'
       _onPress = () => {
         Alert.alert(
@@ -37,12 +37,12 @@ class FullfillWishButton extends Component {
             '',
             [
               {text: 'Abbrechen', onPress: () => console.log('Abbruch!')},
-              {text: 'Ja', onPress: () => dispatch(fullfillWish(wish))},
+              {text: 'Ja', onPress: () => dispatch(fulfillWish(wish))},
             ]
           )
       }
-    } else if (fullfilledByUser(wish, currentUser)) {
-      // fullfilled by me => unFullfillButton
+    } else if (fulfilledByUser(wish, currentUser)) {
+      // fulfilled by me => unFulfillButton
       _text = 'Wunsch unerfüllen'
       _onPress = () => {
         Alert.alert(
@@ -51,7 +51,7 @@ class FullfillWishButton extends Component {
             [
               {text: 'Abbrechen', onPress: () => console.log('Abbruch!')},
               {text: 'Ja', onPress: () => {
-                  dispatch(saveWish(wish.set('fullfillerId', null)))
+                  dispatch(saveWish(wish.set('fulfillerId', null)))
                 }
               }
             ]
@@ -79,4 +79,4 @@ function select(state) {
     currentUser: state.global.currentUser
   };
 }
-export default connect(select)(FullfillWishButton)
+export default connect(select)(FulfillWishButton)

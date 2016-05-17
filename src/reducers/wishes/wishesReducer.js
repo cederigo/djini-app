@@ -20,7 +20,7 @@ import {isIdea} from '../../lib/wishUtil'
 const initialState = new InitialState
 
 export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = OrderedMap()): Record<Wish> {
-  const fulfiller = parseWish.get('fullfiller')
+  const fulfiller = parseWish.get('fulfiller')
   const fromUser = parseWish.get('fromUser')
   const toUser = parseWish.get('toUser')
   //phoneNumber is stored in username attribute
@@ -36,7 +36,7 @@ export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = Ordered
     createdAt: parseWish.get('createdAt'),
     fromUserId: fromUser ? fromUser.id || fromUser.objectId : undefined,
     toUserId: toUser ? toUser.id || toUser.objectId : undefined,
-    fullfillerId: fulfiller ? fulfiller.id || fulfiller.objectId : undefined,
+    fulfillerId: fulfiller ? fulfiller.id || fulfiller.objectId : undefined,
     fulfillerName: fulfillerContact ? fulfillerContact.name : undefined
   }))
 }

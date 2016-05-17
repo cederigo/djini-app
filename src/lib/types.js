@@ -1,5 +1,3 @@
-import {List} from 'immutable'
-
 export type User = {
   id: string,
   name: string,
@@ -24,5 +22,6 @@ export type Wish = {
   isFavorite: bool,
   fromUserId: string,
   toUserId: string,
-  fullfillerId: string,
+  fulfillerId: string,
+  fulfillerName: ?string,
 }

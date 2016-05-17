@@ -83,12 +83,12 @@ export function saveWish(wish: Record<Wish>) {
       ...wish.toObject(),
       fromUser: parseUserPointer(wish.fromUserId),
       toUser: parseUserPointer(wish.toUserId),
-      fullfiller: parseUserPointer(wish.fullfillerId)
+      fulfiller: parseUserPointer(wish.fulfillerId)
     }
 
     delete attributes.fromUserId
     delete attributes.toUserId
-    delete attributes.fullfillerId
+    delete attributes.fulfillerId
 
     parseWish.save(attributes).then((data) => {
       if (wish.id) {
@@ -130,16 +130,16 @@ export function deleteWish(wish: Wish) {
   }
 }
 
-export function fullfillWish(wish) {
+export function fulfillWish(wish) {
   return dispatch => {
     dispatch(saveWishRequest())
-    Parse.Cloud.run('fullfillWish', {wishId: wish.id})
+    Parse.Cloud.run('fulfillWish', {wishId: wish.id})
     .then(data => {
       dispatch(wishUpdated(data))
     })
     .catch(error => {
       dispatch(saveWishFailure(error))
-      if (error.message.code === 'Wish is already fullfilled.') {
+      if (error.message.code === 'Wish is already fulfilled.') {
         Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
       }
     })

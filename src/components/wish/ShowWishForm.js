@@ -8,12 +8,12 @@ import React, {
   Text,
 } from 'react-native';
 
-import FullfillWishButton from './FullfillWishButton'
+import FulfillWishButton from './FulfillWishButton'
 import WMButton from '../WMButton'
 import {NavBar, NavButton} from '../NavBar'
 
 // Utils
-import {allowEdit, fullfillable, fullfilledByUser, fullfilled, toUser, fromUser, type} from '../../lib/wishUtil'
+import {allowEdit, fulfillable, fulfilledByUser, fulfilled, toUser, fromUser, type} from '../../lib/wishUtil'
 
 // Actions
 import {Actions} from 'react-native-router-flux'
@@ -24,7 +24,7 @@ export default class ShowWishForm extends Component {
     const {dispatch, currentUser, wishState} = this.props
     const {wish, isFetching} = wishState
 
-    let EditButton, DeleteButton, FullfillButton, FullfillmentStatus, PrivacyStatus
+    let EditButton, DeleteButton, FulfillButton, FulfillmentStatus, PrivacyStatus
 
     if (allowEdit(wish, currentUser)) {
       EditButton = <NavButton onPress={() => dispatch(editWish(wish))} enabled={!isFetching} text={"Bearbeiten"} />
@@ -36,20 +36,20 @@ export default class ShowWishForm extends Component {
       PrivacyStatus = <Text style={styles.privacy}>{wish.isPrivate ? 'Dieser Wunsch ist privat' : 'Dieser Wunsch ist öffentlich'}</Text>
     }
     
-    //FullfillButton
-    if (fullfillable(wish, currentUser) || fullfilledByUser(wish, currentUser)) {
-      FullfillButton = <FullfillWishButton wish={wish}/>
+    //FulfillButton
+    if (fulfillable(wish, currentUser) || fulfilledByUser(wish, currentUser)) {
+      FulfillButton = <FulfillWishButton wish={wish}/>
     }
-    //FullfillmentStatus
+    //FulfillmentStatus
     if (!toUser(wish, currentUser)) {
-      if (fullfilledByUser(wish, currentUser)) {
-        FullfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird von mir erfüllt</Text>
+      if (fulfilledByUser(wish, currentUser)) {
+        FulfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird von mir erfüllt</Text>
       } 
       else if (wish.fulfillerName) {
-        FullfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird von {wish.fulfillerName} erfüllt</Text>
+        FulfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird von {wish.fulfillerName} erfüllt</Text>
       } 
-      else if (fullfilled(wish)) {
-        FullfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird erfüllt</Text>
+      else if (fulfilled(wish)) {
+        FulfillmentStatus = <Text style={styles.text}>Dieser Wunsch wird erfüllt</Text>
       } 
     }
    
@@ -65,8 +65,8 @@ export default class ShowWishForm extends Component {
           {wish.seenAt ? <Text style={styles.text}>{wish.seenAt}</Text> : undefined}
           {PrivacyStatus}
           {DeleteButton}
-          {FullfillmentStatus}
-          {FullfillButton}
+          {FulfillmentStatus}
+          {FulfillButton}
         </View>
       </View>
     )
