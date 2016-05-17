@@ -2,17 +2,13 @@ import Record from 'immutable'
 import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
 
-import React, {
-  Alert
-} from 'react-native';
+import { Alert } from 'react-native';
 
 import {
   SAVE_WISH_REQUEST, 
   SAVE_WISH_FAILURE, 
   WISH_ADDED,
   WISH_UPDATED,
-  IDEA_ADDED,
-  IDEA_UPDATED,
   WISH_DELETED,
   ON_WISH_FIELD_CHANGE,
   SHOW_WISH,
@@ -113,10 +109,24 @@ export function deleteWish(wish: Wish) {
       //nothing to do
       return
     }
-    ParseWish.createWithoutData(wish.id).destroy()
-      .then(() => {
-        dispatch({type: WISH_DELETED, payload: wish})
-      })
+
+    function deleteConfirmed() {
+      ParseWish.createWithoutData(wish.id).destroy()
+        .then(() => {
+          dispatch({type: WISH_DELETED, payload: wish})
+        })
+    }
+
+    //Dont know if this is the right place for a confirmation dialog
+    //see: https://github.com/reactjs/redux/issues/1528
+    Alert.alert(
+      'Wunsch löschen?', //title
+      `Möchtest du den Wunsch ${wish.title} wirklich löschen?`, //message
+      [
+        {text: 'Abbrechen', style: 'cancel'},
+        {text: 'Ja', onPress: deleteConfirmed},
+      ]
+    )
   }
 }
 
