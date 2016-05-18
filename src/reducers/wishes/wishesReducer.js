@@ -19,12 +19,20 @@ import {isIdea} from '../../lib/wishUtil'
 
 const initialState = new InitialState
 
+function isParseObject(value) {
+  return value && value.id
+}
+
 export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = OrderedMap()): Record<Wish> {
-  const fulfiller = parseWish.get('fulfiller')
   const fromUser = parseWish.get('fromUser')
   const toUser = parseWish.get('toUser')
+  const fulfiller = parseWish.get('fulfiller')
+  let fulfillerContact;
+  if (isParseObject(fulfiller)) {
+    console.log('fulfiller', fulfiller)
+    fulfillerContact = contacts.get(fulfiller.get('username'))
+  }
   //phoneNumber is stored in username attribute
-  const fulfillerContact = fulfiller ? contacts.get(fulfiller.get('username')) : undefined 
   return new (Record({
     id: parseWish.id,
     title: parseWish.get('title'),
