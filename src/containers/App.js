@@ -6,8 +6,8 @@
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
 import Parse from 'parse/react-native'
-import React, { 
-  Component,
+import React, {Component} from 'react'
+import { 
   StyleSheet,
   View,
   Text,
