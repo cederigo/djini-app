@@ -82,6 +82,7 @@ class PureListView extends React.Component {
     const {contentInset} = this.props;
     const bottom = contentInset.bottom +
       Math.max(0, this.props.minContentHeight - this.state.contentHeight);
+        // contentInset={{bottom, top: contentInset.top}}
     return (
       <ListView
         initialListSize={10}
@@ -90,7 +91,6 @@ class PureListView extends React.Component {
         ref="listview"
         dataSource={this.state.dataSource}
         renderFooter={this.renderFooter}
-        contentInset={{bottom, top: contentInset.top}}
         onContentSizeChange={this.onContentSizeChange}
       />
     );

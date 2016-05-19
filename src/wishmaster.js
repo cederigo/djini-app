@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import Parse from 'parse/react-native'
 
 import configureStore from './lib/configureStore'
-const {width, height} = Dimensions.get('window')
+const {width} = Dimensions.get('window')
 import WMColors from './lib/WMColors'
 
 /* Config */

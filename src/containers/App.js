@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import {version} from '../lib/config'
+import WMColors from '../lib/WMColors'
 
 /* actions */
 import {loginSuccess, loginFailure} from '../actions/authActions';
@@ -23,12 +24,14 @@ import {updateInstallation} from '../actions/installation'
 var styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: WMColors.background,
     alignItems: 'center',
     justifyContent: 'center'
   },
   summary: {
-    fontSize: 18,
-    fontWeight: 'bold'
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: WMColors.lightText
   }
 });
 
@@ -55,7 +58,7 @@ class App extends Component {
   render() {
     return(
       <View style={ styles.container }>
-        <Text style={ styles.summary }>Wishmaster</Text>
+        <Text style={ styles.summary }>Djini</Text>
       </View>
     );
   }

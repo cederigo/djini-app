@@ -8,6 +8,8 @@ import {
   Text
 } from 'react-native';
 
+import WMColors from '../lib/WMColors'
+
 //types
 import {Wish} from '../lib/types'
 
@@ -28,16 +30,28 @@ class MyWishList extends Component {
     this.renderRow = this.renderRow.bind(this)
     this.swipeoutBtns = this.swipeoutBtns.bind(this)
   }
+
+  renderSectionHeader(data, sectionId) {
+    return (
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionHeaderText}>{sectionId}</Text>
+      </View>
+    );
+  }
   
   render() {
+    const data = {
+      'Wunschliste': this.props.wishes
+    }
     return (
       <PureListView
         style={styles.container}
         ref={this.storeInnerRef}
-        data={this.props.wishes}
+        data={data}
         renderRow={this.renderRow}
         renderSeparator={this.renderSeparator}
         renderEmptyList={this.renderEmptyList}
+        renderSectionHeader={this.renderSectionHeader}
         {...this.props}
       />
     );
@@ -73,7 +87,7 @@ class MyWishList extends Component {
       <Swipeout right={this.swipeoutBtns(wish)} autoClose={true}>
         <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
-            <Text style={styles.text}>
+            <Text style={styles.rowText}>
               {wish.title + (wish.isPrivate ? '(Privat)' : '') + (wish.isFavorite ? '(Fav)' : '')}
             </Text>
           </View>
@@ -105,8 +119,6 @@ class MyWishList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    alignSelf: 'stretch'
   },
   emptyList: {
     alignItems: 'center',
@@ -115,25 +127,29 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingLeft: 10,
-    backgroundColor: '#F6F6F6',
-    height: 60,
-    padding: 10
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: WMColors.white,
   },
   rowSeparator: {
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: WMColors.background,
     height: 1,
-    marginHorizontal: 10,
   },
-  sectionHeader: {
-    backgroundColor: '#48D1CC',
-    paddingLeft: 10
-  },
-  text: {
+  rowText: {
     flex: 1,
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    color: WMColors.lightText
+  },
+  sectionHeader: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: WMColors.lightText,
+  },
+  sectionHeaderText: {
+    fontSize: 18,
+    color: 'white',
+    backgroundColor: WMColors.lightText,
+  },
 })
 
 export default connect()(MyWishList)
