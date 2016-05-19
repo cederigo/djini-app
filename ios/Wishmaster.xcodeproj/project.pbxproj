@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -724,6 +723,10 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Wishmaster.app/Wishmaster";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lc++",
+				);
 			};
 			name = Debug;
 		};
@@ -746,6 +749,10 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Wishmaster.app/Wishmaster";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lc++",
+				);
 			};
 			name = Release;
 		};
@@ -763,7 +770,10 @@
 				);
 				INFOPLIST_FILE = Wishmaster/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wishmaster;
 				PRODUCT_NAME = Wishmaster;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -784,7 +794,10 @@
 				);
 				INFOPLIST_FILE = Wishmaster/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wishmaster;
 				PRODUCT_NAME = Wishmaster;
 				TARGETED_DEVICE_FAMILY = "1,2";

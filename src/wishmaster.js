@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { AppRegistry, View, Text} from 'react-native'
-import RNRF, { Scene } from 'react-native-router-flux'
-import { Provider, connect } from 'react-redux'
+import { Scene, Router } from 'react-native-router-flux'
+import { Provider } from 'react-redux'
 import configureStore from './lib/configureStore'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Parse from 'parse/react-native'
@@ -66,17 +66,11 @@ export default function native(platform) {
 
   let Wishmaster = React.createClass( {
     render() {
-
-      
       // configureStore will combine reducers from snowflake and main application
       // it will then create the store based on aggregate state from all reducers
       const store = configureStore(getInitialState())
 
-      //Connect w/ the Router
-      const Router = connect()(RNRF.Router)
-      
       store.dispatch(restoreContacts())
-
       // setup the router table with App selected as the initial component
       return (
         <Provider store={store}>
@@ -91,7 +85,7 @@ export default function native(platform) {
 
               <Scene key="wish" panHandlers={null} direction="vertical" component={Wish} title="Wunsch"/>
 
-              <Scene key="home" panHandlers={null} tabs={true} hideNavBar={false} >
+              <Scene key="home" type="replace" panHandlers={null} tabs={true}>
                 <Scene key="wishes" initial={true} component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
                 <Scene key="contacts" component={Contacts} title="Meine Kontakte" icon={TabIcon} iconName="accessibility"/>
               </Scene>
