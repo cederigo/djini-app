@@ -17,6 +17,23 @@ import {
 } from '../lib/constants'
 
 const ParseWish = Parse.Object.extend('Wish')
+const ParseUser = Parse.Object.extend('User')
+
+function toParseWish(wish: Record<Wish>) {
+  return new ParseWish({
+    id: wish.id,
+    title: wish.title,
+    description: wish.description,
+    url: wish.url,
+    seenAt: wish.seenAt,
+    isPrivate: wish.isPrivate,
+    isFavorite: wish.isFavorite,
+
+    fromUser: ParseUser.createWithoutData(wish.fromUserId),
+    toUser: ParseUser.createWithoutData(wish.toUserId),
+    fulfiller: wish.fulfillerId ? ParseUser.createWithoutData(wish.fulfillerId) : undefined
+  })
+}
 
 import {Wish, User} from '../lib/types'
 
@@ -78,19 +95,9 @@ export function saveWish(wish: Record<Wish>) {
     dispatch(saveWishRequest())
 
     //use existing id if possible
-    let parseWish = ParseWish.createWithoutData(wish.id)
-    let attributes = {
-      ...wish.toObject(),
-      fromUser: parseUserPointer(wish.fromUserId),
-      toUser: parseUserPointer(wish.toUserId),
-      fulfiller: parseUserPointer(wish.fulfillerId)
-    }
+    let parseWish = toParseWish(wish)
 
-    delete attributes.fromUserId
-    delete attributes.toUserId
-    delete attributes.fulfillerId
-
-    parseWish.save(attributes).then((data) => {
+    parseWish.save().then((data) => {
       if (wish.id) {
         dispatch(wishUpdated(data))
       } else {
@@ -143,18 +150,5 @@ export function fulfillWish(wish) {
         Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
       }
     })
-  }
-}
-
-/* Helper */
-function parseUserPointer(userId) {
-  if (!userId) {
-    return null
-  }
-
-  return {
-    __type: 'Pointer',
-    className: '_User',
-    objectId: userId 
   }
 }
