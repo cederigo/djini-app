@@ -1,12 +1,15 @@
 'use strict';
 
 import React from 'react'
-import { AppRegistry, View, Text} from 'react-native'
+import { AppRegistry, View, Text, StyleSheet, Dimensions} from 'react-native'
 import { Scene, Router } from 'react-native-router-flux'
 import { Provider } from 'react-redux'
-import configureStore from './lib/configureStore'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Parse from 'parse/react-native'
+
+import configureStore from './lib/configureStore'
+const {width, height} = Dimensions.get('window')
+import WMColors from './lib/WMColors'
 
 /* Config */
 import {
@@ -48,15 +51,50 @@ function getInitialState() {
 class TabIcon extends React.Component {
   render(){
     const {selected, iconName, title} = this.props
-    var color = selected ? '#FF3366' : '#FFB3B3';
     return (
-      <View style={{flex:1, flexDirection:'column', alignItems:'center', alignSelf:'center'}}>
-        <Icon style={{color: color}} name={iconName} size={30} />
-        <Text style={{color: color}}>{title}</Text>
+      <View style={[styles.tab, selected ? styles.tabSelected : undefined]}>
+        <Icon style={[styles.tabIcon, selected ? styles.tabIconSelected : undefined]} name={iconName} size={30} />
+        <Text style={[styles.tabText, selected ? styles.tabTextSelected : undefined]}>{title}</Text>
       </View>
       )
   }
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    borderColor: WMColors.lightText,
+    borderTopWidth: 2,
+    height: 60,
+    color: WMColors.lightText,
+    backgroundColor: WMColors.background,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
+  },
+  tab: {
+    height: 60,
+    width: width / 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    color: WMColors.lightText,
+    backgroundColor: WMColors.background,
+  },
+  tabSelected: {
+    backgroundColor: WMColors.lightText,
+  },
+  tabIcon: {
+    color: WMColors.lightText
+  },
+  tabIconSelected: {
+    color: 'white'
+  },
+  tabText: {
+    color: WMColors.lightText,
+  },
+  tabTextSelected: {
+    color: 'white'
+  }
+})
 
 export default function native(platform) {
 
@@ -85,9 +123,11 @@ export default function native(platform) {
 
               <Scene key="wish" panHandlers={null} direction="vertical" component={Wish} title="Wunsch"/>
 
-              <Scene key="home" type="replace" panHandlers={null} tabs={true}>
-                <Scene key="wishes" initial={true} component={Wishes} title="Meine Wünsche" icon={TabIcon} iconName="cake"/>
-                <Scene key="contacts" component={Contacts} title="Meine Kontakte" icon={TabIcon} iconName="accessibility"/>
+              <Scene key="home" type="replace" panHandlers={null} tabs={true} tabBarStyle={styles.tabBar}>
+                <Scene key="wishes" initial={true} component={Wishes} title="Wünsche" icon={TabIcon} iconName="cake"/>
+                <Scene key="contacts" component={Contacts} title="Kontakte" icon={TabIcon} iconName="group"/>
+                <Scene key="pots" component={Contacts} title="Pots" icon={TabIcon} iconName="folder-shared"/>
+                <Scene key="more" component={Contacts} title="Mehr" icon={TabIcon} iconName="more-horiz"/>
               </Scene>
 
             </Scene>
