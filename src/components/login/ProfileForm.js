@@ -1,9 +1,6 @@
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import React, {
-  View,
-  Component,
-  TextInput
-} from 'react-native';
+import React, {Component} from 'react';
+import {View, TextInput} from 'react-native';
 
 export default class ProfileForm extends Component {
 

@@ -1,14 +1,8 @@
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 
-// components
-import React, {
-   Component,
-   PropTypes,
-   View,
-   StyleSheet,
-   StatusBar
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import EditWishForm from '../components/wish/EditWishForm'
 import ShowWishForm from '../components/wish/ShowWishForm'
 

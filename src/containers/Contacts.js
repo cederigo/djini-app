@@ -2,14 +2,8 @@
 
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
-import React, {
-  Component,
-  View,
-  PropTypes,
-  StyleSheet,
-  StatusBar,
-  TextInput,
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
+import {View, StyleSheet, StatusBar, TextInput} from 'react-native';
 
 import NoContactsPermission from '../components/NoContactsPermission'
 import ContactsList from '../components/ContactsList'

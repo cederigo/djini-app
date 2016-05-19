@@ -1,9 +1,5 @@
-import React, {
-  Component,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React, {Component} from 'react';
+import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 export default class WMButton extends Component {
 

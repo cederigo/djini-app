@@ -1,13 +1,6 @@
 import { connect } from 'react-redux';
-import React, {
-  Platform,
-  Component,
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-} from 'react-native';
+import React, {Component} from 'react';
+import {Platform, TouchableOpacity, View, Text, StyleSheet, StatusBar} from 'react-native';
 
 import {
   profileForm,

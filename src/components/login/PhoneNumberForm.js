@@ -1,11 +1,6 @@
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import React, {
-  Component,
-  View,
-  Text,
-  TextInput,
-  Alert
-} from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, TextInput, Alert} from 'react-native';
 
 export default class PhoneNumberForm extends Component {
 

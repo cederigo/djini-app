@@ -1,16 +1,8 @@
 import Immutable from 'immutable'
 import { connect } from 'react-redux'
 import dismissKeyboard from 'dismissKeyboard'
-import React, { 
-  StyleSheet,
-  Component,
-  PropTypes,
-  View,
-  ListView,
-  TouchableHighlight,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
+import {StyleSheet, View, ListView, TouchableHighlight, TouchableOpacity, Text} from 'react-native';
 import Swipeout from 'react-native-swipeout'
 
 import {

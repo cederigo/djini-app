@@ -1,8 +1,6 @@
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import React, {
-  Component,
-  View
-} from 'react-native';
+import React, {Component} from 'react';
+import {View} from 'react-native';
 import BirthdayInput from '../BirthdayInput'
 
 

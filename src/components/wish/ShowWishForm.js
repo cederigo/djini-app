@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
 
-// Components
-import React, {
-  Component,
-  StyleSheet,
-  View,
-  Text,
-} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, View, Text} from 'react-native';
 
 import FulfillWishButton from './FulfillWishButton'
 import WMButton from '../WMButton'

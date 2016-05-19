@@ -1,15 +1,7 @@
 import { connect } from 'react-redux';
 
-// Components
-import React, {
-  Component,
-  View,
-  Switch,
-  StyleSheet,
-  Text,
-  TextInput,
-  Platform
-} from 'react-native';
+import React, {Component} from 'react';
+import {View, Switch, StyleSheet, Text, TextInput, Platform} from 'react-native';
 
 import WMButton from '../WMButton'
 import {NavBar, NavButton} from '../NavBar'

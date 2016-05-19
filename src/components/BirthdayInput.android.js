@@ -1,10 +1,5 @@
-import React, { 
-  StyleSheet,
-  Component,
-  PropTypes,
-  View,
-  DatePickerIOS,
-  Picker } from 'react-native';
+import React, {Component, PropTypes} from 'react';
+import {StyleSheet, View, DatePickerIOS, Picker} from 'react-native';
 
 //Picker Items
 let DAYS = []

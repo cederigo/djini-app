@@ -1,11 +1,6 @@
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import React, {
-  Component,
-  Alert,
-  View,
-  Text,
-  TextInput
-} from 'react-native';
+import React, {Component} from 'react';
+import {Alert, View, Text, TextInput} from 'react-native';
 
 export default class VerificationCodeForm extends Component {
 

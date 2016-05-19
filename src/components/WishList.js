@@ -1,14 +1,6 @@
 import Immutable from 'immutable';
-import React, { 
-  StyleSheet,
-  Component,
-  PropTypes,
-  View,
-  ListView,
-  TouchableHighlight,
-  TouchableOpacity,
-  Text
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
+import {StyleSheet, View, ListView, TouchableHighlight, TouchableOpacity, Text} from 'react-native';
 
 // actions
 import show from '../actions/wishes'

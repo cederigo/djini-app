@@ -1,9 +1,6 @@
 import { connect } from 'react-redux';
-import React, {
-  Component,
-  View, Text,
-  StyleSheet,
-} from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 
 class NoContactsPermission extends Component {
   render() {

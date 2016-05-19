@@ -1,14 +1,8 @@
 import { connect } from 'react-redux';
 import {Wish, User} from '../../lib/types'
 
-// Components
-import React, { 
-  StyleSheet,
-  Component,
-  TouchableOpacity,
-  Text,
-  Alert
-} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, TouchableOpacity, Text, Alert} from 'react-native';
 import WMButton from '../WMButton'
 
 // Actions
