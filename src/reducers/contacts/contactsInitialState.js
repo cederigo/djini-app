@@ -5,7 +5,7 @@ var InitialState = Record({
   error: null,
   filterText: '',
   lastSavedAt: 0,
-  noContactsPermission: false,
+  permissionDenied: false,
   contacts: OrderedMap(),
 });
 

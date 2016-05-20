@@ -5,7 +5,8 @@ import Immutable from 'immutable';
 import React, {Component, PropTypes} from 'react';
 import {View, StyleSheet, StatusBar, TextInput} from 'react-native';
 
-import NoContactsPermission from '../components/NoContactsPermission'
+import ContactsPermission from '../components/ContactsPermission'
+import ContactsWizard from '../components/ContactsWizard'
 import ContactsList from '../components/ContactsList'
 
 import {onSearchFieldChange} from '../actions/contacts'
@@ -16,23 +17,28 @@ class Contacts extends Component {
     const {contactsState, dispatch} = this.props
     let {contacts, filterText} = contactsState
 
-    if (contactsState.noContactsPermission) {
-      return (<NoContactsPermission/>)
+    if (contactsState.permissionDenied) {
+      return (<ContactsPermission/>)
     }
 
+    if (!contacts.size) {
+      return (<ContactsWizard/>)
+    } 
+
+    //contacts
     return (
-        <View style={styles.container}>
-          <StatusBar translucent={true} />
-          <View style={styles.toolbar}>
-            <TextInput
-              onChangeText={(text) => dispatch(onSearchFieldChange(text))}
-              style={styles.searchBar}
-              placeholder="Kontakte suchen ..."
-              value={filterText}
-            />
-          </View>
-          <ContactsList contacts={contacts} filterText={filterText}/>
+      <View style={styles.container}>
+        <StatusBar translucent={true} />
+        <View style={styles.toolbar}>
+          <TextInput
+            onChangeText={(text) => dispatch(onSearchFieldChange(text))}
+            style={styles.searchBar}
+            placeholder="Kontakte suchen ..."
+            value={filterText}
+          />
         </View>
+        <ContactsList contacts={contacts} filterText={filterText}/>
+      </View>
     )
   }
 }

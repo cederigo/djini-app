@@ -18,7 +18,6 @@ import WMColors from '../lib/WMColors'
 
 /* actions */
 import {loginSuccess, loginFailure} from '../actions/authActions';
-import {refreshContacts} from '../actions/contacts';
 import {updateInstallation} from '../actions/installation'
 
 var styles = StyleSheet.create({
@@ -44,7 +43,6 @@ class App extends Component {
         if (!parseUser) {
           throw new Error('User not logged in')
         }
-        dispatch(refreshContacts())
         dispatch(loginSuccess(parseUser))
       })
       .catch((error) => {

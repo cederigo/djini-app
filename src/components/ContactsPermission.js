@@ -1,8 +1,9 @@
-import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-class NoContactsPermission extends Component {
+import WMColors from '../lib/WMColors'
+
+export default class ContactsPermission extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -18,10 +19,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: WMColors.background
   },
   text: {
     textAlign: 'center',
+    fontSize: 16,
+    color: WMColors.lightText
   },
 })
-
-export default connect()(NoContactsPermission)

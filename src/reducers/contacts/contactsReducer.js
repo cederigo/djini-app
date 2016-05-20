@@ -50,7 +50,7 @@ export default function contactsReducer(state = initialState, {type, payload}) {
     case RESTORE_CONTACTS_FAILURE:
     case CONTACTS_FAILURE:
       return state.set('isFetching', false)
-        .set('noContactsPermission', payload.message === 'permissionDenied')
+        .set('permissionDenied', payload.message === 'permissionDenied')
         .set('error', payload)
 
     case ON_SEARCH_FIELD_CHANGE:

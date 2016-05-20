@@ -20,7 +20,6 @@ import {
 } from '../actions/authActions'
 
 import { loadMyProfile } from '../actions/profile'
-import { refreshContacts } from '../actions/contacts'
 
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
@@ -52,8 +51,6 @@ class Login extends Component {
         title = "Telefon"
         onBack = Actions.welcome
         onNext = () => {
-          //TODO move this to contacts screen
-          dispatch(refreshContacts()) //permission dialog (IOS)
           dispatch(sendCode(fields.get('phoneNumberFormatted')))
         }
         form = <PhoneNumberForm 
