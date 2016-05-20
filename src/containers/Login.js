@@ -50,7 +50,7 @@ class Login extends Component {
     switch(formName) {
       case LOGIN_PHONENUMBER_FORM:
         title = "Telefon"
-        onBack = undefined
+        onBack = Actions.welcome
         onNext = () => {
           //TODO move this to contacts screen
           dispatch(refreshContacts()) //permission dialog (IOS)

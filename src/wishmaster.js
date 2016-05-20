@@ -19,6 +19,7 @@ import {
 
 /*  Containers */
 import App from './containers/App'
+import Welcome from './containers/Welcome'
 import Login from './containers/Login'
 import Wishes from './containers/Wishes'
 import Contacts from './containers/Contacts'
@@ -116,6 +117,8 @@ export default function native(platform) {
             <Scene key="root">
 
               <Scene key="app" component={App} title="Wishmaster" initial={true}/>
+
+              <Scene key="welcome" type="replace" component={Welcome} />
 
               <Scene key="login" type="replace" component={Login} />
               

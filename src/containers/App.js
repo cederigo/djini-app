@@ -49,7 +49,7 @@ class App extends Component {
       })
       .catch((error) => {
         dispatch(loginFailure(error))
-        Actions.login()
+        Actions.welcome()
       })
 
     updateInstallation({version})
