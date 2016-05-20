@@ -1,4 +1,4 @@
-package com.wishmaster;
+package ch.djini;
 
 import com.facebook.react.ReactActivity;
 import cl.json.RNSharePackage;

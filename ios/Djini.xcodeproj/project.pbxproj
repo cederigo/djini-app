@@ -244,12 +244,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		00E356EF1AD99517003FC87E /* WishmasterTests */ = {
+		00E356EF1AD99517003FC87E /* DjiniTests */ = {
 			isa = PBXGroup;
 			children = (
 				00E356F21AD99517003FC87E /* WishmasterTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
+			name = DjiniTests;
 			path = WishmasterTests;
 			sourceTree = "<group>";
 		};
@@ -277,7 +278,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* Wishmaster */ = {
+		13B07FAE1A68108700A75B9A /* Djini */ = {
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -288,7 +289,7 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = Wishmaster;
+			name = Djini;
 			sourceTree = "<group>";
 		};
 		146834001AC3E56700842450 /* Products */ = {
@@ -353,9 +354,9 @@
 			isa = PBXGroup;
 			children = (
 				8CD150781CC6342E0028C73F /* RCTContacts.xcodeproj */,
-				13B07FAE1A68108700A75B9A /* Wishmaster */,
+				13B07FAE1A68108700A75B9A /* Djini */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* WishmasterTests */,
+				00E356EF1AD99517003FC87E /* DjiniTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				6527F72DD04647938DA33739 /* Resources */,
 			);
@@ -775,7 +776,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wishmaster;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.djini;
 				PRODUCT_NAME = Djini;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -799,7 +800,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wishmaster;
+				PRODUCT_BUNDLE_IDENTIFIER = ch.djini;
 				PRODUCT_NAME = Djini;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
