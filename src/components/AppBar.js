@@ -8,22 +8,28 @@ import WMColors from '../lib/WMColors'
 export class AppBar extends Component {
   props: {
     showBackButton: bool,
+    onBack: () => void,
     title: string
   }
 
   render() {
+    const {showBackButton, onBack, title} = this.props
     return (
       <View style={styles.appBar}>
         <View style={styles.left}>
-          {this.props.showBackButton ? <ActionButton onPress={Actions.pop} iconName="chevron-left" style={styles.backButton}/> : undefined}
+          {showBackButton ? <ActionButton onPress={onBack} iconName="chevron-left" style={styles.backButton}/> : undefined}
         </View>
-        <Text style={styles.title}>{this.props.title}</Text>
+        <Text style={styles.title}>{title}</Text>
         <View style={styles.right}>
           {this.props.children}
         </View>
       </View>
     )
   }
+}
+
+AppBar.defaultProps = {
+  onBack: () => Actions.pop()
 }
 
 export class ActionButton extends React.Component {

@@ -94,7 +94,6 @@ export function saveWish(wish: Record<Wish>) {
   return dispatch => {
     dispatch(saveWishRequest())
 
-    //use existing id if possible
     let parseWish = toParseWish(wish)
 
     parseWish.save().then((data) => {

@@ -1,19 +1,26 @@
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
-import {Platform, TouchableOpacity, View, Text, StyleSheet, StatusBar} from 'react-native';
+import { Actions } from 'react-native-router-flux'
+import {View, StyleSheet, StatusBar} from 'react-native';
+
+import WMColors from '../lib/WMColors'
+
+import {AppBar} from '../components/AppBar'
+import WMButton from '../components/WMButton'
 
 import {
   profileForm,
   birthdayForm,
   phoneNumberForm,
+  verificationCodeForm,
   login,
   sendCode,
-  onFormFieldChange
+  onFormFieldChange,
+  updateProfile
 } from '../actions/authActions'
 
-import {
-  refreshContacts,
-} from '../actions/contacts'
+import { loadMyProfile } from '../actions/profile'
+import { refreshContacts } from '../actions/contacts'
 
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
@@ -26,67 +33,6 @@ import {
   LOGIN_BIRTHDAY_FORM,
 } from '../lib/constants'
 
-
-const formStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'flex-start',
-    backgroundColor: 'white',
-    padding: 10,
-  },
-  text: {},
-  icon: {
-    alignSelf: 'center',
-    marginBottom: 30,
-  },
-  input: {
-    marginLeft: Platform.OS === 'android' ? -5 : 0,
-    height: 50,
-    marginTop: 10,
-  },
-})
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  navbar: {
-    marginTop: 20,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#CDCDCD',
-    flexDirection: 'row',
-    alignSelf: 'stretch',
-  },
-  nextButton: {
-    padding: 15,
-  },
-  title: {
-    flex: 1,
-  },
-  backButton: {
-    padding: 15,
-    alignSelf: 'flex-start',
-  },
-  buttonText: {
-    fontSize: 17,
-    fontWeight: '500',
-  },
-})
-
-class NavButton extends React.Component {
-  render() {
-    const {enabled, onPress, text, style} = this.props
-    return (
-      <TouchableOpacity
-        activeOpacity={enabled ? 0 : 1}
-        style={style}
-        onPress={() => { if (enabled) { onPress() }}}>
-        <Text style={[styles.buttonText, {color: enabled ? 'rgb(0, 122, 155)' : 'grey'}]}>{text}</Text>
-      </TouchableOpacity>
-    );
-  }
-}
-
 class Login extends Component {
 
   props: {
@@ -98,13 +44,43 @@ class Login extends Component {
     const {authState, dispatch} = this.props
     const {formName, isValid, fields, isFetching} = authState
 
-    let form, onNext, nextText, onBack
+    let title, form, onNext, onBack
+    let nextCaption = "Weiter"
 
     switch(formName) {
-      case LOGIN_PROFILE_FORM: /* 1. Screen */
+      case LOGIN_PHONENUMBER_FORM:
+        title = "Telefon"
         onBack = undefined
+        onNext = () => {
+          //TODO move this to contacts screen
+          dispatch(refreshContacts()) //permission dialog (IOS)
+          dispatch(sendCode(fields.get('phoneNumberFormatted')))
+        }
+        form = <PhoneNumberForm 
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          styles={formStyles}
+          onNext={isValid ? onNext: null}/>
+        break;
+      case LOGIN_VERIFICATIONCODE_FORM:
+        title = "Code"
+        onBack = () => dispatch(phoneNumberForm())
+        onNext = () => {
+          dispatch(login(
+            fields.get('phoneNumberFormatted'), /* username */
+            fields.get('code') /* password */
+          ))
+        }
+        form = <VerificationCodeForm 
+          styles={formStyles}
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          onNext={isValid ? onNext : null}/>
+        break;
+      case LOGIN_PROFILE_FORM:
+        title = "Name & E-Mail"
+        onBack = () => dispatch(verificationCodeForm())
         onNext = () => dispatch(birthdayForm())
-        nextText = "Weiter"
         form = <ProfileForm 
           authState={authState}
           onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
@@ -112,65 +88,84 @@ class Login extends Component {
           onNext={isValid? onNext: null}
         />
         break
-      case LOGIN_BIRTHDAY_FORM: /* 2. Screen */
+      case LOGIN_BIRTHDAY_FORM: {
+        title = "Geburtstag"
+        nextCaption = "Abschliessen"
+        const {name, email, birthday} = fields
         onBack = () => dispatch(profileForm())
-        onNext = () => dispatch(phoneNumberForm())
-        nextText = "Weiter"
+        onNext = () => {
+          dispatch(updateProfile({name, email, birthday}))
+            .then(() => dispatch(loadMyProfile()))
+            .then(() => Actions.home())
+        }
         form = <BirthdayForm 
           styles={formStyles}
           authState={authState}
           onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
         />
         break
-      case LOGIN_PHONENUMBER_FORM: /* 3. Screen */
-        onBack = () => dispatch(birthdayForm())
-        onNext = () => {
-          dispatch(refreshContacts()) //permission dialog (IOS)
-          dispatch(sendCode(fields.get('phoneNumberFormatted')))
-        }
-        nextText = "Code senden"
-        form = <PhoneNumberForm 
-          authState={authState}
-          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
-          styles={formStyles}
-          onNext={isValid ? onNext: null}/>
-        break;
-      case LOGIN_VERIFICATIONCODE_FORM: /* 4. Screen */
-        onBack = () => dispatch(phoneNumberForm())
-        onNext = () => {
-          const {name, email, birthday} = fields
-          dispatch(login(
-            fields.get('phoneNumberFormatted'), /* username */
-            fields.get('code'), /* password */
-            { name, email, birthday } /* additional fields */
-          ))
-        }
-        nextText = "Login"
-        form = <VerificationCodeForm 
-          styles={formStyles}
-          authState={authState}
-          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
-          onNext={isValid ? onNext : null}/>
-        break;
+      }
     }
 
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-
-        <View style={styles.navbar}>
-          {onBack ? 
-            <NavButton enabled={true} onPress={onBack} text="Zurück" style={styles.backButton}/> :
-            undefined
-          }
-          <Text style={styles.title}></Text>
-          <NavButton enabled={isValid && !isFetching} onPress={onNext} text={nextText} style={styles.nextButton}/>
-        </View>
+        <AppBar title={title} showBackButton={onBack ? true : false} onBack={onBack}/>
         {form}
+        <WMButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>
       </View>
     )
   }
 }
+
+const formStyles = StyleSheet.create({
+  container: {
+    alignItems: 'flex-start',
+    backgroundColor: 'white',
+    padding: 20
+  },
+  text: {
+    color: WMColors.lightText,
+    fontSize: 16,
+    marginBottom: 10
+  },
+  formGroup: {
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    flex: 1,
+    marginTop: 20
+  },
+  formGroupText: {
+    fontSize: 16,
+    color: WMColors.lightText,
+    marginBottom: 5,
+    flex: 1
+  },
+  formGroupInputView: {
+    borderColor: WMColors.lightText,
+    borderBottomWidth: 1,
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  formGroupInput: {
+    height: 30,
+    flex: 1,
+    fontSize: 16,
+    color: WMColors.lightText,
+  }
+})
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  button: {
+    margin: 20
+  }
+})
 
 /**
  * Redux boilerplate

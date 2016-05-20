@@ -1,6 +1,5 @@
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {Component} from 'react';
-import {View, TextInput} from 'react-native';
+import {View, TextInput, Text} from 'react-native';
 
 export default class ProfileForm extends Component {
 
@@ -17,35 +16,44 @@ export default class ProfileForm extends Component {
     const {name, email} = authState.fields
     return ( 
       <View style={styles.container}>
-        <Icon name="account-circle" style={styles.icon} size={90} />
-
-        <TextInput
-          style={styles.input}
-          editable={!authState.isFetching}
-          placeholder="Username"
-          onChangeText={(text) => { onFormFieldChange('name', text)}}
-          autoFocus={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-          returnKeyType="next"
-          value={name}
-          onSubmitEditing={() => this.refs.email.focus()}
-        />
-
-        <TextInput
-          ref="email"
-          style={styles.input}
-          editable={!authState.isFetching}
-          placeholder="E-Mail"
-          keyboardType="email-address"
-          onChangeText={(text) => { onFormFieldChange('email', text)}}
-          autoCapitalize="none"
-          autoCorrect={false}
-          returnKeyType="next"
-          onSubmitEditing={onNext}
-          value={email}
-        />
-
+        <Text style={styles.text}>
+          Gib Djini deinen Namen und deine E-Mail Adresse an:
+        </Text>
+        <View style={styles.formGroup}>
+          <Text style={styles.formGroupText}>Name</Text>
+          <View style={styles.formGroupInputView}>
+            <TextInput
+              style={styles.formGroupInput}
+              editable={!authState.isFetching}
+              onChangeText={(text) => { onFormFieldChange('name', text)}}
+              autoFocus={true}
+              clearButtonMode="while-editing"
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="next"
+              value={name}
+              onSubmitEditing={() => this.refs.email.focus()}
+            />
+          </View>
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.formGroupText}>E-Mail</Text>
+          <View style={styles.formGroupInputView}>
+            <TextInput
+              ref="email"
+              style={styles.formGroupInput}
+              editable={!authState.isFetching}
+              keyboardType="email-address"
+              clearButtonMode="while-editing"
+              onChangeText={(text) => { onFormFieldChange('email', text)}}
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="next"
+              onSubmitEditing={onNext}
+              value={email}
+            />
+          </View>
+        </View>
       </View>
     )
   }

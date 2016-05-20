@@ -42,7 +42,7 @@ class App extends Component {
     Parse.User.currentAsync()
       .then((parseUser) => {
         if (!parseUser) {
-          throw ('User not logged in')
+          throw new Error('User not logged in')
         }
         dispatch(refreshContacts())
         dispatch(loginSuccess(parseUser))

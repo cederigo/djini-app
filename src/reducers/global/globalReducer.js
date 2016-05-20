@@ -5,6 +5,7 @@
 import {
   MY_PROFILE_LOADED,
   LOGIN_SUCCESS,
+  PROFILE_UPDATE_SUCCESS,
   LOGOUT
 } from '../../lib/constants'
 
@@ -28,6 +29,7 @@ export function fromParseUser(user: Object): User {
 
 export default function globalReducer(state = initialState, {type, payload}) {
   switch (type) {
+    case PROFILE_UPDATE_SUCCESS:
     case LOGIN_SUCCESS:
       return state.set('currentUser', fromParseUser(payload))
     case LOGOUT:

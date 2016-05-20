@@ -28,7 +28,7 @@ const InitialState = Record({
   error: null,
   isValid: false,
   isFetching: false,
-  formName: LOGIN_PROFILE_FORM,
+  formName: LOGIN_PHONENUMBER_FORM,
   fields: new (Record({
     phoneNumber: '',
     phoneNumberFormatted: '', //Properly formatted phone number

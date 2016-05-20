@@ -17,9 +17,9 @@ import {
 
   LOGOUT,
 
-  // PROFILE_UPDATE_REQUEST,
-  // PROFILE_UPDATE_SUCCESS,
-  // PROFILE_UPDATE_FAILURE,
+  PROFILE_UPDATE_REQUEST,
+  PROFILE_UPDATE_SUCCESS,
+  PROFILE_UPDATE_FAILURE,
 
   ON_FORM_FIELD_CHANGE
 } from '../lib/constants'
@@ -98,8 +98,14 @@ export function loginRequest() {
 export function loginSuccess(parseUser) {
   return (dispatch) => {
     dispatch({ type: LOGIN_SUCCESS, payload: parseUser })
-    dispatch(loadMyProfile())
-    Actions.home()
+    if (parseUser.get('email')) {
+      //everything is fine
+      dispatch(loadMyProfile())
+      Actions.home()
+    } else {
+      dispatch(profileForm())
+      Actions.login()
+    }
   } 
 }
 export function loginFailure(error) {
@@ -134,45 +140,37 @@ export function logout() {
 /*
  * Update Profile
  */
-// export function profileUpdateRequest() {
-//   return {
-//     type: PROFILE_UPDATE_REQUEST
-//   };
-// }
-// export function profileUpdateSuccess(json) {
-//   return {
-//     type: PROFILE_UPDATE_SUCCESS,
-//     payload: json
-//   };
-// }
-// export function profileUpdateFailure(error) {
-//   return {
-//     type: PROFILE_UPDATE_FAILURE,
-//     payload: error
-//   };
-// }
-// export function updateProfile(data) {
-
-//   return (dispatch, getState) => {
-//     dispatch(profileUpdateRequest());
-//     const {currentUser, sessionToken} = getState().global;
-
-//     if (!(currentUser && sessionToken)) {
-//       dispatch(profileUpdateFailure(new Error('Should not happen')))
-//       dispatch(phoneNumberForm())
-//       return;
-//     }
-
-//     return new Parse(sessionToken).updateProfile(currentUser.objectId, data)
-//       .then(() => new Parse(sessionToken).getProfile())
-//       .then((json) => {
-//         db.saveCurrentUser(json)
-//         dispatch(profileUpdateSuccess(json))
-//         Actions.home()
-//       })
-//       .catch(error => {
-//         dispatch(profileUpdateFailure(error))
-//         dispatch(phoneNumberForm()) //start over
-//       })
-//   }
-// }
+export function profileUpdateRequest() {
+  return {
+    type: PROFILE_UPDATE_REQUEST
+  };
+}
+export function profileUpdateSuccess(json) {
+  return {
+    type: PROFILE_UPDATE_SUCCESS,
+    payload: json
+  };
+}
+export function profileUpdateFailure(error) {
+  return {
+    type: PROFILE_UPDATE_FAILURE,
+    payload: error
+  };
+}
+export function updateProfile(details = {}) {
+  return (dispatch) => {
+    dispatch(profileUpdateRequest());
+    const user = Parse.User.current()
+    if (!user) {
+      dispatch(profileUpdateFailure('User not logged in'))
+      return
+    }
+    return user.save(details)
+      .then((parseUser) => {
+        dispatch(profileUpdateSuccess(parseUser))
+      })
+      .catch(error => {
+        dispatch(profileUpdateFailure(error))
+      })
+  }
+}

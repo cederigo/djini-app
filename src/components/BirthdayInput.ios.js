@@ -1,8 +1,9 @@
 //IOS only
 
 import React, {Component} from 'react';
+import {DatePickerIOS, StyleSheet} from 'react-native';
 
-import {DatePickerIOS} from 'react-native';
+import WMColors from '../lib/WMColors'
 
 export default class BirthdayInput extends Component {
 
@@ -18,6 +19,7 @@ export default class BirthdayInput extends Component {
 
     return (
       <DatePickerIOS
+        style={styles.picker}
         date={birthday}
         mode="date"
         onDateChange={onDateChange}
@@ -25,3 +27,10 @@ export default class BirthdayInput extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  picker: {
+    color: WMColors.lightText,
+    left: -20
+  }
+})

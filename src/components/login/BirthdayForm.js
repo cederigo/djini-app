@@ -1,6 +1,5 @@
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import BirthdayInput from '../BirthdayInput'
 
 
@@ -18,7 +17,9 @@ export default class BirthdayForm extends Component {
     const {birthday} = authState.fields
     return ( 
       <View style={styles.container}>
-        <Icon name="cake" style={styles.icon} size={90} />
+        <Text style={styles.text}>
+          Mit Angabe deines Geburtsdatums kann „Djini“ deine Freunde rechzeitig über deinen Geburtstag informieren.
+        </Text>
         <BirthdayInput initialDate={birthday} onDateChange={date => onFormFieldChange('birthday', date)} />
       </View>
     )

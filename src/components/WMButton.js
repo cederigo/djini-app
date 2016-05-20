@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
+import WMColors from '../lib/WMColors'
 
 export default class WMButton extends Component {
 
@@ -13,15 +14,15 @@ export default class WMButton extends Component {
   };
 
   render() {
-    const {caption} = this.props
+    const {caption, disabled, onPress} = this.props
     return (
       <TouchableOpacity
         accessibilityTraits="button"
-        onPress={this.props.onPress}
-        disabled={this.props.disabled}
+        onPress={onPress}
+        disabled={disabled}
         activeOpacity={0.8}
         style={[styles.container, this.props.style]}>
-        <Text style={[styles.button, styles.caption, styles.primaryCaption]}>
+        <Text style={[styles.text, disabled ? styles.disabled : undefined]}>
           {caption}
         </Text>
       </TouchableOpacity>
@@ -32,20 +33,18 @@ export default class WMButton extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: WMColors.white,
     padding: 15,
     alignItems: 'center',
     justifyContent: 'center'
   },
-  button: {
-  },
-  icon: {
-    marginRight: 12
-  },
-  caption: {
+  text: {
     letterSpacing: 1,
-    fontSize: 12
+    fontSize: 16,
+    fontWeight: '500',
+    color: WMColors.darkText
   },
-  primaryCaption: {
-    color: 'rgb(0, 122, 155)',
-  },
+  disabled: {
+    color: WMColors.disabledText
+  }
 });

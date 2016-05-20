@@ -1,4 +1,3 @@
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {Component} from 'react';
 import {Alert, View, Text, TextInput} from 'react-native';
 
@@ -22,17 +21,24 @@ export default class VerificationCodeForm extends Component {
 
     return ( 
       <View style={styles.container}>
-        <Icon name="sms" size={90} style={styles.icon} />
-        <Text style={styles.text}>SMS Code..</Text>
-        <TextInput
-          style={styles.input}
-          editable={!authState.isFetching}
-          autoFocus={true}
-          keyboardType="numeric"
-          onChangeText={(text) => onFormFieldChange('code', text)}
-          onSubmitEditing={onNext}
-          value={code}
-        />
+        <Text style={styles.text}>
+          Gib den 4-stelligen Verifizierungs-Code ein, den du per SMS erhalten hast:
+        </Text>
+        <View style={styles.formGroup}>
+          <Text style={styles.formGroupText}>Code</Text>
+          <View style={styles.formGroupInputView}>
+            <TextInput
+              style={styles.formGroupInput}
+              editable={!authState.isFetching}
+              autoFocus={true}
+              keyboardType="numeric"
+              onChangeText={(text) => onFormFieldChange('code', text)}
+              onSubmitEditing={onNext}
+              clearButtonMode="while-editing"
+              value={code}
+            />
+          </View>
+        </View>
       </View>
     )
   }
