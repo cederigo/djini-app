@@ -132,7 +132,7 @@ export function logout() {
     Parse.User.logOut()
       .then(() => {
         dispatch({type: LOGOUT})
-        Actions.login()
+        Actions.welcome()
       })
   }
 }

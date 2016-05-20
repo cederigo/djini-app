@@ -23,6 +23,8 @@ import Welcome from './containers/Welcome'
 import Login from './containers/Login'
 import Wishes from './containers/Wishes'
 import Contacts from './containers/Contacts'
+import Pots from './containers/Pots'
+import More from './containers/More'
 import Friend from './containers/Friend'
 import Wish from './containers/Wish'
 
@@ -64,7 +66,7 @@ class TabIcon extends React.Component {
 const styles = StyleSheet.create({
   tabBar: {
     borderColor: WMColors.lightText,
-    borderTopWidth: 2,
+    borderTopWidth: 1,
     height: 60,
     color: WMColors.lightText,
     backgroundColor: WMColors.background,
@@ -129,8 +131,8 @@ export default function native(platform) {
               <Scene key="home" type="replace" panHandlers={null} tabs={true} tabBarStyle={styles.tabBar}>
                 <Scene key="wishes" initial={true} component={Wishes} title="Wünsche" icon={TabIcon} iconName="cake"/>
                 <Scene key="contacts" component={Contacts} title="Kontakte" icon={TabIcon} iconName="group"/>
-                <Scene key="pots" component={Contacts} title="Pots" icon={TabIcon} iconName="folder-shared"/>
-                <Scene key="more" component={Contacts} title="Mehr" icon={TabIcon} iconName="more-horiz"/>
+                <Scene key="pots" component={Pots} title="Pots" icon={TabIcon} iconName="folder-shared"/>
+                <Scene key="more" component={More} title="Mehr" icon={TabIcon} iconName="more-horiz"/>
               </Scene>
 
             </Scene>
