@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import Swipeout from 'react-native-swipeout'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import React, {Component} from 'react'
 import { 
   StyleSheet,
@@ -31,27 +32,24 @@ class MyWishList extends Component {
     this.swipeoutBtns = this.swipeoutBtns.bind(this)
   }
 
-  renderSectionHeader(data, sectionId) {
+  renderHeader() {
     return (
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionHeaderText}>{sectionId}</Text>
+      <View style={styles.listHeader}>
+        <Text style={styles.listHeaderText}>Wunschliste</Text>
       </View>
     );
   }
   
   render() {
-    const data = {
-      'Wunschliste': this.props.wishes
-    }
     return (
       <PureListView
         style={styles.container}
         ref={this.storeInnerRef}
-        data={data}
+        data={this.props.wishes}
         renderRow={this.renderRow}
         renderSeparator={this.renderSeparator}
         renderEmptyList={this.renderEmptyList}
-        renderSectionHeader={this.renderSectionHeader}
+        renderHeader={this.renderHeader}
         {...this.props}
       />
     );
@@ -62,19 +60,28 @@ class MyWishList extends Component {
     const {dispatch} = this.props
     return [
       { 
-        text: 'Delete',
+        component:
+          <View style={styles.swipeout}>
+            <Icon style={styles.swipeoutIcon} name="delete" size={30}/>
+          </View>,
         onPress: () => dispatch(deleteWish(wish)),
-        type: 'delete'
       },
+      // {
+      //   text: 'Edit',
+      //   onPress: () => dispatch(editWish(wish))
+      // },
       {
-        text: 'Edit',
-        onPress: () => dispatch(editWish(wish))
-      },
-      {
-        text: wish.isFavorite ? 'Not a Fav.' : 'Favorite', 
+        component: 
+          <View style={styles.swipeout}>
+            <Icon style={styles.swipeoutIcon} name={wish.isFavorite ? 'favorite-border' : 'favorite'} size={30}/>
+          </View>,
         onPress: () => dispatch(saveWish(wish.set('isFavorite', !wish.isFavorite)))
       },
       {
+        component: 
+          <View style={styles.swipeout}>
+            <Icon style={styles.swipeoutIcon} name={wish.isPrivate ? 'lock-open' : 'lock'} size={30}/>
+          </View>,
         text: wish.isPrivate ? 'Make public' : 'Make private',
         onPress: () => dispatch(saveWish(wish.set('isPrivate', !wish.isPrivate)))
       }
@@ -87,9 +94,11 @@ class MyWishList extends Component {
       <Swipeout right={this.swipeoutBtns(wish)} autoClose={true}>
         <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
-            <Text style={styles.rowText}>
-              {wish.title + (wish.isPrivate ? '(Privat)' : '') + (wish.isFavorite ? '(Fav)' : '')}
+            <Text style={styles.rowText} numberOfLines={1}>
+              {wish.title}
             </Text>
+            {wish.isPrivate ? <Icon style={styles.rowIcon} name="lock" size={30}/> : undefined}
+            {wish.isFavorite ? <Icon style={styles.rowIcon} name="favorite" size={30}/> : undefined}
           </View>
         </TouchableHighlight>
       </Swipeout>
@@ -127,8 +136,9 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
     paddingHorizontal: 20,
-    paddingVertical: 10,
     backgroundColor: WMColors.white,
   },
   rowSeparator: {
@@ -140,16 +150,32 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: WMColors.lightText
   },
-  sectionHeader: {
+  rowIcon: {
+    color: WMColors.lightText,
+  },
+  listHeader: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: WMColors.lightText,
+    borderColor: 'white',
+    borderBottomWidth: 1
   },
-  sectionHeaderText: {
+  listHeaderText: {
     fontSize: 18,
     color: 'white',
     backgroundColor: WMColors.lightText,
   },
+  swipeout: {
+    backgroundColor: WMColors.lightText,
+    borderColor: 'white',
+    borderLeftWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
+  },
+  swipeoutIcon: {
+    color: 'white',
+  }
 })
 
 export default connect()(MyWishList)
