@@ -1,6 +1,5 @@
 import {OrderedMap} from 'immutable';
-import {ActionSheetIOS, Platform, Linking} from 'react-native'
-import Share from 'react-native-share';
+import {Platform, Linking, InteractionManager} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 
 import {
@@ -177,8 +176,10 @@ export function loadFriendProfile(contact) {
     Actions.friend()
     Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
       .then((profile) => {
-        const contacts = getState().contacts.contacts
-        dispatch(getFriendProfileSuccess({profile, contacts}))
+        InteractionManager.runAfterInteractions(() => {
+          const contacts = getState().contacts.contacts
+          dispatch(getFriendProfileSuccess({profile, contacts}))
+        })
       })
       .catch(error => {
         dispatch(getFriendProfileFailure(error))
