@@ -142,9 +142,10 @@ export function invite(contact) {
 /*
 * Get Friend profile
 */
-function getFriendProfileRequest() {
+function getFriendProfileRequest(contact) {
   return {
-    type: GET_FRIEND_PROFILE_REQUEST
+    type: GET_FRIEND_PROFILE_REQUEST,
+    payload: contact
   }
 }
 
@@ -164,12 +165,20 @@ function getFriendProfileFailure(error) {
 
 export function loadFriendProfile(contact) {
   return (dispatch, getState) => {
-    dispatch(getFriendProfileRequest())
+
+    const me = getState().global.currentUser
+
+    if (contact.phoneNumber === me.phoneNumber) {
+      //not allowed
+      return;   
+    }
+
+    dispatch(getFriendProfileRequest(contact))
+    Actions.friend()
     Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
       .then((profile) => {
         const contacts = getState().contacts.contacts
-        dispatch(getFriendProfileSuccess({profile, contact, contacts}))
-        Actions.friend()
+        dispatch(getFriendProfileSuccess({profile, contacts}))
       })
       .catch(error => {
         dispatch(getFriendProfileFailure(error))

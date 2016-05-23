@@ -21,6 +21,7 @@ import {NavBar} from '../components/NavBar'
 class Friend extends Component {
 
   props: {
+    isFetching: bool,
     user: User, //me
     friend: User,
     contact: Contact,
@@ -31,33 +32,39 @@ class Friend extends Component {
   constructor() {
     super()
     this.renderProfileView = this.renderProfileView.bind(this)
-    this.renderInviteView = this.renderInviteView.bind(this)
   }
 
   renderProfileView() {
-    const {user, friend, wishes, contact} = this.props
-    return (
-      <View>
+    const {user, friend, wishes, ideas, contact} = this.props
+
+    let profileView
+
+    if (friend.registerd) {
+      profileView = <View>
         {friend.birthday ? <Text>Geburtstag am: {friend.birthday.toString()}</Text> : undefined}
         <Text style={styles.title}>{contact.name}s Wünsche</Text>
         <FriendWishesList wishes={wishes.toArray()} user={user} />
       </View>
-    )
-  }
-
-  renderInviteView() {
-    const {contact} = this.props
-    return (
-      <View>
+    }
+    else {
+      profileView = <View>
         <Text>{contact.name} ist noch nicht dabei.</Text>
         <InviteButton contact={contact} />
+      </View>
+    }
+
+    return (
+      <View>
+        {profileView}
+        <Text style={styles.title}>Meine Ideen für {contact.name}</Text>
+        <NewWishButton style={{height: 50}} text="Neue Idee" toUser={friend}/>
+        <FriendIdeasList wishes={ideas.toArray()} />
       </View>
     )
   }
 
-  
   render() {
-    const {friend, contact, ideas} = this.props
+    const {isFetching, contact} = this.props
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
@@ -65,11 +72,12 @@ class Friend extends Component {
 
         <View style={styles.content}>
           <Text style={styles.title}>Profil von {contact.name}</Text>
-          {friend.registered ? this.renderProfileView() : this.renderInviteView() }
 
-          <Text style={styles.title}>Meine Ideen für {contact.name}</Text>
-          <NewWishButton style={{height: 50}} text="Neue Idee" toUser={friend}/>
-          <FriendIdeasList wishes={ideas.toArray()} />
+          {isFetching? 
+            <Text>Laden...</Text> :
+            this.renderProfileView()
+          }
+
         </View>
       </View>
     )

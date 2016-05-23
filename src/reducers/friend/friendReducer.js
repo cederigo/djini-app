@@ -28,14 +28,14 @@ export default function friendReducer(state = initialState, {type, payload}) {
   switch (type) {
     case GET_FRIEND_PROFILE_REQUEST:
       return state.set('isFetching', true)
+        .set('contact', payload)
 
     case GET_FRIEND_PROFILE_SUCCESS: {
-      const {profile, contact, contacts} = payload
+      const {profile, contacts} = payload
       return state.set('isFetching', false)
         .set('ideas', List(profile.ideas.map((idea) => fromParseWish(idea))))
         .set('wishes', List(profile.wishes.map((wish) => fromParseWish(wish, contacts))))
         .set('user', fromParseUser(profile.user))
-        .set('contact', contact)
         .set('error', null)
     }
 
