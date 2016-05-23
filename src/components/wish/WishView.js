@@ -8,7 +8,7 @@ import FulfillWishButton from './FulfillWishButton'
 import {AppBar, ActionButton} from '../AppBar'
 
 import WMColors from '../../lib/WMColors'
-import {User} from '../../lib/types'
+import {User, Wish} from '../../lib/types'
 
 // Utils
 import {allowEdit, fulfilled, toUser, fulfillable} from '../../lib/wishUtil'
@@ -20,7 +20,7 @@ class WishView extends Component {
 
   props: {
     currentUser: User,
-    wishState: any 
+    wish: Wish 
   }
 
   renderImage() {
@@ -52,8 +52,7 @@ class WishView extends Component {
 
 
   render() {
-    const {dispatch, currentUser, wishState} = this.props
-    const {wish} = wishState
+    const {dispatch, currentUser, wish} = this.props
 
     return ( 
       <View style={styles.container}>
@@ -119,7 +118,6 @@ const styles = StyleSheet.create({
  */
 function select(state) {
   return { 
-    wishState: state.wish,
     currentUser: state.global.currentUser
   };
 }

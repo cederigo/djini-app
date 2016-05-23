@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {View, Switch, StyleSheet, Text, TextInput} from 'react-native';
+import {View, StyleSheet, Text, TextInput} from 'react-native';
 
 import {AppBar, ActionButton} from '../AppBar'
 import WMButton from '../WMButton'
@@ -12,12 +12,16 @@ import {saveWish, onWishFieldChange} from '../../actions/wishes'
 // Utils
 import {isIdea} from '../../lib/wishUtil'
 import WMColors from '../../lib/WMColors'
+import {Wish} from '../../lib/types'
 
 class WishEditView extends Component {
 
+  props: {
+    wish: Wish
+  }
+
   render() {
-    const {dispatch, wishState} = this.props
-    const {wish, isFetching} = wishState
+    const {dispatch, wish} = this.props
     const title = isIdea(wish) ? 'Idee erfassen' : 'Wunsch erfassen'
   
     return ( 
@@ -127,12 +131,4 @@ const styles = StyleSheet.create({
   }
 })
 
-/**
- * Redux boilerplate
- */
-function select(state) {
-  return { 
-    wishState: state.wish
-  };
-}
-export default connect(select)(WishEditView)
+export default connect()(WishEditView)

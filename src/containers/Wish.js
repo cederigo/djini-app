@@ -15,8 +15,8 @@ class Wish extends Component {
       <View style={styles.container}>
         <StatusBar translucent={true} />
         {wishState.editMode ?
-          <WishEditView/> :
-          <WishView/>
+          <WishEditView wish={wishState.wish}/> :
+          <WishView wish={wishState.wish}/>
         }
       </View>
     )
