@@ -39,7 +39,7 @@ class Friend extends Component {
 
     let profileView
 
-    if (friend.registerd) {
+    if (friend.registered) {
       profileView = <View>
         {friend.birthday ? <Text>Geburtstag am: {friend.birthday.toString()}</Text> : undefined}
         <Text style={styles.title}>{contact.name}s Wünsche</Text>
