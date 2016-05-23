@@ -34,6 +34,7 @@ export default class PhoneNumberForm extends Component {
               autoFocus={true}
               autoCorrect={false}
               keyboardType="phone-pad"
+              underlineColorAndroid="transparent"
               onSubmitEditing={onNext}
               clearButtonMode="while-editing"
               onChangeText={(text) => {

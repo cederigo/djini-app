@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { Actions } from 'react-native-router-flux'
-import {View, StyleSheet, StatusBar} from 'react-native';
+import {View, StyleSheet, StatusBar, Platform} from 'react-native';
 
 import WMColors from '../lib/WMColors'
 
@@ -151,6 +151,7 @@ const formStyles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: WMColors.lightText,
+    padding: Platform.select({android: 0}),
   }
 })
 
