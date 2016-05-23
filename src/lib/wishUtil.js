@@ -2,10 +2,6 @@ export function allowEdit(wish, user) {
   return wish.fromUserId === user.id
 } 
 
-export function allowDelete(wish, user) {
-  return allowEdit(wish, user)
-}
-
 export function fulfillable(wish, user) {
   return !fulfilled(wish) && !toUser(wish, user) && !fromUser(wish, user)
 }
@@ -28,11 +24,4 @@ export function fromUser(wish, user) {
 
 export function isIdea(wish) {
   return wish.fromUserId !== wish.toUserId
-}
-
-export function type(wish) {
-  if (isIdea(wish)) {
-    return 'Idee'
-  } 
-  return 'Wunsch'
 }

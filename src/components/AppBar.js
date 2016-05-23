@@ -19,7 +19,7 @@ export class AppBar extends Component {
         <View style={styles.left}>
           {showBackButton ? <ActionButton onPress={onBack} iconName="chevron-left" style={styles.backButton}/> : undefined}
         </View>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title} numberOfLines={1}>{title}</Text>
         <View style={styles.right}>
           {this.props.children}
         </View>

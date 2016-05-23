@@ -3,36 +3,28 @@ import Immutable from 'immutable';
 
 import React, {Component, PropTypes} from 'react';
 import {View, StyleSheet, StatusBar} from 'react-native';
-import EditWishForm from '../components/wish/EditWishForm'
-import ShowWishForm from '../components/wish/ShowWishForm'
 
-//Actions
-import {Actions} from 'react-native-router-flux';
+import WishView from '../components/wish/WishView'
+import WishEditView from '../components/wish/WishEditView'
 
 class Wish extends Component {
 
   render() {
-    const {wishState, globalState, dispatch} = this.props
-    
-    let WishForm
-    if (wishState.editMode) {
-      WishForm = <EditWishForm/>
-    } else {
-      WishForm = <ShowWishForm/>
-    }
-    
+    const {wishState} = this.props
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-        {WishForm}
+        {wishState.editMode ?
+          <WishEditView/> :
+          <WishView/>
+        }
       </View>
     )
   }
 }
 
 Wish.propTypes = {
-  wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  globalState: PropTypes.instanceOf(Immutable.Record).isRequired
+  wishState: PropTypes.instanceOf(Immutable.Record).isRequired
 }
 
 const styles = StyleSheet.create({
@@ -47,7 +39,6 @@ const styles = StyleSheet.create({
 function select(state) {
   return { 
     wishState: state.wish,
-    globalState: state.global
   };
 }
 
