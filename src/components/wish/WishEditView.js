@@ -1,18 +1,19 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {View, Switch, StyleSheet, Text, TextInput, Platform} from 'react-native';
+import {View, Switch, StyleSheet, Text, TextInput} from 'react-native';
 
+import {AppBar, ActionButton} from '../AppBar'
 import WMButton from '../WMButton'
-import {NavBar, NavButton} from '../NavBar'
 
 // Actions
 import {saveWish, onWishFieldChange} from '../../actions/wishes'
 
 // Utils
-import {isIdea} from '../../lib/wishUtil'
+import {isIdea} from '../../lib/wishUtil'
+import WMColors from '../../lib/WMColors'
 
-export default class EditWishForm extends Component {
+class WishEditView extends Component {
 
   constructor() {
     super()
@@ -36,57 +37,72 @@ export default class EditWishForm extends Component {
   render() {
     const {dispatch, wishState} = this.props
     const {wish, isFetching} = wishState
+    const title = isIdea(wish) ? 'Idee erfassen' : 'Wunsch erfassen'
   
     return ( 
       <View style={styles.container}>
-
-        <NavBar>
-         <NavButton
-           onPress={() => dispatch(saveWish(wish))}
-           text={"Speichern"}
-           enabled={wish.title && !isFetching}
-         />
-        </NavBar>
+        <AppBar showBackButton={true} title={title}>
+          <ActionButton iconName="save" onPress={() => dispatch(saveWish(wish))}/>
+        </AppBar>
 
         <View style={styles.content}>
+
+          <Text style={styles.label}>Titel</Text>
           <TextInput
             style={styles.input}
             editable={true}
-            placeholder="Titel"
             onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
             autoCapitalize="none"
             autoCorrect={false}
             value={wish.title}
           />
+
+          <Text style={styles.label}>Beschreibung</Text>
           <TextInput
             style={styles.input}
             editable={true}
-            placeholder="Beschreibung"
             onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
             autoCapitalize="none"
             autoCorrect={false}
             value={wish.description}
           />
+
+          <Text style={styles.label}>URL</Text>
           <TextInput
             style={styles.input}
             editable={true}
-            placeholder="URL"
             keyboardType="url"   
             onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
             autoCapitalize="none"
             autoCorrect={false}
             value={wish.url}
           />
+
+          <Text style={styles.label}>Wo gesehen</Text>
           <TextInput
             style={styles.input}
             editable={true}
-            placeholder="Gesehen bei"
             onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
             autoCapitalize="none"
             autoCorrect={false}
             value={wish.seenAt}
           />
-          {isIdea(wish) ? undefined : this.renderPrivacyView()}
+
+          {!isIdea(wish) ? 
+            <View style={styles.buttons}>
+              <WMButton 
+                style={styles.button}
+                iconName={wish.isPrivate ? 'lock' : 'lock-open'}
+                caption={wish.isPrivate ? 'Privat' : 'Öffentlich'}
+                onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
+              <WMButton
+                style={styles.button}
+                iconName={wish.isFavorite ? 'favorite' : 'favorite-border'}
+                onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
+            </View> :
+            undefined
+          }
+
         </View>
       </View>
     )
@@ -96,16 +112,29 @@ export default class EditWishForm extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: WMColors.background
   },
   content: {
-    flex: 1,
-    backgroundColor: 'white',
-    padding: 10,
-    alignItems: 'flex-start'
+    marginHorizontal: 20
+  },
+  label: {
+    marginTop: 10,
+    fontSize: 16,
+    color: WMColors.darkText
   },
   input: {
-    marginLeft: Platform.OS === 'android' ? -5 : 0,
-    height: 50,
+    fontSize: 16,
+    height: 40,
+    color: WMColors.lightText,
+    backgroundColor: WMColors.white,
+    paddingLeft: 10
+  },
+  buttons: {
+    marginTop: 20,
+    flexDirection: 'row',
+  },
+  button: {
+    marginRight: 10
   },
   privacy: {
     alignSelf: 'stretch',
@@ -125,4 +154,4 @@ function select(state) {
     wishState: state.wish
   };
 }
-export default connect(select)(EditWishForm)
+export default connect(select)(WishEditView)

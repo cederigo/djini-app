@@ -11,12 +11,12 @@ import WMColors from '../../lib/WMColors'
 import {User} from '../../lib/types'
 
 // Utils
-import {allowEdit, fulfilledByUser, fulfilled, toUser, fulfillable} from '../../lib/wishUtil'
+import {allowEdit, fulfilled, toUser, fulfillable} from '../../lib/wishUtil'
 
 // Actions
 import {editWish, deleteWish} from '../../actions/wishes'
 
-export default class ShowWishForm extends Component {
+class WishView extends Component {
 
   props: {
     currentUser: User,
@@ -39,18 +39,14 @@ export default class ShowWishForm extends Component {
       return
     }
 
-    if (fulfilledByUser(wish, currentUser)) {
-      return <Text style={styles.text}>Dieser Wunsch wird von mir erfüllt</Text>
-    }
-    if (wish.fulfillerName) {
-      return <Text style={styles.text}>Dieser Wunsch wird von {wish.fulfillerName} erfüllt</Text>
-    } 
-    if (fulfilled(wish)) {
-      return <Text style={styles.text}>Dieser Wunsch wird erfüllt</Text>
-    }
-
     if (fulfillable(wish, currentUser)) {
       return <FulfillWishButton wish={wish}/>
+    }
+    else if (wish.fulfillerName) {
+      return <Text style={styles.text}>Dieser Wunsch wird von {wish.fulfillerName} erfüllt</Text>
+    }
+    else if (fulfilled(wish)) {
+      return <Text style={styles.text}>Dieser Wunsch wird erfüllt</Text>
     }
   }
 
@@ -62,7 +58,7 @@ export default class ShowWishForm extends Component {
     return ( 
       <View style={styles.container}>
         <AppBar showBackButton={true} title={wish.title}>
-          {allowEdit(wish, currentUser) ? <ActionButton iconName="delete" onPress={() => dispatch(deleteWish(wish))}/> : undefined }
+          {allowEdit(wish, currentUser) ? <ActionButton iconName="delete" onPress={() => dispatch(deleteWish(wish, 'details'))}/> : undefined }
           {allowEdit(wish, currentUser) ? <ActionButton iconName="edit" onPress={() => dispatch(editWish(wish))}/> : undefined }
         </AppBar>
 
@@ -127,4 +123,4 @@ function select(state) {
     currentUser: state.global.currentUser
   };
 }
-export default connect(select)(ShowWishForm)
+export default connect(select)(WishView)

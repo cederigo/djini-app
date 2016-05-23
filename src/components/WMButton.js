@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import WMColors from '../lib/WMColors'
 
 export default class WMButton extends Component {
@@ -7,14 +8,15 @@ export default class WMButton extends Component {
   props: {
     // type: 'primary' | 'secondary' | 'bordered';
     // icon: number;
-    disabled: boolean;
-    caption: string;
-    style: any;
-    onPress: () => void;
+    disabled: boolean,
+    caption: string,
+    style: any,
+    onPress: () => void,
+    iconName: ?string
   };
 
   render() {
-    const {caption, disabled, onPress} = this.props
+    const {caption, disabled, onPress, iconName} = this.props
     return (
       <TouchableOpacity
         accessibilityTraits="button"
@@ -22,6 +24,7 @@ export default class WMButton extends Component {
         disabled={disabled}
         activeOpacity={0.8}
         style={[styles.container, this.props.style]}>
+        {iconName ? <Icon name={iconName} style={styles.icon} size={20}/> : undefined }
         <Text style={[styles.text, disabled ? styles.disabled : undefined]}>
           {caption}
         </Text>
@@ -33,16 +36,20 @@ export default class WMButton extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: WMColors.white,
+    backgroundColor: WMColors.whiteThree,
     padding: 15,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flexDirection: 'row'
   },
   text: {
-    letterSpacing: 1,
     fontSize: 16,
     fontWeight: '500',
     color: WMColors.darkText
+  },
+  icon: {
+    color: WMColors.darkText,
+      paddingRight: 5
   },
   disabled: {
     color: WMColors.disabledText

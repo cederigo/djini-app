@@ -109,7 +109,7 @@ export function saveWish(wish: Record<Wish>) {
   }
 }
 
-export function deleteWish(wish: Wish) {
+export function deleteWish(wish: Wish, source: ?string = 'swipe') {
   return dispatch => {
     if (!wish.id) {
       //nothing to do
@@ -120,6 +120,9 @@ export function deleteWish(wish: Wish) {
       ParseWish.createWithoutData(wish.id).destroy()
         .then(() => {
           dispatch({type: WISH_DELETED, payload: wish})
+          if (source === 'details') {
+            Actions.pop() //go back
+          }
         })
     }
 

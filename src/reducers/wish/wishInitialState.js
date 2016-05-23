@@ -11,6 +11,7 @@ const InitialState = Record({
     url: '',
     seenAt: '',
     isPrivate: false,
+    isFavorite: false,
     fromUserId: '',
     toUserId: '',
     fulfillerId: '',

@@ -11,12 +11,13 @@ import {
 } from 'react-native';
 
 import {Wish, User, Contact} from '../lib/types'
+import WMColors from '../lib/WMColors'
 import NewWishButton from '../components/NewWishButton'
 
 import FriendWishesList from '../components/FriendWishesList'
 import FriendIdeasList from '../components/FriendIdeasList'
 import InviteButton from '../components/InviteButton'
-import {NavBar} from '../components/NavBar'
+import {AppBar} from '../components/AppBar'
 
 class Friend extends Component {
 
@@ -68,11 +69,9 @@ class Friend extends Component {
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-        <NavBar/>
+        <AppBar showBackButton={true} title={contact.name}/>
 
         <View style={styles.content}>
-          <Text style={styles.title}>Profil von {contact.name}</Text>
-
           {isFetching? 
             <Text>Laden...</Text> :
             this.renderProfileView()
@@ -86,7 +85,8 @@ class Friend extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: WMColors.background
   },
   content: {
     padding: 10,
