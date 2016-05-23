@@ -15,25 +15,6 @@ import WMColors from '../../lib/WMColors'
 
 class WishEditView extends Component {
 
-  constructor() {
-    super()
-    this.renderPrivacyView = this.renderPrivacyView.bind(this)
-  }
-
-  renderPrivacyView() {
-    const {dispatch, wishState} = this.props
-    const {wish} = wishState
-    return (
-     <View style={styles.privacy}>
-      <Switch
-        disabled={false}
-        onValueChange={(value) => dispatch(onWishFieldChange('isPrivate', value))}
-        value={wish.isPrivate} />
-      <Text style={styles.privacyText}>{wish.isPrivate ? 'Der Wunsch ist privat' : 'Der Wunsch ist öffentlich'}</Text>
-     </View>
-   )
-  }
-
   render() {
     const {dispatch, wishState} = this.props
     const {wish, isFetching} = wishState

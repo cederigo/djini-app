@@ -101,6 +101,7 @@ export function saveWish(wish: Record<Wish>) {
         dispatch(wishUpdated(data))
       } else {
         dispatch(wishAdded(data))
+        Actions.pop()
       }
     })
     .catch((error) => {
