@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react'
-import { AppRegistry, View, Text, StyleSheet, Dimensions} from 'react-native'
-import { Scene, Router } from 'react-native-router-flux'
+import { AppRegistry, View, Text, StyleSheet, Dimensions, BackAndroid} from 'react-native'
+import { Scene, Router, Actions } from 'react-native-router-flux'
 import { Provider } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Parse from 'parse/react-native'
@@ -62,6 +62,13 @@ class TabIcon extends React.Component {
       )
   }
 }
+
+BackAndroid.addEventListener('hardwareBackPress', function() {
+  if (Actions.pop()) {
+    return true;
+  }
+  return false;
+});
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -124,9 +131,9 @@ export default function native(platform) {
 
               <Scene key="login" type="replace" component={Login} />
               
-              <Scene key="friend" panHandlers={null} direction="vertical" component={Friend} title="Freund"/>
+              <Scene key="friend" direction="vertical" component={Friend} title="Freund"/>
 
-              <Scene key="wish" panHandlers={null} direction="vertical" component={Wish} title="Wunsch"/>
+              <Scene key="wish" direction="vertical" component={Wish} title="Wunsch"/>
 
               <Scene key="home" type="replace" panHandlers={null} tabs={true} tabBarStyle={styles.tabBar}>
                 <Scene key="wishes" initial={true} component={Wishes} title="Wünsche" icon={TabIcon} iconName="cake"/>
