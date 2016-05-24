@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     borderColor: WMColors.lightText,
     borderTopWidth: 1,
     height: 60,
-    color: WMColors.lightText,
     backgroundColor: WMColors.background,
     alignItems: 'flex-start',
     justifyContent: 'flex-start'
@@ -86,7 +85,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    color: WMColors.lightText,
     backgroundColor: WMColors.background,
   },
   tabSelected: {
@@ -135,7 +133,7 @@ export default function native(platform) {
 
               <Scene key="wish" component={Wish} title="Wunsch"/>
 
-              <Scene key="home" type="replace" panHandlers={null} tabs={true} tabBarStyle={styles.tabBar}>
+              <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
                 <Scene key="wishes" initial={true} component={Wishes} title="Wünsche" icon={TabIcon} iconName="cake"/>
                 <Scene key="contacts" component={Contacts} title="Kontakte" icon={TabIcon} iconName="group"/>
                 <Scene key="pots" component={Pots} title="Pots" icon={TabIcon} iconName="folder-shared"/>
