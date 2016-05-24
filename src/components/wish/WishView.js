@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Linking} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import FulfillWishButton from './FulfillWishButton'
@@ -34,6 +34,19 @@ class WishView extends Component {
     )
   }
 
+  openURL(url) {
+    if (!url) {
+      return
+    }
+
+    if (!/http:|https:/i.test(url)) {
+      //try to prepend http://
+      Linking.openURL('http://' + url)
+    } else {
+      Linking.openURL(url)
+    }
+  }
+
   renderFulfillment(wish, currentUser) {
     if(toUser(wish, currentUser)) {
       //its for me, so I'm not interested
@@ -64,6 +77,9 @@ class WishView extends Component {
         {this.renderImage()}
 
         <View style={styles.details}>
+          <Text style={styles.label}>Titel</Text>
+          <Text style={styles.text}>{wish.title || '-'}</Text>
+
           <Text style={styles.label}>Beschreibung</Text>
           <Text style={styles.text}>{wish.description || '-'}</Text>
 
@@ -71,7 +87,9 @@ class WishView extends Component {
           <Text style={styles.text}>{wish.seenAt || '-'}</Text>
 
           <Text style={styles.label}>URL</Text>
-          <Text style={styles.text}>{wish.url || '-'}</Text>
+          <TouchableOpacity onPress={() => this.openURL(wish.url)}>
+            <Text style={styles.text}>{wish.url || '-'}</Text>
+          </TouchableOpacity>
 
           <View style={styles.fulfillment}>
             {this.renderFulfillment(wish, currentUser)}
