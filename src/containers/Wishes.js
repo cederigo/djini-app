@@ -44,7 +44,7 @@ class Wishes extends Component {
         </AppBar>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          bounces={false}>
+          bounces={true}>
           <DjiniButton toUser={user}/>
           {isFetching ? 
             <Text style={styles.loading}>Laden..</Text> :
