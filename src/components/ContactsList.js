@@ -22,11 +22,12 @@ class ContactsList extends Component {
       sectionHeaderHasChanged: (s1, s2) => s1 != s2
     })
 
-    this._renderRow = this._renderRow.bind(this)
-    this._onRefresh = this._onRefresh.bind(this)
+    this.renderRow = this.renderRow.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
+    this.renderFooter = this.renderFooter.bind(this)
 
     this.state = {
-      dataSource: ds.cloneWithRowsAndSections(this._getListViewData(this.props)),
+      dataSource: ds.cloneWithRowsAndSections(this.getListViewData(this.props)),
       refreshing: false
     }
   }
@@ -34,7 +35,7 @@ class ContactsList extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.filterText !== this.props.filterText || nextProps.contacts !== this.props.contacts) {
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(this._getListViewData(nextProps)),
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(this.getListViewData(nextProps)),
         refreshing: false
       })
       this.refs.listView.scrollTo({animated: false})
@@ -51,26 +52,27 @@ class ContactsList extends Component {
         keyboardShouldPersistTaps={true}
         keyboardDismissMode="on-drag"
         pageSize={5}
-        renderRow={this._renderRow}
-        renderSeparator={this._renderSeparator}
-        renderSectionHeader={this._renderSectionHeader}
+        renderRow={this.renderRow}
+        renderSeparator={this.renderSeparator}
+        renderSectionHeader={this.renderSectionHeader}
+        renderFooter={this.renderFooter}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh}
+            onRefresh={this.onRefresh}
           />
         }
       />
     )
   }
 
-  _onRefresh() {
+  onRefresh() {
     const {dispatch} = this.props
     this.setState({refreshing: true})
     dispatch(refreshContacts('user'))
   }
 
-  _getListViewData(props) {
+  getListViewData(props) {
     const {filterText, contacts} = props
     const r = new RegExp(filterText)
 
@@ -85,7 +87,7 @@ class ContactsList extends Component {
     return data
   }
 
-  _swipeoutBtns (contact) {
+  swipeoutBtns (contact) {
     //TODO icons instead of text
     const {dispatch} = this.props
     return [
@@ -105,12 +107,12 @@ class ContactsList extends Component {
     dismissKeyboard()
   }
 
-  _renderRow (contact) {
+  renderRow (contact) {
 
     const {dispatch} = this.props
 
     return (
-      <Swipeout right={this._swipeoutBtns(contact)} autoClose={true}>
+      <Swipeout right={this.swipeoutBtns(contact)} autoClose={true}>
         <TouchableHighlight onPress={() => this.showContact(contact)}>
           <View style={styles.row}>
             <Text style={styles.text}>
@@ -127,7 +129,7 @@ class ContactsList extends Component {
     );
   }
 
-  _renderSectionHeader(data, sectionId) {
+  renderSectionHeader(data, sectionId) {
     return (
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionHeaderText}>{sectionId}</Text>
@@ -135,10 +137,17 @@ class ContactsList extends Component {
     );
   }
 
-  _renderSeparator(sectionID, rowID) {
+  renderSeparator(sectionID, rowID) {
     return (
       <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}/>
     );
+  }
+
+  renderFooter() {
+    if (this.state.dataSource.getRowCount() !== 0) {
+      return //nothing to render
+    }
+    return (<Text style={styles.emptyList}>Keine Kontakte gefunden</Text>)
   }
 }
 
@@ -182,6 +191,10 @@ const styles = StyleSheet.create({
     width: 50,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  emptyList: {
+    alignSelf: 'center',
+    margin: 50
   }
 })
 
