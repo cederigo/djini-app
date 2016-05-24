@@ -30,7 +30,7 @@
     "react": "^15.0.2",
     "react-native": "^0.26.0",
     "react-native-contacts": "^0.2.5",
-    "react-native-router-flux": "aksonov/react-native-router-flux#0.26-wip",
+    "react-native-router-flux": "3.26.1",
     "react-native-share": "^1.0.9",
     "react-native-swipeout": "atvenu/react-native-swipeout#patch-1",
     "react-native-vector-icons": "^2.0.2",

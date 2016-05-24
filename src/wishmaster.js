@@ -131,9 +131,9 @@ export default function native(platform) {
 
               <Scene key="login" type="replace" component={Login} />
               
-              <Scene key="friend" direction="vertical" component={Friend} title="Freund"/>
+              <Scene key="friend" component={Friend} title="Freund"/>
 
-              <Scene key="wish" direction="vertical" component={Wish} title="Wunsch"/>
+              <Scene key="wish" component={Wish} title="Wunsch"/>
 
               <Scene key="home" type="replace" panHandlers={null} tabs={true} tabBarStyle={styles.tabBar}>
                 <Scene key="wishes" initial={true} component={Wishes} title="Wünsche" icon={TabIcon} iconName="cake"/>
