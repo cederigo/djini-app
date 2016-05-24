@@ -30,6 +30,7 @@
     "react": "^15.0.2",
     "react-native": "^0.26.0",
     "react-native-contacts": "^0.2.5",
+    "react-native-image-picker": "^0.18.17",
     "react-native-router-flux": "3.26.1",
     "react-native-share": "^1.0.9",
     "react-native-swipeout": "atvenu/react-native-swipeout#patch-1",
