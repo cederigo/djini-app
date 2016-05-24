@@ -22,7 +22,7 @@ import {
   INVITE_CONTACT
 } from '../lib/constants'
 
-import contacts from '../lib/contacts'
+import Contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
 
@@ -90,8 +90,9 @@ export function refreshContacts(source: ?string = 'app') {
       return;
     }
     dispatch(contactsRequest())
-    return contacts.getAll()
+    return Contacts.getAll()
       .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
+      .then((contacts) => Contacts.prepareForSearch(contacts))
       .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
       .then((contacts) => dispatch(contactsSuccess(contacts)))
       .then(() => dispatch(saveContacts()))

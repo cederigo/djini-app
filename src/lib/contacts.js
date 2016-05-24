@@ -3,6 +3,7 @@
  */
 
 import contacts from 'react-native-contacts'
+import {transliterate} from './transliteration'
 import {formatNumber} from './phoneUtil' 
 
 class Contacts {
@@ -19,6 +20,13 @@ class Contacts {
   _isValidContact(raw) {
     return raw.phoneNumbers && raw.phoneNumbers.length
       && (raw.givenName || raw.familyName)
+  }
+
+  prepareForSearch(contacts) {
+    Object.values(contacts).forEach((contact) => {
+      contact.nameForSearch = transliterate(contact.name.toLowerCase())
+    })
+    return contacts
   }
 
   getAll() {

@@ -72,12 +72,12 @@ class ContactsList extends Component {
 
   _getListViewData(props) {
     const {filterText, contacts} = props
-    const r = new RegExp(filterText, 'i')
+    const r = new RegExp(filterText)
 
     var data = {'Favoriten': [], 'Kontakte': []}
 
     contacts.forEach(contact => {
-      if (r.test(contact.name)) {
+      if (r.test(contact.nameForSearch)) {
         data[contact.isFavorite ? 'Favoriten' : 'Kontakte'].push(contact)
       }
     })

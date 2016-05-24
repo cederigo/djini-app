@@ -32,6 +32,8 @@ class Contacts extends Component {
         <View style={styles.toolbar}>
           <TextInput
             onChangeText={(text) => dispatch(onSearchFieldChange(text))}
+            autoCapitalize={false}
+            clearButtonMode="while-editing"
             style={styles.searchBar}
             placeholder="Kontakte suchen ..."
             value={filterText}

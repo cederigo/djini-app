@@ -8,7 +8,8 @@ export type User = {
 
 export type Contact = {
   phoneNumber: string,
-  name: string
+  name: string,
+  nameForSearch: string
 }
 
 export type Wish = {
