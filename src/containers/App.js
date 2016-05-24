@@ -17,6 +17,7 @@ import {version} from '../lib/config'
 import WMColors from '../lib/WMColors'
 
 /* actions */
+import {refreshContacts} from '../actions/contacts';
 import {loginSuccess, loginFailure} from '../actions/authActions';
 import {updateInstallation} from '../actions/installation'
 
@@ -44,6 +45,7 @@ class App extends Component {
           throw new Error('User not logged in')
         }
         dispatch(loginSuccess(parseUser))
+        dispatch(refreshContacts())
       })
       .catch((error) => {
         dispatch(loginFailure(error))

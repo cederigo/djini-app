@@ -17,7 +17,7 @@ class ContactsWizard extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Erklärung warum wir Zugriff auf dein Adressbuch wollen</Text>
-        <WMButton disabled={isFetching} style={styles.button} onPress={() => dispatch(refreshContacts())} caption="Auf Kontakte zugreifen" />
+        <WMButton disabled={isFetching} style={styles.button} onPress={() => dispatch(refreshContacts('user'))} caption="Auf Kontakte zugreifen" />
       </View>
     )
   }

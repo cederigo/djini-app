@@ -8,7 +8,7 @@ export default class ContactsPermission extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Kein Zugriff auf dein Adressbuch</Text>
-        <Text style={styles.text}>Gehe zu Settings > Wishmaster</Text>
+        <Text style={styles.text}>Gehe zu Settings > Djini</Text>
       </View>
     )
   }

@@ -81,12 +81,14 @@ export function contactsFailure(error) {
  * Read local contacts from phonebook (name & phoneNumber)
  * and merge with users on server.
  *
- * For each matching <contact, user> pair the server adds these attributes:
- *  - id 
- *  - birthday
  */
-export function refreshContacts() {
-  return (dispatch) => {
+export function refreshContacts(source: ?string = 'app') {
+  return (dispatch, getState) => {
+    if (source === 'app' && getState().contacts.pristine) {
+      //Don't try to access contacts on app startup when state is pristine.
+      //We want the user to actively trigger the permission dialog
+      return;
+    }
     dispatch(contactsRequest())
     return contacts.getAll()
       .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))

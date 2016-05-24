@@ -23,12 +23,16 @@ const initialState = new InitialState;
 export default function contactsReducer(state = initialState, {type, payload}) {
   switch(type) {
     case RESTORE_CONTACTS_REQUEST:
+      return state.set('isFetching', true)
+
     case CONTACTS_REQUEST:
       return state.set('isFetching', true)
+        .set('pristine', false)
 
     case RESTORE_CONTACTS_SUCCESS: {
       const contacts = OrderedMap(payload)
       return state.set('isFetching', false)
+        .set('pristine', false) //In pristine state restoring contacts fails. So if we succeed, we can safely assume we are not in pristine state
         .set('contacts', contacts)
     }
 

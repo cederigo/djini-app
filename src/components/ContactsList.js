@@ -2,14 +2,15 @@ import Immutable from 'immutable'
 import { connect } from 'react-redux'
 import dismissKeyboard from 'dismissKeyboard'
 import React, {Component, PropTypes} from 'react';
-import {StyleSheet, View, ListView, TouchableHighlight, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, View, ListView, TouchableHighlight, TouchableOpacity, Text, RefreshControl} from 'react-native';
 import Swipeout from 'react-native-swipeout'
 
 import {
   toggleFavorite,
   invite,
   loadFriendProfile,
-  onSearchFieldChange
+  onSearchFieldChange,
+  refreshContacts
 } from '../actions/contacts'
 
 class ContactsList extends Component {
@@ -22,16 +23,19 @@ class ContactsList extends Component {
     })
 
     this._renderRow = this._renderRow.bind(this)
+    this._onRefresh = this._onRefresh.bind(this)
 
     this.state = {
-      dataSource: ds.cloneWithRowsAndSections(this._getListViewData(this.props))
+      dataSource: ds.cloneWithRowsAndSections(this._getListViewData(this.props)),
+      refreshing: false
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.filterText !== this.props.filterText || nextProps.contacts !== this.props.contacts) {
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(this._getListViewData(nextProps))
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(this._getListViewData(nextProps)),
+        refreshing: false
       })
       this.refs.listView.scrollTo({animated: false})
     }
@@ -50,8 +54,20 @@ class ContactsList extends Component {
         renderRow={this._renderRow}
         renderSeparator={this._renderSeparator}
         renderSectionHeader={this._renderSectionHeader}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }
       />
     )
+  }
+
+  _onRefresh() {
+    const {dispatch} = this.props
+    this.setState({refreshing: true})
+    dispatch(refreshContacts('user'))
   }
 
   _getListViewData(props) {
