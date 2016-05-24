@@ -38,6 +38,7 @@ class WishEditView extends Component {
             editable={true}
             onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
             autoCapitalize="none"
+            clearButtonMode="while-editing"
             autoCorrect={false}
             value={wish.title}
           />
@@ -48,6 +49,7 @@ class WishEditView extends Component {
             editable={true}
             onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
             autoCapitalize="none"
+            clearButtonMode="while-editing"
             autoCorrect={false}
             value={wish.description}
           />
@@ -59,6 +61,7 @@ class WishEditView extends Component {
             keyboardType="url"   
             onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
             autoCapitalize="none"
+            clearButtonMode="while-editing"
             autoCorrect={false}
             value={wish.url}
           />
@@ -69,6 +72,7 @@ class WishEditView extends Component {
             editable={true}
             onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
             autoCapitalize="none"
+            clearButtonMode="while-editing"
             autoCorrect={false}
             value={wish.seenAt}
           />
@@ -78,7 +82,6 @@ class WishEditView extends Component {
               <WMButton 
                 style={styles.button}
                 iconName={wish.isPrivate ? 'lock' : 'lock-open'}
-                caption={wish.isPrivate ? 'Privat' : 'Öffentlich'}
                 onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
               <WMButton
                 style={styles.button}

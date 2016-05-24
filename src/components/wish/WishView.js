@@ -5,6 +5,7 @@ import {StyleSheet, View, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import FulfillWishButton from './FulfillWishButton'
+import WMButton from '../WMButton'
 import {AppBar, ActionButton} from '../AppBar'
 
 import WMColors from '../../lib/WMColors'
@@ -57,7 +58,6 @@ class WishView extends Component {
     return ( 
       <View style={styles.container}>
         <AppBar showBackButton={true} title={wish.title}>
-          {allowEdit(wish, currentUser) ? <ActionButton iconName="delete" onPress={() => dispatch(deleteWish(wish, 'details'))}/> : undefined }
           {allowEdit(wish, currentUser) ? <ActionButton iconName="edit" onPress={() => dispatch(editWish(wish))}/> : undefined }
         </AppBar>
 
@@ -76,6 +76,15 @@ class WishView extends Component {
           <View style={styles.fulfillment}>
             {this.renderFulfillment(wish, currentUser)}
           </View>
+
+          {allowEdit(wish, currentUser) ? 
+            <WMButton style={styles.button}
+              iconName="delete"
+              caption="Löschen"
+              onPress={() => dispatch(deleteWish(wish, 'details'))}
+            /> :
+            undefined
+          }
         </View>
       </View>
     )
@@ -110,6 +119,9 @@ const styles = StyleSheet.create({
   },
   fulfillment: {
     marginTop: 20
+  },
+  button: {
+    marginTop: 10
   }
 })
 
