@@ -3,7 +3,8 @@ export function allowEdit(wish, user) {
 } 
 
 export function fulfillable(wish, user) {
-  return !fulfilled(wish) && !toUser(wish, user) && !fromUser(wish, user)
+  return (!fulfilled(wish) || fulfilledByUser(wish, user))
+    && !(toUser(wish, user) || fromUser(wish, user)) //not my wish
 }
 
 export function fulfilledByUser(wish, user) {

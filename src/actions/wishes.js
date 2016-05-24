@@ -31,7 +31,7 @@ function toParseWish(wish: Record<Wish>) {
 
     fromUser: ParseUser.createWithoutData(wish.fromUserId),
     toUser: ParseUser.createWithoutData(wish.toUserId),
-    fulfiller: wish.fulfillerId ? ParseUser.createWithoutData(wish.fulfillerId) : undefined
+    fulfiller: wish.fulfillerId ? ParseUser.createWithoutData(wish.fulfillerId) : null
   })
 }
 
