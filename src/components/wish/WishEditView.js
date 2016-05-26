@@ -76,15 +76,16 @@ class WishEditView extends Component {
       if (response.didCancel || response.error) {
         return;
       }
-      dispatch(onWishFieldChange('imageURL', null)) //clear image
 
-      if (response.customButton === 'remove-image') {
-        return 
-      }
+      //clear image
+      dispatch(onWishFieldChange('imageURL', null)) 
       this.setState({
         imageSource: {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true}
       })
-      this.uploadImage(response.data)
+
+      if (response.data) {
+        this.uploadImage(response.data)
+      }
     })
   }
 
@@ -101,7 +102,7 @@ class WishEditView extends Component {
         {image}
         {uploadFailure ? 
           <Icon style={styles.icon} name="error" size={40}/> :
-          <Icon style={styles.icon} name="edit" size={40}/>
+          <Icon style={styles.icon} name="photo-camera" size={40}/>
         }
       </TouchableOpacity>
     )

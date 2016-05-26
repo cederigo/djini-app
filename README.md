@@ -1,5 +1,23 @@
 # README #
 
+## Making a release ##
+
+Edit the version in the following files (I know, its a pane)
+ - package.json
+ - src/lib/config.js
+ - ios/Wishmaster/Info.plist
+ - android/app/src/main/AndroidManifest.xml
+
+Build IOS release in XCode
+ - edit ios/Wishmaster/AppDelegate.m (comment OPTION 1, uncomment OPTION 2)
+ - On the top choose "Generic iOS Device"
+ - Build archive (Product -> Archive)
+
+Build Android release
+```
+$ cd android && ./gradlew assembleRelease
+```
+
 ### Requirements ###
 
 1. OS X - This guide assumes OS X which is needed for iOS development.
