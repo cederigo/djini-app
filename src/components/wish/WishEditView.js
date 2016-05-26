@@ -16,7 +16,7 @@ import WMColors from '../../lib/WMColors'
 import {Wish} from '../../lib/types'
 
 const IMAGE_WIDTH = Dimensions.get('window').width
-const IMAGE_HEIGHT = 150
+const IMAGE_HEIGHT = 200
 
 class WishEditView extends Component {
 
@@ -53,7 +53,7 @@ class WishEditView extends Component {
   showImagePicker() {
     const {dispatch} = this.props
     let options = {
-      //title: 'Select Avatar', // specify null or empty string to remove the title
+      title: 'Bild auswählen',
       cancelButtonTitle: 'Abbrechen',
       takePhotoButtonTitle: 'Eine Aufnahme machen...', // specify null or empty string to remove this button
       chooseFromLibraryButtonTitle: 'Aus Gallerie...', // specify null or empty string to remove this button
@@ -62,13 +62,13 @@ class WishEditView extends Component {
       },
       cameraType: 'back', // 'front' or 'back'
       mediaType: 'photo', // 'photo' or 'video'
-      maxWidth: 800, // photos only
-      maxHeight: 800, // photos only
+      maxWidth: 3 * IMAGE_WIDTH, // photos only
+      maxHeight: 3 * IMAGE_HEIGHT, // photos only
       aspectX: 2, // android only - aspectX:aspectY, the cropping image's ratio of width to height
       aspectY: 1, // android only - aspectX:aspectY, the cropping image's ratio of width to height
       quality: 0.2, // 0 to 1, photos only
       angle: 0, // android only, photos only
-      allowsEditing: false, // Built in functionality to resize/reposition the image after selection
+      allowsEditing: true, // Built in functionality to resize/reposition the image after selection
       noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
     };
 
@@ -76,11 +76,11 @@ class WishEditView extends Component {
       if (response.didCancel || response.error) {
         return;
       }
+      dispatch(onWishFieldChange('imageURL', null)) //clear image
 
-      if (response.customButton) {
-        return dispatch(onWishFieldChange('imageURL', null))
+      if (response.customButton === 'remove-image') {
+        return 
       }
-
       this.setState({
         imageSource: {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true}
       })
@@ -89,7 +89,7 @@ class WishEditView extends Component {
   }
 
   renderImage() {
-    const {uploading} = this.state
+    const {uploading, uploadFailure} = this.state
     const {wish} = this.props
     const imageSource = wish.imageURL ? {uri: wish.imageURL} : this.state.imageSource
     let image
@@ -99,9 +99,9 @@ class WishEditView extends Component {
     return (
       <TouchableOpacity style={styles.imageWrapper} onPress={() => this.showImagePicker()}>
         {image}
-        {uploading ? 
-          <Icon style={styles.icon} name="file-upload" size={40}/> :
-          <Icon style={styles.icon} name="photo-camera" size={40}/>
+        {uploadFailure ? 
+          <Icon style={styles.icon} name="error" size={40}/> :
+          <Icon style={styles.icon} name="edit" size={40}/>
         }
       </TouchableOpacity>
     )
@@ -114,7 +114,7 @@ class WishEditView extends Component {
       return ( 
         <View style={styles.container}>
           <AppBar showBackButton={true} title={title}>
-            <ActionButton iconName="save" onPress={() => dispatch(saveWish(wish))}/>
+            <ActionButton iconName="save" disabled={this.state.uploading} onPress={() => dispatch(saveWish(wish))}/>
           </AppBar>
 
           {this.renderImage()}

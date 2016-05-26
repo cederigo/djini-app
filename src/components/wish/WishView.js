@@ -17,7 +17,7 @@ import {allowEdit, fulfilled, toUser, fulfillable} from '../../lib/wishUtil'
 // Actions
 import {editWish, deleteWish} from '../../actions/wishes'
 
-const IMAGE_HEIGHT = 150
+const IMAGE_HEIGHT = 200
 
 class WishView extends Component {
 
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 150,
+    height: IMAGE_HEIGHT,
     borderColor: WMColors.lightText,
     borderBottomWidth: 1
   },
