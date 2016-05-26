@@ -10,6 +10,7 @@ import {
   WISH_ADDED,
   WISH_UPDATED,
   WISH_DELETED,
+  UPLOAD_WISH_IMAGE,
   ON_WISH_FIELD_CHANGE,
   SHOW_WISH,
   EDIT_WISH,
@@ -28,6 +29,7 @@ function toParseWish(wish: Record<Wish>) {
     seenAt: wish.seenAt,
     isPrivate: wish.isPrivate,
     isFavorite: wish.isFavorite,
+    imageURL: wish.imageURL,
 
     fromUser: ParseUser.createWithoutData(wish.fromUserId),
     toUser: ParseUser.createWithoutData(wish.toUserId),
@@ -153,5 +155,14 @@ export function fulfillWish(wish) {
         Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
       }
     })
+  }
+}
+
+export function uploadWishImage(base64Data) {
+  return dispatch => {
+    dispatch({type: UPLOAD_WISH_IMAGE})
+    const imageFile = new Parse.File('wish-image.jpg', {base64: base64Data})
+    return imageFile.save()
+      .then((uploadedFile) => dispatch(onWishFieldChange('imageURL', uploadedFile.url())))
   }
 }

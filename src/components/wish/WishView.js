@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity, Linking} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Linking, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import FulfillWishButton from './FulfillWishButton'
@@ -17,6 +17,8 @@ import {allowEdit, fulfilled, toUser, fulfillable} from '../../lib/wishUtil'
 // Actions
 import {editWish, deleteWish} from '../../actions/wishes'
 
+const IMAGE_HEIGHT = 150
+
 class WishView extends Component {
 
   props: {
@@ -24,14 +26,16 @@ class WishView extends Component {
     wish: Wish 
   }
 
-  renderImage() {
-    //its a placeholder
-    //TODO real image
-    return (
-      <View style={styles.imageWrapper}>
-        <Icon style={styles.image} name="photo-camera" size={40}/>
-      </View>
-    )
+  renderImage(wish) {
+    if (wish.imageURL) {
+      return <Image source={{uri: wish.imageURL}} style={styles.image}/>
+    } else {
+      return (
+        <View style={styles.imagePlaceholder}>
+          <Icon style={styles.imagePlaceholderIcon} name="photo-camera" size={40}/>
+        </View>
+      )
+    }
   }
 
   openURL(url) {
@@ -74,7 +78,7 @@ class WishView extends Component {
           {allowEdit(wish, currentUser) ? <ActionButton iconName="edit" onPress={() => dispatch(editWish(wish))}/> : undefined }
         </AppBar>
 
-        {this.renderImage()}
+        {this.renderImage(wish)}
 
         <View style={styles.details}>
           <Text style={styles.label}>Titel</Text>
@@ -88,7 +92,7 @@ class WishView extends Component {
 
           <Text style={styles.label}>URL</Text>
           <TouchableOpacity onPress={() => this.openURL(wish.url)}>
-            <Text style={styles.text}>{wish.url || '-'}</Text>
+            <Text style={styles.text} numberOfLines={1}>{wish.url || '-'}</Text>
           </TouchableOpacity>
 
           <View style={styles.fulfillment}>
@@ -114,15 +118,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: WMColors.background,
   },
-  imageWrapper: {
+  imagePlaceholder: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 150,
     borderColor: WMColors.lightText,
     borderBottomWidth: 1
   },
-  image: {
+  imagePlaceholderIcon: {
     color: WMColors.lightText
+  },
+  image: {
+    height: IMAGE_HEIGHT,
+    resizeMode: 'cover'
   },
   details: {
     marginHorizontal: 20

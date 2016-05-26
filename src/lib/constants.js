@@ -12,6 +12,7 @@ export const SAVE_WISH_REQUEST = 'save-wish-request'
 export const SAVE_WISH_FAILURE = 'save-wish-failure'
 export const WISH_ADDED = 'wish-added'
 export const WISH_UPDATED = 'wish-updated'
+export const UPLOAD_WISH_IMAGE = 'upload-wish-image'
 
 export const WISH_DELETED = 'wish-deleted'
 

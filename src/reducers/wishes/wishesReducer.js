@@ -29,7 +29,6 @@ export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = Ordered
   const fulfiller = parseWish.get('fulfiller')
   let fulfillerContact;
   if (isParseObject(fulfiller)) {
-    console.log('fulfiller', fulfiller)
     fulfillerContact = contacts.get(fulfiller.get('username'))
   }
   //phoneNumber is stored in username attribute
@@ -42,6 +41,7 @@ export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = Ordered
     isPrivate: parseWish.get('isPrivate'),
     isFavorite: parseWish.get('isFavorite'),
     createdAt: parseWish.get('createdAt'),
+    imageURL: parseWish.get('imageURL'),
     fromUserId: fromUser ? fromUser.id || fromUser.objectId : undefined,
     toUserId: toUser ? toUser.id || toUser.objectId : undefined,
     fulfillerId: fulfiller ? fulfiller.id || fulfiller.objectId : undefined,
