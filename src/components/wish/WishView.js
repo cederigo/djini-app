@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity, Linking, Image} from 'react-native';
+import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Linking, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import FulfillWishButton from './FulfillWishButton'
@@ -15,7 +15,7 @@ import {User, Wish} from '../../lib/types'
 import {allowEdit, fulfilled, toUser, fulfillable} from '../../lib/wishUtil'
 
 // Actions
-import {editWish, deleteWish} from '../../actions/wishes'
+import {editWish, deleteWish, copyWish} from '../../actions/wishes'
 
 const IMAGE_HEIGHT = 200
 
@@ -78,36 +78,47 @@ class WishView extends Component {
           {allowEdit(wish, currentUser) ? <ActionButton iconName="edit" onPress={() => dispatch(editWish(wish))}/> : undefined }
         </AppBar>
 
-        {this.renderImage(wish)}
+        <ScrollView>
 
-        <View style={styles.details}>
-          <Text style={styles.label}>Titel</Text>
-          <Text style={styles.text}>{wish.title || '-'}</Text>
+          {this.renderImage(wish)}
 
-          <Text style={styles.label}>Beschreibung</Text>
-          <Text style={styles.text}>{wish.description || '-'}</Text>
+          <View style={styles.details}>
+            <Text style={styles.label}>Titel</Text>
+            <Text style={styles.text}>{wish.title || '-'}</Text>
 
-          <Text style={styles.label}>Wo gesehen</Text>
-          <Text style={styles.text}>{wish.seenAt || '-'}</Text>
+            <Text style={styles.label}>Beschreibung</Text>
+            <Text style={styles.text}>{wish.description || '-'}</Text>
 
-          <Text style={styles.label}>URL</Text>
-          <TouchableOpacity onPress={() => this.openURL(wish.url)}>
-            <Text style={styles.text} numberOfLines={1}>{wish.url || '-'}</Text>
-          </TouchableOpacity>
+            <Text style={styles.label}>Wo gesehen</Text>
+            <Text style={styles.text}>{wish.seenAt || '-'}</Text>
 
-          <View style={styles.fulfillment}>
-            {this.renderFulfillment(wish, currentUser)}
+            <Text style={styles.label}>URL</Text>
+            <TouchableOpacity onPress={() => this.openURL(wish.url)}>
+              <Text style={styles.text} numberOfLines={1}>{wish.url || '-'}</Text>
+            </TouchableOpacity>
+
+            <View style={styles.fulfillment}>
+              {this.renderFulfillment(wish, currentUser)}
+            </View>
+
+            {allowEdit(wish, currentUser) ? 
+              <WMButton style={styles.button}
+                iconName="delete"
+                caption="Löschen"
+                onPress={() => dispatch(deleteWish(wish, 'details'))}
+              />
+              : undefined
+            }
+
+            {toUser(wish, currentUser) ? 
+              undefined
+              : <WMButton style={styles.button}
+                  iconName="content-copy"
+                  caption="Kopieren"
+                  onPress={() => dispatch(copyWish(wish, currentUser))}/> 
+            }
           </View>
-
-          {allowEdit(wish, currentUser) ? 
-            <WMButton style={styles.button}
-              iconName="delete"
-              caption="Löschen"
-              onPress={() => dispatch(deleteWish(wish, 'details'))}
-            /> :
-            undefined
-          }
-        </View>
+        </ScrollView>
       </View>
     )
   }
@@ -133,7 +144,8 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   details: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    marginBottom: 20
   },
   label: {
     marginTop: 20,

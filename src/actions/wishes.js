@@ -17,6 +17,8 @@ import {
   NEW_WISH
 } from '../lib/constants'
 
+import {isIdea} from '../lib/wishUtil'
+
 const ParseWish = Parse.Object.extend('Wish')
 const ParseUser = Parse.Object.extend('User')
 
@@ -74,16 +76,16 @@ export function saveWishRequest() {
     type: SAVE_WISH_REQUEST
   };
 }
-export function wishAdded(wish) {
+export function wishAdded(wish, source) {
   return {
     type: WISH_ADDED,
-    payload: wish
+    payload: {wish, source}
   };
 }
-export function wishUpdated(wish) {
+export function wishUpdated(wish, source) {
   return {
     type: WISH_UPDATED,
-    payload: wish
+    payload: {wish, source}
   };
 }
 export function saveWishFailure(error) {
@@ -92,18 +94,20 @@ export function saveWishFailure(error) {
     payload: error
   };
 }
-export function saveWish(wish: Record<Wish>) {
+export function saveWish(wish: Record<Wish>, source: string = "details") {
   return dispatch => {
     dispatch(saveWishRequest())
 
     let parseWish = toParseWish(wish)
 
-    parseWish.save().then((data) => {
+    return parseWish.save().then((data) => {
       if (wish.id) {
-        dispatch(wishUpdated(data))
+        dispatch(wishUpdated(data, source))
       } else {
-        dispatch(wishAdded(data))
-        Actions.pop()
+        dispatch(wishAdded(data, source))
+        if (source === 'details') {
+          Actions.pop()
+        }
       }
     })
     .catch((error) => {
@@ -164,5 +168,15 @@ export function uploadWishImage(base64Data) {
     const imageFile = new Parse.File('wish-image.jpg', {base64: base64Data})
     return imageFile.save()
       .then((uploadedFile) => dispatch(onWishFieldChange('imageURL', uploadedFile.url())))
+  }
+}
+
+export function copyWish(wish: Record<Wish>, user: User) {
+  return dispatch => {
+    const copy = wish.merge({id: null, isFavorite: false, fromUserId: user.id, toUserId: user.id, fulfillerId: null})
+    dispatch(saveWish(copy, 'copy'))
+      .then(() => {
+        Alert.alert((isIdea(wish) ? 'Idee' : 'Wunsch') + ' kopiert', 'Du hast nun einen neuen Eintrag in deiner Wunschliste.')
+      })
   }
 }

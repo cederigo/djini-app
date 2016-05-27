@@ -70,7 +70,7 @@ export default function wishesReducer(state = initialState, {type, payload}) {
 
     case WISH_ADDED: {
       const wishes = state.get('wishes')
-      const wish = fromParseWish(payload)
+      const wish = fromParseWish(payload.wish)
       if (isIdea(wish)) {
         // nothing to do
         return state   
@@ -81,7 +81,7 @@ export default function wishesReducer(state = initialState, {type, payload}) {
 
     case WISH_UPDATED: {
       const wishes = state.get('wishes')
-      const wish = fromParseWish(payload)
+      const wish = fromParseWish(payload.wish)
       let idx = wishes.findIndex((w) => w.id === wish.id)
       if (isIdea(wish) || idx === -1) {
         // nothing to do

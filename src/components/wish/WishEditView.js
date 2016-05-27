@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {View, StyleSheet, Text, TextInput, TouchableOpacity, Image, NativeModules, Dimensions} from 'react-native';
+import {View, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Image, NativeModules, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from '../AppBar'
@@ -118,69 +118,72 @@ class WishEditView extends Component {
             <ActionButton iconName="save" disabled={this.state.uploading} onPress={() => dispatch(saveWish(wish))}/>
           </AppBar>
 
-          {this.renderImage()}
+          <ScrollView>
 
-          <View style={styles.content}>
+            {this.renderImage()}
 
-            <Text style={styles.label}>Titel</Text>
-            <TextInput
-              style={styles.input}
-              editable={true}
-              onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
-              autoCapitalize="none"
-              clearButtonMode="while-editing"
-              autoCorrect={false}
-              value={wish.title}
-            />
+            <View style={styles.content}>
 
-            <Text style={styles.label}>Beschreibung</Text>
-            <TextInput
-              style={styles.input}
-              editable={true}
-              onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
-              autoCapitalize="none"
-              clearButtonMode="while-editing"
-              autoCorrect={false}
-              value={wish.description}
-            />
+              <Text style={styles.label}>Titel</Text>
+              <TextInput
+                style={styles.input}
+                editable={true}
+                onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
+                autoCapitalize="none"
+                clearButtonMode="while-editing"
+                autoCorrect={false}
+                value={wish.title}
+              />
 
-            <Text style={styles.label}>Wo gesehen</Text>
-            <TextInput
-              style={styles.input}
-              editable={true}
-              onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
-              autoCapitalize="none"
-              clearButtonMode="while-editing"
-              autoCorrect={false}
-              value={wish.seenAt}
-            />
+              <Text style={styles.label}>Beschreibung</Text>
+              <TextInput
+                style={styles.input}
+                editable={true}
+                onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
+                autoCapitalize="none"
+                clearButtonMode="while-editing"
+                autoCorrect={false}
+                value={wish.description}
+              />
 
-            <Text style={styles.label}>URL</Text>
-            <TextInput
-              style={styles.input}
-              editable={true}
-              keyboardType="url"   
-              onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
-              autoCapitalize="none"
-              clearButtonMode="while-editing"
-              autoCorrect={false}
-              value={wish.url}
-            />
+              <Text style={styles.label}>Wo gesehen</Text>
+              <TextInput
+                style={styles.input}
+                editable={true}
+                onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
+                autoCapitalize="none"
+                clearButtonMode="while-editing"
+                autoCorrect={false}
+                value={wish.seenAt}
+              />
 
-            {!isIdea(wish) ? 
-              <View style={styles.buttons}>
-                <WMButton 
-                  style={styles.button}
-                  iconName={wish.isPrivate ? 'lock' : 'lock-open'}
-                  onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
-                <WMButton
-                  style={styles.button}
-                  iconName={wish.isFavorite ? 'favorite' : 'favorite-border'}
-                  onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
-              </View> :
-              undefined
-            }
-          </View>
+              <Text style={styles.label}>URL</Text>
+              <TextInput
+                style={styles.input}
+                editable={true}
+                keyboardType="url"   
+                onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
+                autoCapitalize="none"
+                clearButtonMode="while-editing"
+                autoCorrect={false}
+                value={wish.url}
+              />
+
+              {!isIdea(wish) ? 
+                <View style={styles.buttons}>
+                  <WMButton 
+                    style={styles.button}
+                    iconName={wish.isPrivate ? 'lock' : 'lock-open'}
+                    onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
+                  <WMButton
+                    style={styles.button}
+                    iconName={wish.isFavorite ? 'favorite' : 'favorite-border'}
+                    onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
+                </View> :
+                undefined
+              }
+            </View>
+          </ScrollView>
        </View>
      )
   }
@@ -189,10 +192,11 @@ class WishEditView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-      backgroundColor: WMColors.background
+    backgroundColor: WMColors.background
   },
   content: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    marginBottom: 20
   },
   label: {
     marginTop: 10,

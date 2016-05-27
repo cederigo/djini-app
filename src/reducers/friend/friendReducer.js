@@ -44,7 +44,7 @@ export default function friendReducer(state = initialState, {type, payload}) {
           .set('error', payload)
 
     case WISH_UPDATED: {
-      const wish = fromParseWish(payload)
+      const wish = fromParseWish(payload.wish)
       const key = isIdea(wish) ? 'ideas' : 'wishes'
       const collection = state.get(key)
       let idx = collection.findIndex((w) => w.id === wish.id)
@@ -55,7 +55,7 @@ export default function friendReducer(state = initialState, {type, payload}) {
     }
 
     case WISH_ADDED: {
-      const wish = fromParseWish(payload)
+      const wish = fromParseWish(payload.wish)
       const ideas = state.get('ideas')
       if (!isIdea(wish)) {
         return state; //nothing to to

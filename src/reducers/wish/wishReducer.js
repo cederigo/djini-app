@@ -41,7 +41,14 @@ export default function wishReducer(state = initialState, {type, payload}) {
 
     case WISH_UPDATED:
     case WISH_ADDED: {
-      const wish = fromParseWish(payload)
+      const wish = fromParseWish(payload.wish)
+      const source = payload.source
+
+      if (source === 'copy') {
+        //nothing to do
+        return state;
+      }
+
       return state.set('isFetching', false)
        .set('wish', wish)
        .set('error', null)
