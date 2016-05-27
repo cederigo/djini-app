@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: WMColors.darkText,
-      paddingRight: 5
+    paddingRight: 5
   },
   disabled: {
     color: WMColors.disabledText

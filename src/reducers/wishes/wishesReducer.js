@@ -49,9 +49,13 @@ export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = Ordered
   }))
 }
 
-function sortWishBy(wish) {
+export function sortWishBy(wish) {
   const createdAt = wish.createdAt.getTime()
-  return wish.isFavorite ? 'a' + createdAt : '' + createdAt
+  if (isIdea(wish)) {
+    return wish.fulfillerId ? '' + createdAt : 'a' + createdAt
+  } else {
+    return wish.isFavorite ? 'a' + createdAt : '' + createdAt
+  }
 }
 
 export default function wishesReducer(state = initialState, {type, payload}) {

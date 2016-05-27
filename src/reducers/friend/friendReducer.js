@@ -15,7 +15,7 @@ import {
 
 import {isIdea} from '../../lib/wishUtil'
 
-import {fromParseWish} from '../wishes/wishesReducer'
+import {fromParseWish, sortWishBy} from '../wishes/wishesReducer'
 import {fromParseUser} from '../global/globalReducer'
 
 const initialState = new InitialState
@@ -51,7 +51,7 @@ export default function friendReducer(state = initialState, {type, payload}) {
       if (idx === -1) {
         return state //nothing to do
       }
-      return state.set(key, collection.update(idx, () => wish)) //update
+      return state.set(key, collection.update(idx, () => wish).sortBy(sortWishBy).reverse()) //update
     }
 
     case WISH_ADDED: {
@@ -60,7 +60,7 @@ export default function friendReducer(state = initialState, {type, payload}) {
       if (!isIdea(wish)) {
         return state; //nothing to to
       }
-      return state.set('ideas', ideas.unshift(wish)) //add
+      return state.set('ideas', ideas.unshift(wish).sortBy(sortWishBy).reverse()) //add
     }
 
     case WISH_DELETED: {

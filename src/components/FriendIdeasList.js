@@ -12,6 +12,7 @@ import PureListView from './PureListView'
 
 //types
 import {Wish} from '../lib/types'
+import {fulfilled} from '../lib/wishUtil'
 
 // actions
 import {showWish, editWish, deleteWish} from '../actions/wishes'
@@ -74,7 +75,7 @@ class FriendIdeasList extends Component {
         <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
             <Text style={styles.text}>
-              {wish.title}
+              {wish.title + (fulfilled(wish) ? ' (geschenkt)' : '')}
             </Text>
           </View>
         </TouchableHighlight>

@@ -12,7 +12,7 @@ import WMColors from '../../lib/WMColors'
 import {User, Wish} from '../../lib/types'
 
 // Utils
-import {allowEdit, fulfilled, toUser, fulfillable} from '../../lib/wishUtil'
+import {allowEdit, fulfilled, toUser, fulfillable, isIdea} from '../../lib/wishUtil'
 
 // Actions
 import {editWish, deleteWish, copyWish} from '../../actions/wishes'
@@ -53,7 +53,7 @@ class WishView extends Component {
 
   renderFulfillment(wish, currentUser) {
     if(toUser(wish, currentUser)) {
-      //its for me, so I'm not interested
+      //its a wish for me so I'm not interested
       return
     }
 
@@ -109,7 +109,6 @@ class WishView extends Component {
               />
               : undefined
             }
-
             {toUser(wish, currentUser) ? 
               undefined
               : <WMButton style={styles.button}

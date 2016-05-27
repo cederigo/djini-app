@@ -9,7 +9,7 @@ import WMButton from '../WMButton'
 import {fulfillWish, saveWish} from '../../actions/wishes'
 
 // Utils
-import {fulfillable, fulfilledByUser} from '../../lib/wishUtil'
+import {fulfillable, fulfilledByUser, isIdea} from '../../lib/wishUtil'
 
 class FulfillWishButton extends Component {
 
@@ -28,21 +28,25 @@ class FulfillWishButton extends Component {
     }
 
     if (fulfilledByUser(wish, currentUser)) {
-      caption = 'Wunsch unerfüllen'
+      caption = isIdea(wish) ? 'Zurücksetzen' :  'Freigeben'
       msg = 'Willst Du diesen Wunsch wirklich nicht mehr erfüllen?'
       onConfirm = () => dispatch(saveWish(wish.set('fulfillerId', null)))
     } else {
-      caption = 'Wunsch erfüllen'
+      caption = 'Erfüllen'
       msg = 'Willst Du diesen Wunsch wirklich erfüllen?'
       onConfirm = () => dispatch(fulfillWish(wish))
     }
 
     function confirmDialog() {
-      Alert.alert(msg, '', [{text: 'Abbrechen'}, {text: 'Ja', onPress: onConfirm}])
+      if (isIdea(wish)) {
+        onConfirm()
+      } else {
+        Alert.alert(msg, '', [{text: 'Abbrechen'}, {text: 'Ja', onPress: onConfirm}])
+      }
     }
 
     return (
-      <WMButton onPress={confirmDialog} caption={caption} />
+      <WMButton iconName="cake" onPress={confirmDialog} caption={caption} />
     )
   }
 }
