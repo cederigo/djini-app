@@ -15,13 +15,14 @@ import WMColors from '../lib/WMColors'
 import {Wish} from '../lib/types'
 
 // actions
-import {showWish, editWish, deleteWish, saveWish} from '../actions/wishes'
+import {showWish, deleteWish, saveWish} from '../actions/wishes'
 
 import PureListView from './PureListView'
 
 class MyWishList extends Component {
 
   props: {
+    showSwipeoutHint: bool,
     wishes: Array<Wish>
   }
   _innerRef: ?PureListView;
@@ -55,8 +56,16 @@ class MyWishList extends Component {
     );
   }
 
+  showSwipeoutAnimation (swipeout) {
+    if (!swipeout) {
+      return
+    }
+    swipeout.setState({btnWidth: 50, btnsRightWidth: 150})
+    setTimeout(() => swipeout._tweenContent('contentPos', -100), 1000)
+    setTimeout(() => swipeout._close(), 1500)
+  }
+
   swipeoutBtns (wish) {
-    //TODO icons instead of text
     const {dispatch} = this.props
     return [
       { 
@@ -66,10 +75,6 @@ class MyWishList extends Component {
           </View>,
         onPress: () => dispatch(deleteWish(wish)),
       },
-      // {
-      //   text: 'Edit',
-      //   onPress: () => dispatch(editWish(wish))
-      // },
       {
         component: 
           <View style={styles.swipeout}>
@@ -82,16 +87,15 @@ class MyWishList extends Component {
           <View style={styles.swipeout}>
             <Icon style={styles.swipeoutIcon} name={wish.isPrivate ? 'lock-open' : 'lock'} size={30}/>
           </View>,
-        text: wish.isPrivate ? 'Make public' : 'Make private',
         onPress: () => dispatch(saveWish(wish.set('isPrivate', !wish.isPrivate)))
       }
     ]
   }
 
   renderRow (wish) {
-    const {dispatch} = this.props
+    const {dispatch, showSwipeoutHint} = this.props
     return (
-      <Swipeout right={this.swipeoutBtns(wish)} autoClose={true}>
+      <Swipeout right={this.swipeoutBtns(wish)} ref={showSwipeoutHint ? this.showSwipeoutAnimation : undefined} autoClose={true}>
         <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
             <Text style={styles.rowText} numberOfLines={1}>

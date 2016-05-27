@@ -24,13 +24,14 @@ class Wishes extends Component {
     wishes: Array<Wish>,
     isFetching: bool,
     error: any,
+    showSwipeoutHint: bool,
   }
 
   render
   
   render() {
 
-    const {wishes, isFetching, error, user, dispatch} = this.props
+    const {wishes, isFetching, error, user, showSwipeoutHint, dispatch} = this.props
 
     if (error) {
       Alert.alert('Oops', 'Wünsche konnten nicht geladen werden')
@@ -48,7 +49,7 @@ class Wishes extends Component {
           <DjiniButton toUser={user}/>
           {isFetching ? 
             <Text style={styles.loading}>Laden..</Text> :
-            <MyWishList wishes={wishes.toArray()} scrollEnabled={false} />
+            <MyWishList wishes={wishes.toArray()} showSwipeoutHint={showSwipeoutHint} scrollEnabled={false} />
           }
         </ScrollView>
       </View>
@@ -80,6 +81,7 @@ function select(state) {
     wishes: wishesState.wishes,
     isFetching: wishesState.isFetching,
     error: wishesState.error,
+    showSwipeoutHint: wishesState.showSwipeoutHint
   };
 }
 

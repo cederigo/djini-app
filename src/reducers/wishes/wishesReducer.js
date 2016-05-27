@@ -75,7 +75,8 @@ export default function wishesReducer(state = initialState, {type, payload}) {
         // nothing to do
         return state   
       }
-      return state.set('wishes', wishes.push(wish).sortBy(sortWishBy).reverse()) //add
+      return state.set('showSwipeoutHint', wishes.size === 0)
+        .set('wishes', wishes.push(wish).sortBy(sortWishBy).reverse())
     }
 
     case WISH_UPDATED: {
