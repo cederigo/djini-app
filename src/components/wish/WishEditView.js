@@ -8,7 +8,7 @@ import {AppBar, ActionButton} from '../AppBar'
 import WMButton from '../WMButton'
 
 // Actions
-import {saveWish, onWishFieldChange, uploadWishImage} from '../../actions/wishes'
+import {saveWish, onWishFieldChange, uploadWishImage, deleteWish} from '../../actions/wishes'
 
 // Utils
 import {isIdea} from '../../lib/wishUtil'
@@ -102,7 +102,7 @@ class WishEditView extends Component {
         {image}
         {uploadFailure ? 
           <Icon style={styles.icon} name="error" size={40}/> :
-          <Icon style={styles.icon} name="photo-camera" size={40}/>
+          <Icon style={styles.icon} name="add-a-photo" size={40}/>
         }
       </TouchableOpacity>
     )
@@ -115,7 +115,7 @@ class WishEditView extends Component {
       return ( 
         <View style={styles.container}>
           <AppBar showBackButton={true} title={title}>
-            <ActionButton iconName="save" disabled={this.state.uploading} onPress={() => dispatch(saveWish(wish))}/>
+            <ActionButton text="Fertig" disabled={this.state.uploading || !wish.title} onPress={() => dispatch(saveWish(wish))}/>
           </AppBar>
 
           <ScrollView>
@@ -169,19 +169,35 @@ class WishEditView extends Component {
                 value={wish.url}
               />
 
-              {!isIdea(wish) ? 
-                <View style={styles.buttons}>
-                  <WMButton 
-                    style={styles.button}
-                    iconName={wish.isPrivate ? 'lock' : 'lock-open'}
-                    onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
-                  <WMButton
-                    style={styles.button}
-                    iconName={wish.isFavorite ? 'favorite' : 'favorite-border'}
-                    onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
-                </View> :
-                undefined
+              {isIdea(wish) ? 
+                undefined :
+                <View style={styles.toggles}>
+                  <View style={styles.toggle}>
+                    <WMButton
+                      style={[styles.toggleButton, wish.isFavorite ? styles.toggleButtonActive : undefined]}
+                      iconStyle={styles.toggleButtonIcon}
+                      iconName={wish.isFavorite ? 'star' : 'star-border'}
+                      onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
+                    <Text style={styles.toggleText}>Djini, das will ich unbedingt haben!</Text>
+                  </View>
+                  <View style={styles.toggle}>
+                    <WMButton 
+                      style={[styles.toggleButton, wish.isPrivate ? styles.toggleButtonActive : undefined]}
+                      iconStyle={styles.toggleButtonIcon}
+                      iconName={wish.isPrivate ? 'lock' : 'lock-open'}
+                      onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
+                    <Text style={styles.toggleText}>Uhh, das sollte besser niemand sehen</Text>
+                  </View>
+                </View>
               }
+
+              <View style={styles.actions}>
+                <WMButton style={styles.button}
+                iconName="delete"
+                caption="Löschen"
+                onPress={() => dispatch(deleteWish(wish, 'details'))}
+              />
+              </View>
             </View>
           </ScrollView>
        </View>
@@ -210,12 +226,24 @@ const styles = StyleSheet.create({
     backgroundColor: WMColors.white,
     paddingLeft: 10
   },
-  buttons: {
-    marginTop: 20,
-    flexDirection: 'row',
+  toggles: {
+    marginTop: 10
   },
-  button: {
-    marginRight: 10
+  toggle: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  toggleButton: {},
+  toggleButtonIcon: {
+    color: 'white'
+  },
+  toggleButtonActive: {
+    backgroundColor: WMColors.darkText,
+  },
+  toggleText: {
+    marginLeft: 10,
+    color: WMColors.lightText
   },
   privacy: {
     alignSelf: 'stretch',
@@ -225,10 +253,13 @@ const styles = StyleSheet.create({
   privacyText: {
     marginLeft: 10,
   },
+  actions: {
+    marginTop: 20
+  },
   imageWrapper: {
     height: IMAGE_HEIGHT,
     borderColor: WMColors.lightText,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     justifyContent: 'center',
     alignItems: 'center'
   },

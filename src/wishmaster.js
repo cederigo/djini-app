@@ -1,15 +1,17 @@
 'use strict';
 
-import React from 'react'
-import { AppRegistry, View, Text, StyleSheet, Dimensions, BackAndroid} from 'react-native'
+import React, {PropTypes} from 'react'
+import { AppRegistry, View, StyleSheet, Dimensions, BackAndroid} from 'react-native'
 import { Scene, Router, Actions } from 'react-native-router-flux'
 import { Provider } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Parse from 'parse/react-native'
 
 import configureStore from './lib/configureStore'
-const {width} = Dimensions.get('window')
 import WMColors from './lib/WMColors'
+
+const WIDTH = Dimensions.get('window').width
+const TABBAR_HEIGHT = 50 
 
 /* Config */
 import {
@@ -52,12 +54,15 @@ function getInitialState() {
 }
 
 class TabIcon extends React.Component {
+  static propTypes = {
+    iconName: PropTypes.string.isRequired,
+    selected: PropTypes.bool
+  }
   render(){
-    const {selected, iconName, title} = this.props
+    const {selected, iconName} = this.props
     return (
       <View style={[styles.tab, selected ? styles.tabSelected : undefined]}>
         <Icon style={[styles.tabIcon, selected ? styles.tabIconSelected : undefined]} name={iconName} size={30} />
-        <Text style={[styles.tabText, selected ? styles.tabTextSelected : undefined]}>{title}</Text>
       </View>
       )
   }
@@ -71,40 +76,42 @@ BackAndroid.addEventListener('hardwareBackPress', function() {
 });
 
 const styles = StyleSheet.create({
+  tabScene: {
+    flex: 1,
+    marginBottom: TABBAR_HEIGHT,
+    backgroundColor: WMColors.background
+  },
   tabBar: {
-    borderColor: WMColors.lightText,
-    borderTopWidth: 1,
-    height: 60,
+    height: TABBAR_HEIGHT,
     backgroundColor: WMColors.background,
     alignItems: 'flex-start',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    shadowColor: WMColors.lightText,
+    shadowRadius: 10,
+    shadowOpacity: 1,
   },
   tab: {
-    height: 60,
-    width: width / 4,
+    height: TABBAR_HEIGHT,
+    width: WIDTH / 4,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
     backgroundColor: WMColors.background,
+    borderColor: 'white',
   },
   tabSelected: {
     backgroundColor: WMColors.lightText,
   },
   tabIcon: {
-    color: WMColors.lightText
+    color: WMColors.lightText,
+    borderWidth: 0
   },
   tabIconSelected: {
     color: 'white'
   },
-  tabText: {
-    color: WMColors.lightText,
-  },
-  tabTextSelected: {
-    color: 'white'
-  }
 })
 
-export default function native(platform) {
+export default function init() {
 
   //init parse sdk
   Parse.initialize(PARSE_APP_ID);
@@ -129,15 +136,15 @@ export default function native(platform) {
 
               <Scene key="login" type="replace" component={Login} />
               
-              <Scene key="friend" component={Friend} title="Freund"/>
+              <Scene key="friend" style={styles.tabScene} component={Friend} title="Freund"/>
 
-              <Scene key="wish" component={Wish} title="Wunsch"/>
+              <Scene key="wish" style={styles.tabScene} component={Wish} title="Wunsch"/>
 
               <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
-                <Scene key="wishes" initial={true} component={Wishes} title="Wünsche" icon={TabIcon} iconName="cake"/>
-                <Scene key="contacts" component={Contacts} title="Kontakte" icon={TabIcon} iconName="group"/>
-                <Scene key="pots" component={Pots} title="Pots" icon={TabIcon} iconName="folder-shared"/>
-                <Scene key="more" component={More} title="Mehr" icon={TabIcon} iconName="more-horiz"/>
+                <Scene key="wishes" sceneStyle={styles.tabScene} initial={true} component={Wishes} icon={TabIcon} iconName="cake"/>
+                <Scene key="contacts" sceneStyle={styles.tabScene} component={Contacts} icon={TabIcon} iconName="group"/>
+                <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="folder-shared"/>
+                <Scene key="more" sceneStyle={styles.tabScene} component={More} icon={TabIcon} iconName="more-horiz"/>
               </Scene>
 
             </Scene>

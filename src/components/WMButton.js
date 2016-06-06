@@ -16,7 +16,7 @@ export default class WMButton extends Component {
   };
 
   render() {
-    const {caption, disabled, onPress, iconName} = this.props
+    const {caption, disabled, onPress, iconName, iconStyle} = this.props
     return (
       <TouchableOpacity
         accessibilityTraits="button"
@@ -24,7 +24,7 @@ export default class WMButton extends Component {
         disabled={disabled}
         activeOpacity={0.8}
         style={[styles.container, this.props.style]}>
-        {iconName ? <Icon name={iconName} style={styles.icon} size={20}/> : undefined }
+        {iconName ? <Icon name={iconName} style={[styles.icon, iconStyle]} size={30}/> : undefined }
         <Text style={[styles.text, disabled ? styles.disabled : undefined]}>
           {caption}
         </Text>
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: WMColors.darkText,
-    paddingRight: 5
   },
   disabled: {
     color: WMColors.disabledText

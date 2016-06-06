@@ -37,9 +37,10 @@ const styles = StyleSheet.create({
   text: {
     color: WMColors.lightText,
     fontSize: 50,
-    fontWeight: '500'
+    fontWeight: '200'
   },
   icon: {
+    marginVertical: 20,
     color: WMColors.lightText
   }
 })

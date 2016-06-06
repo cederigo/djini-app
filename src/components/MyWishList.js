@@ -33,14 +33,6 @@ class MyWishList extends Component {
     this.swipeoutBtns = this.swipeoutBtns.bind(this)
   }
 
-  renderHeader() {
-    return (
-      <View style={styles.listHeader}>
-        <Text style={styles.listHeaderText}>Wunschliste</Text>
-      </View>
-    );
-  }
-  
   render() {
     return (
       <PureListView
@@ -50,7 +42,6 @@ class MyWishList extends Component {
         renderRow={this.renderRow}
         renderSeparator={this.renderSeparator}
         renderEmptyList={this.renderEmptyList}
-        renderHeader={this.renderHeader}
         {...this.props}
       />
     );
@@ -78,7 +69,7 @@ class MyWishList extends Component {
       {
         component: 
           <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name={wish.isFavorite ? 'favorite-border' : 'favorite'} size={30}/>
+            <Icon style={styles.swipeoutIcon} name={wish.isFavorite ? 'star-border' : 'star'} size={30}/>
           </View>,
         onPress: () => dispatch(saveWish(wish.set('isFavorite', !wish.isFavorite)))
       },
@@ -102,7 +93,7 @@ class MyWishList extends Component {
               {wish.title}
             </Text>
             {wish.isPrivate ? <Icon style={styles.rowIcon} name="lock" size={30}/> : undefined}
-            {wish.isFavorite ? <Icon style={styles.rowIcon} name="favorite" size={30}/> : undefined}
+            {wish.isFavorite ? <Icon style={styles.rowIcon} name="star" size={30}/> : undefined}
           </View>
         </TouchableHighlight>
       </Swipeout>
@@ -111,9 +102,7 @@ class MyWishList extends Component {
 
   renderEmptyList() {
     return (
-      <View style={styles.emptyList}>
-        <Text>Du hast noch keine Wünsche erfasst. Erfasse jetzt einen!</Text>
-      </View>
+      <Text style={styles.emptyList}>Flüstere Djini deinen ersten Wunsch! Achtung: Wünsche können dank Djini in Erfüllung gehen! Djini haftet nicht für erfüllte Wünsche!</Text>
     );
   }
 
@@ -134,28 +123,32 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   emptyList: {
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginTop: 100,
+    fontSize: 16,
+    lineHeight: 24,
+    color: WMColors.darkText,
+    textAlign: 'center',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 60,
+    height: 70,
     paddingHorizontal: 20,
     backgroundColor: WMColors.white,
   },
   rowSeparator: {
     backgroundColor: WMColors.background,
-    height: 1,
+    height: StyleSheet.hairlineWidth,
   },
   rowText: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 20,
     color: WMColors.lightText
   },
   rowIcon: {
     color: WMColors.lightText,
+    opacity: 0.7
   },
   listHeader: {
     paddingHorizontal: 20,

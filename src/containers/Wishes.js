@@ -27,8 +27,6 @@ class Wishes extends Component {
     showSwipeoutHint: bool,
   }
 
-  render
-  
   render() {
 
     const {wishes, isFetching, error, user, showSwipeoutHint, dispatch} = this.props
@@ -49,7 +47,7 @@ class Wishes extends Component {
           <DjiniButton toUser={user}/>
           {isFetching ? 
             <Text style={styles.loading}>Laden..</Text> :
-            <MyWishList wishes={wishes.toArray()} showSwipeoutHint={showSwipeoutHint} scrollEnabled={false} />
+            <MyWishList style={styles.list} wishes={wishes.toArray()} showSwipeoutHint={showSwipeoutHint} scrollEnabled={false} />
           }
         </ScrollView>
       </View>
@@ -60,13 +58,14 @@ class Wishes extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: WMColors.background,
-    marginBottom: 60 //tabbar
   },
   loading: {
     flex: 1,
     color: WMColors.lightText,
     textAlign: 'center'
+  },
+  list: {
+    marginTop: 30 
   }
 })
 

@@ -1,6 +1,6 @@
 import {Actions} from 'react-native-router-flux';
 
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import WMColors from '../lib/WMColors'
@@ -9,7 +9,8 @@ export class AppBar extends Component {
   props: {
     showBackButton: bool,
     onBack: () => void,
-    title: string
+    title: string,
+    children: React.PropTypes.element
   }
 
   render() {
@@ -33,11 +34,12 @@ AppBar.defaultProps = {
 }
 
 export class ActionButton extends React.Component {
-  props: {
-    disabled: bool,
-    onPress: () => void,
-    text: string,
-    iconName: string,
+
+  static propTypes = {
+    onPress: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
+    text: PropTypes.string,
+    iconName: PropTypes.string,
   }
   render() {
     const {disabled, onPress, text, style, iconName} = this.props
@@ -58,13 +60,13 @@ export class ActionButton extends React.Component {
 const styles = StyleSheet.create({
   appBar: {
     marginTop: 20, //status bar
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: WMColors.lightText,
     flexDirection: 'row',
     alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 50,
+    height: 44,
   },
   left: {
     flex: 1,
@@ -74,8 +76,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: WMColors.lightText,
     flex: 2,
-    fontSize: 20,
-    fontWeight: '500',
+    fontSize: 18,
+    fontWeight: '400',
   },
   right: {
     flexDirection: 'row',
@@ -92,4 +94,8 @@ const styles = StyleSheet.create({
   actionIcon: {
     color: WMColors.darkText
   },
+  actionText: {
+    color: WMColors.darkText,
+    marginRight: 5
+  }
 })
