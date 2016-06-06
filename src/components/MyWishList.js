@@ -3,13 +3,12 @@ import Swipeout from 'react-native-swipeout'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import React, {Component} from 'react'
 import { 
-  StyleSheet,
   View,
   TouchableHighlight,
   Text
 } from 'react-native';
 
-import WMColors from '../lib/WMColors'
+import styles from '../lib/listStyles'
 
 //types
 import {Wish} from '../lib/types'
@@ -31,6 +30,7 @@ class MyWishList extends Component {
     super(props)
     this.renderRow = this.renderRow.bind(this)
     this.swipeoutBtns = this.swipeoutBtns.bind(this)
+    this.storeInnerRef = this.storeInnerRef.bind(this)
   }
 
   render() {
@@ -116,63 +116,5 @@ class MyWishList extends Component {
     this._innerRef = ref;
   }
 }
-
-// styles
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  emptyList: {
-    marginTop: 100,
-    fontSize: 16,
-    lineHeight: 24,
-    color: WMColors.darkText,
-    textAlign: 'center',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 70,
-    paddingHorizontal: 20,
-    backgroundColor: WMColors.white,
-  },
-  rowSeparator: {
-    backgroundColor: WMColors.background,
-    height: StyleSheet.hairlineWidth,
-  },
-  rowText: {
-    flex: 1,
-    fontSize: 20,
-    color: WMColors.lightText
-  },
-  rowIcon: {
-    color: WMColors.lightText,
-    opacity: 0.7
-  },
-  listHeader: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: WMColors.lightText,
-    borderColor: 'white',
-    borderBottomWidth: 1
-  },
-  listHeaderText: {
-    fontSize: 18,
-    color: 'white',
-    backgroundColor: WMColors.lightText,
-  },
-  swipeout: {
-    backgroundColor: WMColors.lightText,
-    borderColor: 'white',
-    borderLeftWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
-  },
-  swipeoutIcon: {
-    color: 'white',
-  }
-})
 
 export default connect()(MyWishList)

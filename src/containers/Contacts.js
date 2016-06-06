@@ -10,13 +10,49 @@ import ContactsWizard from '../components/ContactsWizard'
 import ContactsList from '../components/ContactsList'
 import {SearchBar} from '../components/AppBar'
 
-import {onSearchFieldChange} from '../actions/contacts'
+import {
+  onSearchFieldChange,
+  loadFriendProfile,
+  invite,
+  toggleFavorite,
+  refreshContacts
+} from '../actions/contacts'
 
 class Contacts extends Component {
 
   endSearch() {
     const {dispatch} = this.props
     dispatch(onSearchFieldChange('')) //clear search
+    this.refs.searchBar.endSearch()
+  }
+
+  getListData(contacts, filterText) {
+    const r = new RegExp(filterText)
+    const result = {favorites: [], contacts: []}
+    contacts.forEach(c => {
+      if (!r.test(c.nameTransliterated)) {
+        return;
+      }
+      result[c.isFavorite ? 'favorites' : 'contacts'].push(c)
+    })
+    return result.favorites.concat(result.contacts) //favorites first
+  }
+
+  toggleFavorite(contact) {
+    const {dispatch} = this.props
+    dispatch(toggleFavorite(contact))
+    dispatch(onSearchFieldChange('')) //clear search
+  }
+
+  openContact(contact) {
+    const {dispatch} = this.props
+    dispatch(loadFriendProfile(contact))
+    this.endSearch()
+  }
+
+  inviteContact(c) {
+    const {dispatch} = this.props
+    dispatch(invite(c))
   }
 
   render() {
@@ -35,13 +71,19 @@ class Contacts extends Component {
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
-        <SearchBar 
+        <SearchBar
+          ref="searchBar"
           title="Freunde"
           inputValue={filterText}
           inputPlaceholder="Freunde suchen ..."
           onChangeText={(text) => dispatch(onSearchFieldChange(text))}
           onSearchEnd={() => this.endSearch()}/>
-        <ContactsList contacts={contacts} filterText={filterText}/>
+        <ContactsList
+          toggleFavorite={(c) => this.toggleFavorite(c)}
+          openContact={(c) => this.openContact(c)}
+          inviteContact={(c) => this.inviteContact(c)}
+          refreshContacts={() => dispatch(refreshContacts())}
+          contacts={this.getListData(contacts, filterText)}/>
       </View>
     )
   }

@@ -1,125 +1,95 @@
-import Immutable from 'immutable'
-import { connect } from 'react-redux'
-import dismissKeyboard from 'dismissKeyboard'
 import React, {Component, PropTypes} from 'react';
-import {StyleSheet, View, ListView, TouchableHighlight, TouchableOpacity, Text, RefreshControl} from 'react-native';
+import {View, TouchableHighlight, TouchableOpacity, Text, RefreshControl} from 'react-native';
 import Swipeout from 'react-native-swipeout'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import {
-  toggleFavorite,
-  invite,
-  loadFriendProfile,
-  onSearchFieldChange,
-  refreshContacts
-} from '../actions/contacts'
+import PureListView from './PureListView'
+import styles from '../lib/listStyles'
 
-class ContactsList extends Component {
+export default class ContactsList extends Component {
+
+  _innerRef: ?PureListView;
+
+  static propTypes = {
+    contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
+    toggleFavorite: PropTypes.func.isRequired,
+    openContact: PropTypes.func.isRequired,
+    inviteContact: PropTypes.func.isRequired,
+    refreshContacts: PropTypes.func.isRequired,
+  }
+
   constructor(props) {
     super(props);
-
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 != r2,
-      sectionHeaderHasChanged: (s1, s2) => s1 != s2
-    })
-
     this.renderRow = this.renderRow.bind(this)
     this.onRefresh = this.onRefresh.bind(this)
-    this.renderFooter = this.renderFooter.bind(this)
-
+    this.storeInnerRef = this.storeInnerRef.bind(this)
     this.state = {
-      dataSource: ds.cloneWithRowsAndSections(this.getListViewData(this.props)),
       refreshing: false
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.filterText !== this.props.filterText || nextProps.contacts !== this.props.contacts) {
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(this.getListViewData(nextProps)),
-        refreshing: false
-      })
-      this.refs.listView.scrollTo({animated: false})
+    if (nextProps.contacts !== this.props.contacts) {
+      this.setState({ refreshing: false })
+      this._innerRef.scrollTo({animated: false})
     }
   }
 
   render() {
     return (
-      <ListView
-        ref="listView"
+      <PureListView
         style={styles.container}
-        dataSource={this.state.dataSource}
-        scrollRenderAheadDistance={2000}
+        ref={this.storeInnerRef}
+        data={this.props.contacts}
         keyboardShouldPersistTaps={true}
         keyboardDismissMode="on-drag"
-        pageSize={5}
         renderRow={this.renderRow}
         renderSeparator={this.renderSeparator}
-        renderSectionHeader={this.renderSectionHeader}
-        renderFooter={this.renderFooter}
+        renderEmptyList={this.renderEmptyList}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={this.onRefresh}
           />
         }
+        {...this.props}
       />
     )
   }
 
   onRefresh() {
-    const {dispatch} = this.props
+    const {refreshContacts} = this.props
     this.setState({refreshing: true})
-    dispatch(refreshContacts('user'))
-  }
-
-  getListViewData(props) {
-    const {filterText, contacts} = props
-    const r = new RegExp(filterText)
-
-    var data = {'Favoriten': [], 'Kontakte': []}
-
-    contacts.forEach(contact => {
-      if (r.test(contact.nameForSearch)) {
-        data[contact.isFavorite ? 'Favoriten' : 'Kontakte'].push(contact)
-      }
-    })
-
-    return data
+    refreshContacts()
   }
 
   swipeoutBtns (contact) {
-    //TODO icons instead of text
-    const {dispatch} = this.props
+    const {toggleFavorite} = this.props
     return [
       {
-        text: contact.isFavorite ? 'Not a Fav.' : 'Favorite', 
-        onPress: () => {
-          dispatch(toggleFavorite(contact))
-          dispatch(onSearchFieldChange('')) //clear search
-        }
+        component:
+          <View style={styles.swipeout}>
+            <Icon style={styles.swipeoutIcon} name={contact.isFavorite ? 'favorite-border' : 'favorite'} size={30}/>
+          </View>,
+        onPress: () => toggleFavorite(contact)
       }
     ]
   }
 
-  showContact(contact) {
-    const {dispatch} = this.props
-    dispatch(loadFriendProfile(contact))
-    dismissKeyboard()
-  }
-
   renderRow (contact) {
 
-    const {dispatch} = this.props
+    const {openContact, inviteContact} = this.props
 
     return (
       <Swipeout right={this.swipeoutBtns(contact)} autoClose={true}>
-        <TouchableHighlight onPress={() => this.showContact(contact)}>
+        <TouchableHighlight onPress={() => openContact(contact)}>
           <View style={styles.row}>
-            <Text style={styles.text}>
+            <Text style={styles.rowText}>
               {contact.name}
             </Text>
+            {contact.isFavorite ? <Icon style={styles.rowIcon} name="favorite" size={30}/> : undefined}
             {contact.registered ? null : 
-              <TouchableOpacity style={styles.actions} onPress={() => dispatch(invite(contact))}>
+              <TouchableOpacity style={styles.actions} onPress={() => inviteContact(contact)}>
                 <Text>Invite</Text>
               </TouchableOpacity>
             }
@@ -129,73 +99,18 @@ class ContactsList extends Component {
     );
   }
 
-  renderSectionHeader(data, sectionId) {
-    return (
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionHeaderText}>{sectionId}</Text>
-      </View>
-    );
-  }
-
   renderSeparator(sectionID, rowID) {
     return (
       <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}/>
     );
   }
 
-  renderFooter() {
-    if (this.state.dataSource.getRowCount() !== 0) {
-      return //nothing to render
-    }
+  renderEmptyList() {
     return (<Text style={styles.emptyList}>Keine Kontakte gefunden</Text>)
   }
-}
 
-ContactsList.propTypes = {
-  contacts: PropTypes.instanceOf(Immutable.OrderedMap).isRequired,
-  filterText: PropTypes.string
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingLeft: 10,
-    backgroundColor: '#F6F6F6',
-    height: 60,
-    padding: 10
-  },
-  rowSeparator: {
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    height: 1,
-    marginHorizontal: 10,
-  },
-  sectionHeader: {
-    backgroundColor: '#48D1CC',
-    paddingLeft: 10
-  },
-  sectionHeaderText: {
-    fontSize: 16,
-    color: 'white',
-  },
-  text: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-  actions: {
-    width: 50,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  emptyList: {
-    alignSelf: 'center',
-    margin: 50
+  storeInnerRef(ref: ?PureListView) {
+    this._innerRef = ref;
   }
-})
 
-export default connect()(ContactsList)
+}

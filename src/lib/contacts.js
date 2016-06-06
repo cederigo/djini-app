@@ -22,9 +22,9 @@ class Contacts {
       && (raw.givenName || raw.familyName)
   }
 
-  prepareForSearch(contacts) {
+  transliterate(contacts) {
     Object.values(contacts).forEach((contact) => {
-      contact.nameForSearch = transliterate(contact.name.toLowerCase())
+      contact.nameTransliterated = transliterate(contact.name.toLowerCase())
     })
     return contacts
   }

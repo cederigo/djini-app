@@ -39,6 +39,7 @@ export class SearchBar extends Component {
     super(props)
     this.startSearch = this.startSearch.bind(this)
     this.endSearch = this.endSearch.bind(this)
+    this._endSearch = this._endSearch.bind(this)
     this.state = {
       searchActive: false
     }
@@ -49,6 +50,10 @@ export class SearchBar extends Component {
   }
 
   endSearch() {
+    this.setState({searchActive: false})
+  }
+
+  _endSearch() {
     const {onSearchEnd} = this.props
     this.setState({searchActive: false})
     onSearchEnd && onSearchEnd()
@@ -75,7 +80,7 @@ export class SearchBar extends Component {
         }
         <View style={styles.right}>
           {this.state.searchActive ? 
-            <ActionButton onPress={this.endSearch} iconName="cancel"/>
+            <ActionButton onPress={this._endSearch} iconName="cancel"/>
             : <ActionButton onPress={this.startSearch} iconName="search"/>
           }
         </View>

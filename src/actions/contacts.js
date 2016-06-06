@@ -92,7 +92,7 @@ export function refreshContacts(source: ?string = 'app') {
     dispatch(contactsRequest())
     return Contacts.getAll()
       .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
-      .then((contacts) => Contacts.prepareForSearch(contacts))
+      .then((contacts) => Contacts.transliterate(contacts))
       .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
       .then((contacts) => dispatch(contactsSuccess(contacts)))
       .then(() => dispatch(saveContacts()))
