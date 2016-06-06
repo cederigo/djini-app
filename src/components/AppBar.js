@@ -2,7 +2,7 @@ import {Actions} from 'react-native-router-flux';
 
 import React, {Component, PropTypes} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Text, TextInput} from 'react-native';
 import WMColors from '../lib/WMColors'
 
 export class AppBar extends Component {
@@ -11,6 +11,10 @@ export class AppBar extends Component {
     onBack: () => void,
     title: string,
     children: React.PropTypes.element
+  }
+
+  static defaultProps = {
+    onBack: () => Actions.pop()
   }
 
   render() {
@@ -29,8 +33,55 @@ export class AppBar extends Component {
   }
 }
 
-AppBar.defaultProps = {
-  onBack: () => Actions.pop()
+export class SearchBar extends Component {
+
+  constructor(props) {
+    super(props)
+    this.startSearch = this.startSearch.bind(this)
+    this.endSearch = this.endSearch.bind(this)
+    this.state = {
+      searchActive: false
+    }
+  }
+
+  startSearch() {
+    this.setState({searchActive: true})
+  }
+
+  endSearch() {
+    const {onSearchEnd} = this.props
+    this.setState({searchActive: false})
+    onSearchEnd && onSearchEnd()
+  }
+
+  render() {
+    const {title, onChangeText, inputValue, inputPlaceholder} = this.props
+    return (
+      <View style={styles.appBar}>
+        {this.state.searchActive ? 
+          <TextInput
+            onChangeText={onChangeText}
+            autoFocus={true}
+            autoCapitalize='none'
+            style={styles.searchInput}
+            value={inputValue}
+            placeholder={inputPlaceholder}
+          />
+          : <View style={styles.left}/>
+        }
+        {this.state.searchActive ?
+          undefined
+          : <Text style={styles.title} numberOfLines={1}>{title}</Text>
+        }
+        <View style={styles.right}>
+          {this.state.searchActive ? 
+            <ActionButton onPress={this.endSearch} iconName="cancel"/>
+            : <ActionButton onPress={this.startSearch} iconName="search"/>
+          }
+        </View>
+      </View>
+    )
+  }
 }
 
 export class ActionButton extends React.Component {
@@ -97,5 +148,12 @@ const styles = StyleSheet.create({
   actionText: {
     color: WMColors.darkText,
     marginRight: 5
+  },
+  searchInput: {
+    marginLeft: 10,
+    color: WMColors.lightText,
+    flex: 6,
+    height: 44,
+    fontSize: 16
   }
 })
