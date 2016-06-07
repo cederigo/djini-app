@@ -6,28 +6,43 @@ import WMColors from '../lib/WMColors'
 export default class WMButton extends Component {
 
   props: {
-    // type: 'primary' | 'secondary' | 'bordered';
-    // icon: number;
     disabled: boolean,
+    active: boolean,
+    toggle: boolean,
     caption: string,
     style: any,
     onPress: () => void,
-    iconName: ?string
-  };
+    iconName: ?string,
+    iconStyle: any
+  }
+
+  static defaultProps = {
+    toggle: false,
+    active: false
+  }
 
   render() {
-    const {caption, disabled, onPress, iconName, iconStyle} = this.props
+    const {caption, disabled, onPress, iconName, iconStyle, toggle, active} = this.props
     return (
       <TouchableOpacity
         accessibilityTraits="button"
         onPress={onPress}
         disabled={disabled}
         activeOpacity={0.8}
-        style={[styles.container, this.props.style]}>
-        {iconName ? <Icon name={iconName} style={[styles.icon, iconStyle]} size={30}/> : undefined }
-        <Text style={[styles.text, disabled ? styles.disabled : undefined]}>
-          {caption}
-        </Text>
+        style={[styles.container, active ? styles.active : undefined, this.props.style]}>
+        {iconName ?
+          <Icon
+            name={iconName}
+            style={[styles.icon, toggle ? styles.toggleIcon : undefined, iconStyle]}
+            size={30}/>
+          : undefined
+        }
+        {caption ?
+          <Text style={[styles.text, disabled ? styles.disabled : undefined]}>
+            {caption}
+          </Text>
+          : undefined
+        }
       </TouchableOpacity>
     )
   }
@@ -52,5 +67,11 @@ const styles = StyleSheet.create({
   },
   disabled: {
     color: WMColors.disabledText
+  },
+  active: {
+    backgroundColor: WMColors.darkText,
+  },
+  toggleIcon: {
+    color: 'white'
   }
 });

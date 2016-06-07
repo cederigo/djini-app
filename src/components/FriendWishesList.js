@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import React, {Component} from 'react'
 import { 
-  StyleSheet,
   View,
   TouchableHighlight,
   Text
@@ -9,8 +8,8 @@ import {
 
 import PureListView from './PureListView'
 
-//types
 import {Wish, User} from '../lib/types'
+import styles from '../lib/listStyles'
 
 import {fulfilled, fulfilledByUser} from '../lib/wishUtil'
 
@@ -46,19 +45,23 @@ class FriendWishesList extends Component {
     );
   }
 
-  renderTitle (wish, user) {
+  renderRowDescription (wish, user) {
     if (!fulfilled(wish)) {
-      return wish.title
+      return //nothing to render
     }
-    else if (fulfilledByUser(wish, user)) {
-      return wish.title + ' (erfüllt von mir)'
+
+    let description = 'Wird erfüllt'
+    if (fulfilledByUser(wish, user)) {
+      description = 'Wird von mir erfüllt'
     }
     else if (wish.fulfillerName) {
-      return wish.title + ` (erfüllt von ${wish.fulfillerName})`
+      description = `Wird erfüllt durch ${wish.fulfillerName})`
     }
-    else {
-      return wish.title + ' (erfüllt)'
-    }
+    return (
+      <Text style={styles.rowDescription}>
+        {description}
+      </Text>
+    )
   }
 
   renderRow (wish) {
@@ -66,11 +69,20 @@ class FriendWishesList extends Component {
     return (
       <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
         <View style={styles.row}>
-          <Text style={styles.text}>
-            {this.renderTitle(wish, user)}
-          </Text>
+          <View style={styles.col}>
+            <Text style={styles.rowText}>
+              {wish.title}
+            </Text>
+            {this.renderRowDescription(wish, user)}
+          </View>
         </View>
       </TouchableHighlight>
+    );
+  }
+
+  renderEmptyList() {
+    return (
+      <Text style={styles.emptyList}>Dein Freund hat noch keine Wünsche erfasst</Text>
     );
   }
 
@@ -84,19 +96,5 @@ class FriendWishesList extends Component {
     this._innerRef = ref;
   }
 }
-
-// styles
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#F6F6F6',
-  },
-  text: {
-    flex: 1,
-    fontSize: 16,
-  }
-})
 
 export default connect()(FriendWishesList)

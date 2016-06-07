@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import Swipeout from 'react-native-swipeout'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import React, {Component} from 'react'
 import { 
-  StyleSheet,
   View,
   TouchableHighlight,
   Text
@@ -10,12 +10,12 @@ import {
 
 import PureListView from './PureListView'
 
-//types
 import {Wish} from '../lib/types'
 import {fulfilled} from '../lib/wishUtil'
+import styles from '../lib/listStyles'
 
 // actions
-import {showWish, editWish, deleteWish} from '../actions/wishes'
+import {showWish, deleteWish, fulfillWish, saveWish} from '../actions/wishes'
 
 class FriendIdeasList extends Component {
 
@@ -45,26 +45,39 @@ class FriendIdeasList extends Component {
       />
     );
   }
+
+  toggleFulfilled(wish) {
+    const {dispatch} = this.props
+    if (fulfilled(wish)) {
+      dispatch(saveWish(wish.set('fulfillerId', null)))
+    } else {
+      dispatch(fulfillWish(wish))
+    }
+  }
   
   _swipeoutBtns (wish) {
-    //TODO icons instead of text
     const {dispatch} = this.props
     return [
       { 
-        text: 'Delete',
+        component:
+          <View style={styles.swipeout}>
+            <Icon style={styles.swipeoutIcon} name="delete" size={30}/>
+          </View>,
         onPress: () => dispatch(deleteWish(wish)),
-        type: 'delete'
       },
-      {
-        text: 'Edit',
-        onPress: () => dispatch(editWish(wish))
+      { 
+        component:
+          <View style={styles.swipeout}>
+            <Icon style={styles.swipeoutIcon} name={fulfilled(wish) ? 'clear' : 'check'} size={30}/>
+          </View>,
+        onPress: () => this.toggleFulfilled(wish),
       }
     ]
   }
 
   renderEmptyList() {
     return (
-      <Text>Du hast noch keine Ideen erfasst</Text>
+      <Text style={styles.emptyList}>Du hast noch keine Ideen erfasst</Text>
     );
   }
 
@@ -74,9 +87,10 @@ class FriendIdeasList extends Component {
       <Swipeout right={this._swipeoutBtns(wish)} autoClose={true}>
         <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
-            <Text style={styles.text}>
-              {wish.title + (fulfilled(wish) ? ' (geschenkt)' : '')}
+            <Text style={styles.rowText}>
+              {wish.title}
             </Text>
+            {fulfilled(wish) ? <Icon style={styles.rowIcon} name="check" size={30}/> : undefined}
           </View>
         </TouchableHighlight>
       </Swipeout>
@@ -93,19 +107,5 @@ class FriendIdeasList extends Component {
     this._innerRef = ref;
   }
 }
-
-// styles
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 10,
-    backgroundColor: '#F6F6F6',
-  },
-  text: {
-    flex: 1,
-    fontSize: 16,
-  }
-})
 
 export default connect()(FriendIdeasList)

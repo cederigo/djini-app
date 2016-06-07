@@ -19,6 +19,10 @@ export default StyleSheet.create({
     alignItems: 'center',
     height: 70,
     backgroundColor: WMColors.white,
+    paddingHorizontal: 25
+  },
+  col: {
+    flex: 1,
   },
   rowSeparator: {
     backgroundColor: WMColors.background,
@@ -28,15 +32,18 @@ export default StyleSheet.create({
     flex: 1,
     fontSize: 20,
     color: WMColors.lightText,
-    paddingLeft: 25
+  },
+  rowDescription: {
+    fontSize: 14,
+    color: WMColors.lightText,
   },
   rowIcon: {
-    marginRight: 20,
     color: WMColors.lightText,
     opacity: 0.7
   },
   rowButton: {
-    marginRight: 10,
+    marginLeft: 10,
+    marginRight: -10,
     width: 50,
     height: 50,
     backgroundColor: WMColors.lightText

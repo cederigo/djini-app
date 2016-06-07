@@ -174,16 +174,16 @@ class WishEditView extends Component {
                 <View style={styles.toggles}>
                   <View style={styles.toggle}>
                     <WMButton
-                      style={[styles.toggleButton, wish.isFavorite ? styles.toggleButtonActive : undefined]}
-                      iconStyle={styles.toggleButtonIcon}
+                      toggle={true}
+                      active={wish.isFavorite}
                       iconName={wish.isFavorite ? 'star' : 'star-border'}
                       onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
                     <Text style={styles.toggleText}>Djini, das will ich unbedingt haben!</Text>
                   </View>
                   <View style={styles.toggle}>
                     <WMButton 
-                      style={[styles.toggleButton, wish.isPrivate ? styles.toggleButtonActive : undefined]}
-                      iconStyle={styles.toggleButtonIcon}
+                      toggle={true}
+                      active={wish.isPrivate}
                       iconName={wish.isPrivate ? 'lock' : 'lock-open'}
                       onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
                     <Text style={styles.toggleText}>Uhh, das sollte besser niemand sehen</Text>
@@ -233,13 +233,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center'
-  },
-  toggleButton: {},
-  toggleButtonIcon: {
-    color: 'white'
-  },
-  toggleButtonActive: {
-    backgroundColor: WMColors.darkText,
   },
   toggleText: {
     marginLeft: 10,

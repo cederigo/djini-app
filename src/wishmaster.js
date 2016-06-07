@@ -136,9 +136,9 @@ export default function init() {
 
               <Scene key="login" type="replace" component={Login} />
               
-              <Scene key="friend" style={styles.tabScene} component={Friend} title="Freund"/>
+              <Scene key="friend" sceneStyle={styles.tabScene} component={Friend} title="Freund"/>
 
-              <Scene key="wish" style={styles.tabScene} component={Wish} title="Wunsch"/>
+              <Scene key="wish" sceneStyle={styles.tabScene} component={Wish} title="Wunsch"/>
 
               <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
                 <Scene key="wishes" sceneStyle={styles.tabScene} initial={true} component={Wishes} icon={TabIcon} iconName="cake"/>
