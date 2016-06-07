@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import {View, TouchableHighlight, TouchableOpacity, Text, RefreshControl} from 'react-native';
+import {View, TouchableHighlight, Text, RefreshControl} from 'react-native';
 import Swipeout from 'react-native-swipeout'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+import WMButton from './WMButton'
 import PureListView from './PureListView'
 import styles from '../lib/listStyles'
 
@@ -88,11 +89,7 @@ export default class ContactsList extends Component {
               {contact.name}
             </Text>
             {contact.isFavorite ? <Icon style={styles.rowIcon} name="favorite" size={30}/> : undefined}
-            {contact.registered ? null : 
-              <TouchableOpacity style={styles.actions} onPress={() => inviteContact(contact)}>
-                <Text>Invite</Text>
-              </TouchableOpacity>
-            }
+            {contact.registered ? undefined : <WMButton style={styles.rowButton} iconStyle={styles.rowButtonIcon} iconName="person-add" onPress={() => inviteContact}/>}
           </View>
         </TouchableHighlight>
       </Swipeout>

@@ -1,9 +1,10 @@
 /* @flow */
 
-import { connect } from 'react-redux';
-import Immutable from 'immutable';
-import React, {Component, PropTypes} from 'react';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import { connect } from 'react-redux'
+import Immutable from 'immutable'
+import React, {Component, PropTypes} from 'react'
+import {View, StyleSheet, StatusBar} from 'react-native'
+import dismissKeyboard from 'dismissKeyboard'
 
 import ContactsPermission from '../components/ContactsPermission'
 import ContactsWizard from '../components/ContactsWizard'
@@ -47,7 +48,7 @@ class Contacts extends Component {
   openContact(contact) {
     const {dispatch} = this.props
     dispatch(loadFriendProfile(contact))
-    this.endSearch()
+    dismissKeyboard()
   }
 
   inviteContact(c) {

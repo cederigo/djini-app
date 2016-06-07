@@ -18,7 +18,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 70,
-    paddingHorizontal: 20,
     backgroundColor: WMColors.white,
   },
   rowSeparator: {
@@ -28,11 +27,22 @@ export default StyleSheet.create({
   rowText: {
     flex: 1,
     fontSize: 20,
-    color: WMColors.lightText
+    color: WMColors.lightText,
+    paddingLeft: 25
   },
   rowIcon: {
+    marginRight: 20,
     color: WMColors.lightText,
     opacity: 0.7
+  },
+  rowButton: {
+    marginRight: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: WMColors.lightText
+  },
+  rowButtonIcon: {
+    color: 'white'
   },
   swipeout: {
     backgroundColor: WMColors.lightText,
