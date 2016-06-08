@@ -46,7 +46,7 @@ class FulfillWishButton extends Component {
     }
 
     return (
-      <WMButton iconName="cake" onPress={confirmDialog} caption={caption} />
+      <WMButton style={this.props.style} iconName="check" onPress={confirmDialog} caption={caption} />
     )
   }
 }

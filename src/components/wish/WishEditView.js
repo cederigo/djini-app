@@ -193,10 +193,9 @@ class WishEditView extends Component {
 
               <View style={styles.actions}>
                 <WMButton style={styles.button}
-                iconName="delete"
-                caption="Löschen"
-                onPress={() => dispatch(deleteWish(wish, 'details'))}
-              />
+                  iconName="delete"
+                  caption="Löschen"
+                  onPress={() => dispatch(deleteWish(wish, 'details'))}/>
               </View>
             </View>
           </ScrollView>

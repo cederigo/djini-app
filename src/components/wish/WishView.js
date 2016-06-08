@@ -12,14 +12,13 @@ import WMColors from '../../lib/WMColors'
 import {User, Wish} from '../../lib/types'
 
 // Utils
-import {allowEdit, fulfilled, toUser, fulfillable, isIdea} from '../../lib/wishUtil'
+import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser} from '../../lib/wishUtil'
 
 // Actions
 import {editWish, copyWish} from '../../actions/wishes'
 
 const WIDTH = Dimensions.get('window').width
 const IMAGE_HEIGHT = 200 
-const ICON_SIZE = 40
 
 class WishView extends Component {
 
@@ -90,20 +89,41 @@ class WishView extends Component {
   }
 
   renderFulfillment(wish, currentUser) {
+    if(toUser(wish, currentUser) || !fulfilled(wish)) {
+      return //nothing to render
+    }
+
+    let text = 'Dieser Wunsch wird erfüllt'
+    if (fulfilledByUser(wish, currentUser)) {
+      text = 'Du erfüllst diesen Wunsch'
+    }
+    else if (wish.fulfillerName) {
+      text = wish.fulfillerName + ' erfüllt diesen Wunsch'
+    }
+
+    return (
+      <View style={styles.fulfillment}>
+        <Icon style={[styles.fulfillmentText, styles.fulfillmentIcon]} name="check" size={20}/>
+        <Text style={styles.fulfillmentText}>{text}</Text>
+      </View>
+    )
+  }
+
+  renderActionButtons(wish, currentUser) {
     if(toUser(wish, currentUser)) {
       //its a wish for me so I'm not interested
       return
     }
-
-    if (fulfillable(wish, currentUser)) {
-      return <FulfillWishButton wish={wish}/>
-    }
-    else if (wish.fulfillerName) {
-      return <Text style={styles.text}>Dieser Wunsch wird von {wish.fulfillerName} erfüllt</Text>
-    }
-    else if (fulfilled(wish)) {
-      return <Text style={styles.text}>Dieser Wunsch wird erfüllt</Text>
-    }
+    const {dispatch} = this.props
+    return (
+      <View style={styles.buttonGroup}>
+        <WMButton style={styles.buttonGroupButton} iconName="playlist-add" caption="Will ich auch" onPress={() => dispatch(copyWish(wish, currentUser))}/> 
+        {fulfillable(wish, currentUser) ?
+          <FulfillWishButton style={styles.buttonGroupButton} wish={wish}/>
+          : undefined
+        }
+      </View>
+    )
   }
 
   renderPrivateAttributes(wish, currentUser) {
@@ -115,14 +135,14 @@ class WishView extends Component {
       <View style={styles.privateAttributes}>
         {wish.isFavorite ?
           <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="star" size={ICON_SIZE}/>
+            <Icon style={[styles.text, styles.attrIcon]} name="star"/>
             <Text style={[styles.text, styles.attrText]}>Dieser Wunsch ist ein Favorit</Text>
           </View>
           : undefined
         }
         {wish.isPrivate ?
           <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="lock" size={ICON_SIZE}/>
+            <Icon style={[styles.text, styles.attrIcon]} name="lock"/>
             <Text style={[styles.text, styles.attrText]}>Dieser Wunsch siehst nur du</Text>
           </View>
           : undefined
@@ -142,6 +162,7 @@ class WishView extends Component {
         </AppBar>
 
         <ScrollView>
+          {this.renderFulfillment(wish, currentUser)}
 
           {this.renderImage(wish)}
 
@@ -150,17 +171,17 @@ class WishView extends Component {
           </View>
 
           <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="description" size={50}/>
+            <Icon style={[styles.text, styles.attrIcon]} name="description"/>
             <Text style={[styles.text, styles.attrText]}>{wish.description || '-'}</Text>
           </View>
 
           <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="remove-red-eye" size={ICON_SIZE}/>
+            <Icon style={[styles.text, styles.attrIcon]} name="remove-red-eye"/>
             <Text style={[styles.text, styles.attrText]}>{wish.seenAt || '-'}</Text>
           </View>
 
           <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="link" size={ICON_SIZE}/>
+            <Icon style={[styles.text, styles.attrIcon]} name="link"/>
             <TouchableOpacity onPress={() => this.openURL(wish.url)}>
               <Text style={[styles.text, styles.attrText]} numberOfLines={1}>{wish.url || '-'}</Text>
             </TouchableOpacity>
@@ -168,17 +189,7 @@ class WishView extends Component {
 
           {this.renderPrivateAttributes(wish, currentUser)}
 
-          <View style={styles.fulfillment}>
-            {this.renderFulfillment(wish, currentUser)}
-          </View>
-
-          {toUser(wish, currentUser) ? 
-            undefined
-            : <WMButton style={styles.button}
-                iconName="content-copy"
-                caption="Kopieren"
-                onPress={() => dispatch(copyWish(wish, currentUser))}/> 
-          }
+          {this.renderActionButtons(wish, currentUser)}
         </ScrollView>
       </View>
     )
@@ -214,7 +225,8 @@ const styles = StyleSheet.create({
   attrIcon: {
     position: 'absolute',
     left: 18,
-    top: 3
+    top: 3,
+    fontSize: 20
   },
   attrText: {
     marginLeft: 50
@@ -223,10 +235,31 @@ const styles = StyleSheet.create({
     marginTop: 18
   },
   fulfillment: {
-    marginTop: 20
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 50,
+    backgroundColor: WMColors.lightText 
   },
-  button: {
-    marginTop: 10
+  fulfillmentText: {
+    color: 'white',
+    fontSize: 17
+  },
+  fulfillmentIcon: {
+    fontSize: 30,
+    marginRight: 10
+  },
+  buttonGroup: {
+    marginTop: 20,
+    marginHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonGroupButton: {
+    flex: 1,
+    borderColor: 'white',
+    borderRightWidth: 1
   }
 })
 
