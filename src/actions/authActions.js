@@ -17,9 +17,6 @@ import {
 
   LOGOUT,
 
-  PROFILE_UPDATE_REQUEST,
-  PROFILE_UPDATE_SUCCESS,
-  PROFILE_UPDATE_FAILURE,
 
   ON_FORM_FIELD_CHANGE
 } from '../lib/constants'
@@ -133,44 +130,6 @@ export function logout() {
       .then(() => {
         dispatch({type: LOGOUT})
         Actions.welcome()
-      })
-  }
-}
-
-/*
- * Update Profile
- */
-export function profileUpdateRequest() {
-  return {
-    type: PROFILE_UPDATE_REQUEST
-  };
-}
-export function profileUpdateSuccess(json) {
-  return {
-    type: PROFILE_UPDATE_SUCCESS,
-    payload: json
-  };
-}
-export function profileUpdateFailure(error) {
-  return {
-    type: PROFILE_UPDATE_FAILURE,
-    payload: error
-  };
-}
-export function updateProfile(details = {}) {
-  return (dispatch) => {
-    dispatch(profileUpdateRequest());
-    const user = Parse.User.current()
-    if (!user) {
-      dispatch(profileUpdateFailure('User not logged in'))
-      return
-    }
-    return user.save(details)
-      .then((parseUser) => {
-        dispatch(profileUpdateSuccess(parseUser))
-      })
-      .catch(error => {
-        dispatch(profileUpdateFailure(error))
       })
   }
 }

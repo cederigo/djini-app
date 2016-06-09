@@ -27,6 +27,8 @@ import Wishes from './containers/Wishes'
 import Contacts from './containers/Contacts'
 import Pots from './containers/Pots'
 import More from './containers/More'
+import Profile from './containers/Profile'
+import ProfileEdit from './containers/ProfileEdit'
 import Friend from './containers/Friend'
 import Wish from './containers/Wish'
 
@@ -135,16 +137,22 @@ export default function init() {
               <Scene key="welcome" type="replace" component={Welcome} />
 
               <Scene key="login" type="replace" component={Login} />
-              
-              <Scene key="friend" sceneStyle={styles.tabScene} component={Friend} title="Freund"/>
-
-              <Scene key="wish" sceneStyle={styles.tabScene} component={Wish} title="Wunsch"/>
 
               <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
-                <Scene key="wishes" sceneStyle={styles.tabScene} initial={true} component={Wishes} icon={TabIcon} iconName="cake"/>
-                <Scene key="contacts" sceneStyle={styles.tabScene} component={Contacts} icon={TabIcon} iconName="group"/>
+                <Scene key="wishesTab" icon={TabIcon} iconName="cake">
+                  <Scene key="wishes" initial={true} sceneStyle={styles.tabScene} component={Wishes}/>
+                  <Scene key="wish" sceneStyle={styles.tabScene} component={Wish}/>
+                </Scene>
+                <Scene key="contactsTab" icon={TabIcon} iconName="group">
+                  <Scene key="contacts" initial={true} sceneStyle={styles.tabScene} component={Contacts}/>
+                  <Scene key="friend" sceneStyle={styles.tabScene} component={Friend}/>
+                </Scene>
                 <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="folder-shared"/>
-                <Scene key="more" sceneStyle={styles.tabScene} component={More} icon={TabIcon} iconName="more-horiz"/>
+                <Scene key="profileTab" icon={TabIcon} iconName="person" onSelect={Actions.profile}>
+                  <Scene key="profile" sceneStyle={styles.tabScene} component={Profile}/>
+                  <Scene key="profileEdit" sceneStyle={styles.tabScene} component={ProfileEdit}/>
+                  <Scene key="more" sceneStyle={styles.tabScene} component={More}/>
+                </Scene>
               </Scene>
 
             </Scene>

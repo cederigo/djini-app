@@ -2,6 +2,8 @@
 export const MY_PROFILE_REQUEST = 'my-profile-request'
 export const MY_PROFILE_FAILURE = 'my-profile-failure'
 export const MY_PROFILE_LOADED = 'my-profile-loaded'
+export const EDIT_PROFILE = 'edit-profile'
+
 
 //wish
 export const SHOW_WISH = 'show-wish'

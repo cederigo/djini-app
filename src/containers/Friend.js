@@ -11,6 +11,7 @@ import WMColors from '../lib/WMColors'
 import WMButton from '../components/WMButton'
 
 import Tabs from '../components/Tabs'
+import BirthdayText from '../components/BirthdayText'
 import FriendWishesList from '../components/FriendWishesList'
 import FriendIdeasList from '../components/FriendIdeasList'
 import {AppBar} from '../components/AppBar'
@@ -39,13 +40,6 @@ class Friend extends Component {
     }
   }
 
-  renderBirthday(date) {
-    if (!date) {
-      return ''
-    }
-    return `Geb. ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
-  }
-
   renderContentView() {
     return (
       <View>
@@ -65,9 +59,7 @@ class Friend extends Component {
           <Text style={[styles.text, styles.textBig]}>
             {contact.name}
           </Text>
-          <Text style={[styles.text, styles.textSmall]}>
-            {this.renderBirthday(friend.birthday)}
-          </Text>
+          <BirthdayText style={[styles.text, styles.textSmall]} text="Geb. " date={friend.birthday}/>
         </View>
         <WMButton
           style={styles.profileFavoriteButton}

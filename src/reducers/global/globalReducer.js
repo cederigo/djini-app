@@ -21,6 +21,7 @@ export function fromParseUser(user: Object): User {
   return {
     id: user.id,
     name: user.get('name'),
+    email: user.get('email'),
     birthday: user.get('birthday'),
     registered: user.get('registered'),
     phoneNumber: user.get('username')

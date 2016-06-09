@@ -16,10 +16,9 @@ import {
   login,
   sendCode,
   onFormFieldChange,
-  updateProfile
 } from '../actions/authActions'
 
-import { loadMyProfile } from '../actions/profile'
+import { loadMyProfile, updateProfile } from '../actions/profile'
 
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
