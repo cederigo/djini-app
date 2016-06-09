@@ -85,7 +85,7 @@ class FriendIdeasList extends Component {
     const {dispatch} = this.props
     return (
       <Swipeout right={this._swipeoutBtns(wish)} autoClose={true}>
-        <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
+        <TouchableHighlight onPress={() => dispatch(showWish(wish, 'friend'))}>
           <View style={styles.row}>
             <Text style={styles.rowText}>
               {wish.title}

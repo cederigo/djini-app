@@ -13,6 +13,8 @@ import {
   PROFILE_UPDATE_REQUEST,
   PROFILE_UPDATE_SUCCESS,
   PROFILE_UPDATE_FAILURE,
+
+  ON_PROFILE_FIELD_CHANGE
 } from '../lib/constants'
 
 export function loadMyProfile() {
@@ -35,6 +37,10 @@ export function editProfile(currentUser: User) {
   }
 }
 
+export function onFieldChange(field, value) {
+  return {type: ON_PROFILE_FIELD_CHANGE, payload: {field, value}}
+}
+
 /*
  * Update Profile
  */
@@ -55,7 +61,7 @@ export function profileUpdateFailure(error) {
     payload: error
   };
 }
-export function updateProfile(details = {}) {
+export function updateProfile(details = {}, source="login") {
   return (dispatch) => {
     dispatch(profileUpdateRequest());
     const user = Parse.User.current()
@@ -66,6 +72,9 @@ export function updateProfile(details = {}) {
     return user.save(details)
       .then((parseUser) => {
         dispatch(profileUpdateSuccess(parseUser))
+        if (source === 'profile-edit') {
+          Actions.pop()
+        }
       })
       .catch(error => {
         dispatch(profileUpdateFailure(error))

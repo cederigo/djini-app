@@ -67,7 +67,7 @@ class FriendWishesList extends Component {
   renderRow (wish) {
     const {dispatch, user} = this.props
     return (
-      <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
+      <TouchableHighlight onPress={() => dispatch(showWish(wish, 'friend'))}>
         <View style={styles.row}>
           <View style={styles.col}>
             <Text style={styles.rowText}>

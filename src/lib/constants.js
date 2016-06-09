@@ -3,6 +3,7 @@ export const MY_PROFILE_REQUEST = 'my-profile-request'
 export const MY_PROFILE_FAILURE = 'my-profile-failure'
 export const MY_PROFILE_LOADED = 'my-profile-loaded'
 export const EDIT_PROFILE = 'edit-profile'
+export const ON_PROFILE_FIELD_CHANGE = 'on-profile-field-change'
 
 
 //wish

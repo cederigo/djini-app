@@ -38,18 +38,18 @@ class Profile extends Component {
             {user.name}
           </Text>
         </View>
-        <View style={styles.profileDetails}>
-          <View style={styles.attribute}>
-            <Text style={[styles.text, styles.attributeLabel]}>E-Mail</Text>
-            <Text style={[styles.text, styles.attributeValue]}>{user.email}</Text>
+        <View style={styles.fields}>
+          <View style={styles.field}>
+            <Text style={[styles.text, styles.fieldLabel]}>E-Mail</Text>
+            <Text style={[styles.text, styles.fieldValue]}>{user.email}</Text>
           </View>
-          <View style={styles.attribute}>
-            <Text style={[styles.text, styles.attributeLabel]}>Geb.</Text>
-            <BirthdayText style={[styles.text, styles.attributeValue]} date={user.birthday}/>
+          <View style={styles.field}>
+            <Text style={[styles.text, styles.fieldLabel]}>Geb.</Text>
+            <BirthdayText style={[styles.text, styles.fieldValue]} date={user.birthday}/>
           </View>
-          <View style={styles.attribute}>
-            <Text style={[styles.text, styles.attributeLabel]}>Telefon</Text>
-            <Text style={[styles.text, styles.attributeValue]}>{user.phoneNumber}</Text>
+          <View style={styles.field}>
+            <Text style={[styles.text, styles.fieldLabel]}>Telefon</Text>
+            <Text style={styles.text}>{user.phoneNumber}</Text>
           </View>
           <WMButton style={styles.logoutButton} onPress={() => dispatch(logout())} caption="Abmelden"/>
         </View>
@@ -76,15 +76,18 @@ const styles = StyleSheet.create({
   profileName: {
     marginTop: 20 
   },
-  profileDetails: {
+  fields: {
     marginHorizontal: 25
   },
-  attribute: {
+  field: {
     flexDirection: 'row',
     marginTop: 10,
   },
-  attributeLabel: {
-    width: 125
+  fieldLabel: {
+    width: 100
+  },
+  fieldValue: {
+    flex: 1,
   },
   profileIcon: {
     fontSize: 120,

@@ -41,10 +41,14 @@ function toParseWish(wish: Record<Wish>) {
 
 import {Wish, User} from '../lib/types'
 
-export function showWish(wish) {
+export function showWish(wish, source = 'wishes') {
   return dispatch => {
     dispatch({type: SHOW_WISH, payload: wish})
-    Actions.wish()
+    if (source === 'wishes') {
+      Actions.wish()
+    } else {
+      Actions.friendWish()
+    }
   }
 }
 

@@ -11,6 +11,7 @@ import wish from './wish/wishReducer'
 import contacts from './contacts/contactsReducer'
 import friend from './friend/friendReducer'
 import wishes from './wishes/wishesReducer'
+import profile from './profile/profileReducer'
 
 import { combineReducers } from 'redux'
 
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   wish,
   contacts,
   friend,
-  wishes
+  wishes,
+  profile
 })
 
 export default rootReducer
