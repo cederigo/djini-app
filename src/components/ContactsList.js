@@ -89,7 +89,7 @@ export default class ContactsList extends Component {
               {contact.name}
             </Text>
             {contact.isFavorite ? <Icon style={styles.rowIcon} name="favorite" size={30}/> : undefined}
-            {contact.registered ? undefined : <WMButton style={styles.rowButton} iconStyle={styles.rowButtonIcon} iconName="person-add" onPress={() => inviteContact}/>}
+            {contact.registered ? undefined : <WMButton style={styles.rowButton} iconStyle={styles.rowButtonIcon} iconName="person-add" onPress={() => inviteContact(contact)}/>}
           </View>
         </TouchableHighlight>
       </Swipeout>

@@ -15,28 +15,34 @@ import {fromParseWish} from '../wishes/wishesReducer'
 
 const initialState = new InitialState;
 
+function updateWish(state, wish) {
+  return state.set(state.source === 'friend' ? 'wishOfFriend' : 'wish', wish)
+}
+
 export default function wishReducer(state = initialState, {type, payload}) {
   switch (type) {
 
-    case SHOW_WISH:
-      return state.set('wish', payload)
+    case SHOW_WISH: {
+      const {wish, source} = payload
+      return updateWish(state.set('source', source), wish)
         .set('editMode', false)
+    }
 
     case EDIT_WISH:
-      return state.set('wish', payload)
+      return updateWish(state, payload)
         .set('editMode', true)
 
     case NEW_WISH: {
-     const {fromUser, toUser} = payload
-     return initialState
-        .set('editMode', true)
-        .setIn(['wish', 'fromUserId'], fromUser.id)
-        .setIn(['wish', 'toUserId'], toUser.id)
+     const {fromUser, toUser, source} = payload
+     const newWish = initialState.wish
+       .set('fromUserId', fromUser.id)
+       .set('toUserId', toUser.id)
+     return updateWish(state.set('source', source), newWish)
+       .set('editMode', true)
     }
 
     case SAVE_WISH_REQUEST:
      return state.set('isFetching', true)
-       .set('editMode', false)
        .set('error', null)
 
     case WISH_UPDATED:
@@ -49,9 +55,10 @@ export default function wishReducer(state = initialState, {type, payload}) {
         return state;
       }
 
-      return state.set('isFetching', false)
-       .set('wish', wish)
-       .set('error', null)
+      return updateWish(state, wish)
+        .set('editMode', false)
+        .set('isFetching', false)
+        .set('error', null)
     }
 
     case SAVE_WISH_FAILURE:
@@ -60,7 +67,7 @@ export default function wishReducer(state = initialState, {type, payload}) {
 
     case ON_WISH_FIELD_CHANGE: {
       const {field, value} = payload
-        return state.setIn(['wish', field], value)
+        return state.setIn([state.source === 'friend' ? 'wishOfFriend' : 'wish', field], value)
     }
   }
   /**

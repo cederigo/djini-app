@@ -15,7 +15,8 @@ export default function authFormValidation(state) {
   switch (formName) {
     case LOGIN_BIRTHDAY_FORM: 
       return state.set('isValid', birthday ? true : false)
-    case LOGIN_PHONENUMBER_FORM: state.set('isValid', isValidNumber(phoneNumber))
+    case LOGIN_PHONENUMBER_FORM: 
+      return state.set('isValid', isValidNumber(phoneNumber))
           .setIn(['fields', 'phoneNumberFormatted'], formatNumber(phoneNumber))
     case LOGIN_VERIFICATIONCODE_FORM:
       return state.set('isValid', code ? true : false)

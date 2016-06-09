@@ -24,7 +24,8 @@ class WishView extends Component {
 
   props: {
     currentUser: User,
-    wish: Wish 
+    source: string,
+    wish: Wish
   }
 
   constructor(props) {
@@ -66,12 +67,12 @@ class WishView extends Component {
   }
 
   imageClicked() {
-    const {wish, currentUser, dispatch} = this.props
+    const {wish, currentUser, dispatch, source} = this.props
     if (wish.imageURL) {
       return this.setState({imageExpanded: !this.state.imageExpanded})
     }
     if (allowEdit(wish, currentUser)) {
-      dispatch(editWish(wish))
+      dispatch(editWish(wish, source))
     }
   }
 
@@ -153,12 +154,12 @@ class WishView extends Component {
 
 
   render() {
-    const {dispatch, currentUser, wish} = this.props
+    const {dispatch, currentUser, wish, source} = this.props
 
     return ( 
       <View style={styles.container}>
         <AppBar showBackButton={true} title={wish.title}>
-          {allowEdit(wish, currentUser) ? <ActionButton text="Bearbeiten" onPress={() => dispatch(editWish(wish))}/> : undefined }
+          {allowEdit(wish, currentUser) ? <ActionButton text="Bearbeiten" onPress={() => dispatch(editWish(wish, source))}/> : undefined }
         </AppBar>
 
         <ScrollView>
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
  */
 function select(state) {
   return { 
-    currentUser: state.global.currentUser
+    currentUser: state.global.currentUser,
   };
 }
 export default connect(select)(WishView)

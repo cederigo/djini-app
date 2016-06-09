@@ -14,12 +14,9 @@ export default class BirthdayText extends Component {
 
   render() {
     const {date, text} = this.props
-    if (!date) {
-      return //nothing to render
-    }
     return (
       <Text {...this.props}>
-        {`${text}${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`}
+        {date ? `${text}${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}` : ''}
       </Text>
     )
   }

@@ -141,12 +141,12 @@ export default function init() {
               <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
                 <Scene key="wishesTab" icon={TabIcon} iconName="cake">
                   <Scene key="wishes" initial={true} sceneStyle={styles.tabScene} component={Wishes}/>
-                  <Scene key="wish" sceneStyle={styles.tabScene} component={Wish}/>
+                  <Scene key="wish" sceneStyle={styles.tabScene} component={Wish} source="wishes"/>
                 </Scene>
                 <Scene key="contactsTab" icon={TabIcon} iconName="group">
                   <Scene key="contacts" initial={true} sceneStyle={styles.tabScene} component={Contacts}/>
                   <Scene key="friend" sceneStyle={styles.tabScene} component={Friend}/>
-                  <Scene key="friendWish" sceneStyle={styles.tabScene} component={Wish}/>
+                  <Scene key="friendWish" sceneStyle={styles.tabScene} component={Wish} source="friend"/>
                 </Scene>
                 <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="folder-shared"/>
                 <Scene key="profileTab" icon={TabIcon} iconName="person" onSelect={Actions.profile}>

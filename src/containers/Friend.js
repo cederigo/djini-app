@@ -42,7 +42,7 @@ class Friend extends Component {
 
   renderContentView() {
     return (
-      <View>
+      <View style={styles.container}>
         {this.renderProfileView()}
         {this.renderTabs()}
       </View>
@@ -88,22 +88,22 @@ class Friend extends Component {
       ) 
     }
     if (activeTab === 'wishes') {
-      return <FriendWishesList wishes={wishes.toArray()} user={user}/>
+      return <FriendWishesList style={styles.container} wishes={wishes.toArray()} user={user}/>
     } else {
-      return <FriendIdeasList wishes={ideas.toArray()}/>
+      return <FriendIdeasList style={styles.container} wishes={ideas.toArray()}/>
     }
   }
 
   renderTabs() {
     const {user, friend, dispatch} = this.props
     return (
-      <View style={styles.tabbedView}>
+      <View style={styles.container}>
         <Tabs selected={this.state.activeTab} onSelect={(el) => this.setState({activeTab: el.props.name})}>
           <Text style={styles.tabText} initial={true} name="wishes">Wünsche</Text>
           <View style={styles.tabIdeas} name="ideas">
             <Text style={styles.tabText}>Meine Ideen</Text>
             <TouchableOpacity
-              onPress={() => dispatch(newWish(user, friend))}>
+              onPress={() => dispatch(newWish(user, friend, 'friend'))}>
               <Icon style={styles.tabIcon} name="add"/>
             </TouchableOpacity>
           </View>

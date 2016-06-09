@@ -43,7 +43,7 @@ import {Wish, User} from '../lib/types'
 
 export function showWish(wish, source = 'wishes') {
   return dispatch => {
-    dispatch({type: SHOW_WISH, payload: wish})
+    dispatch({type: SHOW_WISH, payload: {source, wish}})
     if (source === 'wishes') {
       Actions.wish()
     } else {
@@ -52,10 +52,14 @@ export function showWish(wish, source = 'wishes') {
   }
 }
 
-export function editWish(wish) {
+export function editWish(wish, source='wishes') {
   return dispatch => {
     dispatch({type: EDIT_WISH, payload: wish})
-    Actions.wish()
+    if (source === 'wishes') {
+      Actions.wish()
+    } else {
+      Actions.friendWish()
+    }
   }
 }
 
@@ -66,10 +70,14 @@ export function onWishFieldChange(field, value) {
   }
 }
 
-export function newWish(fromUser: User, toUser: User) {
+export function newWish(fromUser: User, toUser: User, source) {
   return dispatch => {
-    dispatch({type: NEW_WISH, payload: {fromUser, toUser}})
-    Actions.wish()
+    dispatch({type: NEW_WISH, payload: {fromUser, toUser, source}})
+    if (source === 'wishes') {
+      Actions.wish()
+    } else {
+      Actions.friendWish()
+    }
   }
 }
 /*
@@ -108,10 +116,10 @@ export function saveWish(wish: Record<Wish>, source: string = "details") {
       if (wish.id) {
         dispatch(wishUpdated(data, source))
       } else {
-        dispatch(wishAdded(data, source))
         if (source === 'details') {
           Actions.pop()
         }
+        dispatch(wishAdded(data, source))
       }
     })
     .catch((error) => {

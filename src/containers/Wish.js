@@ -9,22 +9,24 @@ import WishEditView from '../components/wish/WishEditView'
 
 class Wish extends Component {
 
+  static propTypes = {
+    wishState: PropTypes.instanceOf(Immutable.Record).isRequired,
+    source: PropTypes.string.isRequired
+  }
+
   render() {
-    const {wishState} = this.props
+    const {wishState, source} = this.props
+    const wish = source === 'friend' ? wishState.wishOfFriend : wishState.wish
     return (
       <View style={styles.container}>
         <StatusBar translucent={true} />
         {wishState.editMode ?
-          <WishEditView wish={wishState.wish}/> :
-          <WishView wish={wishState.wish}/>
+          <WishEditView wish={wish} source={source}/> :
+          <WishView wish={wish} source={source}/>
         }
       </View>
     )
   }
-}
-
-Wish.propTypes = {
-  wishState: PropTypes.instanceOf(Immutable.Record).isRequired
 }
 
 const styles = StyleSheet.create({
@@ -33,13 +35,9 @@ const styles = StyleSheet.create({
   }
 });
 
-/**
- * Redux boilerplate
- */
 function select(state) {
   return { 
     wishState: state.wish,
   };
 }
-
 export default connect(select)(Wish)

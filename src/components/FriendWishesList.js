@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import React, {Component} from 'react'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { 
   View,
   TouchableHighlight,
@@ -55,7 +56,7 @@ class FriendWishesList extends Component {
       description = 'Wird von mir erfüllt'
     }
     else if (wish.fulfillerName) {
-      description = `Wird erfüllt durch ${wish.fulfillerName})`
+      description = `Wird erfüllt durch ${wish.fulfillerName}`
     }
     return (
       <Text style={styles.rowDescription}>
@@ -75,6 +76,7 @@ class FriendWishesList extends Component {
             </Text>
             {this.renderRowDescription(wish, user)}
           </View>
+          {fulfilled(wish) ? <Icon style={styles.rowIcon} name="check" size={30}/> : undefined}
         </View>
       </TouchableHighlight>
     );
