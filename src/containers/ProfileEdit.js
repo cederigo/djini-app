@@ -1,5 +1,4 @@
 
-import Immutable from 'immutable'
 import { connect } from 'react-redux'
 import React, {Component, PropTypes} from 'react'
 import { StyleSheet, View, StatusBar, Text } from 'react-native'
@@ -8,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import {updateProfile, onFieldChange} from '../actions/profile'
 
 import {AppBar, ActionButton} from '../components/AppBar'
-import BirthdayInput2 from '../components/BirthdayInput2'
+import BirthdayInput from '../components/BirthdayInput'
 import FieldInput from '../components/FieldInput'
 
 import WMColors from '../lib/WMColors'
@@ -16,9 +15,9 @@ import WMColors from '../lib/WMColors'
 class ProfileEdit extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
+    fields: PropTypes.object.isRequired,
     isValid: PropTypes.bool.isRequired,
     isFetching: PropTypes.bool.isRequired,
-    fields: PropTypes.instanceOf(Immutable.Record)
   }
 
   render() {
@@ -51,15 +50,16 @@ class ProfileEdit extends Component {
               value={email}
               editable={!isFetching}
               onChangeText={(text) => { dispatch(onFieldChange('email', text))}}
+              onSubmitEditing={() => this.refs.birthday.focus()}
             />
           </View>
           <View style={styles.field}>
             <Text style={[styles.text, styles.fieldLabel]}>Geb.</Text>
-            <BirthdayInput2
+            <BirthdayInput
               ref="birthday"
               style={styles.fieldInput}
               date={birthday}
-              editable={false}
+              editable={!isFetching}
               onDateChange={(date) => {dispatch(onFieldChange('birthday', date))}}
             />
           </View>

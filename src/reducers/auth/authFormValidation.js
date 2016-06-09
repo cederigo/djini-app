@@ -10,13 +10,12 @@ import {
 export default function authFormValidation(state) {
 
   const {formName, fields} = state
-  const {phoneNumber, code, email, name} = fields
+  const {phoneNumber, code, email, name, birthday} = fields
 
   switch (formName) {
     case LOGIN_BIRTHDAY_FORM: 
-      return state.set('isValid', true)
-    case LOGIN_PHONENUMBER_FORM: 
-      return state.set('isValid', isValidNumber(phoneNumber))
+      return state.set('isValid', birthday ? true : false)
+    case LOGIN_PHONENUMBER_FORM: state.set('isValid', isValidNumber(phoneNumber))
           .setIn(['fields', 'phoneNumberFormatted'], formatNumber(phoneNumber))
     case LOGIN_VERIFICATIONCODE_FORM:
       return state.set('isValid', code ? true : false)

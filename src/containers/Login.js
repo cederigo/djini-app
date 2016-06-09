@@ -142,10 +142,11 @@ const formStyles = StyleSheet.create({
     borderColor: WMColors.lightText,
     borderBottomWidth: 1,
     flex: 2,
-    alignItems: 'center',
-    justifyContent: 'center'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   formGroupInput: {
+    alignSelf: 'stretch',
     height: 30,
     flex: 1,
     fontSize: 16,

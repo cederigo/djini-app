@@ -35,7 +35,7 @@ const InitialState = Record({
     code: '',
     name: '',
     email: '',
-    birthday: new Date(0)
+    birthday: undefined
   }))
 });
 
