@@ -5,7 +5,6 @@ import {TextInput} from 'react-native';
 export default class FieldInput extends Component {
   render() {
     return <TextInput
-      autoFocus={true}
       clearButtonMode="while-editing"
       autoCapitalize="none"
       autoCorrect={false}

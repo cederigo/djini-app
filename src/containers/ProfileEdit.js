@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import {updateProfile, onFieldChange} from '../actions/profile'
 
 import {AppBar, ActionButton} from '../components/AppBar'
-import BirthdayText from '../components/BirthdayText'
+import BirthdayInput2 from '../components/BirthdayInput2'
 import FieldInput from '../components/FieldInput'
 
 import WMColors from '../lib/WMColors'
@@ -35,6 +35,7 @@ class ProfileEdit extends Component {
           <View style={styles.field}>
             <Text style={[styles.text, styles.fieldLabel]}>Name</Text>
             <FieldInput
+              autoFocus={true}
               style={styles.fieldInput}
               value={name}
               editable={!isFetching}
@@ -54,7 +55,13 @@ class ProfileEdit extends Component {
           </View>
           <View style={styles.field}>
             <Text style={[styles.text, styles.fieldLabel]}>Geb.</Text>
-            <BirthdayText style={styles.text} date={birthday}/>
+            <BirthdayInput2
+              ref="birthday"
+              style={styles.fieldInput}
+              date={birthday}
+              editable={!isFetching}
+              onDateChange={(date) => {dispatch(onFieldChange('birthday', date))}}
+            />
           </View>
           <View style={styles.field}>
             <Text style={[styles.text, styles.fieldLabel]}>Telefon</Text>
