@@ -59,7 +59,7 @@ class ProfileEdit extends Component {
               ref="birthday"
               style={styles.fieldInput}
               date={birthday}
-              editable={!isFetching}
+              editable={false}
               onDateChange={(date) => {dispatch(onFieldChange('birthday', date))}}
             />
           </View>
