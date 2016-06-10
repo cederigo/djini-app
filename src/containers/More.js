@@ -1,9 +1,12 @@
 
 import { connect } from 'react-redux';
-import React, {Component} from 'react'
-import { StyleSheet, View, StatusBar, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, {Component, PropTypes} from 'react'
+import {TouchableWithoutFeedback, StyleSheet, View, StatusBar, Text, TouchableOpacity, TextInput } from 'react-native';
+import dismissKeyboard from 'dismissKeyboard'
 import {Actions} from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
+import {sendFeedback, onFeedbackChange} from '../actions/feedback'
 
 import {AppBar} from '../components/AppBar'
 import WMButton from '../components/WMButton'
@@ -12,7 +15,14 @@ import Tabs from '../components/Tabs'
 import WMColors from '../lib/WMColors'
 
 class More extends Component {
+  static propTypes = {
+    isFetching: PropTypes.bool.isRequired,
+    isValid: PropTypes.bool.isRequired,
+    description: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
+  }
   render() {
+    const {isFetching, isValid, description, user, dispatch} = this.props
     return(
       <View style={ styles.container }>
         <StatusBar translucent={true}/>
@@ -21,14 +31,23 @@ class More extends Component {
           <Text style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Mein Profil</Text>
           <Text style={styles.tabText} name="more">Mehr</Text>
         </Tabs>
-        <View style={styles.feedback}>
-          <Text style={styles.text}>Feedback schreiben</Text>
-          <Text style={styles.textSmall}>Sag Djini deine Verbesserungswünsche für die App…</Text>
-          <TextInput
-            multiline={true}
-            style={styles.feedbackInput} />
-          <WMButton style={styles.feedbackSubmit} caption="Senden"/>
-        </View>
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+          <View style={styles.feedback}>
+            <Text style={styles.text}>Feedback schreiben</Text>
+            <Text style={styles.textSmall}>Sag Djini deine Verbesserungswünsche für die App…</Text>
+            <TextInput
+              autoCorrect={false}
+              multiline={true}
+              value={description}
+              onChangeText={(text) => dispatch(onFeedbackChange(text))}
+              style={styles.feedbackInput} />
+            <WMButton
+              style={styles.feedbackSubmit}
+              disabled={isFetching || !isValid}
+              onPress={() => {dispatch(sendFeedback(user, description)); dismissKeyboard()}}
+              caption="Senden"/>
+          </View>
+        </TouchableWithoutFeedback>
         <View>
           <TouchableOpacity style={styles.item}>
             <Text style={styles.itemText}>FAQ</Text>
@@ -101,4 +120,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect()(More);
+function select(state) {
+  return {...state.feedback.toJS(), user: state.global.currentUser}
+}
+export default connect(select)(More);

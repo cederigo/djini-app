@@ -12,6 +12,7 @@ import contacts from './contacts/contactsReducer'
 import friend from './friend/friendReducer'
 import wishes from './wishes/wishesReducer'
 import profile from './profile/profileReducer'
+import feedback from './feedback/feedbackReducer'
 
 import { combineReducers } from 'redux'
 
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
   contacts,
   friend,
   wishes,
-  profile
+  profile,
+  feedback
 })
 
 export default rootReducer

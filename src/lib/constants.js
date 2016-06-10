@@ -61,3 +61,8 @@ export const SHOW_CONTACT = 'show-contact'
 export const GET_FRIEND_PROFILE_REQUEST = 'get-friend-profile-request'
 export const GET_FRIEND_PROFILE_SUCCESS = 'get-friend-profile-success'
 export const GET_FRIEND_PROFILE_FAILURE = 'get-friend-profile-failure'
+
+export const FEEDBACK_REQUEST = 'feedback-request'
+export const FEEDBACK_SUCCESS = 'feedback-success'
+export const FEEDBACK_FAILURE = 'feedback-failure'
+export const ON_FEEDBACK_CHANGE = 'on-feedback-change'

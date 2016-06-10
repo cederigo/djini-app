@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
+import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Linking, Image, Dimensions, Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import FulfillWishButton from './FulfillWishButton'
@@ -34,13 +34,14 @@ class WishView extends Component {
     this.imageClicked = this.imageClicked.bind(this)
     this.state = {
       imageExpanded: false,
-      imageHeight: 0
+      imageHeight: IMAGE_HEIGHT
     }
   }
 
   componentDidMount() {
     const {wish} = this.props
-    if (wish.imageURL) {
+    //TODO: Wait for https://github.com/facebook/react-native/pull/7664 to be merged (getSize does not work on android)
+    if (wish.imageURL && Platform.OS === 'ios') {
       Image.getSize(wish.imageURL, (width, height) => {
         this.setState({
           imageHeight: height * (WIDTH / width)
@@ -162,35 +163,37 @@ class WishView extends Component {
           {allowEdit(wish, currentUser) ? <ActionButton text="Bearbeiten" onPress={() => dispatch(editWish(wish, source))}/> : undefined }
         </AppBar>
 
-        <ScrollView>
-          {this.renderFulfillment(wish, currentUser)}
+        <ScrollView style={styles.container}>
+          <View style={styles.content}>
+            {this.renderFulfillment(wish, currentUser)}
 
-          {this.renderImage(wish)}
+            {this.renderImage(wish)}
 
-          <View style={styles.attr}>
-            <Text style={[styles.text, styles.titleText]}>{wish.title || '-'}</Text>
+            <View style={styles.attr}>
+              <Text style={[styles.text, styles.titleText]}>{wish.title || '-'}</Text>
+            </View>
+
+            <View style={styles.attr}>
+              <Icon style={[styles.text, styles.attrIcon]} name="description"/>
+              <Text style={[styles.text, styles.attrText]}>{wish.description || '-'}</Text>
+            </View>
+
+            <View style={styles.attr}>
+              <Icon style={[styles.text, styles.attrIcon]} name="remove-red-eye"/>
+              <Text style={[styles.text, styles.attrText]}>{wish.seenAt || '-'}</Text>
+            </View>
+
+            <View style={styles.attr}>
+              <Icon style={[styles.text, styles.attrIcon]} name="link"/>
+              <TouchableOpacity onPress={() => this.openURL(wish.url)}>
+                <Text style={[styles.text, styles.attrText]} numberOfLines={1}>{wish.url || '-'}</Text>
+              </TouchableOpacity>
+            </View>
+
+            {this.renderPrivateAttributes(wish, currentUser)}
+
+            {this.renderActionButtons(wish, currentUser)}
           </View>
-
-          <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="description"/>
-            <Text style={[styles.text, styles.attrText]}>{wish.description || '-'}</Text>
-          </View>
-
-          <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="remove-red-eye"/>
-            <Text style={[styles.text, styles.attrText]}>{wish.seenAt || '-'}</Text>
-          </View>
-
-          <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="link"/>
-            <TouchableOpacity onPress={() => this.openURL(wish.url)}>
-              <Text style={[styles.text, styles.attrText]} numberOfLines={1}>{wish.url || '-'}</Text>
-            </TouchableOpacity>
-          </View>
-
-          {this.renderPrivateAttributes(wish, currentUser)}
-
-          {this.renderActionButtons(wish, currentUser)}
         </ScrollView>
       </View>
     )
@@ -200,7 +203,10 @@ class WishView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: WMColors.background,
+  },
+  content: {
+    flex: 1,
+    marginBottom: 50
   },
   imagePlaceholder: {
     height: IMAGE_HEIGHT,
@@ -217,7 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 17 
   },
   titleText: {
-    paddingHorizontal: 18,
+    marginHorizontal: 18,
     fontSize: 22,
   },
   attr: {
