@@ -22,7 +22,13 @@ export class AppBar extends Component {
     return (
       <View style={styles.appBar}>
         <View style={styles.left}>
-          {showBackButton ? <ActionButton onPress={onBack} iconName="chevron-left" style={styles.backButton}/> : undefined}
+          {showBackButton ? 
+            <ActionButton 
+              onPress={onBack}
+              iconName="chevron-left"
+              style={[styles.actionButton, styles.actionButtonLeft]}/>
+            : undefined
+          }
         </View>
         <Text style={styles.title} numberOfLines={1}>{title}</Text>
         <View style={styles.right}>
@@ -105,7 +111,7 @@ export class ActionButton extends React.Component {
         style={[styles.actionButton, style]}
         onPress={() => { if (!disabled) { onPress() }}}>
         {iconName ? 
-          <Icon style={[styles.actionIcon, disabled ? styles.disabled : undefined]} name={iconName} size={30} /> :
+          <Icon style={[styles.actionIcon, disabled ? styles.disabled : undefined]} name={iconName}/> :
           <Text style={[styles.actionText, disabled ? styles.disabled : undefined]}>{text}</Text>
         }
       </TouchableOpacity>
@@ -126,7 +132,6 @@ const styles = StyleSheet.create({
   },
   left: {
     flex: 1,
-    paddingLeft: 5
   },
   title: {
     textAlign: 'center',
@@ -138,21 +143,28 @@ const styles = StyleSheet.create({
   right: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    paddingRight: 5,
     flex: 1,
   },
   actionButton: {
-    padding: 0,
+    paddingVertical: 10,
+    paddingRight: 10,
+    alignItems: 'flex-end',
+    flex: 1
+  },
+  actionButtonLeft: {
+    paddingLeft: 0,
+    alignItems: 'flex-start',
   },
   disabled: {
     color: WMColors.disabledText
   },
   actionIcon: {
+    fontSize: 30,
     color: WMColors.darkText
   },
   actionText: {
+    fontSize: 16,
     color: WMColors.darkText,
-    marginRight: 5
   },
   searchInput: {
     marginLeft: 10,
