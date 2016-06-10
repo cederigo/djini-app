@@ -31,10 +31,10 @@ async function currentInstallation(): Promise<Parse.Installation> {
   const installationId = await Parse._getInstallationId();
   return new Parse.Installation({
     installationId,
-    appName: 'Wishper',
+    appName: 'Djini',
     deviceType: Platform.OS,
     // TODO: Get this information from the app itself
-    appIdentifier: Platform.OS === 'ios' ? 'ch.wishper' : 'ch.wishper',
+    appIdentifier: Platform.OS === 'ios' ? 'ch.djini' : 'ch.djini',
   });
 }
 
