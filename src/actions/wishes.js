@@ -70,7 +70,7 @@ export function onWishFieldChange(field, value) {
   }
 }
 
-export function newWish(fromUser: User, toUser: User, source) {
+export function newWish(fromUser: User, toUser: User, source = 'wishes') {
   return dispatch => {
     dispatch({type: NEW_WISH, payload: {fromUser, toUser, source}})
     if (source === 'wishes') {
