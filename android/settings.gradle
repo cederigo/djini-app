@@ -1,4 +1,4 @@
-rootProject.name = 'Wishmaster'
+rootProject.name = 'Djini'
 
 include ':app'
 include ':react-native-image-picker'

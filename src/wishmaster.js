@@ -163,5 +163,5 @@ export default function init() {
     }
   })
 
-  AppRegistry.registerComponent('Wishmaster', () => Wishmaster)
+  AppRegistry.registerComponent('Djini', () => Wishmaster)
 }
