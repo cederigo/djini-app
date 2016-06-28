@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Linking, Image, Dimensions, Platform} from 'react-native';
+import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import FulfillWishButton from './FulfillWishButton'
@@ -40,14 +40,11 @@ class WishView extends Component {
 
   componentDidMount() {
     const {wish} = this.props
-    //TODO: Wait for https://github.com/facebook/react-native/pull/7664 to be merged (getSize does not work on android)
-    if (wish.imageURL && Platform.OS === 'ios') {
-      Image.getSize(wish.imageURL, (width, height) => {
-        this.setState({
-          imageHeight: height * (WIDTH / width)
-        })
+    Image.getSize(wish.imageURL, (width, height) => {
+      this.setState({
+        imageHeight: height * (WIDTH / width)
       })
-    }
+    })
   }
 
   renderImage(wish) {
