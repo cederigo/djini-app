@@ -22,7 +22,6 @@ export default StyleSheet.create({
     paddingHorizontal: 25
   },
   col: {
-    paddingVertical: 5,
     flex: 1,
   },
   rowSeparator: {
@@ -35,7 +34,6 @@ export default StyleSheet.create({
     color: WMColors.lightText,
   },
   rowDescription: {
-    flex: 1,
     fontSize: 14,
     color: WMColors.lightText,
   },

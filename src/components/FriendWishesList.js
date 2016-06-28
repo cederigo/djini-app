@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import Swipeout from 'react-native-swipeout'
 import React, {Component} from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { 
@@ -15,7 +16,7 @@ import styles from '../lib/listStyles'
 import {fulfilled, fulfilledByUser} from '../lib/wishUtil'
 
 // actions
-import {showWish} from '../actions/wishes'
+import {showWish, copyWish} from '../actions/wishes'
 
 class FriendWishesList extends Component {
 
@@ -65,20 +66,35 @@ class FriendWishesList extends Component {
     )
   }
 
+  swipeoutBtns (wish) {
+    const {dispatch, user} = this.props
+    return [
+      { 
+        component:
+          <View style={styles.swipeout}>
+            <Icon style={styles.swipeoutIcon} name="playlist-add" size={30}/>
+          </View>,
+        onPress: () => dispatch(copyWish(wish, user)),
+      },
+    ]
+  }
+
   renderRow (wish) {
     const {dispatch, user} = this.props
     return (
-      <TouchableHighlight onPress={() => dispatch(showWish(wish, 'friend'))}>
-        <View style={styles.row}>
-          <View style={styles.col}>
-            <Text style={styles.rowText} numberOfLines={1}>
-              {wish.title}
-            </Text>
-            {this.renderRowDescription(wish, user)}
+      <Swipeout right={this.swipeoutBtns(wish)} autoClose={true}>
+        <TouchableHighlight onPress={() => dispatch(showWish(wish, 'friend'))}>
+          <View style={styles.row}>
+            <View style={styles.col}>
+              <Text style={[styles.rowText, {flex: 0}]} numberOfLines={1}>
+                {wish.title}
+              </Text>
+              {this.renderRowDescription(wish, user)}
+            </View>
+            {fulfilled(wish) ? <Icon style={styles.rowIcon} name="check" size={30}/> : undefined}
           </View>
-          {fulfilled(wish) ? <Icon style={styles.rowIcon} name="check" size={30}/> : undefined}
-        </View>
-      </TouchableHighlight>
+        </TouchableHighlight>
+      </Swipeout>
     );
   }
 
