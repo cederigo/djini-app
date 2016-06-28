@@ -52,7 +52,7 @@ var styles = StyleSheet.create({
     backgroundColor: WMColors.lightText,
     flexDirection: 'row',
     borderColor: 'white',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   iconView: {
     flex: 1,

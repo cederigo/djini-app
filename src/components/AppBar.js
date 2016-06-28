@@ -112,7 +112,7 @@ export class ActionButton extends React.Component {
         onPress={() => { if (!disabled) { onPress() }}}>
         {iconName ? 
           <Icon style={[styles.actionIcon, disabled ? styles.disabled : undefined]} name={iconName}/> :
-          <Text style={[styles.actionText, disabled ? styles.disabled : undefined]}>{text}</Text>
+          <Text numberOfLines={1} style={[styles.actionText, disabled ? styles.disabled : undefined]}>{text}</Text>
         }
       </TouchableOpacity>
     );
@@ -137,8 +137,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: WMColors.lightText,
     flex: 2,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '400',
+    marginHorizontal: 5
   },
   right: {
     flexDirection: 'row',
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     paddingVertical: 10,
-    paddingRight: 10,
+    paddingRight: 5,
     alignItems: 'flex-end',
     flex: 1
   },
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     color: WMColors.darkText
   },
   actionText: {
-    fontSize: 16,
+    fontSize: 13,
     color: WMColors.darkText,
   },
   searchInput: {

@@ -40,11 +40,13 @@ class WishView extends Component {
 
   componentDidMount() {
     const {wish} = this.props
-    Image.getSize(wish.imageURL, (width, height) => {
-      this.setState({
-        imageHeight: height * (WIDTH / width)
+    if (wish.imageURL) {
+      Image.getSize(wish.imageURL, (width, height) => {
+        this.setState({
+          imageHeight: height * (WIDTH / width)
+        })
       })
-    })
+    }
   }
 
   renderImage(wish) {

@@ -1,7 +1,7 @@
 
 import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
-import {TouchableWithoutFeedback, StyleSheet, View, StatusBar, Text, TouchableOpacity, TextInput } from 'react-native';
+import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, StatusBar, Text, TouchableOpacity, TextInput } from 'react-native';
 import dismissKeyboard from 'dismissKeyboard'
 import {Actions} from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -27,41 +27,43 @@ class More extends Component {
       <View style={ styles.container }>
         <StatusBar translucent={true}/>
         <AppBar title="Mehr" showBackButton={false}/>
-        <Tabs selected="more">
-          <Text style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Mein Profil</Text>
-          <Text style={styles.tabText} name="more">Mehr</Text>
-        </Tabs>
-        <TouchableWithoutFeedback onPress={dismissKeyboard}>
-          <View style={styles.feedback}>
-            <Text style={styles.text}>Feedback schreiben</Text>
-            <Text style={styles.textSmall}>Sag Djini deine Verbesserungswünsche für die App…</Text>
-            <TextInput
-              autoCorrect={false}
-              multiline={true}
-              value={description}
-              onChangeText={(text) => dispatch(onFeedbackChange(text))}
-              style={styles.feedbackInput} />
-            <WMButton
-              style={styles.feedbackSubmit}
-              disabled={isFetching || !isValid}
-              onPress={() => {dispatch(sendFeedback(user, description)); dismissKeyboard()}}
-              caption="Senden"/>
+        <ScrollView>
+          <Tabs selected="more">
+            <Text style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Mein Profil</Text>
+            <Text style={styles.tabText} name="more">Mehr</Text>
+          </Tabs>
+          <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View style={styles.feedback}>
+              <Text style={styles.text}>Feedback schreiben</Text>
+              <Text style={styles.textSmall}>Sag Djini deine Verbesserungswünsche für die App…</Text>
+              <TextInput
+                autoCorrect={false}
+                multiline={true}
+                value={description}
+                onChangeText={(text) => dispatch(onFeedbackChange(text))}
+                style={styles.feedbackInput} />
+              <WMButton
+                style={styles.feedbackSubmit}
+                disabled={isFetching || !isValid}
+                onPress={() => {dispatch(sendFeedback(user, description)); dismissKeyboard()}}
+                caption="Senden"/>
+            </View>
+          </TouchableWithoutFeedback>
+          <View>
+            <TouchableOpacity style={styles.item}>
+              <Text style={styles.itemText}>FAQ</Text>
+              <Icon style={styles.itemIcon} name="chevron-right"/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.item}>
+              <Text style={styles.itemText}>Nutzungsbedingungen (ABG)</Text>
+              <Icon style={styles.itemIcon} name="chevron-right"/>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.item}>
+              <Text style={styles.itemText}>Credits</Text>
+              <Icon style={styles.itemIcon} name="chevron-right"/>
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
-        <View>
-          <TouchableOpacity style={styles.item}>
-            <Text style={styles.itemText}>FAQ</Text>
-            <Icon style={styles.itemIcon} name="chevron-right"/>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.item}>
-            <Text style={styles.itemText}>Nutzungsbedingungen (ABG)</Text>
-            <Icon style={styles.itemIcon} name="chevron-right"/>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.item}>
-            <Text style={styles.itemText}>Credits</Text>
-            <Icon style={styles.itemIcon} name="chevron-right"/>
-          </TouchableOpacity>
-        </View>
+        </ScrollView>
       </View>
     );
   }

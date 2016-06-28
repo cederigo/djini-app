@@ -71,7 +71,7 @@ class FriendWishesList extends Component {
       <TouchableHighlight onPress={() => dispatch(showWish(wish, 'friend'))}>
         <View style={styles.row}>
           <View style={styles.col}>
-            <Text style={styles.rowText}>
+            <Text style={styles.rowText} numberOfLines={1}>
               {wish.title}
             </Text>
             {this.renderRowDescription(wish, user)}

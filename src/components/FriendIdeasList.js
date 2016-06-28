@@ -87,7 +87,7 @@ class FriendIdeasList extends Component {
       <Swipeout right={this._swipeoutBtns(wish)} autoClose={true}>
         <TouchableHighlight onPress={() => dispatch(showWish(wish, 'friend'))}>
           <View style={styles.row}>
-            <Text style={styles.rowText}>
+            <Text style={styles.rowText} numberOfLines={1}>
               {wish.title}
             </Text>
             {fulfilled(wish) ? <Icon style={styles.rowIcon} name="check" size={30}/> : undefined}

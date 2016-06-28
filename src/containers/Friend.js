@@ -178,15 +178,16 @@ const styles = StyleSheet.create({
     marginVertical: 25
   },
   tabText: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'white'
   },
   tabIcon: {
     color: 'white',
     fontSize: 34,
-    marginLeft: 10
+    padding: 5 
   },
   tabIdeas: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   }
