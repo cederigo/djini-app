@@ -2,8 +2,9 @@
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Actions } from 'react-native-router-flux'
 import React, {Component} from 'react'
-import { StyleSheet, View, Text, StatusBar } from 'react-native';
+import { StyleSheet, View, StatusBar } from 'react-native';
 
+import DjiniText from '../components/DjiniText'
 import WMButton from '../components/WMButton'
 import WMColors from '../lib/WMColors'
 
@@ -13,24 +14,24 @@ export default class Welcome extends Component {
       <View style={ styles.container }>
         <StatusBar translucent={true} barStyle="light-content"/>
 
-        <Text style={ styles.title }>Djini</Text>
+        <DjiniText style={ styles.title }>Djini</DjiniText>
         <View style={styles.feature}>
           <Icon style={styles.featureIcon} name="cake" size={40}/>
-          <Text style={styles.featureText}>
+          <DjiniText style={styles.featureText}>
             Eigene Wünsche teilen
-          </Text>
+          </DjiniText>
         </View>
         <View style={styles.feature}>
           <Icon style={styles.featureIcon} name="group" size={40}/>
-          <Text style={styles.featureText}>
+          <DjiniText style={styles.featureText}>
             Geschenkideen für Freunde merken
-          </Text>
+          </DjiniText>
         </View>
         <View style={styles.feature}>
           <Icon style={styles.featureIcon} name="folder-shared" size={40}/>
-          <Text style={styles.featureText}>
+          <DjiniText style={styles.featureText}>
             Geschenke in Gruppen organisieren
-          </Text>
+          </DjiniText>
         </View>
 
         <WMButton style={styles.button} onPress={Actions.login} caption="Los gehts!"/>

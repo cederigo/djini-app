@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -26,6 +27,10 @@
 		60A8DA2B4C5F47F182B04ADC /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CFBF7D63D24F4F2E8C820E45 /* Foundation.ttf */; };
 		77E3145BD60A4537AD65E376 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDAFF6CD44D149EC8E1B4885 /* Octicons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		8C460E0D1D6F0E50005214F3 /* Asap-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C460E0C1D6F0E50005214F3 /* Asap-Bold.ttf */; };
+		8C460E111D6F0E88005214F3 /* Asap-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C460E0E1D6F0E88005214F3 /* Asap-BoldItalic.ttf */; };
+		8C460E121D6F0E88005214F3 /* Asap-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C460E0F1D6F0E88005214F3 /* Asap-Italic.ttf */; };
+		8C460E131D6F0E88005214F3 /* Asap-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C460E101D6F0E88005214F3 /* Asap-Regular.ttf */; };
 		8CD1507E1CC634560028C73F /* libRCTContacts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CD1507D1CC6342E0028C73F /* libRCTContacts.a */; };
 		8F89D186279B44878DF71DF8 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6707F6002BEE46B4B41F3174 /* EvilIcons.ttf */; };
 		92EDDFDF65284589871FF8E9 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2E16D33E1E5A4966A09B607A /* Entypo.ttf */; };
@@ -170,6 +175,10 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		873261C3C0E04F7DB758B98B /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
+		8C460E0C1D6F0E50005214F3 /* Asap-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asap-Bold.ttf"; sourceTree = "<group>"; };
+		8C460E0E1D6F0E88005214F3 /* Asap-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asap-BoldItalic.ttf"; sourceTree = "<group>"; };
+		8C460E0F1D6F0E88005214F3 /* Asap-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asap-Italic.ttf"; sourceTree = "<group>"; };
+		8C460E101D6F0E88005214F3 /* Asap-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Asap-Regular.ttf"; sourceTree = "<group>"; };
 		8CD150781CC6342E0028C73F /* RCTContacts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTContacts.xcodeproj; path = "../node_modules/react-native-contacts/ios/RCTContacts.xcodeproj"; sourceTree = "<group>"; };
 		BDAFF6CD44D149EC8E1B4885 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		CFBF7D63D24F4F2E8C820E45 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
@@ -288,6 +297,10 @@
 		6527F72DD04647938DA33739 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C460E0E1D6F0E88005214F3 /* Asap-BoldItalic.ttf */,
+				8C460E0F1D6F0E88005214F3 /* Asap-Italic.ttf */,
+				8C460E101D6F0E88005214F3 /* Asap-Regular.ttf */,
+				8C460E0C1D6F0E50005214F3 /* Asap-Bold.ttf */,
 				2E16D33E1E5A4966A09B607A /* Entypo.ttf */,
 				6707F6002BEE46B4B41F3174 /* EvilIcons.ttf */,
 				ED0824BA164D4A72B31D7AED /* FontAwesome.ttf */,
@@ -621,11 +634,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C460E0D1D6F0E50005214F3 /* Asap-Bold.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				92EDDFDF65284589871FF8E9 /* Entypo.ttf in Resources */,
+				8C460E111D6F0E88005214F3 /* Asap-BoldItalic.ttf in Resources */,
 				8F89D186279B44878DF71DF8 /* EvilIcons.ttf in Resources */,
 				C5956AB00E7A4DC280E9E6A7 /* FontAwesome.ttf in Resources */,
+				8C460E121D6F0E88005214F3 /* Asap-Italic.ttf in Resources */,
+				8C460E131D6F0E88005214F3 /* Asap-Regular.ttf in Resources */,
 				60A8DA2B4C5F47F182B04ADC /* Foundation.ttf in Resources */,
 				07EC8370B5684A5ABB5FE49C /* Ionicons.ttf in Resources */,
 				E6FC77DF92354E20AF63B144 /* MaterialIcons.ttf in Resources */,
