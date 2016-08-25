@@ -8,43 +8,28 @@
     "test:watch": "npm run test -- --watch"
   },
   "jest": {
-    "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "packager/react-packager/src/Activity/"
-    ],
-    "testFileExtensions": [
-      "js"
-    ],
-    "unmockedModulePathPatterns": [
-      "promise",
-      "source-map",
-      "immutable"
-    ]
+    "preset": "jest-react-native"
   },
   "dependencies": {
-    "google-libphonenumber": "^1.0.20",
-    "immutable": "^3.7.6",
-    "lodash": "^4.8.2",
-    "parse": "^1.8.5",
-    "react": "^15.1.0",
-    "react-native": "^0.28.0",
-    "react-native-contacts": "^0.2.5",
-    "react-native-image-picker": "^0.18.17",
-    "react-native-router-flux": "^3.30.2",
-    "react-native-share": "^1.0.9",
+    "google-libphonenumber": "^1.1.0",
+    "immutable": "^3.8.1",
+    "parse": "^1.9.1",
+    "react": "15.2.1",
+    "react-native": "^0.31.0",
+    "react-native-contacts": "^0.3.0",
+    "react-native-image-picker": "^0.21.5",
+    "react-native-router-flux": "^3.35.0",
     "react-native-swipeout": "dancormier/react-native-swipeout",
-    "react-native-vector-icons": "^2.0.2",
+    "react-native-vector-icons": "^2.1.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
-    "babel-jest": "^12.0.2",
-    "babel-polyfill": "^6.7.4",
-    "babel-preset-react-native": "^1.8.0",
-    "jest-cli": "^12.0.2",
-    "rnpm-plugin-upgrade": "^0.26.0"
+    "babel-jest": "^14.1.0",
+    "babel-preset-react-native": "^1.9.0",
+    "jest": "^14.1.0",
+    "jest-react-native": "^14.1.3"
   }
 }
