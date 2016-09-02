@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { Actions } from 'react-native-router-flux'
-import {View, StyleSheet, StatusBar, Platform} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
+import DjiniBackground from '../components/DjiniBackground'
 import WMColors from '../lib/WMColors'
 
 import {AppBar} from '../components/AppBar'
@@ -104,12 +105,11 @@ class Login extends Component {
     }
 
     return (
-      <View style={styles.container}>
-        <StatusBar translucent={true} />
+      <DjiniBackground style={styles.container}>
         <AppBar title={title} showBackButton={onBack ? true : false} onBack={onBack}/>
         {form}
         <WMButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>
-      </View>
+      </DjiniBackground>
     )
   }
 }
@@ -117,7 +117,6 @@ class Login extends Component {
 const formStyles = StyleSheet.create({
   container: {
     alignItems: 'flex-start',
-    backgroundColor: 'white',
     padding: 20
   },
   text: {
@@ -158,7 +157,6 @@ const formStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
   button: {
     margin: 20

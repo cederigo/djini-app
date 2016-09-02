@@ -2,8 +2,9 @@
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Actions } from 'react-native-router-flux'
 import React, {Component} from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 
+import DjiniBackground from '../components/DjiniBackground'
 import DjiniText from '../components/DjiniText'
 import WMButton from '../components/WMButton'
 import WMColors from '../lib/WMColors'
@@ -11,14 +12,12 @@ import WMColors from '../lib/WMColors'
 export default class Welcome extends Component {
   render() {
     return(
-      <View style={ styles.container }>
-        <StatusBar translucent={true} barStyle="light-content"/>
-
-        <DjiniText style={ styles.title }>Djini</DjiniText>
+      <DjiniBackground style={styles.container} animated={true}>
+        <Image style={styles.logo} source={require('../../img/djini_logo.png')}/>
         <View style={styles.feature}>
           <Icon style={styles.featureIcon} name="cake" size={40}/>
           <DjiniText style={styles.featureText}>
-            Eigene Wünsche teilen
+            Wünsche festhalten und teilen
           </DjiniText>
         </View>
         <View style={styles.feature}>
@@ -33,29 +32,26 @@ export default class Welcome extends Component {
             Geschenke in Gruppen organisieren
           </DjiniText>
         </View>
-
         <WMButton style={styles.button} onPress={Actions.login} caption="Los gehts!"/>
-
-      </View>
+      </DjiniBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: WMColors.darkText,
     alignItems: 'center',
     justifyContent: 'flex-start'
   },
-  title: {
-    marginVertical: 70,
-    color: 'white',
-    fontSize: 50,
+  logo: {
+    marginTop: 100,
+    marginBottom: 70,
+    width: 142,
+    height: 87 
   },
   feature: {
     marginHorizontal: 40,
-    marginBottom: 10,
+    marginBottom: 25,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -68,8 +64,7 @@ const styles = StyleSheet.create({
   },
   featureText: {
     flex: 4,
-    color: 'white',
-    fontSize: 16,
+    fontSize: 20,
   },
   button: {
     position: 'absolute',

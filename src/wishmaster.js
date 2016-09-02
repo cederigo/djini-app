@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {PropTypes} from 'react'
-import { AppRegistry, View, StyleSheet, Dimensions, BackAndroid} from 'react-native'
+import { AppRegistry, View, StyleSheet, Dimensions} from 'react-native'
 import { Scene, Router, Actions} from 'react-native-router-flux'
 import { Provider} from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -73,18 +73,15 @@ class TabIcon extends React.Component {
   }
 }
 
-BackAndroid.addEventListener('hardwareBackPress', function() {
-  if (Actions.pop()) {
-    return true;
-  }
-  return false;
-});
-
 const styles = StyleSheet.create({
+  scene: {
+    flex: 1,
+    backgroundColor: 'transparent'
+  },
   tabScene: {
     flex: 1,
     marginBottom: TABBAR_HEIGHT,
-    backgroundColor: WMColors.background
+    backgroundColor: WMColors.background,
   },
   tabBar: {
     height: TABBAR_HEIGHT,
@@ -122,21 +119,24 @@ export default function init() {
   Parse.initialize(PARSE_APP_ID);
   Parse.serverURL = `${PARSE_BASE_URL}`;
 
-  let Wishmaster = React.createClass( {
+  let Djini = React.createClass( {
     render() {
       const store = configureStore(getInitialState())
       store.dispatch(restoreContacts())
       // setup the router table with App selected as the initial component
+      //
+      console.log('Djini.render()')
+      
       return (
         <Provider store={store}>
           <Router hideNavBar={true} createReducer={createRoutesReducer}>
             <Scene key="root">
 
-              <Scene key="app" component={App} title="Wishmaster" initial={true}/>
+              <Scene key="app" component={App} title="Djini" initial={true}/>
 
-              <Scene key="welcome" type="replace" component={Welcome} />
+              <Scene key="welcome" type="replace" component={Welcome} sceneStyle={styles.scene}/>
 
-              <Scene key="login" type="replace" component={Login} />
+              <Scene key="login" type="replace" component={Login} sceneStyle={styles.scene}/>
 
               <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
                 <Scene key="wishesTab" icon={TabIcon} iconName="cake">
@@ -163,5 +163,5 @@ export default function init() {
     }
   })
 
-  AppRegistry.registerComponent('Djini', () => Wishmaster)
+  AppRegistry.registerComponent('Djini', () => Djini)
 }
