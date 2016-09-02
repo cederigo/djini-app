@@ -2,10 +2,13 @@
 
 import React, {PropTypes} from 'react'
 import { AppRegistry, View, StyleSheet, Dimensions, BackAndroid} from 'react-native'
-import { Scene, Router, Actions } from 'react-native-router-flux'
-import { Provider } from 'react-redux'
+import { Scene, Router, Actions} from 'react-native-router-flux'
+import { Provider} from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import Parse from 'parse/react-native'
+
+/* Custom navigation reducer */
+import {createReducer as createRoutesReducer} from './reducers/routes/routesReducer'
 
 import configureStore from './lib/configureStore'
 import WMColors from './lib/WMColors'
@@ -121,15 +124,12 @@ export default function init() {
 
   let Wishmaster = React.createClass( {
     render() {
-      // configureStore will combine reducers from snowflake and main application
-      // it will then create the store based on aggregate state from all reducers
       const store = configureStore(getInitialState())
-
       store.dispatch(restoreContacts())
       // setup the router table with App selected as the initial component
       return (
         <Provider store={store}>
-          <Router hideNavBar={true}>
+          <Router hideNavBar={true} createReducer={createRoutesReducer}>
             <Scene key="root">
 
               <Scene key="app" component={App} title="Wishmaster" initial={true}/>
