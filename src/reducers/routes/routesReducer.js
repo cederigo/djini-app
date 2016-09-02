@@ -11,7 +11,7 @@ let defaultReducer
 
 const inTabMenu = (state) => {
   if (state && state.children && state.children.length > 0) {
-    return state.children[0].name = "tabbar";
+    return state.children[0].tabs
   }
   return false;
 };
