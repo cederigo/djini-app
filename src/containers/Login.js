@@ -105,7 +105,7 @@ class Login extends Component {
     }
 
     return (
-      <DjiniBackground style={styles.container}>
+      <DjiniBackground style={styles.container} animated={true}>
         <AppBar title={title} showBackButton={onBack ? true : false} onBack={onBack}/>
         {form}
         <WMButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>

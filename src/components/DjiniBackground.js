@@ -62,7 +62,7 @@ export default class DjiniBackground extends Component {
       const colorBottom = getColor(step, [colors[colorIndices[2]], colors[colorIndices[3]]])
       update()
       this.setState({colorTop, colorBottom})
-    }, 10)
+    }, 20)
   }
 
   componentWillUnmount() {
