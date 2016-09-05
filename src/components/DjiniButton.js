@@ -1,56 +1,77 @@
-import { connect } from 'react-redux';
-import React, {Component} from 'react'
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+import DjiniText from './DjiniText'
 import WMColors from '../lib/WMColors'
-import {User} from '../lib/types'
-import {newWish} from '../actions/wishes'
 
-class DjiniButton extends Component {
+export default class DjiniButton extends Component {
+
   props: {
-    fromUser: User,
-    toUser: User,
+    disabled: boolean,
+    active: boolean,
+    toggle: boolean,
+    caption: string,
+    style: any,
+    onPress: () => void,
+    iconName: ?string,
+    iconStyle: any
   }
-  render() {
-    const {dispatch, fromUser, toUser} = this.props
 
+  static defaultProps = {
+    toggle: false,
+    active: false
+  }
+
+  render() {
+    const {caption, disabled, onPress, iconName, iconStyle, toggle, active} = this.props
     return (
-      <TouchableOpacity style={styles.container} onPress={() => dispatch(newWish(fromUser, toUser))}>
-        <Text style={styles.text}>Djini</Text>
-        <Icon style={styles.icon} name={'cake'} size={80} />
+      <TouchableOpacity
+        accessibilityTraits="button"
+        onPress={onPress}
+        disabled={disabled}
+        activeOpacity={0.8}
+        style={[styles.container, active ? styles.active : undefined, this.props.style]}>
+        {iconName ?
+          <Icon
+            name={iconName}
+            style={[styles.icon, toggle ? styles.toggleIcon : undefined, iconStyle]}
+            size={30}/>
+          : undefined
+        }
+        {caption ?
+          <DjiniText style={[styles.text, disabled ? styles.disabled : undefined]}>
+            {caption}
+          </DjiniText>
+          : undefined
+        }
       </TouchableOpacity>
     )
   }
 }
 
-DjiniButton.defaultProps = {
-  text: 'Neuen Wunsch erfassen'
-}
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 15,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flexDirection: 'row'
   },
   text: {
-    color: WMColors.lightText,
-    fontSize: 50,
-    fontWeight: '200'
+    fontSize: 20,
   },
   icon: {
-    marginVertical: 20,
-    color: WMColors.lightText
+    color: 'white',
+  },
+  disabled: {
+    color: 'rgba(255, 255, 255, 0.5)'
+  },
+  active: {
+    backgroundColor: WMColors.darkText,
+  },
+  toggleIcon: {
+    color: 'white'
   }
-})
-
-/**
- * Redux boilerplate
- */
-function select(state) {
-  return { 
-    fromUser: state.global.currentUser
-  };
-}
-export default connect(select)(DjiniButton)
+});

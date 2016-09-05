@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {Wish, User, Contact} from '../lib/types'
 import WMColors from '../lib/WMColors'
-import WMButton from '../components/WMButton'
+import DjiniButton from '../components/DjiniButton'
 
 import Tabs from '../components/Tabs'
 import BirthdayText from '../components/BirthdayText'
@@ -61,7 +61,7 @@ class Friend extends Component {
           </Text>
           <BirthdayText style={[styles.text, styles.textSmall]} text="Geb. " date={friend.birthday}/>
         </View>
-        <WMButton
+        <DjiniButton
           style={styles.profileFavoriteButton}
           toggle={true}
           active={contact.isFavorite}
@@ -80,7 +80,7 @@ class Friend extends Component {
           <Text style={styles.text}>
             {contact.name + ' hat noch kein eigenes Profil erstellt'}
           </Text>
-          <WMButton
+          <DjiniButton
             style={styles.inviteButton}
             caption={contact.name + ' einladen'}
             onPress={() => dispatch(invite(contact))} />

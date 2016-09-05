@@ -1,14 +1,25 @@
+/* global setInterval, clearInterval */
 import React, {Component} from 'react';
-import {StyleSheet, StatusBar} from 'react-native';
+import {StyleSheet, Image, StatusBar, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 const colors = [[101,103,255],[84,172,255],[145,116,247],[144,74,206]]
 const gradientSpeed = 0.002
 
+const WIDTH = Dimensions.get('window').width
+const width = WIDTH + 230
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  image: {
+    position: 'absolute',
+    bottom: -50,
+    left: -110,
+    width: width,
+    height: width/1.629
+  }
 })
 
 // State ;-(
@@ -55,6 +66,7 @@ export default class DjiniBackground extends Component {
 
   componentDidMount() {
     if (!this.props.animated) {
+      console.log('Skip bg animation')
       return
     }
     this.timer = setInterval(() => {
@@ -67,7 +79,7 @@ export default class DjiniBackground extends Component {
 
   componentWillUnmount() {
     if (this.timer) {
-      clearTimeout(this.timer);
+      clearInterval(this.timer);
     }
   }
 
@@ -77,8 +89,13 @@ export default class DjiniBackground extends Component {
         start={[0, 0]} end={[1, 1]}
         colors={[this.state.colorTop, this.state.colorBottom]}>
         <StatusBar translucent={true} barStyle="light-content"/>
+        <Image style={styles.image} resizeMode='stretch' source={require('../../img/clouds.png')}/>
         {this.props.children}
       </LinearGradient>
     )
   }
+}
+
+DjiniBackground.defaultProps = {
+  animated: true
 }

@@ -1,0 +1,12 @@
+/* global require: false */
+export const clouds = require('./clouds.png')
+export const djini_logo = require('./djini_logo.png')
+export const group = require('./group.png')
+export const group_active = require('./group_active.png')
+export const lamp = require('./lamp.png')
+export const lamp_active = require('./lamp_active.png')
+export const lamp_ani = require('./lamp_ani.gif')
+export const person = require('./person.png')
+export const person_active = require('./person_active.png')
+export const todo = require('./todo.png')
+export const todo_active = require('./todo_active.png')

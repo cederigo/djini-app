@@ -3,14 +3,16 @@ import {Actions} from 'react-native-router-flux';
 import React, {Component, PropTypes} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {StyleSheet, View, TouchableOpacity, Text, TextInput} from 'react-native';
-import WMColors from '../lib/WMColors'
+
+import DjiniText from './DjiniText'
 
 export class AppBar extends Component {
-  props: {
-    showBackButton: bool,
-    onBack: () => void,
-    title: string,
-    children: React.PropTypes.element
+  static propTypes = {
+    showBackButton: React.PropTypes.bool,
+    onBack: React.PropTypes.func,
+    title: React.PropTypes.string,
+    children: React.PropTypes.element,
+    textStyle: PropTypes.oneOf(['light', 'dark'])
   }
 
   static defaultProps = {
@@ -18,7 +20,7 @@ export class AppBar extends Component {
   }
 
   render() {
-    const {showBackButton, onBack, title} = this.props
+    const {showBackButton, onBack, title, textStyle} = this.props
     return (
       <View style={styles.appBar}>
         <View style={styles.left}>
@@ -26,11 +28,12 @@ export class AppBar extends Component {
             <ActionButton 
               onPress={onBack}
               iconName="chevron-left"
+              textStyle={textStyle}
               style={[styles.actionButton, styles.actionButtonLeft]}/>
             : undefined
           }
         </View>
-        <Text style={styles.title} numberOfLines={1}>{title}</Text>
+        <DjiniText textStyle={textStyle} style={styles.title} numberOfLines={1}>{title}</DjiniText>
         <View style={styles.right}>
           {this.props.children}
         </View>
@@ -102,17 +105,26 @@ export class ActionButton extends React.Component {
     disabled: PropTypes.bool,
     text: PropTypes.string,
     iconName: PropTypes.string,
+    textStyle: PropTypes.oneOf(['light', 'dark'])
   }
   render() {
-    const {disabled, onPress, text, style, iconName} = this.props
+    const {disabled, onPress, text, iconName, textStyle} = this.props
+    const style = [styles.actionText]
+    if (textStyle === 'dark') {
+      style.push(styles.actionTextDark)
+    }
+    if (disabled) {
+      style.push(styles.actionTextDisabled)
+    }
+
     return (
       <TouchableOpacity
         activeOpacity={disabled ? 1 : 0}
-        style={[styles.actionButton, style]}
+        style={[styles.actionButton, this.props.style]}
         onPress={() => { if (!disabled) { onPress() }}}>
         {iconName ? 
-          <Icon style={[styles.actionIcon, disabled ? styles.disabled : undefined]} name={iconName}/> :
-          <Text numberOfLines={1} style={[styles.actionText, disabled ? styles.disabled : undefined]}>{text}</Text>
+          <Icon style={style} size={30} name={iconName}/> :
+          <DjiniText numberOfLines={1} style={style}>{text}</DjiniText>
         }
       </TouchableOpacity>
     );
@@ -122,8 +134,8 @@ export class ActionButton extends React.Component {
 const styles = StyleSheet.create({
   appBar: {
     marginTop: 20, //status bar
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: WMColors.lightText,
+    // borderBottomWidth: StyleSheet.hairlineWidth,
+    // borderBottomColor: WMColors.lightText,
     flexDirection: 'row',
     alignSelf: 'stretch',
     alignItems: 'center',
@@ -135,10 +147,8 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    color: WMColors.lightText,
-    flex: 2,
-    fontSize: 16,
-    fontWeight: '400',
+    flex: 1.5,
+    fontStyle: 'italic',
     marginHorizontal: 5
   },
   right: {
@@ -148,7 +158,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     paddingVertical: 10,
-    paddingRight: 5,
+    paddingRight: 10,
     alignItems: 'flex-end',
     flex: 1
   },
@@ -156,20 +166,18 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     alignItems: 'flex-start',
   },
-  disabled: {
-    color: WMColors.disabledText
-  },
-  actionIcon: {
-    fontSize: 30,
-    color: WMColors.darkText
+  actionTextDisabled: {
+    opacity: 0.5
   },
   actionText: {
-    fontSize: 13,
-    color: WMColors.darkText,
+    color: 'white'
+  },
+  actionTextDark: {
+    color: 'rgb(101,104,244)'
   },
   searchInput: {
     marginLeft: 10,
-    color: WMColors.lightText,
+    color: 'white',
     flex: 6,
     height: 44,
     fontSize: 16

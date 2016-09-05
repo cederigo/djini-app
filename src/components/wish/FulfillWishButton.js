@@ -3,7 +3,7 @@ import {Wish, User} from '../../lib/types'
 
 import React, {Component} from 'react';
 import {Alert} from 'react-native';
-import WMButton from '../WMButton'
+import DjiniButton from '../DjiniButton'
 
 // Actions
 import {fulfillWish, saveWish} from '../../actions/wishes'
@@ -46,7 +46,7 @@ class FulfillWishButton extends Component {
     }
 
     return (
-      <WMButton style={this.props.style} iconName="check" onPress={confirmDialog} caption={caption} />
+      <DjiniButton style={this.props.style} iconName="check" onPress={confirmDialog} caption={caption} />
     )
   }
 }

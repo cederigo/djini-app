@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, TextInput, Alert} from 'react-native';
+import {View, Alert} from 'react-native';
+import DjiniText from '../DjiniText'
+
+import DjiniTextInput from '../DjiniTextInput'
 
 export default class PhoneNumberForm extends Component {
 
@@ -22,21 +25,19 @@ export default class PhoneNumberForm extends Component {
 
     return ( 
       <View style={styles.container}>
-        <Text style={styles.text}>
+        <DjiniText style={styles.text}>
           Deine Telefonnummer wird einmalig für die Registrierung benötigt. Du erhältst anschliessend einen 4-stelligen Code per SMS für die Verifizierung:
-        </Text>
+        </DjiniText>
         <View style={styles.formGroup}>
-          <Text style={styles.formGroupText}>Telefon</Text>
+          <DjiniText style={styles.formGroupText}>Telefon</DjiniText>
           <View style={styles.formGroupInputView}>
-            <TextInput
+            <DjiniTextInput
               style={styles.formGroupInput}
               editable={!authState.isFetching}
               autoFocus={true}
-              autoCorrect={false}
               keyboardType="phone-pad"
               underlineColorAndroid="transparent"
               onSubmitEditing={onNext}
-              clearButtonMode="while-editing"
               onChangeText={(text) => {
                 onFormFieldChange('phoneNumber', text)
               }}

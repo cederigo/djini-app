@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import {Alert, View, Text, TextInput} from 'react-native';
+import {Alert, View} from 'react-native';
+
+import DjiniTextInput from '../DjiniTextInput'
+import DjiniText from '../DjiniText'
 
 export default class VerificationCodeForm extends Component {
 
@@ -21,13 +24,13 @@ export default class VerificationCodeForm extends Component {
 
     return ( 
       <View style={styles.container}>
-        <Text style={styles.text}>
+        <DjiniText style={styles.text}>
           Gib den 4-stelligen Verifizierungs-Code ein, den du per SMS erhalten hast:
-        </Text>
+        </DjiniText>
         <View style={styles.formGroup}>
-          <Text style={styles.formGroupText}>Code</Text>
+          <DjiniText style={styles.formGroupText}>Code</DjiniText>
           <View style={styles.formGroupInputView}>
-            <TextInput
+            <DjiniTextInput
               style={styles.formGroupInput}
               editable={!authState.isFetching}
               autoFocus={true}

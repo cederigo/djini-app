@@ -1,13 +1,10 @@
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { Actions } from 'react-native-router-flux'
-import {StyleSheet, Platform} from 'react-native';
-
-import DjiniBackground from '../components/DjiniBackground'
-import WMColors from '../lib/WMColors'
+import {StyleSheet, Platform, View} from 'react-native';
 
 import {AppBar} from '../components/AppBar'
-import WMButton from '../components/WMButton'
+import DjiniButton from '../components/DjiniButton'
 
 import {
   profileForm,
@@ -105,11 +102,11 @@ class Login extends Component {
     }
 
     return (
-      <DjiniBackground style={styles.container} animated={true}>
+      <View style={styles.container}>
         <AppBar title={title} showBackButton={onBack ? true : false} onBack={onBack}/>
         {form}
-        <WMButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>
-      </DjiniBackground>
+        <DjiniButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>
+      </View>
     )
   }
 }
@@ -120,8 +117,6 @@ const formStyles = StyleSheet.create({
     padding: 20
   },
   text: {
-    color: WMColors.lightText,
-    fontSize: 16,
     marginBottom: 10
   },
   formGroup: {
@@ -132,13 +127,11 @@ const formStyles = StyleSheet.create({
     marginTop: 20
   },
   formGroupText: {
-    fontSize: 16,
-    color: WMColors.lightText,
     marginBottom: 5,
     flex: 1
   },
   formGroupInputView: {
-    borderColor: WMColors.lightText,
+    borderColor: 'white',
     borderBottomWidth: 1,
     flex: 2,
     flexDirection: 'row',
@@ -148,9 +141,7 @@ const formStyles = StyleSheet.create({
     alignSelf: 'stretch',
     height: 30,
     flex: 1,
-    fontSize: 16,
-    color: WMColors.lightText,
-    padding: Platform.select({android: 0}),
+    padding: Platform.select({android: 0})
   }
 })
 

@@ -1,17 +1,16 @@
-'use strict';
+/* global console */
 
 import React, {PropTypes} from 'react'
-import { AppRegistry, View, StyleSheet, Dimensions} from 'react-native'
+import { AppRegistry, View, StyleSheet, Dimensions, Image} from 'react-native'
 import { Scene, Router, Actions} from 'react-native-router-flux'
 import { Provider} from 'react-redux'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import Parse from 'parse/react-native'
 
 /* Custom navigation reducer */
 import {createReducer as createRoutesReducer} from './reducers/routes/routesReducer'
 
 import configureStore from './lib/configureStore'
-import WMColors from './lib/WMColors'
+import * as images from '../img'
 
 const WIDTH = Dimensions.get('window').width
 const TABBAR_HEIGHT = 50 
@@ -34,6 +33,8 @@ import Profile from './containers/Profile'
 import ProfileEdit from './containers/ProfileEdit'
 import Friend from './containers/Friend'
 import Wish from './containers/Wish'
+
+import DjiniBackground from './components/DjiniBackground'
 
 /* Actions */
 import {restoreContacts} from './actions/contacts'
@@ -65,9 +66,10 @@ class TabIcon extends React.Component {
   }
   render(){
     const {selected, iconName} = this.props
+    const imageName = `${iconName}${selected ? '_active' : ''}`
     return (
-      <View style={[styles.tab, selected ? styles.tabSelected : undefined]}>
-        <Icon style={[styles.tabIcon, selected ? styles.tabIconSelected : undefined]} name={iconName} size={30} />
+      <View style={styles.tab}>
+        <Image style={styles.tabIcon} resizeMode="contain" source={images[imageName]}/>
       </View>
       )
   }
@@ -81,16 +83,12 @@ const styles = StyleSheet.create({
   tabScene: {
     flex: 1,
     marginBottom: TABBAR_HEIGHT,
-    backgroundColor: WMColors.background,
   },
   tabBar: {
     height: TABBAR_HEIGHT,
-    backgroundColor: WMColors.background,
+    backgroundColor: 'rgb(61,63,148)',
     alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    shadowColor: WMColors.lightText,
-    shadowRadius: 10,
-    shadowOpacity: 1,
+    justifyContent: 'flex-start'
   },
   tab: {
     height: TABBAR_HEIGHT,
@@ -98,15 +96,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    backgroundColor: WMColors.background,
-    borderColor: 'white',
-  },
-  tabSelected: {
-    backgroundColor: WMColors.lightText,
+    backgroundColor: 'rgb(61,63,148)',
   },
   tabIcon: {
-    color: WMColors.lightText,
-    borderWidth: 0
+    width: 50,
+    height: 25 
   },
   tabIconSelected: {
     color: 'white'
@@ -128,10 +122,10 @@ export default function init() {
       console.log('Djini.render()')
       
       return (
+        <DjiniBackground>
         <Provider store={store}>
-          <Router hideNavBar={true} createReducer={createRoutesReducer}>
+          <Router hideNavBar={true} createReducer={createRoutesReducer} getSceneStyle={() => styles.scene}>
             <Scene key="root">
-
               <Scene key="app" component={App} title="Djini" initial={true}/>
 
               <Scene key="welcome" type="replace" component={Welcome} sceneStyle={styles.scene}/>
@@ -139,7 +133,7 @@ export default function init() {
               <Scene key="login" type="replace" component={Login} sceneStyle={styles.scene}/>
 
               <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
-                <Scene key="wishesTab" icon={TabIcon} iconName="cake">
+                <Scene key="wishesTab" icon={TabIcon} iconName="lamp">
                   <Scene key="wishes" initial={true} sceneStyle={styles.tabScene} component={Wishes}/>
                   <Scene key="wish" sceneStyle={styles.tabScene} component={Wish} source="wishes"/>
                 </Scene>
@@ -148,17 +142,17 @@ export default function init() {
                   <Scene key="friend" sceneStyle={styles.tabScene} component={Friend}/>
                   <Scene key="friendWish" sceneStyle={styles.tabScene} component={Wish} source="friend"/>
                 </Scene>
-                <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="folder-shared"/>
+                <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="todo"/>
                 <Scene key="profileTab" icon={TabIcon} iconName="person" onSelect={Actions.profile}>
                   <Scene key="profile" sceneStyle={styles.tabScene} component={Profile}/>
                   <Scene key="profileEdit" sceneStyle={styles.tabScene} component={ProfileEdit}/>
                   <Scene key="more" sceneStyle={styles.tabScene} component={More}/>
                 </Scene>
               </Scene>
-
             </Scene>
           </Router>
         </Provider>
+        </DjiniBackground>
       )
     }
   })

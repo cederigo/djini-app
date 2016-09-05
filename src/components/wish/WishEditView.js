@@ -5,7 +5,7 @@ import {View, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Image, 
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from '../AppBar'
-import WMButton from '../WMButton'
+import DjiniButton from '../DjiniButton'
 
 // Actions
 import {saveWish, onWishFieldChange, uploadWishImage, deleteWish} from '../../actions/wishes'
@@ -173,7 +173,7 @@ class WishEditView extends Component {
                 undefined :
                 <View style={styles.toggles}>
                   <View style={styles.toggle}>
-                    <WMButton
+                    <DjiniButton
                       toggle={true}
                       active={wish.isFavorite}
                       iconName={wish.isFavorite ? 'star' : 'star-border'}
@@ -181,7 +181,7 @@ class WishEditView extends Component {
                     <Text style={styles.toggleText}>Djini, das will ich unbedingt haben!</Text>
                   </View>
                   <View style={styles.toggle}>
-                    <WMButton 
+                    <DjiniButton 
                       toggle={true}
                       active={wish.isPrivate}
                       iconName={wish.isPrivate ? 'lock' : 'lock-open'}
@@ -192,7 +192,7 @@ class WishEditView extends Component {
               }
 
               <View style={styles.actions}>
-                <WMButton style={styles.button}
+                <DjiniButton style={styles.button}
                   iconName="delete"
                   caption="Löschen"
                   onPress={() => dispatch(deleteWish(wish, 'details'))}/>

@@ -3,7 +3,7 @@ import {View, TouchableHighlight, Text, RefreshControl} from 'react-native';
 import Swipeout from 'react-native-swipeout'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import WMButton from './WMButton'
+import DjiniButton from './DjiniButton'
 import PureListView from './PureListView'
 import styles from '../lib/listStyles'
 
@@ -89,7 +89,7 @@ export default class ContactsList extends Component {
               {contact.name}
             </Text>
             {contact.isFavorite ? <Icon style={styles.rowIcon} name="favorite" size={30}/> : undefined}
-            {contact.registered ? undefined : <WMButton style={styles.rowButton} iconStyle={styles.rowButtonIcon} iconName="person-add" onPress={() => inviteContact(contact)}/>}
+            {contact.registered ? undefined : <DjiniButton style={styles.rowButton} iconStyle={styles.rowButtonIcon} iconName="person-add" onPress={() => inviteContact(contact)}/>}
           </View>
         </TouchableHighlight>
       </Swipeout>

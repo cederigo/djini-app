@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import BirthdayInput from '../BirthdayInput'
+
+import DjiniText from '../DjiniText'
 
 export default class BirthdayForm extends Component {
 
@@ -14,11 +16,11 @@ export default class BirthdayForm extends Component {
     const {onFormFieldChange, styles} = this.props
     return ( 
       <View style={styles.container}>
-        <Text style={styles.text}>
+        <DjiniText style={styles.text}>
           Mit Angabe deines Geburtsdatums kann „Djini“ deine Freunde rechzeitig über deinen Geburtstag informieren.
-        </Text>
+        </DjiniText>
         <View style={styles.formGroup}>
-          <Text style={styles.formGroupText}>Geb.</Text>
+          <DjiniText style={styles.formGroupText}>Geb.</DjiniText>
           <View style={styles.formGroupInputView}>
             <BirthdayInput 
               style={styles.formGroupInput}

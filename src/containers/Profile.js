@@ -10,7 +10,7 @@ import {editProfile} from '../actions/profile'
 
 import {AppBar, ActionButton} from '../components/AppBar'
 import BirthdayText from '../components/BirthdayText'
-import WMButton from '../components/WMButton'
+import DjiniButton from '../components/DjiniButton'
 import Tabs from '../components/Tabs'
 
 import WMColors from '../lib/WMColors'
@@ -51,7 +51,7 @@ class Profile extends Component {
             <Text style={[styles.text, styles.fieldLabel]}>Telefon</Text>
             <Text style={styles.text}>{user.phoneNumber}</Text>
           </View>
-          <WMButton style={styles.logoutButton} onPress={() => dispatch(logout())} caption="Abmelden"/>
+          <DjiniButton style={styles.logoutButton} onPress={() => dispatch(logout())} caption="Abmelden"/>
         </View>
       </View>
     );

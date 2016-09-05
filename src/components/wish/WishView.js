@@ -1,14 +1,15 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, Text, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
+import {StyleSheet, View, ScrollView, TouchableOpacity, Linking, Image, Dimensions, StatusBar} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
+import {clouds} from '../../../img'
 import FulfillWishButton from './FulfillWishButton'
-import WMButton from '../WMButton'
+import DjiniButton from '../DjiniButton'
 import {AppBar, ActionButton} from '../AppBar'
+import {DjiniDarkText as DjiniText} from '../DjiniText'
 
-import WMColors from '../../lib/WMColors'
 import {User, Wish} from '../../lib/types'
 
 // Utils
@@ -18,7 +19,7 @@ import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser} from '../../
 import {editWish, copyWish} from '../../actions/wishes'
 
 const WIDTH = Dimensions.get('window').width
-const IMAGE_HEIGHT = 200 
+const IMAGE_HEIGHT = 250 
 
 class WishView extends Component {
 
@@ -57,10 +58,10 @@ class WishView extends Component {
       imageStyle = {resizeMode: 'cover', height: IMAGE_HEIGHT}
     }
     return (
-      <TouchableOpacity style={wish.imageURL ? undefined : styles.imagePlaceholder} onPress={this.imageClicked}>
+      <TouchableOpacity style={wish.imageURL ? {} : styles.cloudsContainer} onPress={this.imageClicked}>
         {wish.imageURL ? 
           <Image source={{uri: wish.imageURL}} style={imageStyle}/>
-          : <Icon style={styles.imagePlaceholderIcon} name="photo-camera" size={40}/>
+          : <Image style={styles.clouds} resizeMode='stretch' source={clouds}/>
         }
       </TouchableOpacity>
     )
@@ -105,7 +106,7 @@ class WishView extends Component {
     return (
       <View style={styles.fulfillment}>
         <Icon style={[styles.fulfillmentText, styles.fulfillmentIcon]} name="check" size={20}/>
-        <Text style={styles.fulfillmentText}>{text}</Text>
+        <DjiniText style={styles.fulfillmentText}>{text}</DjiniText>
       </View>
     )
   }
@@ -118,7 +119,7 @@ class WishView extends Component {
     const {dispatch} = this.props
     return (
       <View style={styles.buttonGroup}>
-        <WMButton style={styles.buttonGroupButton} iconName="playlist-add" caption="Will ich auch" onPress={() => dispatch(copyWish(wish, currentUser))}/> 
+        <DjiniButton style={styles.buttonGroupButton} iconName="playlist-add" caption="Will ich auch" onPress={() => dispatch(copyWish(wish, currentUser))}/> 
         {fulfillable(wish, currentUser) ?
           <FulfillWishButton style={styles.buttonGroupButton} wish={wish}/>
           : undefined
@@ -134,20 +135,8 @@ class WishView extends Component {
     }
     return (
       <View style={styles.privateAttributes}>
-        {wish.isFavorite ?
-          <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="star"/>
-            <Text style={[styles.text, styles.attrText]}>Dieser Wunsch ist ein Favorit</Text>
-          </View>
-          : undefined
-        }
-        {wish.isPrivate ?
-          <View style={styles.attr}>
-            <Icon style={[styles.text, styles.attrIcon]} name="lock"/>
-            <Text style={[styles.text, styles.attrText]}>Dieser Wunsch siehst nur du</Text>
-          </View>
-          : undefined
-        }
+        {wish.isFavorite ? <Icon style={styles.favoriteIcon} name="star"/> : undefined }
+        {wish.isPrivate ? <Icon style={styles.privateIcon} name="lock"/> : undefined }
       </View>
     )
   }
@@ -158,34 +147,34 @@ class WishView extends Component {
 
     return ( 
       <View style={styles.container}>
-        <AppBar showBackButton={true} title={wish.title}>
-          {allowEdit(wish, currentUser) ? <ActionButton text="Bearbeiten" onPress={() => dispatch(editWish(wish, source))}/> : undefined }
+        <StatusBar translucent={true} barStyle="default"/>
+        <AppBar showBackButton={true} title="Wunsch" textStyle="dark">
+          {allowEdit(wish, currentUser) ? <ActionButton text="Bearbeiten" textStyle="dark" onPress={() => dispatch(editWish(wish, source))}/> : undefined }
         </AppBar>
 
         <ScrollView style={styles.container}>
           <View style={styles.content}>
+            {this.renderImage(wish)}
             {this.renderFulfillment(wish, currentUser)}
 
-            {this.renderImage(wish)}
-
             <View style={styles.attr}>
-              <Text style={[styles.text, styles.titleText]}>{wish.title || '-'}</Text>
+              <DjiniText style={[styles.attrText, styles.titleText]}>{wish.title || '-'}</DjiniText>
             </View>
 
             <View style={styles.attr}>
-              <Icon style={[styles.text, styles.attrIcon]} name="description"/>
-              <Text style={[styles.text, styles.attrText]}>{wish.description || '-'}</Text>
+              <Icon style={styles.attrIcon} name="list"/>
+              <DjiniText style={styles.attrText}>{wish.description || '-'}</DjiniText>
             </View>
 
             <View style={styles.attr}>
-              <Icon style={[styles.text, styles.attrIcon]} name="remove-red-eye"/>
-              <Text style={[styles.text, styles.attrText]}>{wish.seenAt || '-'}</Text>
+              <Icon style={styles.attrIcon} name="remove-red-eye"/>
+              <DjiniText style={styles.attrText}>{wish.seenAt || '-'}</DjiniText>
             </View>
 
             <View style={styles.attr}>
-              <Icon style={[styles.text, styles.attrIcon]} name="link"/>
+              <Icon style={[styles.attrIcon, styles.action]} name="link"/>
               <TouchableOpacity onPress={() => this.openURL(wish.url)}>
-                <Text style={[styles.text, styles.attrText]} numberOfLines={1}>{wish.url || '-'}</Text>
+                <DjiniText style={[styles.attrText, styles.action]} numberOfLines={1}>{wish.url || '-'}</DjiniText>
               </TouchableOpacity>
             </View>
 
@@ -202,61 +191,81 @@ class WishView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'rgb(240, 240, 240)'
   },
   content: {
     flex: 1,
     marginBottom: 50
   },
-  imagePlaceholder: {
-    height: IMAGE_HEIGHT,
-    borderColor: WMColors.lightText,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    alignItems: 'center',
-    justifyContent: 'center'
+  cloudsContainer: {
+    backgroundColor: 'rgb(61, 63, 148)',
+    height: 150,
   },
-  imagePlaceholderIcon: {
-    color: WMColors.lightText,
-  },
-  text: {
-    color: WMColors.lightText,
-    fontSize: 17 
+  clouds: {
+    position: 'absolute',
+    bottom: -50,
+    left: -110,
+    width: 500,
+    height: 500/1.629
   },
   titleText: {
     marginHorizontal: 18,
-    fontSize: 22,
+    fontSize: 27,
+    fontStyle: 'italic'
   },
   attr: {
     marginTop: 18
   },
   attrIcon: {
+    color: 'rgb(61, 63, 148)',
     position: 'absolute',
     left: 18,
     top: 3,
     fontSize: 20
   },
+  favoriteIcon: {
+    color: 'rgb(244, 230, 56)',
+    fontSize: 30,
+    margin: 5
+  },
+  privateIcon: {
+    color: 'white',
+    fontSize: 30,
+    margin: 5,
+  },
+  action: {
+    color: 'rgb(101,104,244)',
+    textDecorationLine: 'underline'
+  },
   attrText: {
-    marginLeft: 50
+    marginLeft: 60
   },
   privateAttributes: {
-    marginTop: 18
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    flexDirection: 'column',
+    padding: 5
   },
   fulfillment: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: 50,
-    backgroundColor: WMColors.lightText 
+    justifyContent: 'flex-start',
+    height: 45,
+    backgroundColor: 'rgba(101,104,244,0.7)',
   },
   fulfillmentText: {
-    color: 'white',
-    fontSize: 17
+    color: 'white'
   },
   fulfillmentIcon: {
     fontSize: 30,
-    marginRight: 10
+    margin: 10
   },
   buttonGroup: {
-    marginTop: 20,
+    marginTop: 40,
     marginHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -265,7 +274,8 @@ const styles = StyleSheet.create({
   buttonGroupButton: {
     flex: 1,
     borderColor: 'white',
-    borderRightWidth: 1
+    borderRightWidth: 1,
+    backgroundColor: 'rgb(101,104,244)'
   }
 })
 

@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import {sendFeedback, onFeedbackChange} from '../actions/feedback'
 
 import {AppBar} from '../components/AppBar'
-import WMButton from '../components/WMButton'
+import DjiniButton from '../components/DjiniButton'
 import Tabs from '../components/Tabs'
 
 import WMColors from '../lib/WMColors'
@@ -42,7 +42,7 @@ class More extends Component {
                 value={description}
                 onChangeText={(text) => dispatch(onFeedbackChange(text))}
                 style={styles.feedbackInput} />
-              <WMButton
+              <DjiniButton
                 style={styles.feedbackSubmit}
                 disabled={isFetching || !isValid}
                 onPress={() => {dispatch(sendFeedback(user, description)); dismissKeyboard()}}

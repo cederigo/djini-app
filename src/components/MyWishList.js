@@ -1,17 +1,14 @@
+/* global setTimeout */
 import { connect } from 'react-redux'
 import Swipeout from 'react-native-swipeout'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import React, {Component} from 'react'
-import { 
-  View,
-  TouchableHighlight,
-  Text
-} from 'react-native';
+import React, {Component, PropTypes} from 'react'
+import {View, TouchableHighlight} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+
+import DjiniText from './DjiniText'
 
 import styles from '../lib/listStyles'
-
-//types
-import {Wish} from '../lib/types'
 
 // actions
 import {showWish, deleteWish, saveWish} from '../actions/wishes'
@@ -20,9 +17,9 @@ import PureListView from './PureListView'
 
 class MyWishList extends Component {
 
-  props: {
-    showSwipeoutHint: bool,
-    wishes: Array<Wish>
+  static propTypes = {
+    showSwipeoutHint: PropTypes.bool.isRequired,
+    wishes: PropTypes.arrayOf(PropTypes.object).isRequired
   }
   _innerRef: ?PureListView;
 
@@ -60,6 +57,7 @@ class MyWishList extends Component {
     const {dispatch} = this.props
     return [
       { 
+        backgroundColor: 'transparent',
         component:
           <View style={styles.swipeout}>
             <Icon style={styles.swipeoutIcon} name="delete" size={30}/>
@@ -67,16 +65,18 @@ class MyWishList extends Component {
         onPress: () => dispatch(deleteWish(wish)),
       },
       {
+        backgroundColor: 'transparent',
         component: 
           <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name={wish.isFavorite ? 'star-border' : 'star'} size={30}/>
+            <Icon style={styles.swipeoutIcon} name={wish.isFavorite ? 'star' : 'star-border'} size={30}/>
           </View>,
         onPress: () => dispatch(saveWish(wish.set('isFavorite', !wish.isFavorite)))
       },
       {
+        backgroundColor: 'transparent',
         component: 
           <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name={wish.isPrivate ? 'lock-open' : 'lock'} size={30}/>
+            <Icon style={styles.swipeoutIcon} name={wish.isPrivate ? 'lock' : 'lock-open'} size={30}/>
           </View>,
         onPress: () => dispatch(saveWish(wish.set('isPrivate', !wish.isPrivate)))
       }
@@ -86,14 +86,14 @@ class MyWishList extends Component {
   renderRow (wish) {
     const {dispatch, showSwipeoutHint} = this.props
     return (
-      <Swipeout right={this.swipeoutBtns(wish)} ref={showSwipeoutHint ? this.showSwipeoutAnimation : undefined} autoClose={true}>
-        <TouchableHighlight onPress={() => dispatch(showWish(wish))}>
+      <Swipeout style={styles.container} right={this.swipeoutBtns(wish)} ref={showSwipeoutHint ? this.showSwipeoutAnimation : undefined} autoClose={true}>
+        <TouchableHighlight style={{backgroundColor: 'transparent'}} onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
-            <Text style={styles.rowText} numberOfLines={1}>
+            <DjiniText style={styles.rowText} numberOfLines={1}>
               {wish.title}
-            </Text>
-            {wish.isPrivate ? <Icon style={styles.rowIcon} name="lock" size={30}/> : undefined}
-            {wish.isFavorite ? <Icon style={styles.rowIcon} name="star" size={30}/> : undefined}
+            </DjiniText>
+            {wish.isPrivate ? <Icon style={styles.rowIcon} name="lock"/> : undefined}
+            {wish.isFavorite ? <Icon style={styles.rowIconFavorite} name="star"/> : undefined}
           </View>
         </TouchableHighlight>
       </Swipeout>
@@ -102,13 +102,20 @@ class MyWishList extends Component {
 
   renderEmptyList() {
     return (
-      <Text style={styles.emptyList}>Flüstere Djini deinen ersten Wunsch! Achtung: Wünsche können dank Djini in Erfüllung gehen! Djini haftet nicht für erfüllte Wünsche!</Text>
+      <DjiniText style={styles.emptyList}>Flüstere Djini deinen ersten Wunsch! Achtung: Wünsche können dank Djini in Erfüllung gehen! Djini haftet nicht für erfüllte Wünsche!</DjiniText>
     );
   }
 
   renderSeparator(sectionID, rowID) {
     return (
-      <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}/>
+      <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}>
+        <LinearGradient key={"SEP_" + sectionID + "_" + rowID}
+          style={styles.container}
+          start={[0,0]}
+          end={[1,0]}
+          colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
+        />
+      </View>
     );
   }
 

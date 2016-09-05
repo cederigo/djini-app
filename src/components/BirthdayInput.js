@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {View, StyleSheet} from 'react-native';
-import FieldInput from './FieldInput'
+import DjiniTextInput from './DjiniTextInput'
 
 export default class BirthdayInput2 extends Component {
 
@@ -61,7 +61,7 @@ export default class BirthdayInput2 extends Component {
     const {day, month, year} = this.state
     return (
       <View style={[styles.container]}>
-        <FieldInput
+        <DjiniTextInput
           ref="day"
           autoFocus={autoFocus}
           style={[this.props.style, styles.input]}
@@ -72,7 +72,7 @@ export default class BirthdayInput2 extends Component {
           maxLength={2}
           keyboardType='numeric'
         />
-        <FieldInput
+        <DjiniTextInput
           ref="month"
           style={[this.props.style, styles.input]}
           value={month}
@@ -82,7 +82,7 @@ export default class BirthdayInput2 extends Component {
           maxLength={2}
           keyboardType='numeric'
         />
-        <FieldInput
+        <DjiniTextInput
           ref="year"
           style={[this.props.style, styles.input, styles.inputYear]}
           value={year}

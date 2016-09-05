@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import {View, TextInput, Text} from 'react-native';
+import {View,} from 'react-native';
+
+import DjiniText from '../DjiniText'
+import DjiniTextInput from '../DjiniTextInput'
 
 export default class ProfileForm extends Component {
 
@@ -16,13 +19,13 @@ export default class ProfileForm extends Component {
     const {name, email} = authState.fields
     return ( 
       <View style={styles.container}>
-        <Text style={styles.text}>
+        <DjiniText style={styles.text}>
           Gib Djini deinen Namen und deine E-Mail Adresse an:
-        </Text>
+        </DjiniText>
         <View style={styles.formGroup}>
-          <Text style={styles.formGroupText}>Name</Text>
+          <DjiniText style={styles.formGroupText}>Name</DjiniText>
           <View style={styles.formGroupInputView}>
-            <TextInput
+            <DjiniTextInput
               style={styles.formGroupInput}
               editable={!authState.isFetching}
               onChangeText={(text) => { onFormFieldChange('name', text)}}
@@ -37,9 +40,9 @@ export default class ProfileForm extends Component {
           </View>
         </View>
         <View style={styles.formGroup}>
-          <Text style={styles.formGroupText}>E-Mail</Text>
+          <DjiniText style={styles.formGroupText}>E-Mail</DjiniText>
           <View style={styles.formGroupInputView}>
-            <TextInput
+            <DjiniTextInput
               ref="email"
               style={styles.formGroupInput}
               editable={!authState.isFetching}

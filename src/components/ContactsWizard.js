@@ -5,7 +5,7 @@ import {View, Text, StyleSheet, StatusBar} from 'react-native';
 import {refreshContacts} from '../actions/contacts'
 
 import WMColors from '../lib/WMColors'
-import WMButton from './WMButton'
+import DjiniButton from './DjiniButton'
 import {AppBar} from './AppBar'
 
 class ContactsWizard extends Component {
@@ -20,7 +20,7 @@ class ContactsWizard extends Component {
         <StatusBar translucent={true} />
         <AppBar title="Freunde" showBackButton={false}/>
         <Text style={styles.text}>Djini verrät dir, was sich deine Freunde wünschen und hilft dir deine Geschenkideen festzuhalten. Dafür braucht er aber Zugriff auf deine Kontakte! Keine Angst, Djini gibt deine Kontakte nicht weiter!</Text>
-        <WMButton disabled={isFetching} style={styles.button} onPress={() => dispatch(refreshContacts('user'))} caption="Ja klar, bitte!" />
+        <DjiniButton disabled={isFetching} style={styles.button} onPress={() => dispatch(refreshContacts('user'))} caption="Ja klar, bitte!" />
       </View>
     )
   }

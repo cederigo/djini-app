@@ -1,8 +1,16 @@
 import React, {Component} from 'react';
-import {TextInput} from 'react-native';
+import {TextInput, StyleSheet} from 'react-native';
+
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'Asap',
+    color: 'white',
+    fontSize: 17,
+  }
+})
 
 /* sensible defaults */
-export default class FieldInput extends Component {
+export default class DjiniTextInput extends Component {
   focus() {
     this.refs.input.focus()
   }
@@ -14,6 +22,7 @@ export default class FieldInput extends Component {
       autoCorrect={false}
       returnKeyType="next"
       {...this.props}
+      style={[this.props.style, styles.text]}
     />
   }
 }

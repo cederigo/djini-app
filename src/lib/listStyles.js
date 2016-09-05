@@ -1,58 +1,56 @@
-import WMColors from './WMColors'
 import {StyleSheet} from 'react-native'
 
 // styles
 export default StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'transparent',
   },
   emptyList: {
-    marginTop: 100,
-    fontSize: 16,
-    lineHeight: 24,
-    color: WMColors.darkText,
     textAlign: 'center',
   },
   row: {
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 70,
-    backgroundColor: WMColors.white,
-    paddingHorizontal: 25
+    height: 60,
+    paddingLeft: 25,
+    paddingRight: 10
   },
   col: {
     flex: 1,
   },
   rowSeparator: {
-    backgroundColor: WMColors.background,
-    height: StyleSheet.hairlineWidth,
+    height: 2,
   },
   rowText: {
     flex: 1,
     fontSize: 20,
-    color: WMColors.lightText,
   },
   rowDescription: {
     fontSize: 14,
-    color: WMColors.lightText,
   },
   rowIcon: {
-    color: WMColors.lightText,
-    opacity: 0.7
+    color: 'white',
+    fontSize: 28 
+  },
+  rowIconFavorite: {
+    color: 'rgb(244, 230, 56)',
+    fontSize: 28 
   },
   rowButton: {
+    backgroundColor: 'transparent',
     marginLeft: 10,
     marginRight: -10,
     width: 50,
-    height: 50,
-    backgroundColor: WMColors.lightText
+    height: 50
   },
   rowButtonIcon: {
     color: 'white'
   },
   swipeout: {
-    backgroundColor: WMColors.lightText,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     borderColor: 'white',
     borderLeftWidth: 1,
     alignItems: 'center',
@@ -60,6 +58,7 @@ export default StyleSheet.create({
     flex: 1
   },
   swipeoutIcon: {
+    backgroundColor: 'transparent',
     color: 'white',
   }
 })

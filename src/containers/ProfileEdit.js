@@ -8,7 +8,7 @@ import {updateProfile, onFieldChange} from '../actions/profile'
 
 import {AppBar, ActionButton} from '../components/AppBar'
 import BirthdayInput from '../components/BirthdayInput'
-import FieldInput from '../components/FieldInput'
+import DjiniTextInput from '../components/DjiniTextInput'
 
 import WMColors from '../lib/WMColors'
 
@@ -33,7 +33,7 @@ class ProfileEdit extends Component {
         <View style={styles.fields}>
           <View style={styles.field}>
             <Text style={[styles.text, styles.fieldLabel]}>Name</Text>
-            <FieldInput
+            <DjiniTextInput
               autoFocus={true}
               style={styles.fieldInput}
               value={name}
@@ -44,7 +44,7 @@ class ProfileEdit extends Component {
           </View>
           <View style={styles.field}>
             <Text style={[styles.text, styles.fieldLabel]}>E-Mail</Text>
-            <FieldInput
+            <DjiniTextInput
               ref="email"
               style={styles.fieldInput}
               value={email}

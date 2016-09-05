@@ -1,22 +1,44 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Text, StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   text: {
     fontFamily: 'Asap',
     color: 'white',
-    backgroundColor: 'transparent'
+    fontSize: 17,
   },
-  textItalic: {
-    fontFamily: 'Asap-Italic',
-    color: 'white'
+  textDark: {
+    color: 'rgb(61, 63, 148)'
   }
 })
 
 export default function DjiniText (props) {
+  const style = [styles.text]
+  if (props.textStyle === 'dark') {
+    style.push(styles.textDark)
+  }
+  if (props.style) {
+    style.push(props.style)
+  }
   return (
-    <Text {...props} style={[props.style, styles.textItalic]}>
+    <Text {...props} style={style}>
       {props.children}
     </Text>
   )
+}
+
+export function DjiniDarkText (props) {
+  return (
+    <DjiniText {...props} textStyle="dark">
+      {props.children}
+    </DjiniText>
+  )
+}
+
+DjiniText.propTypes = {
+  textStyle: PropTypes.oneOf(['light', 'dark'])
+}
+
+DjiniText.defaultProps = {
+  textStyle: 'light'
 }

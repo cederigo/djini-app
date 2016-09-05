@@ -1,45 +1,44 @@
 
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Actions } from 'react-native-router-flux'
 import React, {Component} from 'react'
 import { StyleSheet, View, Image } from 'react-native';
 
-import DjiniBackground from '../components/DjiniBackground'
+import {djini_logo, lamp, group, todo} from '../../img'
 import DjiniText from '../components/DjiniText'
-import WMButton from '../components/WMButton'
-import WMColors from '../lib/WMColors'
+import DjiniButton from '../components/DjiniButton'
 
 export default class Welcome extends Component {
   render() {
     return(
-      <DjiniBackground style={styles.container} animated={true}>
-        <Image style={styles.logo} source={require('../../img/djini_logo.png')}/>
+      <View style={styles.container}>
+        <Image style={styles.logo} source={djini_logo}/>
         <View style={styles.feature}>
-          <Icon style={styles.featureIcon} name="cake" size={40}/>
+          <Image resizeMode='contain' style={styles.featureIcon} source={lamp}/>
           <DjiniText style={styles.featureText}>
             Wünsche festhalten und teilen
           </DjiniText>
         </View>
         <View style={styles.feature}>
-          <Icon style={styles.featureIcon} name="group" size={40}/>
+          <Image resizeMode='contain' style={styles.featureIcon} source={group}/>
           <DjiniText style={styles.featureText}>
             Geschenkideen für Freunde merken
           </DjiniText>
         </View>
         <View style={styles.feature}>
-          <Icon style={styles.featureIcon} name="folder-shared" size={40}/>
+          <Image resizeMode='contain' style={styles.featureIcon} source={todo}/>
           <DjiniText style={styles.featureText}>
-            Geschenke in Gruppen organisieren
+            Nie mehr Geschenke vergessen
           </DjiniText>
         </View>
-        <WMButton style={styles.button} onPress={Actions.login} caption="Los gehts!"/>
-      </DjiniBackground>
+        <DjiniButton style={styles.button} onPress={Actions.login} caption="Los gehts!"/>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start'
   },
@@ -58,13 +57,14 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch'
   },
   featureIcon: {
-    marginRight: 10,
-    flex: 1,
-    color: 'white'
+    marginRight: 20,
+    width: 60,
+    height: 30
   },
   featureText: {
     flex: 4,
     fontSize: 20,
+    fontStyle: 'italic'
   },
   button: {
     position: 'absolute',
