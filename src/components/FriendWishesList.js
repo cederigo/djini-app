@@ -1,17 +1,21 @@
 import { connect } from 'react-redux'
-import Swipeout from 'react-native-swipeout'
-import React, {Component} from 'react'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import { 
-  View,
-  TouchableHighlight,
-  Text
-} from 'react-native';
+import React, {Component, PropTypes} from 'react'
+import { StyleSheet } from 'react-native';
 
+import DjiniText from './DjiniText'
 import PureListView from './PureListView'
+import ListRowSeperator from './ListRowSeperator'
+import ListRow from './ListRow'
+import ListRowIcon from './ListRowIcon'
+import SwipeoutButton from './ListRowSwipeoutButton'
 
-import {Wish, User} from '../lib/types'
-import styles from '../lib/listStyles'
+const styles = StyleSheet.create({
+  emptyList: {
+    marginTop: 50,
+    textAlign: 'center'
+  }
+})
+
 
 import {fulfilled, fulfilledByUser} from '../lib/wishUtil'
 
@@ -20,9 +24,9 @@ import {showWish, copyWish} from '../actions/wishes'
 
 class FriendWishesList extends Component {
 
-  props: {
-    wishes: Array<Wish>,
-    user: User
+  static propTypes = {
+    wishes: PropTypes.array.isRequired,
+    user: PropTypes.object.isRequired
   }
   _innerRef: ?PureListView;
 
@@ -42,38 +46,30 @@ class FriendWishesList extends Component {
         data={this.props.wishes}
         renderRow={this.renderRow}
         renderEmptyList={this.renderEmptyList}
+        renderSeparator={this.renderSeparator}
         {...this.props}
       />
     );
   }
 
-  renderRowDescription (wish, user) {
+  getRowDescription (wish, user) {
     if (!fulfilled(wish)) {
-      return //nothing to render
+      return '' //nothing to render
     }
-
-    let description = 'Wird erfüllt'
     if (fulfilledByUser(wish, user)) {
-      description = 'Wird von mir erfüllt'
+      return 'Wird von mir erfüllt'
     }
     else if (wish.fulfillerName) {
-      description = `Wird erfüllt durch ${wish.fulfillerName}`
+      return `Wird erfüllt durch ${wish.fulfillerName}`
     }
-    return (
-      <Text style={styles.rowDescription}>
-        {description}
-      </Text>
-    )
+    return 'Wird erfüllt'
   }
 
   swipeoutBtns (wish) {
     const {dispatch, user} = this.props
     return [
       { 
-        component:
-          <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name="playlist-add" size={30}/>
-          </View>,
+        component: <SwipeoutButton name="playlist-add"/>,
         onPress: () => dispatch(copyWish(wish, user)),
       },
     ]
@@ -82,32 +78,23 @@ class FriendWishesList extends Component {
   renderRow (wish) {
     const {dispatch, user} = this.props
     return (
-      <Swipeout right={this.swipeoutBtns(wish)} autoClose={true}>
-        <TouchableHighlight onPress={() => dispatch(showWish(wish, 'friend'))}>
-          <View style={styles.row}>
-            <View style={styles.col}>
-              <Text style={[styles.rowText, {flex: 0}]} numberOfLines={1}>
-                {wish.title}
-              </Text>
-              {this.renderRowDescription(wish, user)}
-            </View>
-            {fulfilled(wish) ? <Icon style={styles.rowIcon} name="check" size={30}/> : undefined}
-          </View>
-        </TouchableHighlight>
-      </Swipeout>
-    );
+      <ListRow
+        title={wish.title}
+        description={this.getRowDescription(wish, user)}
+        onPress={() => dispatch(showWish(wish, 'friend'))}>
+       {fulfilled(wish) ? <ListRowIcon name="check"/> : undefined}
+      </ListRow>
+    )
   }
 
   renderEmptyList() {
     return (
-      <Text style={styles.emptyList}>Dein Freund hat noch keine Wünsche erfasst</Text>
+      <DjiniText style={styles.emptyList}>Dein Freund hat noch keine Wünsche erfasst</DjiniText>
     );
   }
 
   renderSeparator(sectionID, rowID) {
-    return (
-      <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}/>
-    );
+    return <ListRowSeperator key={"SEP_" + sectionID + "_" + rowID}/>
   }
 
   storeInnerRef(ref: ?PureListView) {

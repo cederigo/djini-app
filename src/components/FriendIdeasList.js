@@ -1,27 +1,32 @@
 import { connect } from 'react-redux'
-import Swipeout from 'react-native-swipeout'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import React, {Component} from 'react'
-import { 
-  View,
-  TouchableHighlight,
-  Text
-} from 'react-native';
+import React, {Component, PropTypes} from 'react'
+import { StyleSheet } from 'react-native';
 
+import DjiniText from './DjiniText'
 import PureListView from './PureListView'
+import ListRowSeperator from './ListRowSeperator'
+import ListRow from './ListRow'
+import ListRowIcon from './ListRowIcon'
+import SwipeoutButton from './ListRowSwipeoutButton'
 
-import {Wish} from '../lib/types'
 import {fulfilled} from '../lib/wishUtil'
-import styles from '../lib/listStyles'
+
+const styles = StyleSheet.create({
+  emptyList: {
+    marginTop: 50,
+    textAlign: 'center'
+  }
+})
 
 // actions
 import {showWish, deleteWish, fulfillWish, saveWish} from '../actions/wishes'
 
 class FriendIdeasList extends Component {
 
-  props: {
-    wishes: Array<Wish>
+  static propTypes = {
+    wishes: PropTypes.array.isRequired,
   }
+
   _innerRef: ?PureListView;
 
   constructor(props) {
@@ -41,6 +46,7 @@ class FriendIdeasList extends Component {
         data={this.props.wishes}
         renderRow={this.renderRow}
         renderEmptyList={this.renderEmptyList}
+        renderSeparator={this.renderSeparator}
         {...this.props}
       />
     );
@@ -59,17 +65,13 @@ class FriendIdeasList extends Component {
     const {dispatch} = this.props
     return [
       { 
-        component:
-          <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name="delete" size={30}/>
-          </View>,
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName="delete"/>,
         onPress: () => dispatch(deleteWish(wish)),
       },
       { 
-        component:
-          <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name={fulfilled(wish) ? 'clear' : 'check'} size={30}/>
-          </View>,
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName={fulfilled(wish) ? 'clear' : 'check'} />,
         onPress: () => this.toggleFulfilled(wish),
       }
     ]
@@ -77,32 +79,26 @@ class FriendIdeasList extends Component {
 
   renderEmptyList() {
     return (
-      <Text style={styles.emptyList}>Du hast noch keine Ideen erfasst</Text>
+      <DjiniText style={styles.emptyList}>Du hast noch keine Ideen erfasst</DjiniText>
     );
   }
 
   renderRow (wish) {
     const {dispatch} = this.props
     return (
-      <Swipeout right={this._swipeoutBtns(wish)} autoClose={true}>
-        <TouchableHighlight onPress={() => dispatch(showWish(wish, 'friend'))}>
-          <View style={styles.row}>
-            <Text style={styles.rowText} numberOfLines={1}>
-              {wish.title}
-            </Text>
-            {fulfilled(wish) ? <Icon style={styles.rowIcon} name="check" size={30}/> : undefined}
-          </View>
-        </TouchableHighlight>
-      </Swipeout>
-    );
+      <ListRow
+        swipeoutBtns={this._swipeoutBtns(wish)}
+        title={wish.title}
+        onPress={() => dispatch(showWish(wish, 'friend'))}>
+       {fulfilled(wish) ? <ListRowIcon name="check"/> : undefined}
+      </ListRow>
+    )
   }
 
   renderSeparator(sectionID, rowID) {
-    return (
-      <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}/>
-    );
+    return <ListRowSeperator key={"SEP_" + sectionID + "_" + rowID}/>
   }
-
+  
   storeInnerRef(ref: ?PureListView) {
     this._innerRef = ref;
   }
