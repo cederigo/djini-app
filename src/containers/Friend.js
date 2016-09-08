@@ -39,18 +39,8 @@ class Friend extends Component {
     }
   }
 
-  renderContentView() {
-    return (
-      <View style={styles.container}>
-        {this.renderProfileView()}
-        {this.renderTabs()}
-      </View>
-    )
-  }
-
   renderProfileView() {
     const {friend, contact, dispatch} = this.props
-
     return (
       <View style={styles.profile}>
         <DjiniText textStyle="dark" style={styles.profileName}>
@@ -108,14 +98,6 @@ class Friend extends Component {
     )
   }
 
-  renderLoadingView() {
-    return (
-      <View style={styles.loading}>
-        <DjiniText style={[styles.text, styles.textBig]}>Laden..</DjiniText>
-      </View>
-   )
-  }
-
   render() {
     const {isFetching} = this.props
     return (
@@ -124,9 +106,10 @@ class Friend extends Component {
           <StatusBar translucent={true} barStyle="default"/>
           <AppBar textStyle="dark" showBackButton={true} title="Freunde"/>
         </View>
+        {this.renderProfileView()}
         {isFetching ? 
-          this.renderLoadingView()
-          : this.renderContentView()
+          <DjiniText style={styles.loadingText}>Laden..</DjiniText>
+          : this.renderTabs()
         }
       </DjiniBackground>
     )
@@ -164,9 +147,9 @@ const styles = StyleSheet.create({
     color: 'rgb(239,71,98)',
     fontSize: 40
   },
-  loading: {
-    marginTop: 100,
-    alignItems: 'center'
+  loadingText: {
+    marginTop: 50,
+    textAlign: 'center'
   },
   inviteView: {
     padding: 25,

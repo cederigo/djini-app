@@ -3,7 +3,7 @@
 import { connect } from 'react-redux'
 import Immutable from 'immutable'
 import React, {Component, PropTypes} from 'react'
-import {View, StyleSheet, StatusBar} from 'react-native'
+import {View, StyleSheet} from 'react-native'
 import dismissKeyboard from 'dismissKeyboard'
 
 import ContactsPermission from '../components/ContactsPermission'
@@ -71,7 +71,6 @@ class Contacts extends Component {
     //contacts
     return (
       <View style={styles.container}>
-        <StatusBar translucent={true} />
         <SearchBar
           ref="searchBar"
           title="Freunde"

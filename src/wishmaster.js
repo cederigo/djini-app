@@ -138,8 +138,8 @@ export default function init() {
                   <Scene key="wish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="wishes"/>
                 </Scene>
                 <Scene key="contactsTab" icon={TabIcon} iconName="group">
-                  <Scene key="contacts" animation="fade" initial={true} sceneStyle={styles.tabScene} component={Contacts}/>
-                  <Scene key="friend" animation="fade" sceneStyle={styles.tabScene} component={Friend}/>
+                  <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Contacts}/>
+                  <Scene key="friend" animation="fade" component={Friend}/>
                   <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend"/>
                 </Scene>
                 <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="todo"/>
