@@ -17,9 +17,7 @@ export default function DjiniText (props) {
   if (props.textStyle === 'dark') {
     style.push(styles.textDark)
   }
-  if (props.style) {
-    style.push(props.style)
-  }
+  style.push(props.style)
   return (
     <Text {...props} style={style}>
       {props.children}

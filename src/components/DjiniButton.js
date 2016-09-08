@@ -1,46 +1,42 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import DjiniText from './DjiniText'
-import WMColors from '../lib/WMColors'
 
 export default class DjiniButton extends Component {
 
-  props: {
-    disabled: boolean,
-    active: boolean,
-    toggle: boolean,
-    caption: string,
-    style: any,
-    onPress: () => void,
-    iconName: ?string,
-    iconStyle: any
-  }
-
-  static defaultProps = {
-    toggle: false,
-    active: false
+  static propTypes = {
+    type: PropTypes.oneOf(['primary', 'danger']),
+    disabled: PropTypes.bool,
+    caption: PropTypes.string,
+    style: PropTypes.any,
+    iconName: PropTypes.string,
+    iconStyle: PropTypes.any, 
+    onPress: PropTypes.func.isRequired,
   }
 
   render() {
-    const {caption, disabled, onPress, iconName, iconStyle, toggle, active} = this.props
+    const {type, caption, disabled, onPress, iconName, iconStyle, style} = this.props
+    const buttonStyle = [styles.container, styles[type]]
+    if (disabled) { buttonStyle.push(styles.disabled) }
+    if (style) { buttonStyle.push(style) }
     return (
       <TouchableOpacity
         accessibilityTraits="button"
         onPress={onPress}
         disabled={disabled}
         activeOpacity={0.8}
-        style={[styles.container, active ? styles.active : undefined, this.props.style]}>
+        style={buttonStyle}>
         {iconName ?
           <Icon
             name={iconName}
-            style={[styles.icon, toggle ? styles.toggleIcon : undefined, iconStyle]}
+            style={[styles.icon, iconStyle]}
             size={30}/>
           : undefined
         }
         {caption ?
-          <DjiniText style={[styles.text, disabled ? styles.disabled : undefined]}>
+          <DjiniText style={styles.text}>
             {caption}
           </DjiniText>
           : undefined
@@ -59,6 +55,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row'
   },
+  primary: {
+    backgroundColor: 'rgb(101,104,244)'
+  },
+  danger: {
+    backgroundColor: 'rgb(239,71,98)'
+  },
   text: {
     fontSize: 20,
   },
@@ -66,12 +68,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   disabled: {
-    color: 'rgba(255, 255, 255, 0.5)'
-  },
-  active: {
-    backgroundColor: WMColors.darkText,
-  },
-  toggleIcon: {
-    color: 'white'
+    opacity: 0.5
   }
 });

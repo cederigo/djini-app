@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Swipeout from 'react-native-swipeout'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import React, {Component, PropTypes} from 'react'
-import {View, TouchableHighlight} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import DjiniText from './DjiniText'
@@ -87,7 +87,7 @@ class MyWishList extends Component {
     const {dispatch, showSwipeoutHint} = this.props
     return (
       <Swipeout style={styles.container} right={this.swipeoutBtns(wish)} ref={showSwipeoutHint ? this.showSwipeoutAnimation : undefined} autoClose={true}>
-        <TouchableHighlight style={{backgroundColor: 'transparent'}} onPress={() => dispatch(showWish(wish))}>
+        <TouchableOpacity onPress={() => dispatch(showWish(wish))}>
           <View style={styles.row}>
             <DjiniText style={styles.rowText} numberOfLines={1}>
               {wish.title}
@@ -95,7 +95,7 @@ class MyWishList extends Component {
             {wish.isPrivate ? <Icon style={styles.rowIcon} name="lock"/> : undefined}
             {wish.isFavorite ? <Icon style={styles.rowIconFavorite} name="star"/> : undefined}
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </Swipeout>
     );
   }

@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {View, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Image, NativeModules, Dimensions} from 'react-native';
+import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions, StatusBar} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from '../AppBar'
 import DjiniButton from '../DjiniButton'
+import {DjiniDarkText as DjiniText} from '../DjiniText'
+import DjiniTextInput from '../DjiniTextInput'
 
 // Actions
 import {saveWish, onWishFieldChange, uploadWishImage, deleteWish} from '../../actions/wishes'
@@ -110,143 +112,119 @@ class WishEditView extends Component {
 
   render() {
     const {dispatch, wish} = this.props
-      const title = isIdea(wish) ? 'Idee erfassen' : 'Wunsch erfassen'
+    const isWish = !isIdea(wish)
+    return ( 
+      <View style={styles.container}>
+        <StatusBar translucent={true} barStyle="default"/>
+        <AppBar showBackButton={true} backButtonText="Abbrechen" title="Bearbeiten" textStyle="dark">
+          <ActionButton text="Fertig" textStyle="dark" disabled={this.state.uploading || !wish.title} onPress={() => dispatch(saveWish(wish))}/>
+        </AppBar>
 
-      return ( 
-        <View style={styles.container}>
-          <AppBar showBackButton={true} title={title}>
-            <ActionButton text="Fertig" disabled={this.state.uploading || !wish.title} onPress={() => dispatch(saveWish(wish))}/>
-          </AppBar>
+        <ScrollView>
 
-          <ScrollView>
+          {this.renderImage()}
 
-            {this.renderImage()}
+          <View style={styles.content}>
 
-            <View style={styles.content}>
+            <DjiniText style={styles.label}>Titel</DjiniText>
+            <DjiniTextInput
+              onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
+              value={wish.title}
+            />
 
-              <Text style={styles.label}>Titel</Text>
-              <TextInput
-                style={styles.input}
-                editable={true}
-                onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
-                autoCapitalize="none"
-                clearButtonMode="while-editing"
-                autoCorrect={false}
-                value={wish.title}
-              />
+            <DjiniText style={styles.label}>Details</DjiniText>
+            <DjiniTextInput
+              onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
+              value={wish.description}
+            />
 
-              <Text style={styles.label}>Beschreibung</Text>
-              <TextInput
-                style={styles.input}
-                editable={true}
-                onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
-                autoCapitalize="none"
-                clearButtonMode="while-editing"
-                autoCorrect={false}
-                value={wish.description}
-              />
+            <DjiniText style={styles.label}>Wo gesehen</DjiniText>
+            <DjiniTextInput
+              onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
+              autoCorrect={false}
+              value={wish.seenAt}
+            />
 
-              <Text style={styles.label}>Wo gesehen</Text>
-              <TextInput
-                style={styles.input}
-                editable={true}
-                onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
-                autoCapitalize="none"
-                clearButtonMode="while-editing"
-                autoCorrect={false}
-                value={wish.seenAt}
-              />
+            <DjiniText style={styles.label}>Web-Link</DjiniText>
+            <DjiniTextInput
+              keyboardType="url"   
+              onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
+              value={wish.url}
+            />
 
-              <Text style={styles.label}>URL</Text>
-              <TextInput
-                style={styles.input}
-                editable={true}
-                keyboardType="url"   
-                onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
-                autoCapitalize="none"
-                clearButtonMode="while-editing"
-                autoCorrect={false}
-                value={wish.url}
-              />
+            <View style={styles.toggles}>
+              {isWish ?
+              <View style={styles.toggle}>
+                <DjiniButton
+                  type="primary"
+                  style={styles.toggleButton}
+                  iconStyle={wish.isFavorite ? styles.starIcon : {}}
+                  active={wish.isFavorite}
 
-              {isIdea(wish) ? 
-                undefined :
-                <View style={styles.toggles}>
-                  <View style={styles.toggle}>
-                    <DjiniButton
-                      toggle={true}
-                      active={wish.isFavorite}
-                      iconName={wish.isFavorite ? 'star' : 'star-border'}
-                      onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
-                    <Text style={styles.toggleText}>Djini, das will ich unbedingt haben!</Text>
-                  </View>
-                  <View style={styles.toggle}>
-                    <DjiniButton 
-                      toggle={true}
-                      active={wish.isPrivate}
-                      iconName={wish.isPrivate ? 'lock' : 'lock-open'}
-                      onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
-                    <Text style={styles.toggleText}>Uhh, das sollte besser niemand sehen</Text>
-                  </View>
-                </View>
+                  iconName={wish.isFavorite ? 'star' : 'star-border'}
+                  onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
+                <DjiniText style={styles.toggleText}>Djini, das will ich unbedingt haben!</DjiniText>
+              </View>
+              : undefined
               }
-
-              <View style={styles.actions}>
-                <DjiniButton style={styles.button}
+              {isWish ?
+              <View style={styles.toggle}>
+                <DjiniButton 
+                  type="primary"
+                  style={styles.toggleButton}
+                  active={wish.isPrivate}
+                  iconName={wish.isPrivate ? 'lock' : 'lock-open'}
+                  onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
+                <DjiniText style={styles.toggleText}>Uhh, das sollte besser niemand sehen</DjiniText>
+              </View>
+              : undefined
+              }
+              <View style={styles.toggle}>
+                <DjiniButton 
+                  type="danger"
+                  style={styles.toggleButton}
                   iconName="delete"
-                  caption="Löschen"
-                  onPress={() => dispatch(deleteWish(wish, 'details'))}/>
+                  onPress={() => dispatch(deleteWish(wish, 'details'))}
+                />
+                <DjiniText style={styles.toggleText}>Eintrag löschen</DjiniText>
               </View>
             </View>
-          </ScrollView>
-       </View>
-     )
+          </View>
+        </ScrollView>
+      </View>
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: WMColors.background
+    backgroundColor: 'rgb(240, 240, 240)'
   },
   content: {
-    marginHorizontal: 20,
-    marginBottom: 20
+    margin: 20
   },
   label: {
-    marginTop: 10,
-    fontSize: 16,
-    color: WMColors.darkText
-  },
-  input: {
-    fontSize: 16,
-    height: 40,
-    color: WMColors.lightText,
-    backgroundColor: WMColors.white,
-    paddingLeft: 10
+    marginTop: 30,
+    fontSize: 14,
   },
   toggles: {
-    marginTop: 10
+    marginVertical: 20
   },
   toggle: {
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center'
   },
+  toggleButton: {
+    padding: 10
+  },
+  starIcon: {
+    color: 'rgb(244, 230, 56)',
+  },
   toggleText: {
     marginLeft: 10,
-    color: WMColors.lightText
-  },
-  privacy: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  privacyText: {
-    marginLeft: 10,
-  },
-  actions: {
-    marginTop: 20
+    fontSize: 14
   },
   imageWrapper: {
     height: IMAGE_HEIGHT,
@@ -256,7 +234,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   icon: {
-    color: WMColors.darkText,
     backgroundColor: 'transparent'
   },
   image: {

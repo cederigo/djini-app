@@ -1,11 +1,19 @@
 import React, {Component} from 'react';
-import {TextInput, StyleSheet} from 'react-native';
+import {TextInput, StyleSheet, View} from 'react-native';
 
 const styles = StyleSheet.create({
-  text: {
+  container: {
+    borderColor: 'rgb(61,63,148)',
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  input: {
     fontFamily: 'Asap',
-    color: 'white',
     fontSize: 17,
+    height: 30,
+    flex: 1,
+    color: 'rgb(61,63,148)'
   }
 })
 
@@ -15,14 +23,20 @@ export default class DjiniTextInput extends Component {
     this.refs.input.focus()
   }
   render() {
-    return <TextInput
-      ref="input"
-      clearButtonMode="while-editing"
-      autoCapitalize="none"
-      autoCorrect={false}
-      returnKeyType="next"
-      {...this.props}
-      style={[this.props.style, styles.text]}
-    />
+    return  (
+      <View style={styles.container}>
+        <TextInput
+          ref="input"
+          clearButtonMode="while-editing"
+          autoCapitalize="none"
+          autoCorrect={false}
+          returnKeyType="next"
+          underlineColorAndroid="transparent"
+          editable={true}
+          {...this.props}
+          style={[styles.input, this.props.style]}
+        />
+      </View>
+    )
   }
 }

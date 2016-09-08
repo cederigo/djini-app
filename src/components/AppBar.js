@@ -2,13 +2,15 @@ import {Actions} from 'react-native-router-flux';
 
 import React, {Component, PropTypes} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {StyleSheet, View, TouchableOpacity, Text, TextInput} from 'react-native';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
 
 import DjiniText from './DjiniText'
+import DjiniTextInput from './DjiniTextInput'
 
 export class AppBar extends Component {
   static propTypes = {
     showBackButton: React.PropTypes.bool,
+    backButtonText: React.PropTypes.string,
     onBack: React.PropTypes.func,
     title: React.PropTypes.string,
     children: React.PropTypes.element,
@@ -20,20 +22,23 @@ export class AppBar extends Component {
   }
 
   render() {
-    const {showBackButton, onBack, title, textStyle} = this.props
+    const {showBackButton, backButtonText, onBack, title, textStyle} = this.props
+    const actionButtonProps = backButtonText ? {text: backButtonText} : {iconName: 'chevron-left'}
     return (
       <View style={styles.appBar}>
+        <View style={styles.center}>
+          <DjiniText textStyle={textStyle} style={styles.title} numberOfLines={1}>{title}</DjiniText>
+        </View>
         <View style={styles.left}>
           {showBackButton ? 
             <ActionButton 
+              {...actionButtonProps}
               onPress={onBack}
-              iconName="chevron-left"
               textStyle={textStyle}
               style={[styles.actionButton, styles.actionButtonLeft]}/>
             : undefined
           }
         </View>
-        <DjiniText textStyle={textStyle} style={styles.title} numberOfLines={1}>{title}</DjiniText>
         <View style={styles.right}>
           {this.props.children}
         </View>
@@ -72,8 +77,14 @@ export class SearchBar extends Component {
     const {title, onChangeText, inputValue, inputPlaceholder} = this.props
     return (
       <View style={styles.appBar}>
+        <View style={styles.center}>
+          {this.state.searchActive ?
+            undefined
+            : <DjiniText style={styles.title} numberOfLines={1}>{title}</DjiniText>
+          }
+        </View>
         {this.state.searchActive ? 
-          <TextInput
+          <DjiniTextInput
             onChangeText={onChangeText}
             autoFocus={true}
             autoCapitalize='none'
@@ -82,10 +93,6 @@ export class SearchBar extends Component {
             placeholder={inputPlaceholder}
           />
           : <View style={styles.left}/>
-        }
-        {this.state.searchActive ?
-          undefined
-          : <Text style={styles.title} numberOfLines={1}>{title}</Text>
         }
         <View style={styles.right}>
           {this.state.searchActive ? 
@@ -134,8 +141,6 @@ export class ActionButton extends React.Component {
 const styles = StyleSheet.create({
   appBar: {
     marginTop: 20, //status bar
-    // borderBottomWidth: StyleSheet.hairlineWidth,
-    // borderBottomColor: WMColors.lightText,
     flexDirection: 'row',
     alignSelf: 'stretch',
     alignItems: 'center',
@@ -144,26 +149,28 @@ const styles = StyleSheet.create({
   },
   left: {
     flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
-  title: {
-    textAlign: 'center',
-    flex: 1.5,
-    fontStyle: 'italic',
-    marginHorizontal: 5
+  center: {
+    position: 'absolute',
+    left: 0, right: 0, top: 0, bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   right: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     flex: 1,
   },
+  title: {
+    fontStyle: 'italic',
+  },
   actionButton: {
-    paddingVertical: 10,
-    paddingRight: 10,
+    padding: 10,
     alignItems: 'flex-end',
-    flex: 1
   },
   actionButtonLeft: {
-    paddingLeft: 0,
     alignItems: 'flex-start',
   },
   actionTextDisabled: {
