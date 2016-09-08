@@ -1,19 +1,27 @@
 /* global setTimeout */
 import { connect } from 'react-redux'
-import Swipeout from 'react-native-swipeout'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import React, {Component, PropTypes} from 'react'
-import {View, TouchableOpacity} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import {StyleSheet} from 'react-native'
 
 import DjiniText from './DjiniText'
+import PureListView from './PureListView'
+import ListRowSeperator from './ListRowSeperator'
+import ListRow from './ListRow'
+import ListRowIcon from './ListRowIcon'
+import SwipeoutButton from './ListRowSwipeoutButton'
 
-import styles from '../lib/listStyles'
+const styles = StyleSheet.create({
+  favoriteIcon: {
+    color: 'rgb(244, 230, 56)'
+  },
+  emptyList: {
+    textAlign: 'center'
+  }
+})
 
 // actions
 import {showWish, deleteWish, saveWish} from '../actions/wishes'
 
-import PureListView from './PureListView'
 
 class MyWishList extends Component {
 
@@ -33,7 +41,6 @@ class MyWishList extends Component {
   render() {
     return (
       <PureListView
-        style={styles.container}
         ref={this.storeInnerRef}
         data={this.props.wishes}
         renderRow={this.renderRow}
@@ -58,26 +65,17 @@ class MyWishList extends Component {
     return [
       { 
         backgroundColor: 'transparent',
-        component:
-          <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name="delete" size={30}/>
-          </View>,
+        component: <SwipeoutButton iconName="delete"/>,
         onPress: () => dispatch(deleteWish(wish)),
       },
       {
         backgroundColor: 'transparent',
-        component: 
-          <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name={wish.isFavorite ? 'star' : 'star-border'} size={30}/>
-          </View>,
+        component: <SwipeoutButton iconStyle={wish.isFavorite ? styles.favoriteIcon : {}} iconName={wish.isFavorite ? 'star' : 'star-border'}/>,
         onPress: () => dispatch(saveWish(wish.set('isFavorite', !wish.isFavorite)))
       },
       {
         backgroundColor: 'transparent',
-        component: 
-          <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name={wish.isPrivate ? 'lock' : 'lock-open'} size={30}/>
-          </View>,
+        component: <SwipeoutButton iconName={wish.isPrivate ? 'lock' : 'lock-open'} />,
         onPress: () => dispatch(saveWish(wish.set('isPrivate', !wish.isPrivate)))
       }
     ]
@@ -86,18 +84,15 @@ class MyWishList extends Component {
   renderRow (wish) {
     const {dispatch, showSwipeoutHint} = this.props
     return (
-      <Swipeout style={styles.container} right={this.swipeoutBtns(wish)} ref={showSwipeoutHint ? this.showSwipeoutAnimation : undefined} autoClose={true}>
-        <TouchableOpacity onPress={() => dispatch(showWish(wish))}>
-          <View style={styles.row}>
-            <DjiniText style={styles.rowText} numberOfLines={1}>
-              {wish.title}
-            </DjiniText>
-            {wish.isPrivate ? <Icon style={styles.rowIcon} name="lock"/> : undefined}
-            {wish.isFavorite ? <Icon style={styles.rowIconFavorite} name="star"/> : undefined}
-          </View>
-        </TouchableOpacity>
-      </Swipeout>
-    );
+      <ListRow 
+        title={wish.title}
+        swipeoutBtns={this.swipeoutBtns(wish)}
+        ref={showSwipeoutHint ? this.showSwipeoutAnimation : undefined}
+        onPress={() => dispatch(showWish(wish))}>
+        {wish.isPrivate ? <ListRowIcon name="lock"/> : undefined}
+        {wish.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="star"/> : undefined}
+      </ListRow>
+    )
   }
 
   renderEmptyList() {
@@ -107,16 +102,7 @@ class MyWishList extends Component {
   }
 
   renderSeparator(sectionID, rowID) {
-    return (
-      <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}>
-        <LinearGradient key={"SEP_" + sectionID + "_" + rowID}
-          style={styles.container}
-          start={[0,0]}
-          end={[1,0]}
-          colors={['rgba(255,255,255,0)', 'rgba(255,255,255,1)']}
-        />
-      </View>
-    );
+    return <ListRowSeperator key={"SEP_" + sectionID + "_" + rowID}/>
   }
 
   storeInnerRef(ref: ?PureListView) {

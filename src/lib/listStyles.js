@@ -21,9 +21,6 @@ export default StyleSheet.create({
   col: {
     flex: 1,
   },
-  rowSeparator: {
-    height: 2,
-  },
   rowText: {
     flex: 1,
     fontSize: 20,
