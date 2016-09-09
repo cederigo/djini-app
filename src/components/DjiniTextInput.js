@@ -85,7 +85,6 @@ export default class DjiniTextInput extends Component {
           {...this.props}
           {...this._autoGrowProps()}
           style={[inputStyle, {height: Math.max(this.props.minHeight, this.state.height)}]}
-          value={this.state.text}
         />
       </View>
     )
