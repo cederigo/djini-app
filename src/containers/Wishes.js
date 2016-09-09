@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
-import { StyleSheet, View, ScrollView, Alert, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, Alert, Image, TouchableOpacity} from 'react-native';
 
 import {djini_logo, lamp_ani} from '../../img'
 
@@ -8,9 +8,6 @@ import {newWish} from '../actions/wishes'
 
 import MyWishList from '../components/MyWishList'
 import DjiniText from '../components/DjiniText'
-import {AppBar, ActionButton} from '../components/AppBar'
-import WMColors from '../lib/WMColors'
-
 
 class Wishes extends Component {
 
@@ -29,11 +26,6 @@ class Wishes extends Component {
     if (error) {
       Alert.alert('Oops', 'Wünsche konnten nicht geladen werden')
     }
-        // <AppBar title="Meine Wünsche" showBackButton={false}>
-        //   <ActionButton iconName="add" onPress={() => dispatch(newWish(user, user))}/>
-        // </AppBar>
-
-          // <DjiniButton toUser={user}/>
     return (
       <View style={styles.container}>
         <ScrollView

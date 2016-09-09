@@ -80,7 +80,7 @@ export class SearchBar extends Component {
         <View style={styles.center}>
           {this.state.searchActive ?
             <DjiniTextInput
-              type="search"
+              type="light"
               onChangeText={onChangeText}
               autoFocus={true}
               style={styles.searchInput}

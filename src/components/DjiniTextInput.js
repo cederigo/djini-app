@@ -27,11 +27,35 @@ const styles = StyleSheet.create({
 /* sensible defaults */
 export default class DjiniTextInput extends Component {
   static propTypes = {
-    type: PropTypes.oneOf(['light'])
+    type: PropTypes.oneOf(['light']),
+    minHeight: PropTypes.number.isRequired,
+    autoGrow: PropTypes.bool,
+    style: PropTypes.any,
+    inputStyle: PropTypes.any
+  }
+
+  constructor(props) {
+     super(props);
+     this.state = {text: '', height: 0};
   }
 
   focus() {
     this.refs.input.focus()
+  }
+
+  _autoGrowProps() {
+    if (!this.props.autoGrow) {
+      return {}
+    }
+    return {
+      multiline: true,
+      onChange: (event) => {
+         this.setState({
+           text: event.nativeEvent.text,
+           height: event.nativeEvent.contentSize.height,
+         });
+      }
+    }
   }
 
   render() {
@@ -57,11 +81,17 @@ export default class DjiniTextInput extends Component {
           returnKeyType="next"
           underlineColorAndroid="transparent"
           editable={true}
-          placeholderTextColor={this.props.type === 'light' ? 'white' : 'rgb(61,63,148)'}
+          placeholderTextColor={this.props.type === 'light' ? 'rgba(255,255,255,0.6)' : 'rgba(61,63,148,0.6)'}
           {...this.props}
-          style={inputStyle}
+          {...this._autoGrowProps()}
+          style={[inputStyle, {height: Math.max(this.props.minHeight, this.state.height)}]}
+          value={this.state.text}
         />
       </View>
     )
   }
+}
+
+DjiniTextInput.defaultProps = {
+  minHeight: 30
 }
