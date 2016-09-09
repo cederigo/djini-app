@@ -21,12 +21,11 @@ export default class BirthdayForm extends Component {
         </DjiniText>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Geb.</DjiniText>
-          <View style={styles.formGroupInputView}>
-            <BirthdayInput 
-              style={styles.formGroupInput}
-              autoFocus={true}
-              onDateChange={date => onFormFieldChange('birthday', date)} />
-          </View>
+          <BirthdayInput 
+            type="light"
+            style={styles.formGroupInput}
+            autoFocus={true}
+            onDateChange={date => onFormFieldChange('birthday', date)} />
         </View>
       </View>
     )

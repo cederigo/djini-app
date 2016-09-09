@@ -30,20 +30,18 @@ export default class PhoneNumberForm extends Component {
         </DjiniText>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Telefon</DjiniText>
-          <View style={styles.formGroupInputView}>
-            <DjiniTextInput
-              style={styles.formGroupInput}
-              editable={!authState.isFetching}
-              autoFocus={true}
-              keyboardType="phone-pad"
-              underlineColorAndroid="transparent"
-              onSubmitEditing={onNext}
-              onChangeText={(text) => {
-                onFormFieldChange('phoneNumber', text)
-              }}
-              value={phoneNumber}
-            />
-          </View>
+          <DjiniTextInput
+            style={styles.formGroupInput}
+            type="light"
+            editable={!authState.isFetching}
+            autoFocus={true}
+            keyboardType="phone-pad"
+            onSubmitEditing={onNext}
+            onChangeText={(text) => {
+              onFormFieldChange('phoneNumber', text)
+            }}
+            value={phoneNumber}
+          />
         </View>
       </View>
     )

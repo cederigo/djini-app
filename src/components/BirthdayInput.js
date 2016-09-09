@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {View, StyleSheet} from 'react-native';
 import DjiniTextInput from './DjiniTextInput'
 
-export default class BirthdayInput2 extends Component {
+export default class BirthdayInput extends Component {
 
   static propTypes = {
     date: PropTypes.instanceOf(Date),
@@ -57,14 +57,17 @@ export default class BirthdayInput2 extends Component {
   }
 
   render() {
-    const {editable, autoFocus} = this.props
+    const {editable, autoFocus, style, type} = this.props
     const {day, month, year} = this.state
     return (
-      <View style={[styles.container]}>
+      <View style={[styles.container, style]}>
         <DjiniTextInput
+          placeholder="31"
+          type={type}
           ref="day"
           autoFocus={autoFocus}
-          style={[this.props.style, styles.input]}
+          style={[this.props.style, styles.inputContainer]}
+          inputStyle={styles.input}
           value={day}
           editable={editable}
           onChangeText={(text) => this.setStateIfValid('day', text, this.onDateChange)}
@@ -73,8 +76,11 @@ export default class BirthdayInput2 extends Component {
           keyboardType='numeric'
         />
         <DjiniTextInput
+          placeholder="12"
+          type={type}
           ref="month"
-          style={[this.props.style, styles.input]}
+          style={[this.props.style, styles.inputContainer]}
+          inputStyle={styles.input}
           value={month}
           editable={editable}
           onChangeText={(text) => this.setStateIfValid('month', text, this.onDateChange)}
@@ -83,8 +89,11 @@ export default class BirthdayInput2 extends Component {
           keyboardType='numeric'
         />
         <DjiniTextInput
+          placeholder="2001"
+          type={type}
           ref="year"
-          style={[this.props.style, styles.input, styles.inputYear]}
+          style={[this.props.style, styles.inputYearContainer]}
+          inputStyle={styles.input}
           value={year}
           onChangeText={(text) => this.setStateIfValid('year', text, this.onDateChange)}
           editable={editable}
@@ -100,14 +109,18 @@ export default class BirthdayInput2 extends Component {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    flex: 1
   },
-  input: {
-    flex: 1,
+  inputContainer: {
+    flex: 0,
+    width: 30,
     marginRight: 10,
   },
-  inputYear: {
-    flex: 4,
+  input: {
+    textAlign: 'center'
+  },
+  inputYearContainer: {
+    flex: 0,
+    width: 60,
     marginRight: 0,
   }
 })

@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {TextInput, StyleSheet, View} from 'react-native';
+import {TextInput, StyleSheet, View, Platform} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  searchContainer: {
+  lightContainer: {
     borderColor: 'white',
   },
   input: {
@@ -16,9 +16,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
     height: 30,
     flex: 1,
-    color: 'rgb(61,63,148)'
+    color: 'rgb(61,63,148)',
+    padding: Platform.select({android: 0})
   },
-  searchInput: {
+  lightInput: {
     color: 'white'
   }
 })
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
 /* sensible defaults */
 export default class DjiniTextInput extends Component {
   static propTypes = {
-    type: PropTypes.oneOf(['search'])
+    type: PropTypes.oneOf(['light'])
   }
 
   focus() {
@@ -38,9 +39,9 @@ export default class DjiniTextInput extends Component {
     const containerStyle = [styles.container]
     const inputStyle = [styles.input]
 
-    if (this.props.type === 'search') {
-      containerStyle.push(styles.searchContainer)
-      inputStyle.push(styles.searchInput)
+    if (this.props.type === 'light') {
+      containerStyle.push(styles.lightContainer)
+      inputStyle.push(styles.lightInput)
     }
 
     containerStyle.push(this.props.style)
@@ -56,7 +57,7 @@ export default class DjiniTextInput extends Component {
           returnKeyType="next"
           underlineColorAndroid="transparent"
           editable={true}
-          placeholderTextColor={this.props.type === 'search' ? 'white' : 'rgb(61,63,148)'}
+          placeholderTextColor={this.props.type === 'light' ? 'white' : 'rgb(61,63,148)'}
           {...this.props}
           style={inputStyle}
         />

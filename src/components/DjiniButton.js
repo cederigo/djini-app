@@ -19,7 +19,8 @@ export default class DjiniButton extends Component {
   render() {
     const {type, caption, disabled, onPress, iconName, iconStyle, style} = this.props
     const buttonStyle = [styles.container, styles[type]]
-    if (disabled) { buttonStyle.push(styles.disabled) }
+    const textStyle = [styles.text]
+    if (disabled) { textStyle.push(styles.disabled) }
     if (style) { buttonStyle.push(style) }
     return (
       <TouchableOpacity
@@ -36,7 +37,7 @@ export default class DjiniButton extends Component {
           : undefined
         }
         {caption ?
-          <DjiniText style={styles.text}>
+          <DjiniText style={textStyle}>
             {caption}
           </DjiniText>
           : undefined
