@@ -1,7 +1,7 @@
 
 import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native';
+import { StyleSheet, View} from 'react-native';
 import {Actions} from 'react-native-router-flux'
 
 import {logout} from '../actions/authActions'
@@ -24,9 +24,7 @@ class Profile extends Component {
     return(
       <View style={styles.container}>
         <View style={styles.appBar}>
-          <StatusBar translucent={true} barStyle="default"/>
-          <AppBar textStyle="dark" title="Mein Profil" showBackButton={false}>
-          </AppBar>
+          <AppBar textStyle="dark" title="Mein Profil" showBackButton={false}/>
         </View>
         <Tabs selected="profile">
           <DjiniText style={styles.tabText} name="profile">Details</DjiniText>

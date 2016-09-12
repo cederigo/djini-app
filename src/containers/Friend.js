@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
-import { View, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import DjiniBackground from '../components/DjiniBackground'
@@ -103,7 +103,6 @@ class Friend extends Component {
     return (
       <DjiniBackground>
         <View style={styles.appBar}>
-          <StatusBar translucent={true} barStyle="default"/>
           <AppBar textStyle="dark" showBackButton={true} title="Freunde"/>
         </View>
         {this.renderProfileView()}

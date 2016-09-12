@@ -45,8 +45,6 @@ const styles = StyleSheet.create({
   logo: {
     marginTop: 100,
     marginBottom: 70,
-    width: 142,
-    height: 87 
   },
   feature: {
     marginHorizontal: 40,

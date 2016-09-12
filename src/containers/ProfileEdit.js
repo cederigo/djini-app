@@ -1,7 +1,7 @@
 
 import { connect } from 'react-redux'
 import React, {Component, PropTypes} from 'react'
-import { StyleSheet, View, StatusBar, Text } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {updateProfile, onFieldChange} from '../actions/profile'
@@ -25,7 +25,6 @@ class ProfileEdit extends Component {
     const {name, email, birthday} = fields
     return(
       <View style={ styles.container}>
-        <StatusBar translucent={true}/>
         <AppBar title="Profil Bearbeiten" showBackButton={true}>
           <ActionButton text="Fertig" disabled={!isValid} onPress={() => dispatch(updateProfile(fields, 'profile-edit'))}/>
         </AppBar>

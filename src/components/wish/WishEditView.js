@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions, StatusBar} from 'react-native';
+import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from '../AppBar'
@@ -115,7 +115,6 @@ class WishEditView extends Component {
     const isWish = !isIdea(wish)
     return ( 
       <View style={styles.container}>
-        <StatusBar translucent={true} barStyle="default"/>
         <AppBar showBackButton={true} backButtonText="Abbrechen" title="Bearbeiten" textStyle="dark">
           <ActionButton text="Fertig" textStyle="dark" disabled={this.state.uploading || !wish.title} onPress={() => dispatch(saveWish(wish))}/>
         </AppBar>

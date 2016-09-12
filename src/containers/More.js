@@ -1,7 +1,7 @@
 
 import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
-import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, StatusBar, TouchableOpacity} from 'react-native';
+import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
 import dismissKeyboard from 'dismissKeyboard'
 import {Actions} from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -27,7 +27,6 @@ class More extends Component {
     return(
       <View style={styles.container}>
         <View style={styles.appBar}>
-          <StatusBar translucent={true} barStyle="default"/>
           <AppBar textStyle="dark" title="Mehr" showBackButton={false}/>
         </View>
         <ScrollView>

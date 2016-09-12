@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 import WMColors from '../lib/WMColors'
 import {AppBar} from './AppBar'
@@ -8,7 +8,6 @@ export default class ContactsPermission extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar translucent={true} />
         <AppBar title="Freunde" showBackButton={false}/>
         <Text style={styles.text}>Weil Djini ziemlich nett ist, kannst du es dir jederzeit anders überlegen und die Freigabe in den App-Einstellungen in deinen Smartphone-Einstellungen erteilen</Text>
       </View>
