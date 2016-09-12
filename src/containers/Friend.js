@@ -75,7 +75,7 @@ class Friend extends Component {
     if (activeTab === 'wishes') {
       return <FriendWishesList style={styles.container} wishes={wishes.toArray()} user={user}/>
     } else {
-      return <FriendIdeasList style={styles.container} wishes={ideas.toArray()}/>
+      return <FriendIdeasList style={styles.container} wishes={ideas.toArray()} user={user} friend={friend}/>
     }
   }
 

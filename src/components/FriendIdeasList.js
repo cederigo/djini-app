@@ -1,20 +1,27 @@
 import { connect } from 'react-redux'
 import React, {Component, PropTypes} from 'react'
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import DjiniText from './DjiniText'
+import DjiniButton from '../components/DjiniButton'
 import PureListView from './PureListView'
 import ListRowSeperator from './ListRowSeperator'
 import ListRow from './ListRow'
 import ListRowIcon from './ListRowIcon'
 import SwipeoutButton from './ListRowSwipeoutButton'
 
+import {newWish} from '../actions/wishes'
+
 import {fulfilled} from '../lib/wishUtil'
 
 const styles = StyleSheet.create({
-  emptyList: {
-    marginTop: 50,
-    textAlign: 'center'
+  empty: {
+    padding: 25
+  },
+  emptyText: {
+  },
+  emptyButton: {
+    marginVertical: 25
   }
 })
 
@@ -25,6 +32,8 @@ class FriendIdeasList extends Component {
 
   static propTypes = {
     wishes: PropTypes.array.isRequired,
+    user: PropTypes.object.isRequired, // me
+    friend: PropTypes.object.isRequired
   }
 
   _innerRef: ?PureListView;
@@ -78,8 +87,12 @@ class FriendIdeasList extends Component {
   }
 
   renderEmptyList() {
+    const {dispatch, user, friend} = this.props
     return (
-      <DjiniText style={styles.emptyList}>Du hast noch keine Ideen erfasst</DjiniText>
+      <View style={styles.empty}>
+        <DjiniText style={styles.emptyText}>Du hast noch keine Ideen erfasst</DjiniText>
+        <DjiniButton style={styles.emptyButton} caption="Idee erfassen" onPress={() => dispatch(newWish(user, friend, 'friend'))}/>
+      </View>
     );
   }
 
