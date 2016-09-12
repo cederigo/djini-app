@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import { AppRegistry, View, StyleSheet, Dimensions, Image} from 'react-native'
+import { AppRegistry, View, StyleSheet, Dimensions, Image, StatusBar} from 'react-native'
 import { Scene, Router} from 'react-native-router-flux'
 import { Provider} from 'react-redux'
 import Parse from 'parse/react-native'
@@ -105,7 +105,23 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function init() {
+const getSceneStyleFn = (os) => { 
+  return (props) => {
+    let statusBarStyle = 'light-content' //default
+    if (props.scene.navigationState.statusBarStyle) {
+      statusBarStyle = props.scene.navigationState.statusBarStyle
+    }
+    if (os === 'ios') {
+      StatusBar.setBarStyle(statusBarStyle)
+    } else {
+      StatusBar.setTranslucent(true)
+      // TODO more styling
+    }
+    return styles.scene
+  }
+}
+
+export default function init(os) {
 
   //init parse sdk
   Parse.initialize(PARSE_APP_ID);
@@ -117,35 +133,35 @@ export default function init() {
       store.dispatch(restoreContacts())
       return (
         <DjiniBackground>
-        <Provider store={store}>
-          <Router hideNavBar={true} createReducer={createRoutesReducer} getSceneStyle={() => styles.scene}>
-            <Scene key="root">
-              <Scene key="app" component={App} initial={true}/>
+          <Provider store={store}>
+            <Router hideNavBar={true} createReducer={createRoutesReducer} getSceneStyle={getSceneStyleFn(os)}>
+              <Scene key="root">
+                <Scene key="app" component={App} initial={true}/>
 
-              <Scene key="welcome" type="replace" component={Welcome} sceneStyle={styles.scene}/>
+                <Scene key="welcome" type="replace" component={Welcome} sceneStyle={styles.scene}/>
 
-              <Scene key="login" type="replace" component={Login} sceneStyle={styles.scene}/>
+                <Scene key="login" type="replace" component={Login} sceneStyle={styles.scene}/>
 
-              <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
-                <Scene key="wishesTab" icon={TabIcon} iconName="lamp">
-                  <Scene key="wishes" animation="fade" duration={0} initial={true} sceneStyle={styles.tabScene} component={Wishes}/>
-                  <Scene key="wish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="wishes"/>
-                </Scene>
-                <Scene key="contactsTab" icon={TabIcon} iconName="group">
-                  <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Contacts}/>
-                  <Scene key="friend" animation="fade" component={Friend}/>
-                  <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend"/>
-                </Scene>
-                <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="todo"/>
-                <Scene key="profileTab" icon={TabIcon} iconName="person">
-                  <Scene key="profile" sceneStyle={styles.tabScene} component={Profile}/>
-                  <Scene key="profileEdit" type="replace" sceneStyle={styles.tabScene} component={ProfileEdit}/>
-                  <Scene key="more" type="replace" sceneStyle={styles.tabScene} component={More}/>
+                <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
+                  <Scene key="wishesTab" icon={TabIcon} iconName="lamp">
+                    <Scene key="wishes" animation="fade" duration={0} initial={true} sceneStyle={styles.tabScene} component={Wishes}/>
+                    <Scene key="wish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="wishes" statusBarStyle="default"/>
+                  </Scene>
+                  <Scene key="contactsTab" icon={TabIcon} iconName="group">
+                    <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Contacts}/>
+                    <Scene key="friend" animation="fade" statusBarStyle="default" component={Friend}/>
+                    <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend"/>
+                  </Scene>
+                  <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="todo"/>
+                  <Scene key="profileTab" icon={TabIcon} iconName="person">
+                    <Scene key="profile" statusBarStyle="default" sceneStyle={styles.tabScene} component={Profile}/>
+                    <Scene key="profileEdit" statusBarStyle="default" type="replace" sceneStyle={styles.tabScene} component={ProfileEdit}/>
+                    <Scene key="more" type="replace" statusBarStyle="default" sceneStyle={styles.tabScene} component={More}/>
+                  </Scene>
                 </Scene>
               </Scene>
-            </Scene>
-          </Router>
-        </Provider>
+            </Router>
+          </Provider>
         </DjiniBackground>
       )
     }

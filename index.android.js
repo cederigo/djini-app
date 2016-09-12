@@ -1,2 +1,2 @@
-import wishmaster from './src/wishmaster'
-wishmaster('android')
+import djini from './src/djini'
+djini('android')
