@@ -3,7 +3,8 @@ import { Actions } from 'react-native-router-flux'
 import React, {Component} from 'react'
 import { StyleSheet, View, Image } from 'react-native';
 
-import {djini_logo, lamp, group, todo} from '../../img'
+import {lamp, group, todo} from '../../img'
+import DjiniLogo from '../components/DjiniLogo'
 import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
 
@@ -11,7 +12,7 @@ export default class Welcome extends Component {
   render() {
     return(
       <View style={styles.container}>
-        <Image style={styles.logo} source={djini_logo}/>
+        <DjiniLogo style={styles.logo}/>
         <View style={styles.feature}>
           <Image resizeMode='contain' style={styles.featureIcon} source={lamp}/>
           <DjiniText style={styles.featureText}>
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   logo: {
-    marginTop: 100,
+    marginTop: 80,
     marginBottom: 70,
   },
   feature: {

@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -12,43 +11,20 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Djini" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="20" y="140" width="441" height="43"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                    <color key="textColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="start" translatesAutoresizingMaskIntoConstraints="NO" id="eg6-JC-brE">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                </imageView>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="start" translatesAutoresizingMaskIntoConstraints="NO" id="eI4-Ms-3YA">
-                    <rect key="frame" x="236" y="33" width="188" height="334"/>
-                </imageView>
-                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="djini_logo" translatesAutoresizingMaskIntoConstraints="NO" id="9aN-lb-41q">
-                    <rect key="frame" x="158" y="114" width="284" height="176"/>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="HkC-b3-DHe">
+                    <rect key="frame" x="229" y="256" width="142" height="88"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.23921568691730499" green="0.24705882370471954" blue="0.58039218187332153" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-            <color key="tintColor" red="0.28397992475066947" green="0.25240730396070166" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.2392156869" green="0.24705882370000001" blue="0.58039218189999997" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="bottom" multiplier="1/3" constant="1" id="5cJ-9S-tgC"/>
-                <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="Koa-jz-hwk"/>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="fvb-Df-36g"/>
+                <constraint firstItem="HkC-b3-DHe" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Y5Y-NM-Xjj"/>
+                <constraint firstItem="HkC-b3-DHe" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Zke-V2-eWm"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-            <variation key="default">
-                <mask key="subviews">
-                    <exclude reference="kId-c2-rCX"/>
-                    <exclude reference="eg6-JC-brE"/>
-                    <exclude reference="eI4-Ms-3YA"/>
-                </mask>
-            </variation>
-            <point key="canvasLocation" x="548" y="455"/>
+            <point key="canvasLocation" x="361" y="329"/>
         </view>
     </objects>
     <resources>
-        <image name="djini_logo" width="284" height="176"/>
-        <image name="start" width="188" height="334"/>
+        <image name="Logo" width="142" height="88"/>
     </resources>
 </document>
