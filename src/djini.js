@@ -107,15 +107,19 @@ const styles = StyleSheet.create({
 
 const getSceneStyleFn = (os) => { 
   return (props) => {
+    const navigationState = props.scene.navigationState
     let statusBarStyle = 'light-content' //default
-    if (props.scene.navigationState.statusBarStyle) {
+    if (navigationState.statusBarStyle) {
       statusBarStyle = props.scene.navigationState.statusBarStyle
+    }
+    if (navigationState.children && navigationState.children[navigationState.index].statusBarStyle) {
+      statusBarStyle = navigationState.children[navigationState.index].statusBarStyle
     }
     if (os === 'ios') {
       StatusBar.setBarStyle(statusBarStyle)
     } else {
+      // android: TODO more styling
       StatusBar.setTranslucent(true)
-      // TODO more styling
     }
     return styles.scene
   }
@@ -150,12 +154,12 @@ export default function init(os) {
                   <Scene key="contactsTab" icon={TabIcon} iconName="group">
                     <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Contacts}/>
                     <Scene key="friend" animation="fade" statusBarStyle="default" component={Friend}/>
-                    <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend"/>
+                    <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend" statusBarStyle="default"/>
                   </Scene>
                   <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="todo"/>
-                  <Scene key="profileTab" icon={TabIcon} iconName="person">
-                    <Scene key="profile" statusBarStyle="default" sceneStyle={styles.tabScene} component={Profile}/>
-                    <Scene key="profileEdit" statusBarStyle="default" type="replace" sceneStyle={styles.tabScene} component={ProfileEdit}/>
+                  <Scene key="profileTab" icon={TabIcon} iconName="person" statusBarStyle="default">
+                    <Scene key="profile" animation="fade" duration={0} statusBarStyle="default" sceneStyle={styles.tabScene} component={Profile}/>
+                    <Scene key="profileEdit" type="replace" statusBarStyle="default" sceneStyle={styles.tabScene} component={ProfileEdit}/>
                     <Scene key="more" type="replace" statusBarStyle="default" sceneStyle={styles.tabScene} component={More}/>
                   </Scene>
                 </Scene>

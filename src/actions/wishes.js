@@ -74,9 +74,9 @@ export function newWish(fromUser: User, toUser: User, source = 'wishes') {
   return dispatch => {
     dispatch({type: NEW_WISH, payload: {fromUser, toUser, source}})
     if (source === 'wishes') {
-      Actions.wish()
+      Actions.wish({title: 'Wunsch erfassen'})
     } else {
-      Actions.friendWish()
+      Actions.friendWish({title: 'Idee erfassen'})
     }
   }
 }

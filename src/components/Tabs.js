@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react'
 
-import WMColors from '../lib/WMColors'
 import { StyleSheet, View, TouchableOpacity} from 'react-native'
 
 export default class Tabs extends Component {

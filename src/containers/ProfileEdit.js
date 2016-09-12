@@ -1,7 +1,7 @@
 
 import { connect } from 'react-redux'
 import React, {Component, PropTypes} from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {updateProfile, onFieldChange} from '../actions/profile'
@@ -9,8 +9,7 @@ import {updateProfile, onFieldChange} from '../actions/profile'
 import {AppBar, ActionButton} from '../components/AppBar'
 import BirthdayInput from '../components/BirthdayInput'
 import DjiniTextInput from '../components/DjiniTextInput'
-
-import WMColors from '../lib/WMColors'
+import DjiniText from '../components/DjiniText'
 
 class ProfileEdit extends Component {
   static propTypes = {
@@ -31,7 +30,7 @@ class ProfileEdit extends Component {
         <Icon name="account-box" style={[styles.text, styles.profileIcon]}/>
         <View style={styles.fields}>
           <View style={styles.field}>
-            <Text style={[styles.text, styles.fieldLabel]}>Name</Text>
+            <DjiniText style={[styles.text, styles.fieldLabel]}>Name</DjiniText>
             <DjiniTextInput
               autoFocus={true}
               style={styles.fieldInput}
@@ -42,7 +41,7 @@ class ProfileEdit extends Component {
             />
           </View>
           <View style={styles.field}>
-            <Text style={[styles.text, styles.fieldLabel]}>E-Mail</Text>
+            <DjiniText style={[styles.text, styles.fieldLabel]}>E-Mail</DjiniText>
             <DjiniTextInput
               ref="email"
               style={styles.fieldInput}
@@ -53,7 +52,7 @@ class ProfileEdit extends Component {
             />
           </View>
           <View style={styles.field}>
-            <Text style={[styles.text, styles.fieldLabel]}>Geb.</Text>
+            <DjiniText style={[styles.text, styles.fieldLabel]}>Geb.</DjiniText>
             <BirthdayInput
               ref="birthday"
               style={styles.fieldInput}
@@ -63,8 +62,8 @@ class ProfileEdit extends Component {
             />
           </View>
           <View style={styles.field}>
-            <Text style={[styles.text, styles.fieldLabel]}>Telefon</Text>
-            <Text style={styles.text}>{user.phoneNumber}</Text>
+            <DjiniText style={[styles.text, styles.fieldLabel]}>Telefon</DjiniText>
+            <DjiniText style={styles.text}>{user.phoneNumber}</DjiniText>
           </View>
         </View>
       </View>
@@ -77,7 +76,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    color: WMColors.lightText,
     fontSize: 20
   },
   tabText: {
@@ -102,8 +100,6 @@ const styles = StyleSheet.create({
   fieldInput: {
     height: 40,
     flex: 1,
-    backgroundColor: WMColors.white,
-    color: WMColors.lightText,
     paddingLeft: 10
   }
 });

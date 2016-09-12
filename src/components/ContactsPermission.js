@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
-import WMColors from '../lib/WMColors'
 import {AppBar} from './AppBar'
+import DjiniText from './DjiniText'
 
 export default class ContactsPermission extends Component {
   render() {
     return (
       <View style={styles.container}>
         <AppBar title="Freunde" showBackButton={false}/>
-        <Text style={styles.text}>Weil Djini ziemlich nett ist, kannst du es dir jederzeit anders überlegen und die Freigabe in den App-Einstellungen in deinen Smartphone-Einstellungen erteilen</Text>
+        <DjiniText style={styles.text}>Weil Djini ziemlich nett ist, kannst du es dir jederzeit anders überlegen und die Freigabe in den App-Einstellungen in deinen Smartphone-Einstellungen erteilen</DjiniText>
       </View>
     )
   }
@@ -22,7 +22,5 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 36,
     marginHorizontal: 25,
-    color: WMColors.lightText,
-    fontSize: 17
   },
 })
