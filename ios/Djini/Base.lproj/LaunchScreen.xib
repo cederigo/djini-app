@@ -11,20 +11,32 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="RRy-Y7-jRN">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                    </accessibility>
+                </imageView>
                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="HkC-b3-DHe">
                     <rect key="frame" x="229" y="256" width="142" height="88"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.2392156869" green="0.24705882370000001" blue="0.58039218189999997" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="RRy-Y7-jRN" secondAttribute="trailing" id="8r8-28-0Hm"/>
+                <constraint firstAttribute="bottom" secondItem="RRy-Y7-jRN" secondAttribute="bottom" id="KOD-gj-7mT"/>
                 <constraint firstItem="HkC-b3-DHe" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Y5Y-NM-Xjj"/>
                 <constraint firstItem="HkC-b3-DHe" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Zke-V2-eWm"/>
+                <constraint firstItem="RRy-Y7-jRN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="hyJ-Cf-dql"/>
+                <constraint firstItem="RRy-Y7-jRN" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="sA1-ws-5pB"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="361" y="329"/>
         </view>
     </objects>
     <resources>
+        <image name="Background" width="1000" height="1779"/>
         <image name="Logo" width="142" height="88"/>
     </resources>
 </document>
