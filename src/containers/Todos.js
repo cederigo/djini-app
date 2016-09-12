@@ -3,7 +3,7 @@ import { StyleSheet, View} from 'react-native';
 
 import DjiniText from '../components/DjiniText'
 
-export default class Pots extends Component {
+export default class Todos extends Component {
   render() {
     return(
       <View style={ styles.container }>

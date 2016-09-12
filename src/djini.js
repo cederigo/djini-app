@@ -25,7 +25,7 @@ import Welcome from './containers/Welcome'
 import Login from './containers/Login'
 import Wishes from './containers/Wishes'
 import Contacts from './containers/Contacts'
-import Pots from './containers/Pots'
+import Todos from './containers/Todos'
 import More from './containers/More'
 import Profile from './containers/Profile'
 import ProfileEdit from './containers/ProfileEdit'
@@ -156,7 +156,9 @@ export default function init(os) {
                     <Scene key="friend" animation="fade" statusBarStyle="default" component={Friend}/>
                     <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend" statusBarStyle="default"/>
                   </Scene>
-                  <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="todo"/>
+                  <Scene key="todosTab" icon={TabIcon} iconName="todo">
+                    <Scene key="todos" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Todos}/>
+                  </Scene>
                   <Scene key="profileTab" icon={TabIcon} iconName="person" statusBarStyle="default">
                     <Scene key="profile" animation="fade" duration={0} statusBarStyle="default" sceneStyle={styles.tabScene} component={Profile}/>
                     <Scene key="profileEdit" type="replace" statusBarStyle="default" sceneStyle={styles.tabScene} component={ProfileEdit}/>

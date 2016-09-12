@@ -1,3 +1,5 @@
+/* @flow */
+
 export type User = {
   id: string,
   name: string,
@@ -26,4 +28,22 @@ export type Wish = {
   toUserId: string,
   fulfillerId: string,
   fulfillerName: ?string,
+}
+
+export type Reminder = {
+  date: Object,
+  title: string,
+  text: string
+}
+
+export type Todo = {
+  id: string,
+  title: string,
+  description: string,
+  type: 'find-gift' | 'buy-gift', 
+  done: boolean,
+  dueDate: Object,
+  contactName: string,
+  wish: Wish,
+  reminders: Array<Reminder>
 }

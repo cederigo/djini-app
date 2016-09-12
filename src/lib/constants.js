@@ -5,7 +5,6 @@ export const MY_PROFILE_LOADED = 'my-profile-loaded'
 export const EDIT_PROFILE = 'edit-profile'
 export const ON_PROFILE_FIELD_CHANGE = 'on-profile-field-change'
 
-
 //wish
 export const SHOW_WISH = 'show-wish'
 export const EDIT_WISH = 'edit-wish'
@@ -66,3 +65,11 @@ export const FEEDBACK_REQUEST = 'feedback-request'
 export const FEEDBACK_SUCCESS = 'feedback-success'
 export const FEEDBACK_FAILURE = 'feedback-failure'
 export const ON_FEEDBACK_CHANGE = 'on-feedback-change'
+
+export const TODO_ADD = 'todo-add'
+export const TODO_UPDATE = 'todo-update'
+export const TODO_DELETE = 'todo-delete'
+export const TODO_SHOW = 'todo-show'
+export const TODO_EDIT = 'todo-edit'
+export const TODO_NEW = 'new-todo'
+
