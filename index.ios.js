@@ -1,2 +1,2 @@
-import wishmaster from './src/wishmaster'
-wishmaster('ios')
+import djini from './src/djini'
+djini('ios')

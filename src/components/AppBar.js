@@ -79,21 +79,19 @@ export class SearchBar extends Component {
       <View style={styles.appBar}>
         <View style={styles.center}>
           {this.state.searchActive ?
-            undefined
+            <DjiniTextInput
+              type="light"
+              onChangeText={onChangeText}
+              autoFocus={true}
+              style={styles.searchInput}
+              value={inputValue}
+              placeholder={inputPlaceholder}
+              clearButtonMode="never"
+            />
             : <DjiniText style={styles.title} numberOfLines={1}>{title}</DjiniText>
           }
         </View>
-        {this.state.searchActive ? 
-          <DjiniTextInput
-            onChangeText={onChangeText}
-            autoFocus={true}
-            autoCapitalize='none'
-            style={styles.searchInput}
-            value={inputValue}
-            placeholder={inputPlaceholder}
-          />
-          : <View style={styles.left}/>
-        }
+        <View style={styles.left}/>
         <View style={styles.right}>
           {this.state.searchActive ? 
             <ActionButton onPress={this._endSearch} iconName="cancel"/>
@@ -183,10 +181,7 @@ const styles = StyleSheet.create({
     color: 'rgb(101,104,244)'
   },
   searchInput: {
-    marginLeft: 10,
-    color: 'white',
-    flex: 6,
-    height: 44,
-    fontSize: 16
+    marginLeft: 25,
+    marginRight: 50
   }
 })

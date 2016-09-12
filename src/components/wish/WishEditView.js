@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
-import React, {Component} from 'react';
-import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions, StatusBar} from 'react-native';
+import React, {Component, PropTypes} from 'react';
+import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from '../AppBar'
@@ -14,13 +14,20 @@ import {saveWish, onWishFieldChange, uploadWishImage, deleteWish} from '../../ac
 
 // Utils
 import {isIdea} from '../../lib/wishUtil'
-import WMColors from '../../lib/WMColors'
-import {Wish} from '../../lib/types'
 
 const IMAGE_WIDTH = Dimensions.get('window').width
 const IMAGE_HEIGHT = 200
 
 class WishEditView extends Component {
+
+  static propTypes = {
+    wish: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired
+  }
+
+  static defaultProps = {
+    title: 'Bearbeiten'
+  }
 
   constructor(props) {
     super(props)
@@ -33,9 +40,7 @@ class WishEditView extends Component {
     }
   }
 
-  props: {
-    wish: Wish
-  }
+  
 
   uploadImage(base64Data) {
     if (this.state.uploading) {
@@ -111,12 +116,11 @@ class WishEditView extends Component {
   }
 
   render() {
-    const {dispatch, wish} = this.props
+    const {dispatch, wish, title} = this.props
     const isWish = !isIdea(wish)
     return ( 
       <View style={styles.container}>
-        <StatusBar translucent={true} barStyle="default"/>
-        <AppBar showBackButton={true} backButtonText="Abbrechen" title="Bearbeiten" textStyle="dark">
+        <AppBar showBackButton={true} backButtonText="Abbrechen" title={title} textStyle="dark">
           <ActionButton text="Fertig" textStyle="dark" disabled={this.state.uploading || !wish.title} onPress={() => dispatch(saveWish(wish))}/>
         </AppBar>
 
@@ -228,13 +232,14 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     height: IMAGE_HEIGHT,
-    borderColor: WMColors.lightText,
+    backgroundColor: 'rgb(218,219,241)',
     borderBottomWidth: StyleSheet.hairlineWidth,
     justifyContent: 'center',
     alignItems: 'center'
   },
   icon: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    color: 'rgb(61,63,148)'
   },
   image: {
     resizeMode: 'cover',

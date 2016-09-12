@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, TouchableOpacity, Linking, Image, Dimensions, StatusBar} from 'react-native';
+import {StyleSheet, View, ScrollView, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {clouds} from '../../../img'
@@ -147,7 +147,6 @@ class WishView extends Component {
 
     return ( 
       <View style={styles.container}>
-        <StatusBar translucent={true} barStyle="default"/>
         <AppBar showBackButton={true} title="Wunsch" textStyle="dark">
           {allowEdit(wish, currentUser) ? <ActionButton text="Bearbeiten" textStyle="dark" onPress={() => dispatch(editWish(wish, source))}/> : undefined }
         </AppBar>

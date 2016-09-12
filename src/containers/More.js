@@ -1,7 +1,7 @@
 
 import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
-import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, StatusBar, Text, TouchableOpacity, TextInput } from 'react-native';
+import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
 import dismissKeyboard from 'dismissKeyboard'
 import {Actions} from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -10,9 +10,10 @@ import {sendFeedback, onFeedbackChange} from '../actions/feedback'
 
 import {AppBar} from '../components/AppBar'
 import DjiniButton from '../components/DjiniButton'
+import DjiniText from '../components/DjiniText'
+import DjiniTextInput from '../components/DjiniTextInput'
+import ListRowSeperator from '../components/ListRowSeperator'
 import Tabs from '../components/Tabs'
-
-import WMColors from '../lib/WMColors'
 
 class More extends Component {
   static propTypes = {
@@ -24,24 +25,26 @@ class More extends Component {
   render() {
     const {isFetching, isValid, description, user, dispatch} = this.props
     return(
-      <View style={ styles.container }>
-        <StatusBar translucent={true}/>
-        <AppBar title="Mehr" showBackButton={false}/>
+      <View style={styles.container}>
+        <View style={styles.appBar}>
+          <AppBar textStyle="dark" title="Mehr" showBackButton={false}/>
+        </View>
         <ScrollView>
           <Tabs selected="more">
-            <Text style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Mein Profil</Text>
-            <Text style={styles.tabText} name="more">Mehr</Text>
+            <DjiniText style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Mein Profil</DjiniText>
+            <DjiniText style={styles.tabText} name="more">Mehr</DjiniText>
           </Tabs>
           <TouchableWithoutFeedback onPress={dismissKeyboard}>
-            <View style={styles.feedback}>
-              <Text style={styles.text}>Feedback schreiben</Text>
-              <Text style={styles.textSmall}>Sag Djini deine Verbesserungswünsche für die App…</Text>
-              <TextInput
-                autoCorrect={false}
-                multiline={true}
+            <View style={styles.feedbackC}>
+              <DjiniText style={styles.titleText}>Feedback schreiben</DjiniText>
+              <DjiniTextInput
+                type="light"
+                placeholder="Sag Djini deine Verbesserungswünsche für die App…"
+                autoGrow={true}
+                minHeight={55}
                 value={description}
                 onChangeText={(text) => dispatch(onFeedbackChange(text))}
-                style={styles.feedbackInput} />
+                />
               <DjiniButton
                 style={styles.feedbackSubmit}
                 disabled={isFetching || !isValid}
@@ -50,18 +53,22 @@ class More extends Component {
             </View>
           </TouchableWithoutFeedback>
           <View>
+            <ListRowSeperator/>
             <TouchableOpacity style={styles.item}>
-              <Text style={styles.itemText}>FAQ</Text>
+              <DjiniText style={styles.itemText}>FAQ</DjiniText>
               <Icon style={styles.itemIcon} name="chevron-right"/>
             </TouchableOpacity>
+            <ListRowSeperator/>
             <TouchableOpacity style={styles.item}>
-              <Text style={styles.itemText}>Nutzungsbedingungen (ABG)</Text>
+              <DjiniText style={styles.itemText}>Nutzungsbedingungen (ABG)</DjiniText>
               <Icon style={styles.itemIcon} name="chevron-right"/>
             </TouchableOpacity>
+            <ListRowSeperator/>
             <TouchableOpacity style={styles.item}>
-              <Text style={styles.itemText}>Credits</Text>
+              <DjiniText style={styles.itemText}>Credits</DjiniText>
               <Icon style={styles.itemIcon} name="chevron-right"/>
             </TouchableOpacity>
+            <ListRowSeperator/>
           </View>
         </ScrollView>
       </View>
@@ -73,26 +80,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  text: {
-    color: WMColors.lightText,
-    fontSize: 20
+  appBar: {
+    backgroundColor: 'rgb(240, 240, 240)'
   },
-  textSmall: {
-    color: WMColors.lightText,
-    fontSize: 14
+  titleText: {
+    fontSize: 20
   },
   tabText: {
     fontSize: 20,
-    color: 'white'
+    color: 'white',
+    fontStyle: 'italic',
+    fontWeight: 'bold',
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: WMColors.lightText,
     height: 60,
     paddingLeft: 25,
-    borderColor: 'white',
-    borderTopWidth: StyleSheet.hairlineWidth
+    paddingRight: 15
   },
   itemText: {
     color: 'white',
@@ -101,24 +106,15 @@ const styles = StyleSheet.create({
   },
   itemIcon: {
     color: 'white',
-    fontSize: 40,
+    fontSize: 30,
   },
-  feedback: {
-    backgroundColor: WMColors.white,
+  feedbackC: {
     padding: 25
   },
-  feedbackInput: {
-    height: 100,
-    backgroundColor: 'white',
-    marginVertical: 20,
-    fontSize: 14,
-    padding: 10,
-    color: WMColors.lightText
-  },
   feedbackSubmit: {
+    marginTop: 25,
+    paddingVertical: 10,
     alignSelf: 'flex-end',
-    paddingHorizontal: 50
-  
   }
 });
 

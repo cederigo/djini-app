@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {Text} from 'react-native';
+import DjiniText from './DjiniText'
 
 export default class BirthdayText extends Component {
 
@@ -15,9 +15,9 @@ export default class BirthdayText extends Component {
   render() {
     const {date, text} = this.props
     return (
-      <Text {...this.props}>
+      <DjiniText {...this.props}>
         {date ? `${text}${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}` : ''}
-      </Text>
+      </DjiniText>
     )
   }
 }

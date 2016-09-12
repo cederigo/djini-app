@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes } from 'react'
 
-import WMColors from '../lib/WMColors'
 import { StyleSheet, View, TouchableOpacity} from 'react-native'
 
 export default class Tabs extends Component {
@@ -35,8 +34,8 @@ export default class Tabs extends Component {
     return (
       <View style={[styles.tabbarView, this.props.style]}>
         {React.Children.map(this.props.children.filter(c=>c),(el, idx)=>
-          <TouchableOpacity key={el.props.name+"touch"}
-            style={[styles.iconView, (el.props.name || el.key) == selected ? styles.iconViewSelected : {}, idx === 0 ? styles.iconViewFirst : {} ]}
+          <TouchableOpacity key={el.props.name + "touch"}
+            style={[styles.iconView, (el.props.name || el.key) == selected ? styles.iconViewSelected : {}]}
             onPress={()=>!self.props.locked && self.onSelect(el)}
             onLongPress={()=>self.props.locked && self.onSelect(el)}>
             {el}
@@ -48,27 +47,17 @@ export default class Tabs extends Component {
 }
 var styles = StyleSheet.create({
   tabbarView: {
-    height:55,
-    backgroundColor: WMColors.lightText,
+    // height:55,
     flexDirection: 'row',
-    borderColor: 'white',
-    borderBottomWidth: 1,
   },
   iconView: {
     flex: 1,
     height: 50,
     justifyContent: 'center',
     paddingLeft: 25,
-    backgroundColor: 'rgb(199,199,199)',
-    borderColor: 'white',
-    borderBottomWidth: 1,
-    borderLeftWidth: 1
-  },
-  iconViewFirst: {
-    borderLeftWidth: 0
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
   iconViewSelected: {
-    backgroundColor: WMColors.lightText,
-    borderBottomWidth: 0,
+    backgroundColor: 'transparent'
   }
 });

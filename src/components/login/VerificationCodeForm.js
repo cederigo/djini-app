@@ -28,19 +28,17 @@ export default class VerificationCodeForm extends Component {
           Gib den 4-stelligen Verifizierungs-Code ein, den du per SMS erhalten hast:
         </DjiniText>
         <View style={styles.formGroup}>
-          <DjiniText style={styles.formGroupText}>Code</DjiniText>
-          <View style={styles.formGroupInputView}>
-            <DjiniTextInput
-              style={styles.formGroupInput}
-              editable={!authState.isFetching}
-              autoFocus={true}
-              keyboardType="numeric"
-              onChangeText={(text) => onFormFieldChange('code', text)}
-              onSubmitEditing={onNext}
-              clearButtonMode="while-editing"
-              value={code}
-            />
-          </View>
+        <DjiniText style={styles.formGroupText}>Code</DjiniText>
+          <DjiniTextInput
+            style={styles.formGroupInput}
+            type="light"
+            editable={!authState.isFetching}
+            autoFocus={true}
+            keyboardType="numeric"
+            onChangeText={(text) => onFormFieldChange('code', text)}
+            onSubmitEditing={onNext}
+            value={code}
+          />
         </View>
       </View>
     )

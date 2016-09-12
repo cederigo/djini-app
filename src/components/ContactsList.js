@@ -1,11 +1,23 @@
 import React, {Component, PropTypes} from 'react';
-import {View, TouchableHighlight, Text, RefreshControl} from 'react-native';
-import Swipeout from 'react-native-swipeout'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import {RefreshControl, StyleSheet} from 'react-native';
 
-import DjiniButton from './DjiniButton'
+import DjiniText from './DjiniText'
 import PureListView from './PureListView'
-import styles from '../lib/listStyles'
+import ListRowSeperator from './ListRowSeperator'
+import ListRow from './ListRow'
+import ListRowIcon from './ListRowIcon'
+import ListRowButton from './ListRowButton'
+import SwipeoutButton from './ListRowSwipeoutButton'
+
+const styles = StyleSheet.create({
+  favoriteIcon: {
+    color: 'rgb(239,71,98)'
+  },
+  emptyList: {
+    marginTop: 100,
+    textAlign: 'center'
+  }
+})
 
 export default class ContactsList extends Component {
 
@@ -39,7 +51,6 @@ export default class ContactsList extends Component {
   render() {
     return (
       <PureListView
-        style={styles.container}
         ref={this.storeInnerRef}
         data={this.props.contacts}
         keyboardShouldPersistTaps={true}
@@ -68,42 +79,32 @@ export default class ContactsList extends Component {
     const {toggleFavorite} = this.props
     return [
       {
-        component:
-          <View style={styles.swipeout}>
-            <Icon style={styles.swipeoutIcon} name={contact.isFavorite ? 'favorite-border' : 'favorite'} size={30}/>
-          </View>,
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconStyle={styles.favoriteIcon} iconName={contact.isFavorite ? 'favorite' : 'favorite-border'}/>,
         onPress: () => toggleFavorite(contact)
       }
     ]
   }
 
   renderRow (contact) {
-
     const {openContact, inviteContact} = this.props
-
     return (
-      <Swipeout right={this.swipeoutBtns(contact)} autoClose={true}>
-        <TouchableHighlight onPress={() => openContact(contact)}>
-          <View style={styles.row}>
-            <Text style={styles.rowText}>
-              {contact.name}
-            </Text>
-            {contact.isFavorite ? <Icon style={styles.rowIcon} name="favorite" size={30}/> : undefined}
-            {contact.registered ? undefined : <DjiniButton style={styles.rowButton} iconStyle={styles.rowButtonIcon} iconName="person-add" onPress={() => inviteContact(contact)}/>}
-          </View>
-        </TouchableHighlight>
-      </Swipeout>
+      <ListRow
+        title={contact.name}
+        swipeoutBtns={this.swipeoutBtns(contact)}
+        onPress={() => openContact(contact)}>
+        {contact.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="favorite"/> : undefined}
+        {contact.registered ? undefined : <ListRowButton iconName="person-add" onPress={() => inviteContact(contact)}/>}
+      </ListRow>
     );
   }
 
   renderSeparator(sectionID, rowID) {
-    return (
-      <View key={"SEP_" + sectionID + "_" + rowID}  style={styles.rowSeparator}/>
-    );
+    return <ListRowSeperator key={"SEP_" + sectionID + "_" + rowID}/>
   }
 
   renderEmptyList() {
-    return (<Text style={styles.emptyList}>Keine Kontakte gefunden</Text>)
+    return <DjiniText style={styles.emptyList}>Keine Kontakte gefunden</DjiniText>
   }
 
   storeInnerRef(ref: ?PureListView) {

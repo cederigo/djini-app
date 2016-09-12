@@ -1,13 +1,12 @@
 /* @flow */
 
 import { connect } from 'react-redux';
-import {List} from 'immutable';
-import React, {Component} from 'react'
-import { View, StyleSheet, Text, StatusBar, TouchableOpacity } from 'react-native';
+import React, {Component, PropTypes} from 'react'
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import {Wish, User, Contact} from '../lib/types'
-import WMColors from '../lib/WMColors'
+import DjiniBackground from '../components/DjiniBackground'
+import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
 
 import Tabs from '../components/Tabs'
@@ -21,13 +20,13 @@ import {newWish} from '../actions/wishes'
 
 class Friend extends Component {
 
-  props: {
-    isFetching: bool,
-    user: User, //me
-    friend: User,
-    contact: Contact,
-    wishes: List<Wish>,
-    ideas: List<Wish>
+  static propTypes = {
+    isFetching: PropTypes.bool,
+    user: PropTypes.object, // me
+    friend: PropTypes.object,
+    contact: PropTypes.object,
+    wishes: PropTypes.object,
+    ideas: PropTypes.object
   }
 
   constructor(props) {
@@ -40,31 +39,17 @@ class Friend extends Component {
     }
   }
 
-  renderContentView() {
-    return (
-      <View style={styles.container}>
-        {this.renderProfileView()}
-        {this.renderTabs()}
-      </View>
-    )
-  }
-
   renderProfileView() {
-    const {user, friend, wishes, ideas, contact, dispatch} = this.props
-
+    const {friend, contact, dispatch} = this.props
     return (
       <View style={styles.profile}>
-        <Icon name="account-box" style={[styles.text, styles.profileIcon]}/>
-        <View style={styles.profileDetails}>
-          <Text style={[styles.text, styles.textBig]}>
-            {contact.name}
-          </Text>
-          <BirthdayText style={[styles.text, styles.textSmall]} text="Geb. " date={friend.birthday}/>
-        </View>
+        <DjiniText textStyle="dark" style={styles.profileName}>
+          {contact.name}
+        </DjiniText>
+        <BirthdayText textStyle="dark" style={styles.profileBirthday} text="Geb. " date={friend.birthday}/>
         <DjiniButton
-          style={styles.profileFavoriteButton}
-          toggle={true}
-          active={contact.isFavorite}
+          style={styles.favoriteButton}
+          iconStyle={styles.favoriteIcon}
           iconName={contact.isFavorite ? 'favorite' : 'favorite-border'}
           onPress={() => dispatch(toggleFavorite(contact))}/>
       </View>
@@ -77,9 +62,9 @@ class Friend extends Component {
     if (activeTab === 'wishes' && !friend.registered) {
       return (
         <View style={styles.inviteView}>
-          <Text style={styles.text}>
+          <DjiniText>
             {contact.name + ' hat noch kein eigenes Profil erstellt'}
-          </Text>
+          </DjiniText>
           <DjiniButton
             style={styles.inviteButton}
             caption={contact.name + ' einladen'}
@@ -90,7 +75,7 @@ class Friend extends Component {
     if (activeTab === 'wishes') {
       return <FriendWishesList style={styles.container} wishes={wishes.toArray()} user={user}/>
     } else {
-      return <FriendIdeasList style={styles.container} wishes={ideas.toArray()}/>
+      return <FriendIdeasList style={styles.container} wishes={ideas.toArray()} user={user} friend={friend}/>
     }
   }
 
@@ -99,9 +84,9 @@ class Friend extends Component {
     return (
       <View style={styles.container}>
         <Tabs selected={this.state.activeTab} onSelect={(el) => this.setState({activeTab: el.props.name})}>
-          <Text style={styles.tabText} initial={true} name="wishes">Wünsche</Text>
+          <DjiniText style={styles.tabText} initial={true} name="wishes">Wünsche</DjiniText>
           <View style={styles.tabIdeas} name="ideas">
-            <Text style={styles.tabText}>Meine Ideen</Text>
+            <DjiniText style={styles.tabText}>Meine Ideen</DjiniText>
             <TouchableOpacity
               onPress={() => dispatch(newWish(user, friend, 'friend'))}>
               <Icon style={styles.tabIcon} name="add"/>
@@ -113,25 +98,19 @@ class Friend extends Component {
     )
   }
 
-  renderLoadingView() {
-    return (
-      <View style={styles.loading}>
-        <Text style={[styles.text, styles.textBig]}>Laden..</Text>
-      </View>
-   )
-  }
-
   render() {
     const {isFetching} = this.props
     return (
-      <View style={styles.container}>
-        <StatusBar translucent={true} />
-        <AppBar showBackButton={true} title="Freunde"/>
+      <DjiniBackground>
+        <View style={styles.appBar}>
+          <AppBar textStyle="dark" showBackButton={true} title="Freunde"/>
+        </View>
+        {this.renderProfileView()}
         {isFetching ? 
-          this.renderLoadingView()
-          : this.renderContentView()
+          <DjiniText style={styles.loadingText}>Laden..</DjiniText>
+          : this.renderTabs()
         }
-      </View>
+      </DjiniBackground>
     )
   }
 }
@@ -140,36 +119,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  text: {
-    color: WMColors.lightText,
-    fontSize: 17
-  },
-  textSmall: {
-    fontSize: 14
-  },
-  textBig: {
-    fontSize: 20 
+  appBar: {
+    backgroundColor: 'rgb(240, 240, 240)'
   },
   profile: {
-    flexDirection: 'row'
+    paddingLeft: 25,
+    backgroundColor: 'rgb(240, 240, 240)',
+    flexDirection: 'column',
+    height: 125
   },
-  profileDetails: {
-    marginTop: 20 
+  profileName: {
+    fontSize: 27,
+    marginBottom: 20 
   },
-  profileIcon: {
-    fontSize: 120,
-    margin: 10 
+  profileBirthday: {
+    fontSize: 14
   },
-  profileFavoriteButton: {
-    width: 50,
-    height: 50,
+  favoriteButton: {
     position: 'absolute',
     right: 25,
-    bottom: 25 
+    top: 0,
+    backgroundColor: 'transparent',
+    padding: 10 
   },
-  loading: {
-    marginTop: 100,
-    alignItems: 'center'
+  favoriteIcon: {
+    color: 'rgb(239,71,98)',
+    fontSize: 40
+  },
+  loadingText: {
+    marginTop: 50,
+    textAlign: 'center'
   },
   inviteView: {
     padding: 25,
@@ -178,7 +157,9 @@ const styles = StyleSheet.create({
     marginVertical: 25
   },
   tabText: {
-    fontSize: 18,
+    fontSize: 20,
+    fontStyle: 'italic',
+    fontWeight: 'bold',
     color: 'white'
   },
   tabIcon: {

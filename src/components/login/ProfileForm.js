@@ -24,38 +24,30 @@ export default class ProfileForm extends Component {
         </DjiniText>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Name</DjiniText>
-          <View style={styles.formGroupInputView}>
-            <DjiniTextInput
-              style={styles.formGroupInput}
-              editable={!authState.isFetching}
-              onChangeText={(text) => { onFormFieldChange('name', text)}}
-              autoFocus={true}
-              clearButtonMode="while-editing"
-              autoCapitalize="none"
-              autoCorrect={false}
-              returnKeyType="next"
-              value={name}
-              onSubmitEditing={() => this.refs.email.focus()}
-            />
-          </View>
+          <DjiniTextInput
+            style={styles.formGroupInput}
+            type="light"
+            editable={!authState.isFetching}
+            onChangeText={(text) => { onFormFieldChange('name', text)}}
+            autoFocus={true}
+            returnKeyType="next"
+            value={name}
+            onSubmitEditing={() => this.refs.email.focus()}
+          />
         </View>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>E-Mail</DjiniText>
-          <View style={styles.formGroupInputView}>
-            <DjiniTextInput
-              ref="email"
-              style={styles.formGroupInput}
-              editable={!authState.isFetching}
-              keyboardType="email-address"
-              clearButtonMode="while-editing"
-              onChangeText={(text) => { onFormFieldChange('email', text)}}
-              autoCapitalize="none"
-              autoCorrect={false}
-              returnKeyType="next"
-              onSubmitEditing={onNext}
-              value={email}
-            />
-          </View>
+          <DjiniTextInput
+            ref="email"
+            type="light"
+            style={styles.formGroupInput}
+            editable={!authState.isFetching}
+            keyboardType="email-address"
+            onChangeText={(text) => { onFormFieldChange('email', text)}}
+            returnKeyType="next"
+            onSubmitEditing={onNext}
+            value={email}
+          />
         </View>
       </View>
     )

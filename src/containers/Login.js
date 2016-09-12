@@ -114,35 +114,23 @@ class Login extends Component {
 const formStyles = StyleSheet.create({
   container: {
     alignItems: 'flex-start',
-    padding: 20
+    padding: 20,
+    paddingTop: 40
   },
   text: {
     marginBottom: 10
   },
   formGroup: {
     flexDirection: 'row',
-    alignSelf: 'stretch',
     alignItems: 'center',
-    flex: 1,
     marginTop: 20
   },
   formGroupText: {
-    marginBottom: 5,
     flex: 1
   },
-  formGroupInputView: {
-    borderColor: 'white',
-    borderBottomWidth: 1,
-    flex: 2,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
   formGroupInput: {
-    alignSelf: 'stretch',
-    height: 30,
-    flex: 1,
-    padding: Platform.select({android: 0})
-  }
+    flex: 2,
+  },
 })
 
 const styles = StyleSheet.create({

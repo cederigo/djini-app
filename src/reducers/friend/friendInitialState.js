@@ -15,7 +15,7 @@ import {Record, List} from 'immutable'
 const InitialState = Record({
   isFetching: false,
   error: null,
-  user: null,
+  user: {},
   contact: null,
   wishes: List(),
   ideas: List()

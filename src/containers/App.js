@@ -1,39 +1,22 @@
 /**
  * # app.js
- *  Display startup screen and navigate according to auth state
+ *  navigate according to auth state
  */
 
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
 import Parse from 'parse/react-native'
 import React, {Component} from 'react'
-import { 
-  StyleSheet,
-  View,
-  Text,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import {version} from '../lib/config'
-import WMColors from '../lib/WMColors'
+
+import DjiniLogo from '../components/DjiniLogo'
 
 /* actions */
 import {refreshContacts} from '../actions/contacts';
 import {loginSuccess, loginFailure} from '../actions/authActions';
 import {updateInstallation} from '../actions/installation'
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: WMColors.background,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  summary: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: WMColors.lightText
-  }
-});
 
 class App extends Component {
 
@@ -56,12 +39,23 @@ class App extends Component {
   }
 
   render() {
-    return(
-      <View style={ styles.container }>
-        <Text style={ styles.summary }>Djini</Text>
+    return (
+      <View style={styles.container}>
+        <DjiniLogo style={styles.logo}/>
       </View>
-    );
+    )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  logo: {
+    marginTop: 80
+  }
+})
 
 export default connect()(App);
