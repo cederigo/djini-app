@@ -27,6 +27,7 @@ function toParseWish(wish: Record<Wish>) {
     id: wish.id,
     title: wish.title,
     description: wish.description,
+    price: wish.price ? Number(wish.price) : undefined,
     url: wish.url,
     seenAt: wish.seenAt,
     isPrivate: wish.isPrivate,

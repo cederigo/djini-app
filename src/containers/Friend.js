@@ -43,7 +43,7 @@ class Friend extends Component {
     const {friend, contact, dispatch} = this.props
     return (
       <View style={styles.profile}>
-        <DjiniText textStyle="dark" style={styles.profileName}>
+        <DjiniText textStyle="dark" style={styles.profileName} numberOfLines={2}>
           {contact.name}
         </DjiniText>
         <BirthdayText textStyle="dark" style={styles.profileBirthday} text="Geb. " date={friend.birthday}/>
@@ -73,9 +73,9 @@ class Friend extends Component {
       ) 
     }
     if (activeTab === 'wishes') {
-      return <FriendWishesList style={styles.container} wishes={wishes.toArray()} user={user}/>
+      return <FriendWishesList style={styles.list} wishes={wishes.toArray()} user={user}/>
     } else {
-      return <FriendIdeasList style={styles.container} wishes={ideas.toArray()} user={user} friend={friend}/>
+      return <FriendIdeasList style={styles.list} wishes={ideas.toArray()} user={user} friend={friend}/>
     }
   }
 
@@ -119,6 +119,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  list: {
+    marginBottom: 50 // Tabbar
+  },
   appBar: {
     backgroundColor: 'rgb(240, 240, 240)'
   },
@@ -130,7 +133,8 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 27,
-    marginBottom: 20 
+    marginBottom: 20,
+    marginRight: 80 // Leave room for `favoriteButton`
   },
   profileBirthday: {
     fontSize: 14

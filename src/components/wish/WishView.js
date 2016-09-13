@@ -4,9 +4,9 @@ import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import {clouds} from '../../../img'
 import FulfillWishButton from './FulfillWishButton'
 import DjiniButton from '../DjiniButton'
+import DjiniBackground from '../DjiniBackground'
 import {AppBar, ActionButton} from '../AppBar'
 import {DjiniDarkText as DjiniText} from '../DjiniText'
 
@@ -57,11 +57,12 @@ class WishView extends Component {
     } else {
       imageStyle = {resizeMode: 'cover', height: IMAGE_HEIGHT}
     }
+          // : <Image style={styles.clouds} resizeMode='stretch' source={clouds}/>
     return (
       <TouchableOpacity style={wish.imageURL ? {} : styles.cloudsContainer} onPress={this.imageClicked}>
         {wish.imageURL ? 
           <Image source={{uri: wish.imageURL}} style={imageStyle}/>
-          : <Image style={styles.clouds} resizeMode='stretch' source={clouds}/>
+          : <DjiniBackground/>
         }
       </TouchableOpacity>
     )
@@ -166,6 +167,11 @@ class WishView extends Component {
             </View>
 
             <View style={styles.attr}>
+              <Icon style={[styles.attrIcon,{top: 2}]} name="attach-money"/>
+              <DjiniText style={styles.attrText}>{wish.price + '.-' || '-'}</DjiniText>
+            </View>
+
+            <View style={styles.attr}>
               <Icon style={styles.attrIcon} name="remove-red-eye"/>
               <DjiniText style={styles.attrText}>{wish.seenAt || '-'}</DjiniText>
             </View>
@@ -237,7 +243,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline'
   },
   attrText: {
-    marginLeft: 60
+    marginLeft: 60,
+    marginRight: 15
   },
   privateAttributes: {
     backgroundColor: 'transparent',
