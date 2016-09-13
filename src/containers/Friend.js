@@ -10,7 +10,6 @@ import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
 
 import Tabs from '../components/Tabs'
-import BirthdayText from '../components/BirthdayText'
 import FriendWishesList from '../components/FriendWishesList'
 import FriendIdeasList from '../components/FriendIdeasList'
 import {AppBar} from '../components/AppBar'
@@ -46,7 +45,9 @@ class Friend extends Component {
         <DjiniText textStyle="dark" style={styles.profileName} numberOfLines={2}>
           {contact.name}
         </DjiniText>
-        <BirthdayText textStyle="dark" style={styles.profileBirthday} text="Geb. " date={friend.birthday}/>
+        <DjiniText textStyle="dark" style={styles.profileBirthday}>
+          Wird am 28. Juli 28 Jahre alt
+        </DjiniText>
         <DjiniButton
           style={styles.favoriteButton}
           iconStyle={styles.favoriteIcon}

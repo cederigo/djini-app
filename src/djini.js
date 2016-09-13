@@ -28,7 +28,6 @@ import Contacts from './containers/Contacts'
 import Pots from './containers/Pots'
 import More from './containers/More'
 import Profile from './containers/Profile'
-import ProfileEdit from './containers/ProfileEdit'
 import Friend from './containers/Friend'
 import Wish from './containers/Wish'
 
@@ -159,7 +158,6 @@ export default function init(os) {
                   <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="todo"/>
                   <Scene key="profileTab" icon={TabIcon} iconName="person" statusBarStyle="default">
                     <Scene key="profile" animation="fade" duration={0} statusBarStyle="default" sceneStyle={styles.tabScene} component={Profile}/>
-                    <Scene key="profileEdit" type="replace" statusBarStyle="default" sceneStyle={styles.tabScene} component={ProfileEdit}/>
                     <Scene key="more" type="replace" statusBarStyle="default" sceneStyle={styles.tabScene} component={More}/>
                   </Scene>
                 </Scene>

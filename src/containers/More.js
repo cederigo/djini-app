@@ -27,11 +27,11 @@ class More extends Component {
     return(
       <View style={styles.container}>
         <View style={styles.appBar}>
-          <AppBar textStyle="dark" title="Mehr" showBackButton={false}/>
+          <AppBar textStyle="dark" title="Mein Profil" showBackButton={false}/>
         </View>
         <ScrollView>
           <Tabs selected="more">
-            <DjiniText style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Mein Profil</DjiniText>
+            <DjiniText style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Details</DjiniText>
             <DjiniText style={styles.tabText} name="more">Mehr</DjiniText>
           </Tabs>
           <TouchableWithoutFeedback onPress={dismissKeyboard}>
