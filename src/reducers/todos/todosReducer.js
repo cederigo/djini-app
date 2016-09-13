@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 
-import { MY_PROFILE_LOADED, TODO_DELETE, TODO_ADD, TODO_UPDATE } from '../../lib/constants'
+import {MY_PROFILE_LOADED, TODO_DELETE, TODO_ADD, TODO_UPDATE } from '../../lib/constants'
 
 const initialState = new List
 

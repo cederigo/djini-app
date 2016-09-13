@@ -16,8 +16,7 @@ const todo:Todo = {
 }
 
 const InitialState = Record({
-  isFetching: false,
-  error: null,
+  edit: false,
   todo
 })
 

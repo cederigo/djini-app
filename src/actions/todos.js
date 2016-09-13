@@ -1,7 +1,8 @@
 import shortid from 'shortid'
 import {Actions} from 'react-native-router-flux'
+import initialState from '../reducers/todo/todoInitialState'
 
-import { TODO_NEW, TODO_ADD, TODO_UPDATE, TODO_DELETE, TODO_SHOW, TODO_EDIT } from '../lib/constants'
+import { TODO_ADD, TODO_UPDATE, TODO_DELETE, TODO_SHOW, TODO_EDIT } from '../lib/constants'
 
 export function showTodo(todo) {
   return dispatch => {
@@ -13,7 +14,7 @@ export function showTodo(todo) {
 export function editTodo(todo) {
   return dispatch => {
     dispatch({ type: TODO_EDIT, payload: todo })
-    Actions.todo()
+    // Actions.todo()
   }
 }
 
@@ -21,10 +22,18 @@ export function deleteTodo(todo) {
   return {type: TODO_DELETE, payload: todo}
 }
 
-export function newTodo(contact, user) {
+export function newTodo(contact) {
   return dispatch => {
-    dispatch({type: TODO_NEW, payload: {contact, user}})
-    Actions.todo()
+    let todo = {...initialState.todo}
+    //prefill 
+    todo.contactName = contact.name
+    todo.title = 'Geburtstag ' + contact.name
+    if (contact.registered) {
+      todo.dueDate = contact.birthday
+      dispatch({type: TODO_ADD, payload: todo})
+    } else {
+      dispatch(editTodo(todo))
+    }
   }
 }
 

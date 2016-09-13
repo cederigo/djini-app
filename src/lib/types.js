@@ -12,7 +12,8 @@ export type User = {
 export type Contact = {
   phoneNumber: string,
   name: string,
-  nameForSearch: string
+  nameTransliterated: string,
+  birthday: Date,
 }
 
 export type Wish = {

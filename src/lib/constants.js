@@ -71,5 +71,3 @@ export const TODO_UPDATE = 'todo-update'
 export const TODO_DELETE = 'todo-delete'
 export const TODO_SHOW = 'todo-show'
 export const TODO_EDIT = 'todo-edit'
-export const TODO_NEW = 'new-todo'
-
