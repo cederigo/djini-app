@@ -66,8 +66,11 @@ export default function wishReducer(state = initialState, {type, payload}) {
         .set('error', payload)
 
     case ON_WISH_FIELD_CHANGE: {
-      const {field, value} = payload
-        return state.setIn([state.source === 'friend' ? 'wishOfFriend' : 'wish', field], value)
+      let {field, value} = payload
+      if (field === 'price' && Number.isNaN(Number(value))) {
+        value = state.getIn([state.source === 'friend' ? 'wishOfFriend' : 'wish', field]) // Previous value
+      }
+      return state.setIn([state.source === 'friend' ? 'wishOfFriend' : 'wish', field], value)
     }
   }
   /**

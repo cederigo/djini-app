@@ -79,14 +79,12 @@ class PureListView extends React.Component {
   }
 
   render() {
-    const {contentInset} = this.props;
-    const bottom = contentInset.bottom +
-      Math.max(0, this.props.minContentHeight - this.state.contentHeight);
-        // contentInset={{bottom, top: contentInset.top}}
     return (
       <ListView
         initialListSize={10}
         pageSize={LIST_VIEW_PAGE_SIZE}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         {...this.props}
         ref="listview"
         dataSource={this.state.dataSource}

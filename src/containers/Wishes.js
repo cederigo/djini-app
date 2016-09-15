@@ -29,6 +29,7 @@ class Wishes extends Component {
     return (
       <View style={styles.container}>
         <ScrollView
+          style={styles.content}
           showsVerticalScrollIndicator={false}
           bounces={true}>
           <Image style={styles.logo} source={djini_logo}/>
@@ -50,9 +51,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  content: {
+    marginTop: 20 // status bar
+  },
   logo: {
     alignSelf: 'center',
-    marginTop: 80,
+    marginTop: 60,
     marginBottom: 25,
     width: 142,
     height: 87

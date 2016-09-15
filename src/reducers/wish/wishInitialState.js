@@ -4,6 +4,7 @@ const Wish = Record({
   id: undefined,
   title: '',
   description: '',
+  price: '',
   url: '',
   seenAt: '',
   isPrivate: false,

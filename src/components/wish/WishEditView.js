@@ -73,7 +73,7 @@ class WishEditView extends Component {
       maxHeight: 3 * IMAGE_HEIGHT, // photos only
       aspectX: 2, // android only - aspectX:aspectY, the cropping image's ratio of width to height
       aspectY: 1, // android only - aspectX:aspectY, the cropping image's ratio of width to height
-      quality: 0.2, // 0 to 1, photos only
+      quality: 0.6, // 0 to 1, photos only
       angle: 0, // android only, photos only
       allowsEditing: true, // Built in functionality to resize/reposition the image after selection
       noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
@@ -132,18 +132,30 @@ class WishEditView extends Component {
 
             <DjiniText style={styles.label}>Titel</DjiniText>
             <DjiniTextInput
+              placeholder="Gib einen aussagekräftigen Titel an…"
               onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
               value={wish.title}
             />
 
             <DjiniText style={styles.label}>Details</DjiniText>
             <DjiniTextInput
+              placeholder="z.B. Grösse, Farbe, Modell, …"
+              autoGrow={true}
               onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
               value={wish.description}
             />
 
+            <DjiniText style={styles.label}>Preis</DjiniText>
+            <DjiniTextInput
+              placeholder="Ungefährer Preis"
+              keyboardType="numeric"   
+              onChangeText={(text) => dispatch(onWishFieldChange('price', text))}
+              value={wish.price}
+            />
+
             <DjiniText style={styles.label}>Wo gesehen</DjiniText>
             <DjiniTextInput
+              placeholder="Wo kann dein Wunsch gefunden werden…"
               onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
               autoCorrect={false}
               value={wish.seenAt}
@@ -151,6 +163,7 @@ class WishEditView extends Component {
 
             <DjiniText style={styles.label}>Web-Link</DjiniText>
             <DjiniTextInput
+              placeholder="http://…"
               keyboardType="url"   
               onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
               value={wish.url}

@@ -27,6 +27,7 @@ export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = Ordered
   const fromUser = parseWish.get('fromUser')
   const toUser = parseWish.get('toUser')
   const fulfiller = parseWish.get('fulfiller')
+  const price = parseWish.get('price')
   let fulfillerContact;
   if (isParseObject(fulfiller)) {
     fulfillerContact = contacts.get(fulfiller.get('username'))
@@ -36,6 +37,7 @@ export function fromParseWish(parseWish, contacts: OrderedMap<Contact> = Ordered
     id: parseWish.id,
     title: parseWish.get('title'),
     description: parseWish.get('description'),
+    price: price ? price.toString() : '',
     url: parseWish.get('url'),
     seenAt: parseWish.get('seenAt'),
     isPrivate: parseWish.get('isPrivate'),

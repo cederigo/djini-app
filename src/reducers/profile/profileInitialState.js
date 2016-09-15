@@ -5,6 +5,7 @@ const InitialState = Record({
   isFetching: false,
   error: null,
   user: null,
+  edit: false,
   fields: new (Record({
     name: '',
     email: '',

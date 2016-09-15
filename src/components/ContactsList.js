@@ -6,7 +6,6 @@ import PureListView from './PureListView'
 import ListRowSeperator from './ListRowSeperator'
 import ListRow from './ListRow'
 import ListRowIcon from './ListRowIcon'
-import ListRowButton from './ListRowButton'
 import SwipeoutButton from './ListRowSwipeoutButton'
 
 const styles = StyleSheet.create({
@@ -76,25 +75,35 @@ export default class ContactsList extends Component {
   }
 
   swipeoutBtns (contact) {
-    const {toggleFavorite} = this.props
-    return [
+    const {toggleFavorite, inviteContact} = this.props
+    const result = [
       {
         backgroundColor: 'transparent',
         component: <SwipeoutButton iconStyle={styles.favoriteIcon} iconName={contact.isFavorite ? 'favorite' : 'favorite-border'}/>,
         onPress: () => toggleFavorite(contact)
-      }
+      },
     ]
+
+    if (!contact.registered) {
+      // Add at the beginning
+      result.unshift({
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName="person-add"/>,
+        onPress: () => inviteContact(contact)
+      })
+    }
+
+    return result
   }
 
   renderRow (contact) {
-    const {openContact, inviteContact} = this.props
+    const {openContact} = this.props
     return (
       <ListRow
         title={contact.name}
         swipeoutBtns={this.swipeoutBtns(contact)}
         onPress={() => openContact(contact)}>
         {contact.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="favorite"/> : undefined}
-        {contact.registered ? undefined : <ListRowButton iconName="person-add" onPress={() => inviteContact(contact)}/>}
       </ListRow>
     );
   }

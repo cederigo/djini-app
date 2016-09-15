@@ -2,24 +2,24 @@ import shortid from 'shortid'
 import {Actions} from 'react-native-router-flux'
 import initialState from '../reducers/todo/todoInitialState'
 
-import { TODO_ADD, TODO_UPDATE, TODO_DELETE, TODO_SHOW, TODO_EDIT } from '../lib/constants'
+import { ADD_NOTE, UPDATE_NOTE, DELETE_NOTE, SHOW_NOTE, EDIT_NOTE } from '../lib/constants'
 
 export function showTodo(todo) {
   return dispatch => {
-    dispatch({ type: TODO_SHOW, payload: todo })
+    dispatch({ type: SHOW_NOTE, payload: todo })
     Actions.todo()
   }
 }
 
 export function editTodo(todo) {
   return dispatch => {
-    dispatch({ type: TODO_EDIT, payload: todo })
+    dispatch({ type: EDIT_NOTE, payload: todo })
     // Actions.todo()
   }
 }
 
 export function deleteTodo(todo) {
-  return {type: TODO_DELETE, payload: todo}
+  return {type: DELETE_NOTE, payload: todo}
 }
 
 export function newTodo(contact) {
@@ -30,7 +30,7 @@ export function newTodo(contact) {
     todo.title = 'Geburtstag ' + contact.name
     if (contact.registered) {
       todo.dueDate = contact.birthday
-      dispatch({type: TODO_ADD, payload: todo})
+      dispatch({type: ADD_NOTE, payload: todo})
     } else {
       dispatch(editTodo(todo))
     }
@@ -41,10 +41,10 @@ export function saveTodo(todo) {
   return dispatch => {
     if (todo.id) {
       // update
-      dispatch({type: TODO_UPDATE, payload: todo})
+      dispatch({type: UPDATE_NOTE, payload: todo})
     } else {
       // add
-      dispatch({type: TODO_ADD, payload: {id: shortid.generate(), ...todo}})
+      dispatch({type: ADD_NOTE, payload: {id: shortid.generate(), ...todo}})
     }
   }
 }

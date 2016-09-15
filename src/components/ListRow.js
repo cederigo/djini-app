@@ -39,9 +39,7 @@ export default function ListRow(props) {
             <DjiniText style={styles.title} numberOfLines={1}>{props.title}</DjiniText>
             {props.description ? <DjiniText style={styles.description} numberOfLines={1}>{props.description}</DjiniText> : undefined }
           </View>
-          <View>
-            {props.children}
-          </View>
+          {props.children}
         </View>
       </TouchableOpacity>
     </Swipeout>

@@ -5,45 +5,48 @@ import { StyleSheet, View} from 'react-native';
 import {Actions} from 'react-native-router-flux'
 
 import {logout} from '../actions/authActions'
-import {editProfile} from '../actions/profile'
+import {editProfile, updateProfile, cancelEditProfile, onFieldChange} from '../actions/profile'
 
 import {AppBar, ActionButton} from '../components/AppBar'
-import BirthdayText from '../components/BirthdayText'
+import ProfileField from '../components/ProfileField'
 import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
 import Tabs from '../components/Tabs'
 
 class Profile extends Component {
   static propTypes = {
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    edit: PropTypes.bool.isRequired,
+    isValid: PropTypes.bool.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    fields: PropTypes.object.isRequired
   }
 
   render() {
-    const {dispatch, user} = this.props
-            // <ActionButton textStyle="dark" text="Bearbeiten" onPress={() => dispatch(editProfile(user))}/>
+    const {dispatch, user, edit, isValid, isFetching, fields} = this.props
+    const editable = edit && !isFetching
     return(
       <View style={styles.container}>
         <View style={styles.appBar}>
-          <AppBar textStyle="dark" title="Mein Profil" showBackButton={false}/>
+          <AppBar textStyle="dark" title="Mein Profil" showBackButton={edit} backButtonText="Abbrechen" onBack={() => dispatch(cancelEditProfile())}>
+            {edit ? 
+              <ActionButton textStyle="dark" text="Fertig" disabled={!isValid || isFetching} onPress={() => dispatch(updateProfile(fields, 'profile-edit'))}/>  
+              : <ActionButton textStyle="dark" text="Bearbeiten" onPress={() => dispatch(editProfile(user))}/>
+            }
+          </AppBar>
         </View>
         <Tabs selected="profile">
           <DjiniText style={styles.tabText} name="profile">Details</DjiniText>
           <DjiniText style={styles.tabText} name="more" onSelect={() => Actions.more()}>Mehr</DjiniText>
         </Tabs>
         <View style={styles.fields}>
-          <DjiniText style={[styles.text, styles.profileName]}>{user.name}</DjiniText>
-          <View style={styles.field}>
-            <DjiniText style={[styles.text, styles.fieldLabel]}>E-Mail</DjiniText>
-            <DjiniText style={[styles.text, styles.fieldValue]}>{user.email}</DjiniText>
-          </View>
-          <View style={styles.field}>
-            <DjiniText style={[styles.text, styles.fieldLabel]}>Geb.</DjiniText>
-            <BirthdayText style={[styles.text, styles.fieldValue]} date={user.birthday}/>
-          </View>
-          <View style={styles.field}>
-            <DjiniText style={[styles.text, styles.fieldLabel]}>Telefon</DjiniText>
-            <DjiniText style={styles.text}>{user.phoneNumber}</DjiniText>
-          </View>
+          <ProfileField iconName="person" value={edit ? fields.name : user.name}
+              editable={editable} onChangeText={(text) => { dispatch(onFieldChange('name', text))}}/>
+          <ProfileField iconName="mail" value={edit ? fields.email : user.email}
+              editable={editable} onChangeText={(text) => { dispatch(onFieldChange('email', text))}}/>
+          <ProfileField iconName="cake" value={edit ? fields.birthday : user.birthday}
+              editable={editable} onDateChange={(date) => {dispatch(onFieldChange('birthday', date))}}/>
+          <ProfileField iconName="phone" value={user.phoneNumber}/>
           <DjiniButton style={styles.logoutButton} onPress={() => dispatch(logout())} caption="Abmelden"/>
         </View>
       </View>
@@ -67,23 +70,9 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontWeight: 'bold',
   },
-  profileName: {
-    fontSize: 28,
-    fontStyle: 'italic',
-    marginVertical: 20 
-  },
   fields: {
+    marginTop: 40,
     marginHorizontal: 25
-  },
-  field: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  fieldLabel: {
-    width: 100
-  },
-  fieldValue: {
-    flex: 1,
   },
   logoutButton: {
     marginTop: 40
@@ -91,9 +80,7 @@ const styles = StyleSheet.create({
 });
 
 function select(state) {
-  return {
-    user: state.global.currentUser
-  }
+  return {...state.profile.toJS(), user: state.global.currentUser}
 }
 
 export default connect(select)(Profile);

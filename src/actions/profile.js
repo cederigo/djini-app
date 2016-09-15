@@ -3,12 +3,12 @@ import {Actions} from 'react-native-router-flux'
 
 import {User} from '../lib/types'
 
-
 import {
   MY_PROFILE_REQUEST,
   MY_PROFILE_FAILURE,
   MY_PROFILE_LOADED,
   EDIT_PROFILE,
+  CANCEL_EDIT_PROFILE,
 
   PROFILE_UPDATE_REQUEST,
   PROFILE_UPDATE_SUCCESS,
@@ -33,7 +33,12 @@ export function loadMyProfile() {
 export function editProfile(currentUser: User) {
   return (dispatch) => {
     dispatch({type: EDIT_PROFILE, payload: currentUser})
-    Actions.profileEdit()
+  }
+}
+
+export function cancelEditProfile() {
+  return (dispatch) => {
+    dispatch({type: CANCEL_EDIT_PROFILE})
   }
 }
 
