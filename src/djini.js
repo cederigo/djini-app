@@ -101,16 +101,16 @@ const styles = StyleSheet.create({
   },
 })
 
+const getActiveScene = (state) => {
+  let cbase, result = state;
+  while((cbase = result.children)) { result = cbase[result.index]; }
+  return result
+}
+
 const getSceneStyleFn = (os) => { 
   return (props) => {
-    const navigationState = props.scene.navigationState
-    let statusBarStyle = 'light-content' //default
-    if (navigationState.statusBarStyle) {
-      statusBarStyle = props.scene.navigationState.statusBarStyle
-    }
-    if (navigationState.children && navigationState.children[navigationState.index].statusBarStyle) {
-      statusBarStyle = navigationState.children[navigationState.index].statusBarStyle
-    }
+    const activeScene = getActiveScene(props.scene.navigationState)
+    const statusBarStyle = activeScene.statusBarStyle || 'light-content' //default
     if (os === 'ios') {
       StatusBar.setBarStyle(statusBarStyle)
     } else {
