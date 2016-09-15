@@ -1,6 +1,6 @@
 /**
  * # app.js
- *  navigate according to auth state
+ *  Bootstrap and navigate according to auth state
  */
 
 import { connect } from 'react-redux';
@@ -14,14 +14,18 @@ import {version} from '../lib/config'
 import DjiniLogo from '../components/DjiniLogo'
 
 /* actions */
-import {refreshContacts} from '../actions/contacts';
+import {refreshContacts, restoreContacts} from '../actions/contacts';
 import {loginSuccess, loginFailure} from '../actions/authActions';
 import {updateInstallation} from '../actions/installation'
+import {rehydrateNotes} from '../actions/notes'
 
 class App extends Component {
 
   componentDidMount() {
     const {dispatch} = this.props
+    updateInstallation({version})
+    dispatch(restoreContacts())
+    dispatch(rehydrateNotes())
     Parse.User.currentAsync()
       .then((parseUser) => {
         if (!parseUser) {
@@ -34,8 +38,6 @@ class App extends Component {
         dispatch(loginFailure(error))
         Actions.welcome()
       })
-
-    updateInstallation({version})
   }
 
   render() {

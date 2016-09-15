@@ -33,10 +33,6 @@ import Wish from './containers/Wish'
 
 import DjiniBackground from './components/DjiniBackground'
 
-/* Actions */
-import {restoreContacts} from './actions/contacts'
-import {rehydrateNotes} from './actions/notes'
-
 /* Initial States */
 import globalInitialState from './reducers/global/globalInitialState'
 import authInitialState from './reducers/auth/authInitialState'
@@ -134,8 +130,6 @@ export default function init(os) {
   let Djini = React.createClass( {
     render() {
       const store = configureStore(getInitialState())
-      store.dispatch(restoreContacts())
-      store.dispatch(rehydrateNotes())
       return (
         <DjiniBackground>
           <Provider store={store}>
