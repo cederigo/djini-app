@@ -1,7 +1,7 @@
 /* @flow */
 
 import { connect } from 'react-redux'
-import Immutable from 'immutable'
+import {Record} from 'immutable'
 import React, {Component, PropTypes} from 'react'
 import {View, StyleSheet} from 'react-native'
 import dismissKeyboard from 'dismissKeyboard'
@@ -19,7 +19,7 @@ import {
   refreshContacts
 } from '../actions/contacts'
 
-import {newTodo} from '../actions/todos'
+import {newNote} from '../actions/notes'
 
 class Contacts extends Component {
 
@@ -46,7 +46,7 @@ class Contacts extends Component {
     dispatch(toggleFavorite(contact))
     dispatch(onSearchFieldChange('')) //clear search
     if (!contact.isFavorite) {
-      dispatch(newTodo(contact))
+      dispatch(newNote(contact))
     }
   }
 
@@ -95,7 +95,7 @@ class Contacts extends Component {
 }
 
 Contacts.propTypes = {
-  contactsState: PropTypes.instanceOf(Immutable.Record).isRequired,
+  contactsState: PropTypes.instanceOf(Record).isRequired,
 }
 
 const styles = StyleSheet.create({

@@ -37,14 +37,14 @@ export type Reminder = {
   text: string
 }
 
-export type Todo = {
-  id: string,
+export type Note = {
+  id: ?string,
   title: string,
   description: string,
-  type: 'find-gift' | 'buy-gift', 
+  type: 'reminder' | 'task', 
   done: boolean,
   dueDate: Object,
   contactName: string,
-  wish: Wish,
+  wish: ?Wish,
   reminders: Array<Reminder>
 }

@@ -13,8 +13,8 @@ import friend from './friend/friendReducer'
 import wishes from './wishes/wishesReducer'
 import profile from './profile/profileReducer'
 import feedback from './feedback/feedbackReducer'
-import todos from './todos/todosReducer'
-import todo from './todo/todoReducer'
+import notes from './notes/notesReducer'
+import note from './note/noteReducer'
 
 import { combineReducers } from 'redux'
 
@@ -33,8 +33,8 @@ const rootReducer = combineReducers({
   wishes,
   profile,
   feedback,
-  todos,
-  todo
+  notes,
+  note
 })
 
 export default rootReducer

@@ -1,13 +1,13 @@
 /* @flow */
 
 import {Record} from 'immutable';
-import {Todo} from '../../lib/types'
+import type {Note} from '../../lib/types'
 
-const todo:Todo = {
+const note:Note = {
   id: undefined,
   title: '',
   description: '',
-  type: 'find-gift', // One of 'find-gift', 'buy-gift'
+  type: 'reminder',
   done: false,
   dueDate: new Date(),
   contactName: '',
@@ -17,7 +17,7 @@ const todo:Todo = {
 
 const InitialState = Record({
   edit: false,
-  todo
+  note
 })
 
 export default InitialState;

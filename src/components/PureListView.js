@@ -19,9 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
  *
- * @flow
  */
-'use strict';
 
 var ListView = require('ListView');
 var Dimensions = require('Dimensions');
