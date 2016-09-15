@@ -44,7 +44,6 @@ export type Note = {
   type: 'reminder' | 'task', 
   done: boolean,
   dueDate: Object,
-  contactName: string,
   wish: ?Wish,
   reminders: Array<Reminder>
 }

@@ -10,7 +10,6 @@ const note:Note = {
   type: 'reminder',
   done: false,
   dueDate: new Date(),
-  contactName: '',
   wish: undefined,
   reminders: []
 }

@@ -22,6 +22,7 @@ import {
   INVITE_CONTACT
 } from '../lib/constants'
 
+import {newReminderNote} from './notes'
 import Contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
@@ -121,6 +122,9 @@ export function onSearchFieldChange(text) {
 export function toggleFavorite(contact) {
   return dispatch => {
     dispatch({type: TOGGLE_FAVORITE, payload: contact})
+    if (!contact.isFavorite) {
+      dispatch(newReminderNote(contact))
+    }
     dispatch(saveContacts())
   }
 }

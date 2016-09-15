@@ -2,7 +2,7 @@
 
 import InitialState from './noteInitialState'
 
-import { EDIT_NOTE, SHOW_NOTE, UPDATE_NOTE } from '../../lib/constants'
+import { EDIT_NOTE, SHOW_NOTE, SAVE_NOTE } from '../../lib/constants'
 
 const initialState = new InitialState;
 
@@ -15,7 +15,7 @@ export default function noteReducer(state: any = initialState, action: any) {
   else if (action.type === EDIT_NOTE) {
     return state.set('edit', true)
   }
-  else if (action.type === UPDATE_NOTE) {
+  else if (action.type === SAVE_NOTE) {
     return state.set('note', action.payload)
   }
   return state;

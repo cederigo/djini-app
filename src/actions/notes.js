@@ -2,12 +2,30 @@ import shortid from 'shortid'
 import {Actions} from 'react-native-router-flux'
 import initialState from '../reducers/note/noteInitialState'
 
-import { ADD_NOTE, UPDATE_NOTE, DELETE_NOTE, SHOW_NOTE, EDIT_NOTE } from '../lib/constants'
+import { SAVE_NOTE, DELETE_NOTE, SHOW_NOTE, EDIT_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
+import db from '../lib/db'
+
+export function persistNotes() {
+  return (dispatch, getState) => {
+    const state = getState().notes
+    db.saveNotes(state.toArray())
+      .then(() => dispatch({type: NOTES_PERSISTED}))
+      .catch((e) => console.log('Could not persist notes. error: ', e))
+  }
+}
+
+export function rehydrateNotes() {
+  return (dispatch) => {
+    return db.getNotes()
+      .then((notes) => dispatch({type: NOTES_REHYDRATED, payload: notes}))
+      .catch((e) => console.log('Could not rehydrate notes. error: ', e))
+  }
+}
 
 export function showNote(note) {
   return dispatch => {
     dispatch({ type: SHOW_NOTE, payload: note })
-    Actions.note()
+    // Actions.note()
   }
 }
 
@@ -19,32 +37,38 @@ export function editNote(note) {
 }
 
 export function deleteNote(note) {
-  return {type: DELETE_NOTE, payload: note}
+  return (dispatch) => {
+    dispatch({type: DELETE_NOTE, payload: note})
+    dispatch(persistNotes())
+  }
 }
 
-export function newNote(contact) {
+export function newReminderNote(contact) {
   return dispatch => {
     let note = {...initialState.note}
     //prefill 
-    note.contactName = contact.name
-    note.title = 'Geburtstag ' + contact.name
+    note.id = contact.phoneNumber
+    note.type = 'reminder'
+    note.title = 'Geburtstagserinnerung'
+    note.description = contact.name
     if (contact.registered) {
       note.dueDate = contact.birthday
-      dispatch({type: ADD_NOTE, payload: note})
-    } else {
-      dispatch(editNote(note))
+      note.description += ', 21.2' // TODO date format
+    } else  {
+      note.description += ', Geb. unbekannt ;-('
     }
+
+    dispatch(saveNote(note))
   }
 }
 
 export function saveNote(note) {
   return dispatch => {
-    if (note.id) {
-      // update
-      dispatch({type: UPDATE_NOTE, payload: note})
-    } else {
-      // add
-      dispatch({type: ADD_NOTE, payload: {id: shortid.generate(), ...note}})
-    }
+    if (!note.id) {
+      // generate
+      note.id = shortid.generate()
+    } 
+    dispatch({type: SAVE_NOTE, payload: note})
+    dispatch(persistNotes())
   }
 }

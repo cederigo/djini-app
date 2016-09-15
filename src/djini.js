@@ -35,6 +35,7 @@ import DjiniBackground from './components/DjiniBackground'
 
 /* Actions */
 import {restoreContacts} from './actions/contacts'
+import {rehydrateNotes} from './actions/notes'
 
 /* Initial States */
 import globalInitialState from './reducers/global/globalInitialState'
@@ -134,6 +135,7 @@ export default function init(os) {
     render() {
       const store = configureStore(getInitialState())
       store.dispatch(restoreContacts())
+      store.dispatch(rehydrateNotes())
       return (
         <DjiniBackground>
           <Provider store={store}>

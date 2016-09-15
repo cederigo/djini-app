@@ -1,13 +1,19 @@
-import React, {Component} from 'react'
+import { connect } from 'react-redux';
+import React, {Component, PropTypes} from 'react'
 import { StyleSheet, View} from 'react-native';
 
-import DjiniText from '../components/DjiniText'
+import NotesList from '../components/NotesList'
+import {AppBar} from '../components/AppBar'
 
-export default class Notes extends Component {
+class Notes extends Component {
+  static propTypes = {
+    notes: PropTypes.arrayOf(PropTypes.object).isRequired
+  }
   render() {
     return(
-      <View style={ styles.container }>
-        <DjiniText style={styles.text}>Coming soon ;-)</DjiniText>
+      <View style={ styles.container}>
+        <AppBar title="Djini Notizen"/>
+        <NotesList notes={this.props.notes}/>
       </View>
     );
   }
@@ -16,8 +22,15 @@ export default class Notes extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 50
   }
 });
+
+/**
+ * Redux boilerplate
+ */
+function select(state) {
+  return { 
+    notes: state.notes.toArray()
+  };
+}
+export default connect(select)(Notes)

@@ -19,8 +19,6 @@ import {
   refreshContacts
 } from '../actions/contacts'
 
-import {newNote} from '../actions/notes'
-
 class Contacts extends Component {
 
   endSearch() {
@@ -45,9 +43,6 @@ class Contacts extends Component {
     const {dispatch} = this.props
     dispatch(toggleFavorite(contact))
     dispatch(onSearchFieldChange('')) //clear search
-    if (!contact.isFavorite) {
-      dispatch(newNote(contact))
-    }
   }
 
   openContact(contact) {
