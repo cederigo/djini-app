@@ -13,6 +13,7 @@
   "dependencies": {
     "google-libphonenumber": "^1.1.0",
     "immutable": "^3.8.1",
+    "moment": "^2.15.0",
     "parse": "^1.9.1",
     "react": "15.3.1",
     "react-native": "0.32.1",

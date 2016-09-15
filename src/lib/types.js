@@ -5,7 +5,7 @@ export type User = {
   name: string,
   email: string,
   phoneNumber: string,
-  birthday: Date,
+  birthday: string,
   registered: bool
 }
 
@@ -13,7 +13,7 @@ export type Contact = {
   phoneNumber: string,
   name: string,
   nameTransliterated: string,
-  birthday: Date,
+  birthday: string,
 }
 
 export type Wish = {
@@ -42,8 +42,7 @@ export type Note = {
   title: string,
   description: string,
   type: 'reminder' | 'task', 
-  done: boolean,
-  dueDate: Object,
+  done: boolean, // For type task
+  dueDate: ?Date,
   wish: ?Wish,
-  reminders: Array<Reminder>
 }

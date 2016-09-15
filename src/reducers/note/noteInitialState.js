@@ -11,7 +11,6 @@ const note:Note = {
   done: false,
   dueDate: new Date(),
   wish: undefined,
-  reminders: []
 }
 
 const InitialState = Record({

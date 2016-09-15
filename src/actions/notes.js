@@ -1,6 +1,7 @@
 import shortid from 'shortid'
 import {Actions} from 'react-native-router-flux'
 import initialState from '../reducers/note/noteInitialState'
+import moment from 'moment'
 
 import { SAVE_NOTE, DELETE_NOTE, SHOW_NOTE, EDIT_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
 import db from '../lib/db'
@@ -52,8 +53,10 @@ export function newReminderNote(contact) {
     note.title = 'Geburtstagserinnerung'
     note.description = contact.name
     if (contact.registered) {
-      note.dueDate = contact.birthday
-      note.description += ', 21.2' // TODO date format
+      const birthday = moment(contact.birthday, 'YYYY-MM-DD')
+      const dueDate = moment(birthday) //clone
+      note.dueDate = dueDate.hours(23).minute(59)
+      note.description += ', ' + birthday.format('Do MMMM')
     } else  {
       note.description += ', Geb. unbekannt ;-('
     }

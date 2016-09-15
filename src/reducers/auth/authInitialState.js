@@ -13,7 +13,7 @@ const InitialState = Record({
     code: '',
     name: '',
     email: '',
-    birthday: undefined
+    birthday: ''
   }))
 });
 

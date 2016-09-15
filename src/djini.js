@@ -3,6 +3,11 @@ import { AppRegistry, View, StyleSheet, Dimensions, Image, StatusBar} from 'reac
 import { Scene, Router} from 'react-native-router-flux'
 import { Provider} from 'react-redux'
 import Parse from 'parse/react-native'
+import moment from 'moment'
+import 'moment/locale/de'
+
+/* Set default locale */
+moment.locale('de')
 
 /* Custom navigation reducer */
 import {createReducer as createRoutesReducer} from './reducers/routes/routesReducer'
@@ -126,7 +131,7 @@ export default function init(os) {
   //init parse sdk
   Parse.initialize(PARSE_APP_ID);
   Parse.serverURL = `${PARSE_BASE_URL}`;
-
+  
   let Djini = React.createClass( {
     render() {
       const store = configureStore(getInitialState())

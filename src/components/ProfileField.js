@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react';
 import {View, StyleSheet} from 'react-native';
+import moment from 'moment'
+
 import BirthdayInput from './BirthdayInput'
 import DjiniTextInput from './DjiniTextInput'
 import DjiniText from './DjiniText'
@@ -24,17 +26,17 @@ const styles = StyleSheet.create({
 
 export default function ProfileField(props) {
 
-  let {editable, iconName, value} = props
+  let {editable, iconName, value, isBirthday} = props
 
-  if (!editable && value instanceof Date) {
-    value = `${value.getDate()}.${value.getMonth() + 1}.${value.getFullYear()}`
+  if (!editable && isBirthday) {
+    value = moment(value).format('DD.MM.YYYY')
   }
   
   return (
     <View style={styles.field}>
       <Icon style={styles.fieldIcon} name={iconName}/>
       {editable ? 
-        value instanceof Date ?
+        isBirthday ?
           <BirthdayInput type="light" style={styles.fieldValue} date={value} {...props}/>
           : <DjiniTextInput type="light" style={styles.fieldValue} value={value} {...props}/>
         : <DjiniText style={styles.fieldValue} {...props}>{value}</DjiniText>
@@ -46,7 +48,8 @@ export default function ProfileField(props) {
 ProfileField.propTypes = {
   editable: PropTypes.bool.isRequired,
   iconName: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]).isRequired
+  value: PropTypes.string.isRequired,
+  isBirthday: PropTypes.bool,
 }
 
 ProfileField.defaultProps = {

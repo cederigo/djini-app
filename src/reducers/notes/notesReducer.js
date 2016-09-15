@@ -8,12 +8,12 @@ import {MY_PROFILE_LOADED, DELETE_NOTE, SAVE_NOTE, NOTES_REHYDRATED } from '../.
 const initialState = new List
 
 const sortByDueDate = (note) => {
-  return note.dueDate ? - note.dueDate.getTime() : 0
+  return note.dueDate ? - note.dueDate.valueOf() : 0
 }
 
 export default function notesReducer(state: List<Note> = initialState, {type, payload}: any) {
   if (type === MY_PROFILE_LOADED) {
-    // TODO load notes from profile
+    // TODO load notes from profile (back-end)?
     return state
   }
   else if (type === SAVE_NOTE) {

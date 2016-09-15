@@ -5,20 +5,20 @@ import DjiniTextInput from './DjiniTextInput'
 export default class BirthdayInput extends Component {
 
   static propTypes = {
-    date: PropTypes.instanceOf(Date),
+    date: PropTypes.string.isRequired,
+    onDateChange: PropTypes.func.isRequired,
     editable: PropTypes.bool,
     autoFocus: PropTypes.bool,
-    onDateChange: PropTypes.func.isRequired
   }
 
   constructor(props) {
     super(props)
-    const date = props.date
     this.onDateChange = this.onDateChange.bind(this)
+    let dateParts = props.date.split('-')
     this.state = {
-      day: date ? '' + props.date.getDate() : '',
-      month: date ? '' + (props.date.getMonth() + 1) : '',
-      year: date ? '' + props.date.getFullYear(): ''
+      year: dateParts[0] || '',
+      month: dateParts[1] || '',
+      day: dateParts[2] || ''
     }
   }
 
@@ -28,16 +28,7 @@ export default class BirthdayInput extends Component {
     if (!(day && month && year)) {
       return;
     }
-    try {
-      const newDate = new Date(0)
-      newDate.setDate(parseInt(day))
-      newDate.setMonth(parseInt(month) - 1)
-      newDate.setFullYear(parseInt(year))
-      onDateChange(newDate)
-    } catch(e) { 
-      console.log('invalid date')
-      //nothing to do
-    }
+    onDateChange(`${year}-${month}-${day}`)
   }
 
   setStateIfValid(field, value, cb) {
@@ -106,6 +97,10 @@ export default class BirthdayInput extends Component {
   }
 }
 
+BirthdayInput.defaultProps = {
+  date: ''
+}
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -124,3 +119,5 @@ const styles = StyleSheet.create({
     marginRight: 0,
   }
 })
+
+
