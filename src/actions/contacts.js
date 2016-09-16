@@ -175,13 +175,12 @@ export function loadFriendProfile(contact) {
     const me = getState().global.currentUser
 
     if (contact.phoneNumber === me.phoneNumber) {
-      //not allowed
-      return;   
+      return Promise.reject(new Error('Not allowed to load own profile'));   
     }
 
     dispatch(getFriendProfileRequest(contact))
     Actions.friend()
-    Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
+    return Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
       .then((profile) => {
         InteractionManager.runAfterInteractions(() => {
           const contacts = getState().contacts.contacts
