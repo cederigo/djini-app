@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import { AppRegistry, View, StyleSheet, Dimensions, Image, StatusBar} from 'react-native'
 import { Scene, Router} from 'react-native-router-flux'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Provider} from 'react-redux'
 import Parse from 'parse/react-native'
 import moment from 'moment'
@@ -61,13 +62,15 @@ function getInitialState() {
 class TabIcon extends React.Component {
   static propTypes = {
     iconName: PropTypes.string.isRequired,
-    selected: PropTypes.bool
+    selected: PropTypes.bool,
+    badge: PropTypes.bool,
   }
   render(){
-    const {selected, iconName} = this.props
+    const {selected, iconName, badge} = this.props
     const imageName = `${iconName}${selected ? '_active' : ''}`
     return (
       <View style={styles.tab}>
+        {badge ? <Icon style={styles.tabBadge} name="info"/> : undefined }
         <Image style={styles.tabIcon} resizeMode="contain" source={images[imageName]}/>
       </View>
       )
@@ -100,6 +103,12 @@ const styles = StyleSheet.create({
   tabIcon: {
     width: 50,
     height: 25 
+  },
+  tabBadge: {
+    position: 'absolute',
+    right: 3, top: 3,
+    color: 'red',
+    fontSize: 20
   },
   tabIconSelected: {
     color: 'white'
@@ -157,7 +166,7 @@ export default function init(os) {
                     <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend" statusBarStyle="default"/>
                   </Scene>
                   <Scene key="notesTab" icon={TabIcon} iconName="todo">
-                    <Scene key="Notes" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Notes}/>
+                    <Scene key="notes" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Notes}/>
                   </Scene>
                   <Scene key="profileTab" icon={TabIcon} iconName="person" statusBarStyle="default">
                     <Scene key="profile" animation="fade" duration={0} statusBarStyle="default" sceneStyle={styles.tabScene} component={Profile}/>
