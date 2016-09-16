@@ -26,9 +26,9 @@ class FriendWishesList extends Component {
 
   static propTypes = {
     wishes: PropTypes.array.isRequired,
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    contact: PropTypes.object.isRequired
   }
-  _innerRef: ?PureListView;
 
   constructor(props) {
     super(props)
@@ -76,12 +76,12 @@ class FriendWishesList extends Component {
   }
 
   renderRow (wish) {
-    const {dispatch, user} = this.props
+    const {dispatch, user, contact} = this.props
     return (
       <ListRow
         title={wish.title}
         description={this.getRowDescription(wish, user)}
-        onPress={() => dispatch(showWish(wish, 'friend'))}>
+        onPress={() => dispatch(showWish(wish, 'friend', contact))}>
        {fulfilled(wish) ? <ListRowIcon name="check"/> : undefined}
       </ListRow>
     )

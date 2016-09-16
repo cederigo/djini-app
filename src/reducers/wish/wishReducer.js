@@ -23,8 +23,9 @@ export default function wishReducer(state = initialState, {type, payload}) {
   switch (type) {
 
     case SHOW_WISH: {
-      const {wish, source} = payload
+      const {wish, source, contact} = payload
       return updateWish(state.set('source', source), wish)
+        .set('contact', contact)
         .set('editMode', false)
     }
 

@@ -17,6 +17,9 @@ import {
   NEW_WISH
 } from '../lib/constants'
 
+import {newTaskNote, updateTaskNote} from './notes'
+import {fromParseWish} from '../reducers/wishes/wishesReducer'
+
 import {isIdea} from '../lib/wishUtil'
 
 const ParseWish = Parse.Object.extend('Wish')
@@ -42,9 +45,9 @@ function toParseWish(wish: Record<Wish>) {
 
 import {Wish, User} from '../lib/types'
 
-export function showWish(wish, source = 'wishes') {
+export function showWish(wish, source = 'wishes', contact) {
   return dispatch => {
-    dispatch({type: SHOW_WISH, payload: {source, wish}})
+    dispatch({type: SHOW_WISH, payload: {source, wish, contact}})
     if (source === 'wishes') {
       Actions.wish()
     } else {
@@ -116,6 +119,7 @@ export function saveWish(wish: Record<Wish>, source: string = "details") {
     return parseWish.save().then((data) => {
       if (wish.id) {
         dispatch(wishUpdated(data, source))
+        dispatch(updateTaskNote(fromParseWish(data).toJS()))
       } else {
         if (source === 'details') {
           Actions.pop()
@@ -159,12 +163,13 @@ export function deleteWish(wish: Wish, source: ?string = 'swipe') {
   }
 }
 
-export function fulfillWish(wish) {
+export function fulfillWish(wish, contact) {
   return dispatch => {
     dispatch(saveWishRequest())
     Parse.Cloud.run('fulfillWish', {wishId: wish.id})
     .then(data => {
       dispatch(wishUpdated(data))
+      dispatch(newTaskNote(contact, fromParseWish(data).toJS()))
     })
     .catch(error => {
       dispatch(saveWishFailure(error))

@@ -1,10 +1,31 @@
+import {InteractionManager} from 'react-native'
 import shortid from 'shortid'
 import {Actions} from 'react-native-router-flux'
 import initialState from '../reducers/note/noteInitialState'
+import {Wish} from '../reducers/wish/wishInitialState'
 import moment from 'moment'
 
-import { SAVE_NOTE, DELETE_NOTE, SHOW_NOTE, EDIT_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
+import { SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
+import {loadFriendProfile} from './contacts'
+import {showWish} from './wishes'
 import db from '../lib/db'
+
+// Helpers
+function getDescription(contact) {
+  if (!contact.birthday) {
+    // Unregistered users
+    return contact.name + ', Geb. unbekannt ;-('
+  } 
+  const birthday = moment(contact.birthday, 'YYYY-MM-DD')
+  return contact.name + ', ' + birthday.format('Do MMMM')
+}
+
+function getDueDate(contact) {
+  if (!contact.birthday) {
+    return undefined
+  }
+  return moment(contact.birthday, 'YYYY-MM-DD').hour(23).minute(59)
+}
 
 export function persistNotes() {
   return (dispatch, getState) => {
@@ -25,15 +46,17 @@ export function rehydrateNotes() {
 
 export function showNote(note) {
   return dispatch => {
-    dispatch({ type: SHOW_NOTE, payload: note })
-    // Actions.note()
-  }
-}
-
-export function editNote(note) {
-  return dispatch => {
-    dispatch({ type: EDIT_NOTE, payload: note })
-    // Actions.note()
+    // TODO show note view ?
+    // TODO check if dueDate is missing and make the user enter it
+    Actions.contacts({type: 'reset', duration: 0})
+    InteractionManager.runAfterInteractions(() => {
+      dispatch(loadFriendProfile(note.contact))
+        .then(() => {
+          if (note.type === 'task') {
+            dispatch(showWish(new Wish(note.wish), 'friend', note.contact))
+          }
+        })
+    })
   }
 }
 
@@ -44,34 +67,50 @@ export function deleteNote(note) {
   }
 }
 
-export function newReminderNote(contact) {
-  return dispatch => {
+export function newTaskNote(contact, wish) {
+  return (dispatch) => {
     let note = {...initialState.note}
-    //prefill 
-    note.id = contact.phoneNumber
-    note.type = 'reminder'
-    note.title = 'Geburtstagserinnerung'
-    note.description = contact.name
-    if (contact.registered) {
-      const birthday = moment(contact.birthday, 'YYYY-MM-DD')
-      const dueDate = moment(birthday) //clone
-      note.dueDate = dueDate.hours(23).minute(59)
-      note.description += ', ' + birthday.format('Do MMMM')
-    } else  {
-      note.description += ', Geb. unbekannt ;-('
-    }
-
+    note.id = wish.id
+    note.type = 'task'
+    note.title = wish.title
+    note.description = getDescription(contact)
+    note.contact = {...contact}
+    note.wish = {...wish}
+    note.dueDate = getDueDate(contact)
     dispatch(saveNote(note))
   }
 }
 
-export function saveNote(note) {
+export function updateTaskNote(wish) {
+  return (dispatch) => {
+    let note = {...initialState.note}
+    note.id = wish.id
+    note.wish = {...wish}
+    dispatch(saveNote(note, false))
+  }
+}
+
+export function newReminderNote(contact) {
+  return dispatch => {
+    let note = {...initialState.note} //clone
+    //prefill 
+    note.id = contact.phoneNumber
+    note.type = 'reminder'
+    note.title = 'Geburtstagserinnerung'
+    note.description = getDescription(contact)
+    note.contact = {...contact} //clone
+    note.dueDate = getDueDate(contact)
+    dispatch(saveNote(note))
+  }
+}
+
+export function saveNote(note, upsert = true) {
   return dispatch => {
     if (!note.id) {
       // generate
       note.id = shortid.generate()
     } 
-    dispatch({type: SAVE_NOTE, payload: note})
+    dispatch({type: SAVE_NOTE, payload: {note, upsert}})
     dispatch(persistNotes())
   }
 }

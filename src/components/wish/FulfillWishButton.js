@@ -1,5 +1,7 @@
+// @flow
+
 import { connect } from 'react-redux';
-import {Wish, User} from '../../lib/types'
+import type {Wish, User, Contact} from '../../lib/types'
 
 import React, {Component} from 'react';
 import {Alert} from 'react-native';
@@ -14,12 +16,15 @@ import {fulfillable, fulfilledByUser, isIdea} from '../../lib/wishUtil'
 class FulfillWishButton extends Component {
 
   props: {
+    dispatch: () => void,
     currentUser: User,
-    wish: Wish
+    contact: Contact,
+    wish: Wish,
+    style: any
   }
 
   render() {
-    const {dispatch, currentUser, wish} = this.props
+    const {dispatch, currentUser, wish, contact} = this.props
     
     let caption, msg, onConfirm
 
@@ -30,11 +35,11 @@ class FulfillWishButton extends Component {
     if (fulfilledByUser(wish, currentUser)) {
       caption = isIdea(wish) ? 'Zurücksetzen' :  'Freigeben'
       msg = 'Willst Du diesen Wunsch wirklich nicht mehr erfüllen?'
-      onConfirm = () => dispatch(saveWish(wish.set('fulfillerId', null)))
+      onConfirm = () => dispatch(saveWish({...wish, fulfillerId: null}))
     } else {
       caption = 'Erfüllen'
       msg = 'Willst Du diesen Wunsch wirklich erfüllen?'
-      onConfirm = () => dispatch(fulfillWish(wish))
+      onConfirm = () => dispatch(fulfillWish(wish, contact))
     }
 
     function confirmDialog() {

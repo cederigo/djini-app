@@ -17,13 +17,17 @@ export default function notesReducer(state: List<Note> = initialState, {type, pa
     return state
   }
   else if (type === SAVE_NOTE) {
-    let idx = state.findIndex((t) => t.id === payload.id)
+    const {note, upsert} = payload
+    let idx = state.findIndex((t) => t.id === note.id)
     if (idx >= 0) {
       // update
-      return state.set(idx, payload).sortBy(sortByDueDate)
+      const existing = state.get(idx)
+      return state.set(idx, {...existing, ...note}).sortBy(sortByDueDate)
     }
-    // add
-    return state.push(payload).sortBy(sortByDueDate)
+    if (upsert) {
+      // insert
+      return state.push(note).sortBy(sortByDueDate)
+    }
   }
   else if (type === DELETE_NOTE) {
     let idx = state.findIndex((t) => t.id === payload.id)

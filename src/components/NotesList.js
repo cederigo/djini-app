@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 })
 
 // actions
-import {showNote, deleteNote} from '../actions/notes'
+import {showNote, deleteNote, saveNote} from '../actions/notes'
 
 class NotesList extends Component {
 
@@ -52,13 +52,21 @@ class NotesList extends Component {
 
   swipeoutBtns (note) {
     const {dispatch} = this.props
-    return [
+    const result = [
       { 
         backgroundColor: 'transparent',
         component: <SwipeoutButton iconName="delete"/>,
         onPress: () => dispatch(deleteNote(note)),
       },
     ]
+    if (note.type === 'task') {
+      result.push({
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName={note.done ? "gift" : "gift_done"} iconType="image"/>,
+        onPress: () => dispatch(saveNote({...note, done: !note.done}, false)),
+      })
+    }
+    return result
   }
 
   renderRow (note) {

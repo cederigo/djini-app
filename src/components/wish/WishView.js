@@ -1,4 +1,7 @@
+/* @flow */
+
 import { connect } from 'react-redux';
+import {Record} from 'immutable';
 
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
@@ -10,7 +13,7 @@ import DjiniBackground from '../DjiniBackground'
 import {AppBar, ActionButton} from '../AppBar'
 import {DjiniDarkText as DjiniText} from '../DjiniText'
 
-import {User, Wish} from '../../lib/types'
+import type {User, Wish, Contact} from '../../lib/types'
 
 // Utils
 import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser} from '../../lib/wishUtil'
@@ -24,10 +27,20 @@ const IMAGE_HEIGHT = 250
 class WishView extends Component {
 
   props: {
+    dispatch: () => void,
     currentUser: User,
     source: string,
-    wish: Wish
+    wish: Wish,
+    contact: Contact
   }
+
+  state: {
+    imageExpanded: bool,
+    imageHeight: number
+  }
+
+  renderImage: (wish: Wish) => void
+  imageClicked: () => void
 
   constructor(props) {
     super(props)
@@ -117,12 +130,12 @@ class WishView extends Component {
       //its a wish for me so I'm not interested
       return
     }
-    const {dispatch} = this.props
+    const {dispatch, contact} = this.props
     return (
       <View style={styles.buttonGroup}>
         <DjiniButton style={styles.buttonGroupButton} iconName="playlist-add" caption="Will ich auch" onPress={() => dispatch(copyWish(wish, currentUser))}/> 
         {fulfillable(wish, currentUser) ?
-          <FulfillWishButton style={styles.buttonGroupButton} wish={wish}/>
+          <FulfillWishButton style={styles.buttonGroupButton} wish={wish.toJS()} contact={contact}/>
           : undefined
         }
       </View>

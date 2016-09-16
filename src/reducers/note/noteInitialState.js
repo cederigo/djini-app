@@ -9,8 +9,9 @@ const note:Note = {
   description: '',
   type: 'reminder',
   done: false,
-  dueDate: new Date(),
+  dueDate: undefined,
   wish: undefined,
+  contact: undefined
 }
 
 const InitialState = Record({

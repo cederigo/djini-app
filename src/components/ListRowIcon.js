@@ -23,7 +23,7 @@ export default function ListRowIcon(props) {
     <View style={styles.container}>
       {props.type === 'icon' ?
         <Icon {...props} style={[styles.icon, props.style]}/>
-        : <Image {...props} source={images[props.name]} style={styles.image, props.style}/>
+        : <Image {...props} resizeMode="contain" source={images[props.name]} style={[styles.image, props.style]}/>
       }
     </View>
   )

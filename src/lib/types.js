@@ -1,5 +1,6 @@
 /* @flow */
 
+/* Server */
 export type User = {
   id: string,
   name: string,
@@ -9,6 +10,7 @@ export type User = {
   registered: bool
 }
 
+/* Local (From adressbook) */
 export type Contact = {
   phoneNumber: string,
   name: string,
@@ -16,11 +18,13 @@ export type Contact = {
   birthday: string,
 }
 
+/* Wish or Idea (technically its the same thing) */
 export type Wish = {
   id: string,
   title: string,
   url: string,
   description: string,
+  price: string,
   seenAt: string,
   createdAt: Date,
   isPrivate: bool,
@@ -31,18 +35,13 @@ export type Wish = {
   fulfillerName: ?string,
 }
 
-export type Reminder = {
-  date: Object,
-  title: string,
-  text: string
-}
-
 export type Note = {
   id: ?string,
   title: string,
   description: string,
+  dueDate: ?Date,
   type: 'reminder' | 'task', 
   done: boolean, // For type task
-  dueDate: ?Date,
-  wish: ?Wish,
+  contact: ?Contact, // A note is always associated with one of our contacts
+  wish: ?Wish, // For type task
 }
