@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
 import Parse from 'parse/react-native'
 import React, {Component} from 'react'
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, PushNotificationIOS} from 'react-native';
+import codePush from "react-native-code-push";
 
 import {version} from '../lib/config'
 
@@ -22,6 +23,10 @@ import {rehydrateNotes} from '../actions/notes'
 class App extends Component {
 
   componentDidMount() {
+    // HACK: see https://github.com/facebook/react-native/issues/9105
+    // You absolutely need this for requestPermissions() promise to resolve.
+    PushNotificationIOS.addEventListener('register', () => {});
+    
     const {dispatch} = this.props
     updateInstallation({version})
     dispatch(restoreContacts())
@@ -33,6 +38,13 @@ class App extends Component {
         }
         dispatch(loginSuccess(parseUser))
         dispatch(refreshContacts())
+        // If app was opened through notification, navigate to notes tab
+        PushNotificationIOS.getInitialNotification()
+          .then((notification) => {
+            if (notification) {
+              Actions.notesTab()
+            }
+          })
       })
       .catch((error) => {
         dispatch(loginFailure(error))
@@ -60,4 +72,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect()(App);
+export default connect()(codePush(App));
