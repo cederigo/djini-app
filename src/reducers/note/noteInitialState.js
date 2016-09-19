@@ -3,7 +3,7 @@
 import {Record} from 'immutable';
 import type {Note} from '../../lib/types'
 
-const note:Note = {
+export const note:Note = {
   id: undefined,
   title: '',
   description: '',
