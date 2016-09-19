@@ -36,14 +36,12 @@ class App extends Component {
         if (!parseUser) {
           throw new Error('User not logged in')
         }
-        dispatch(loginSuccess(parseUser))
         dispatch(refreshContacts())
+        dispatch(loginSuccess(parseUser, false))
         // If app was opened through notification, navigate to notes tab
         PushNotificationIOS.getInitialNotification()
           .then((notification) => {
-            if (notification) {
-              Actions.notesTab()
-            }
+            Actions.home({initialScene: notification ? 'notesTab' : undefined})
           })
       })
       .catch((error) => {

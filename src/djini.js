@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import { AppRegistry, View, StyleSheet, Dimensions, Image, StatusBar} from 'react-native'
-import { Scene, Router} from 'react-native-router-flux'
+import { Scene, Router, Switch} from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Provider} from 'react-redux'
 import Parse from 'parse/react-native'
@@ -137,6 +137,7 @@ const getSceneStyleFn = (os) => {
 
 export default function init(os) {
 
+  let initialized = false
   //init parse sdk
   Parse.initialize(PARSE_APP_ID);
   Parse.serverURL = `${PARSE_BASE_URL}`;
@@ -155,18 +156,29 @@ export default function init(os) {
 
                 <Scene key="login" type="replace" component={Login} sceneStyle={styles.scene}/>
 
-                <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
+                <Scene 
+                  key="home" type="replace"
+                  tabs={true} tabBarStyle={styles.tabBar}
+                  component={Switch}
+                  selector={(props) => {
+                    let sceneKey = props.children[props.index].sceneKey
+                    if (!initialized && props.initialScene) {
+                      sceneKey = props.initialScene
+                    }
+                    initialized = true
+                    return sceneKey
+                  }}>
                   <Scene key="wishesTab" icon={TabIcon} iconName="lamp">
-                    <Scene key="wishes" animation="fade" duration={0} initial={true} sceneStyle={styles.tabScene} component={Wishes}/>
+                    <Scene key="wishes" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Wishes} initial={true}/>
                     <Scene key="wish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="wishes" statusBarStyle="default"/>
                   </Scene>
                   <Scene key="contactsTab" icon={TabIcon} iconName="group">
-                    <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Contacts}/>
+                    <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Contacts} initial={true}/>
                     <Scene key="friend" animation="fade" statusBarStyle="default" component={Friend}/>
                     <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend" statusBarStyle="default"/>
                   </Scene>
                   <Scene key="notesTab" icon={TabIcon} iconName="todo">
-                    <Scene key="notes" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Notes}/>
+                    <Scene key="notes" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Notes} initial={true}/>
                   </Scene>
                   <Scene key="profileTab" icon={TabIcon} iconName="person" statusBarStyle="default">
                     <Scene key="profile" animation="fade" duration={0} statusBarStyle="default" sceneStyle={styles.tabScene} component={Profile}/>
