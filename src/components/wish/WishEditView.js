@@ -157,7 +157,6 @@ class WishEditView extends Component {
             <DjiniTextInput
               placeholder="Wo kann dein Wunsch gefunden werden…"
               onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
-              autoCorrect={false}
               value={wish.seenAt}
             />
 

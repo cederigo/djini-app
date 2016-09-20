@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import moment from 'moment'
+
+import {formatBirthday} from '../lib/dateUtil'
 
 import DjiniBackground from '../components/DjiniBackground'
 import DjiniText from '../components/DjiniText'
@@ -41,9 +42,7 @@ class Friend extends Component {
     const {friend, contact, dispatch, isFetching} = this.props
     let birthdayText = isFetching ? '' : 'Geb. unbekannt ;-('
     if (friend.birthday) {
-      const birthday = moment(friend.birthday, 'YYYY-MM-DD')
-      let age = moment().diff(birthday, 'years')
-      birthdayText = `Wird am ${birthday.format('Do MMMM')} ${age + 1} Jahre alt`
+      birthdayText = formatBirthday(friend.birthday)
     }
     return (
       <View style={styles.profile}>

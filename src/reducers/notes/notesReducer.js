@@ -12,6 +12,7 @@ const sortByDueDate = (note) => {
 }
 
 export default function notesReducer(state: List<Note> = initialState, {type, payload}: any) {
+  // TODO sync contacts on `CONTACTS_SUCCESS`
   if (type === MY_PROFILE_LOADED) {
     // TODO load notes from profile (back-end)?
     return state

@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {View, StyleSheet} from 'react-native';
 import moment from 'moment'
 
-import BirthdayInput from './BirthdayInput'
+import DateInput from './DateInput'
 import DjiniTextInput from './DjiniTextInput'
 import DjiniText from './DjiniText'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -37,8 +37,8 @@ export default function ProfileField(props) {
       <Icon style={styles.fieldIcon} name={iconName}/>
       {editable ? 
         isBirthday ?
-          <BirthdayInput type="light" style={styles.fieldValue} date={value} {...props}/>
-          : <DjiniTextInput type="light" style={styles.fieldValue} value={value} {...props}/>
+          <DateInput textStyle="light" style={styles.fieldValue} date={value} {...props}/>
+          : <DjiniTextInput textStyle="light" style={styles.fieldValue} value={value} {...props}/>
         : <DjiniText style={styles.fieldValue} {...props}>{value}</DjiniText>
       }
     </View>

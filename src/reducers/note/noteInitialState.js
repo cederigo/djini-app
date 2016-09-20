@@ -9,14 +9,9 @@ export const note:Note = {
   description: '',
   type: 'reminder',
   done: false,
-  dueDate: undefined,
+  dueDate: '',
   wish: undefined,
   contact: undefined
 }
 
-const InitialState = Record({
-  edit: false,
-  note
-})
-
-export default InitialState;
+export default Record(note)

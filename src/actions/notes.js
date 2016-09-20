@@ -1,32 +1,22 @@
 import {List} from 'immutable'
-import {InteractionManager, PushNotificationIOS} from 'react-native'
-import shortid from 'shortid'
+import {PushNotificationIOS} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import initialState from '../reducers/note/noteInitialState'
-import {Wish} from '../reducers/wish/wishInitialState'
 import moment from 'moment'
 
-import { SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
-import {loadFriendProfile} from './contacts'
-import {showWish} from './wishes'
+import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
 import db from '../lib/db'
 
-
-// Helpers
-function getDescription(contact) {
-  if (!contact.birthday) {
-    // Unregistered users
-    return contact.name + ', Geb. unbekannt ;-('
-  } 
-  const birthday = moment(contact.birthday, 'YYYY-MM-DD')
-  return contact.name + ', ' + birthday.format('Do MMMM')
-}
-
-function getDueDate(contact) {
-  if (!contact.birthday) {
+function getDueDate(birthday) {
+  if (!birthday) {
     return undefined
   }
-  return moment(contact.birthday, 'YYYY-MM-DD').hour(23).minute(59).toDate()
+  const now = moment()
+  const dueDate = moment(birthday, 'YYYY-MM-DD').year(now.year())
+  if (dueDate.isBefore(now)) {
+    dueDate.add(1, 'year')
+  }
+  return dueDate.format('YYYY-MM-DD')
 }
 
 function assureRequiredPermissions() {
@@ -50,14 +40,14 @@ function scheduleLocalNotifications(notes) {
     })
 } 
 
-export function listString(entries) {
+function listString(entries) {
   if (entries.length === 1) {
     return entries[0]
   }
   return `${entries.slice(0, entries.length - 1).join(', ')} und ${entries[entries.length - 1]}`
 }
 
-export function quantityString(quantity, one, many) {
+function quantityString(quantity, one, many) {
   return quantity === 1 ? one : many
 }
 
@@ -69,7 +59,7 @@ export function getLocalNotifications(notes) {
   let result = []
   List(notes)
     .filter((note) => note.dueDate && note.type === 'reminder' && !note.done)
-    .groupBy((note) => (note.dueDate.toISOString() + '[' + note.type + ']'))
+    .groupBy((note) => (note.dueDate + '[' + note.type + ']'))
     .forEach((entries) => {
       entries = entries.toJS()
       // All entries share the same type/dueDate. See `groupBy` above.
@@ -109,18 +99,9 @@ export function rehydrateNotes() {
 }
 
 export function showNote(note) {
-  return dispatch => {
-    // TODO show note view ?
-    // TODO check if dueDate is missing and make the user enter it
-    Actions.contacts({type: 'reset', duration: 0})
-    InteractionManager.runAfterInteractions(() => {
-      dispatch(loadFriendProfile(note.contact))
-        .then(() => {
-          if (note.type === 'task') {
-            dispatch(showWish(new Wish(note.wish), 'friend', note.contact))
-          }
-        })
-    })
+  return (dispatch) => {
+    dispatch({type: SHOW_NOTE, payload: note})
+    Actions.note({edit: false})
   }
 }
 
@@ -137,10 +118,9 @@ export function newTaskNote(contact, wish) {
     note.id = wish.id
     note.type = 'task'
     note.title = wish.title
-    note.description = getDescription(contact)
+    note.dueDate = getDueDate(contact.birthday)
     note.contact = {...contact}
     note.wish = {...wish}
-    note.dueDate = getDueDate(contact)
     dispatch(saveNote(note))
   }
 }
@@ -161,9 +141,8 @@ export function newReminderNote(contact) {
     note.id = contact.phoneNumber
     note.type = 'reminder'
     note.title = 'Geburtstagserinnerung'
-    note.description = getDescription(contact)
+    note.dueDate = getDueDate(contact.birthday)
     note.contact = {...contact} //clone
-    note.dueDate = getDueDate(contact)
     dispatch(saveNote(note))
   }
 }
@@ -171,8 +150,7 @@ export function newReminderNote(contact) {
 export function saveNote(note, upsert = true) {
   return dispatch => {
     if (!note.id) {
-      // generate
-      note.id = shortid.generate()
+      throw new Error('Note has no `id` ', note)
     } 
     dispatch({type: SAVE_NOTE, payload: {note, upsert}})
     dispatch(persistNotes())

@@ -1,22 +1,20 @@
 /* @flow */
 
-import InitialState from './noteInitialState'
+import {Record} from 'immutable';
 
-import { EDIT_NOTE, SHOW_NOTE, SAVE_NOTE } from '../../lib/constants'
+import type {Note} from '../../lib/types'
+import NoteRecord from './noteInitialState'
 
-const initialState = new InitialState;
+import {SHOW_NOTE, SAVE_NOTE} from '../../lib/constants'
 
-export default function noteReducer(state: any = initialState, action: any) {
-  if (action.type === SHOW_NOTE) {
-    return state
-      .set('edit', false)
-      .set('note', action.payload)
+const initialState = new NoteRecord;
+
+export default function noteReducer(state: Record<Note> = initialState, action: any) {
+  if (action.type === SAVE_NOTE) {
+    return new NoteRecord(action.payload.note)
   }
-  else if (action.type === EDIT_NOTE) {
-    return state.set('edit', true)
-  }
-  else if (action.type === SAVE_NOTE) {
-    return state.set('note', action.payload)
+  else if (action.type === SHOW_NOTE) {
+    return new NoteRecord(action.payload)
   }
   return state;
 }

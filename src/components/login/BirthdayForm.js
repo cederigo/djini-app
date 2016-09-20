@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import BirthdayInput from '../BirthdayInput'
+import DateInput from '../DateInput'
 
 import DjiniText from '../DjiniText'
 
@@ -21,7 +21,7 @@ export default class BirthdayForm extends Component {
         </DjiniText>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Geb.</DjiniText>
-          <BirthdayInput 
+          <DateInput 
             type="light"
             style={styles.formGroupInput}
             autoFocus={true}

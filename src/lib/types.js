@@ -26,7 +26,6 @@ export type Wish = {
   description: string,
   price: string,
   seenAt: string,
-  createdAt: Date,
   isPrivate: bool,
   isFavorite: bool,
   fromUserId: string,
@@ -39,7 +38,7 @@ export type Note = {
   id: ?string,
   title: string,
   description: string,
-  dueDate: ?Date,
+  dueDate: string, // YYYY-MM-DD
   type: 'reminder' | 'task', 
   done: boolean, // For type task
   contact: ?Contact, // A note is always associated with one of our contacts
