@@ -13,7 +13,7 @@ moment.locale('de')
 /**
  * Under test
  */
-import {getLocalNotifications} from '../notes'
+import {getLocalNotifications} from '../pushNotification'
 
 
 /**
@@ -23,7 +23,7 @@ function getReminderNote(props = {}, contactName) {
   return {...note, ...props, contact: {name: contactName}}
 }
 
-describe('notes actions', () => {
+describe('./lib/pushNotification', () => {
   describe('getLocalNotifications()', () => {
 
     it('should handle edge cases', () => {
