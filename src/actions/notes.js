@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
 import db from '../lib/db'
-import {cancelAllLocalNotifications, scheduleLocalNotifications, getLocalNotifications} from '../lib/pushNotification'
+import {updateLocalNotifications} from '../lib/pushNotification'
 import {setBadge} from '../actions/tabs'
 
 function getDueDate(birthday) {
@@ -19,17 +19,12 @@ function getDueDate(birthday) {
   return dueDate.format('YYYY-MM-DD')
 }
 
-function updateLocalNotifications(notes) {
-  cancelAllLocalNotifications()
-  scheduleLocalNotifications(getLocalNotifications(notes))
-}
-
 export function persistNotes() {
   return (dispatch, getState) => {
     const notes = getState().notes.toArray()
     db.saveNotes(notes)
       .then(() => dispatch({type: NOTES_PERSISTED}))
-      .then(() => updateLocalNotifications(notes))
+      .then(() => updateLocalNotifications(notes)) // No matter what the permissions are
       .catch((e) => console.log('Could not persist notes. error: ', e))
   }
 }

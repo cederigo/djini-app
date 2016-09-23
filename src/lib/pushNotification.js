@@ -20,6 +20,21 @@ function groupNote(note) {
   }
 }
 
+export function checkPermissions() {
+  return new Promise((resolve) => {
+    PushNotificationIOS.checkPermissions(resolve)
+  })
+}
+
+export function requestPermissions() {
+  return PushNotificationIOS.requestPermissions({alert: true})
+}
+
+export function updateLocalNotifications(notes) {
+  cancelAllLocalNotifications()
+  scheduleLocalNotifications(getLocalNotifications(notes))
+}
+
 export function scheduleLocalNotifications(notifications) {
   notifications.forEach((n) => {
     console.log('schedule notification', n)
