@@ -6,6 +6,8 @@ import React, {Component, PropTypes} from 'react'
 import {View, StyleSheet} from 'react-native'
 import dismissKeyboard from 'dismissKeyboard'
 
+import {transliterate} from '../lib/transliteration'
+
 import ContactsPermission from '../components/ContactsPermission'
 import ContactsWizard from '../components/ContactsWizard'
 import ContactsList from '../components/ContactsList'
@@ -28,7 +30,7 @@ class Contacts extends Component {
   }
 
   getListData(contacts, filterText) {
-    const r = new RegExp(filterText)
+    const r = new RegExp(transliterate(filterText), 'i')
     const result = {favorites: [], contacts: []}
     contacts.forEach(c => {
       if (!r.test(c.nameTransliterated)) {
