@@ -18,6 +18,9 @@ const styles = StyleSheet.create({
     marginTop: 50,
     paddingHorizontal: 10,
     textAlign: 'center'
+  },
+  incomplete: {
+    color: 'red'
   }
 })
 
@@ -84,7 +87,7 @@ class NotesList extends Component {
       icon = <ListRowIcon name="cake"/>
     }
     else if (note.type === 'task') {
-      icon = <ListRowIcon type="image" name={note.done ? "gift_done" : "gift"}/>
+      icon = <ListRowIcon name={note.done ? "gift_done" : "gift"}/>
     }
     return (
       <ListRow 
@@ -92,6 +95,7 @@ class NotesList extends Component {
         description={this.getDescription(note)}
         swipeoutBtns={this.swipeoutBtns(note)}
         onPress={() => dispatch(showNote(note))}>
+        {note.dueDate ? undefined : <ListRowIcon style={styles.incomplete} name="error-outline"/>}
         {icon}
       </ListRow>
     )

@@ -58,9 +58,9 @@ const ReminderNoteFooter = (props) => {
   const {note, dispatch} = props
   return (
     <View style={styles.container}>
-      <DjiniText textStyle="dark" style={styles.bold}>
+      <DjiniText textStyle="dark" style={styles.djiniText}>
         Djini sagt: 
-        <DjiniText textStyle="dark" style={styles.normal}>{` Meine Wunderlampe verrät mir, dass ${note.contact.name} bald Geburtstag hat. Brauchst du noch ein passendes Geschenk?`}</DjiniText>
+        <DjiniText textStyle="dark" style={styles.text}>{` Meine Wunderlampe verrät mir, dass ${note.contact.name} bald Geburtstag hat. Brauchst du noch ein passendes Geschenk?`}</DjiniText>
       </DjiniText>
       <DjiniButton
         type="primary" caption="Geschenk suchen!"

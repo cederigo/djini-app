@@ -5,6 +5,7 @@ import moment from 'moment'
 import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
 import db from '../lib/db'
 import {cancelAllLocalNotifications, scheduleLocalNotifications, getLocalNotifications} from '../lib/pushNotification'
+import {setBadge} from '../actions/tabs'
 
 function getDueDate(birthday) {
   if (!birthday) {
@@ -64,6 +65,7 @@ export function newTaskNote(contact, wish) {
     note.dueDate = getDueDate(contact.birthday)
     note.contact = {...contact}
     note.wish = {...wish}
+    dispatch(setBadge('notesTab'))
     dispatch(saveNote(note))
   }
 }
@@ -86,6 +88,7 @@ export function newReminderNote(contact) {
     note.title = 'Geburtstagserinnerung'
     note.dueDate = getDueDate(contact.birthday)
     note.contact = {...contact} //clone
+    dispatch(setBadge('notesTab'))
     dispatch(saveNote(note))
   }
 }

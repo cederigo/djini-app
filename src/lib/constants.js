@@ -74,3 +74,6 @@ export const EDIT_NOTE = 'edit-note'
 export const CANCEL_EDIT_NOTE = 'cancel-edit-note'
 export const NOTES_REHYDRATED = 'notes-rehydrated'
 export const NOTES_PERSISTED = 'notes-persisted'
+
+export const CLEAR_BADGE = 'clear-badge'
+export const SET_BADGE = 'set-badge'

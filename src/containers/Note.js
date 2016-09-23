@@ -43,15 +43,12 @@ class Note extends Component {
   }
   getFormattedDate(note) {
     const contact = note.contact
-    let hint = 'Damit Djini dich erinnern kann, musst du ein Datum eintragen'
-
-    if (note.type === 'reminder') {
-      if (contact.birthday) {
+    if (note.type === 'reminder' && contact.birthday) {
         return formatBirthday(contact.birthday)
-      }
-      hint = 'Jetzt Geburtstag eintragen damit Djini dich erinnern kann'
     }
-    return note.dueDate ? moment(note.dueDate).format('DD.MM.YYYY') : hint
+    return note.dueDate ?
+       moment(note.dueDate).format('DD.MM.YYYY')
+       : 'Damit Djini dich erinnern kann, musst du ein Datum eintragen'
   }
 
   openWish(note) {
@@ -109,13 +106,16 @@ class Note extends Component {
           <DjiniText style={styles.value}>{contact.name}</DjiniText>
         </View>
 
-        <View style={[styles.row, styles.field]}>
+        <TouchableOpacity style={[styles.row, styles.field]} disabled={!!dueDate} onPress={() => this.edit()}>
           <DjiniIcon style={styles.icon} size={20} name="event"/>
           {fields.dueDate.editable && edit ?
             <DateInput date={fields.dueDate.value} minHeight={20} autoYear={true} onDateChange={(val) => this.onValueChange('dueDate', val)}/>
-            : <DjiniText style={styles.value} numberOfLines={2}>{this.getFormattedDate(this.props.note)}</DjiniText>
+            : <DjiniText style={styles.value} numberOfLines={2}>
+                {this.getFormattedDate(this.props.note)}
+                {dueDate ? undefined : <DjiniIcon style={styles.missingValue} name="error-outline"/>}
+              </DjiniText>
           }
-        </View>
+        </TouchableOpacity>
 
         {dueDate ?
           <View style={[styles.row, styles.field]}>
@@ -181,6 +181,9 @@ const styles = StyleSheet.create({
   },
   value: {
     flex: 1
+  },
+  missingValue: {
+    color: 'red',
   }
 });
 
