@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
   emptyList: {
     marginTop: 50,
     textAlign: 'center'
+  },
+  favoriteIcon: {
+    color: 'rgb(244, 230, 56)'
   }
 })
 
@@ -98,6 +101,7 @@ class FriendWishesList extends Component {
         swipeoutBtns={this._swipeoutBtns(wish)}
         description={this.getRowDescription(wish, user)}
         onPress={() => dispatch(showWish(wish, 'friend', contact))}>
+       {wish.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="star"/> : undefined}
        {fulfilled(wish) ? <ListRowIcon name="check"/> : undefined}
       </ListRow>
     )

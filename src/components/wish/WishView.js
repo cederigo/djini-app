@@ -142,20 +142,6 @@ class WishView extends Component {
     )
   }
 
-  renderPrivateAttributes(wish, currentUser) {
-    if(!toUser(wish, currentUser)) {
-      //NOT for me
-      return
-    }
-    return (
-      <View style={styles.privateAttributes}>
-        {wish.isFavorite ? <Icon style={styles.favoriteIcon} name="star"/> : undefined }
-        {wish.isPrivate ? <Icon style={styles.privateIcon} name="lock"/> : undefined }
-      </View>
-    )
-  }
-
-
   render() {
     const {dispatch, currentUser, wish, source} = this.props
 
@@ -196,7 +182,10 @@ class WishView extends Component {
               </TouchableOpacity>
             </View>
 
-            {this.renderPrivateAttributes(wish, currentUser)}
+            <View style={styles.privateAttributes}>
+              {wish.isFavorite ? <Icon style={styles.favoriteIcon} name="star"/> : undefined }
+              {wish.isPrivate ? <Icon style={styles.privateIcon} name="lock"/> : undefined }
+            </View>
 
             {this.renderActionButtons(wish, currentUser)}
           </View>
