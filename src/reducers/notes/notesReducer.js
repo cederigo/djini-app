@@ -8,7 +8,7 @@ import {MY_PROFILE_LOADED, DELETE_NOTE, SAVE_NOTE, NOTES_REHYDRATED } from '../.
 const initialState = new List
 
 const sortByDueDate = (note) => {
-  return note.dueDate ? - note.dueDate.valueOf() : 0
+  return note.dueDate ? note.dueDate : 'z'
 }
 
 export default function notesReducer(state: List<Note> = initialState, {type, payload}: any) {

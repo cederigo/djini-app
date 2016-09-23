@@ -6,9 +6,7 @@ import {Actions} from 'react-native-router-flux'
 
 import {formatBirthday} from '../lib/dateUtil'
 import {loadFriendProfile} from '../actions/profile'
-import {showWish} from '../actions/wishes'
 import {saveNote} from '../actions/notes'
-import {Wish} from '../reducers/wish/wishInitialState'
 
 import {DjiniDarkIcon as DjiniIcon} from '../components/DjiniIcon'
 import {DjiniDarkTextInput as DjiniTextInput} from '../components/DjiniTextInput'
