@@ -103,7 +103,10 @@ class NotesList extends Component {
 
   renderEmptyList() {
     return (
-      <DjiniText style={styles.emptyList}>Füge einen Freund als Favorit hinzu (Swipe) und erhalte gratis Geburtstagserinnerungen</DjiniText>
+      <DjiniText style={styles.emptyList}>
+        Hier erinnert dich Djini an deine Notizen: Favorisiere einen Kontakt und du erhältst eine Geburtstagserinnerung.
+        Erfülle einen Wunsch oder eine Idee und du wirst hier daran erinnert.
+      </DjiniText>
     );
   }
 

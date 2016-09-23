@@ -68,7 +68,7 @@ export function getLocalNotifications(notes) {
         alertBody: 
           type === 'reminder' ?
             `${listString(names)} ${quantityString(names.length, 'hat', 'haben')} am ${moment(dueDate).format('Do MMMM')} Geburtstag`
-            : `Du hast noch eine Woche um das Geschenk "${note.wish.title}" zu organisieren. `
+            : `Nicht vergessen, du musst noch "${note.wish.title}" für ${note.contact.name} besorgen`
       })
       // The same day @ 9.00h
       result.push({
@@ -76,7 +76,7 @@ export function getLocalNotifications(notes) {
         alertBody: 
           type === 'reminder' ?
             `${listString(names)} ${quantityString(names.length, 'hat', 'haben')} heute Geburtstag`
-            : `Hast du das Geschenk "${note.wish.title}" organisiert? Der Anlass findet heute statt.`
+            : `Nicht vergessen, du musst noch "${note.wish.title}" für ${note.contact.name} besorgen`
       })
     })
 
