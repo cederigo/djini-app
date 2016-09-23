@@ -772,7 +772,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ch.djini;
 				PRODUCT_NAME = Djini;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -810,7 +810,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ch.djini;
 				PRODUCT_NAME = Djini;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
