@@ -10,7 +10,7 @@ import ListRow from './ListRow'
 import ListRowIcon from './ListRowIcon'
 import SwipeoutButton from './ListRowSwipeoutButton'
 
-import {newWish} from '../actions/wishes'
+import {newWish, copyWish, showWish, deleteWish, toggleFulfilled} from '../actions/wishes'
 
 import {fulfilled} from '../lib/wishUtil'
 
@@ -25,18 +25,14 @@ const styles = StyleSheet.create({
   }
 })
 
-// actions
-import {showWish, deleteWish, fulfillWish, saveWish} from '../actions/wishes'
-
 class FriendIdeasList extends Component {
 
   static propTypes = {
     wishes: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired, // me
-    friend: PropTypes.object.isRequired
+    friend: PropTypes.object.isRequired,
+    contact: PropTypes.object.isRequired,
   }
-
-  _innerRef: ?PureListView;
 
   constructor(props) {
     super(props)
@@ -61,17 +57,8 @@ class FriendIdeasList extends Component {
     );
   }
 
-  toggleFulfilled(wish) {
-    const {dispatch} = this.props
-    if (fulfilled(wish)) {
-      dispatch(saveWish(wish.set('fulfillerId', null)))
-    } else {
-      dispatch(fulfillWish(wish))
-    }
-  }
-  
   _swipeoutBtns (wish) {
-    const {dispatch} = this.props
+    const {dispatch, user, contact} = this.props
     return [
       { 
         backgroundColor: 'transparent',
@@ -80,8 +67,13 @@ class FriendIdeasList extends Component {
       },
       { 
         backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName='playlist-add' />,
+        onPress: () => dispatch(copyWish(wish, user))
+      },
+      { 
+        backgroundColor: 'transparent',
         component: <SwipeoutButton iconName={fulfilled(wish) ? 'clear' : 'check'} />,
-        onPress: () => this.toggleFulfilled(wish),
+        onPress: () => dispatch(toggleFulfilled(wish, contact)),
       }
     ]
   }
@@ -97,12 +89,12 @@ class FriendIdeasList extends Component {
   }
 
   renderRow (wish) {
-    const {dispatch} = this.props
+    const {dispatch, contact} = this.props
     return (
       <ListRow
         swipeoutBtns={this._swipeoutBtns(wish)}
         title={wish.title}
-        onPress={() => dispatch(showWish(wish, 'friend'))}>
+        onPress={() => dispatch(showWish(wish, 'friend', contact))}>
        {fulfilled(wish) ? <ListRowIcon name="check"/> : undefined}
       </ListRow>
     )

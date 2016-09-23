@@ -12,6 +12,14 @@ import {
 
 const initialState = new InitialState;
 
+export function findWishInProfile(state, wishId) {
+  let result = state.wishes.find((w) => w.id === wishId)
+  if (!result) {
+    result = state.ideas.find((w) => w.id === wishId)
+  }
+  return result
+}
+
 export default function profileReduer(state = initialState, {type, payload}) {
   if (type === EDIT_PROFILE) {
     const {name, email, birthday} = payload

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(61,63,148)',
     borderBottomWidth: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   lightContainer: {
     borderColor: 'white',
@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: 'Asap',
     fontSize: 17,
-    height: 30,
     flex: 1,
     color: 'rgb(61,63,148)',
     padding: Platform.select({android: 0})
@@ -27,7 +26,8 @@ const styles = StyleSheet.create({
 /* sensible defaults */
 export default class DjiniTextInput extends Component {
   static propTypes = {
-    type: PropTypes.oneOf(['light']),
+    type: PropTypes.oneOf(['light', 'dark']), /* deprecated */
+    textStyle: PropTypes.oneOf(['light', 'dark']).isRequired,
     minHeight: PropTypes.number.isRequired,
     autoGrow: PropTypes.bool,
     style: PropTypes.any,
@@ -36,7 +36,7 @@ export default class DjiniTextInput extends Component {
 
   constructor(props) {
      super(props);
-     this.state = {text: '', height: 0};
+     this.state = {height: 0};
   }
 
   focus() {
@@ -49,12 +49,11 @@ export default class DjiniTextInput extends Component {
     }
     return {
       multiline: true,
-      onChange: (event) => {
-         this.setState({
-           text: event.nativeEvent.text,
-           height: event.nativeEvent.contentSize.height,
-         });
-      }
+      onContentSizeChange: (event) => {
+        this.setState({
+          height: event.nativeEvent.contentSize.height
+        });
+      },
     }
   }
 
@@ -62,8 +61,9 @@ export default class DjiniTextInput extends Component {
 
     const containerStyle = [styles.container]
     const inputStyle = [styles.input]
+    const textStyle = this.props.type || this.props.textStyle
 
-    if (this.props.type === 'light') {
+    if (textStyle === 'light') {
       containerStyle.push(styles.lightContainer)
       inputStyle.push(styles.lightInput)
     }
@@ -76,7 +76,7 @@ export default class DjiniTextInput extends Component {
         <TextInput
           ref="input"
           clearButtonMode="while-editing"
-          autoCapitalize="none"
+          autoCapitalize="sentences"
           autoCorrect={false}
           returnKeyType="next"
           underlineColorAndroid="transparent"
@@ -92,5 +92,12 @@ export default class DjiniTextInput extends Component {
 }
 
 DjiniTextInput.defaultProps = {
-  minHeight: 30
+  minHeight: 28,
+  textStyle: 'dark'
+}
+
+export function DjiniDarkTextInput (props) {
+  return (
+    <DjiniTextInput {...props} textStyle="dark"/>
+  )
 }

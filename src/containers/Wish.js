@@ -4,8 +4,8 @@ import Immutable from 'immutable';
 import React, {Component, PropTypes} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import WishView from '../components/wish/WishView'
-import WishEditView from '../components/wish/WishEditView'
+import WishView from '../components/WishView'
+import WishEditView from '../components/WishEditView'
 
 class Wish extends Component {
 
@@ -21,7 +21,7 @@ class Wish extends Component {
       <View style={styles.container}>
         {wishState.editMode ?
           <WishEditView {...this.props} wish={wish} source={source}/> :
-          <WishView {...this.props} wish={wish} source={source}/>
+          <WishView {...this.props} wish={wish} source={source} contact={wishState.contact}/>
         }
       </View>
     )

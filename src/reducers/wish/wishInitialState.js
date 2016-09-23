@@ -1,6 +1,6 @@
 import {Record} from 'immutable';
 
-const Wish = Record({
+export const Wish = Record({
   id: undefined,
   title: '',
   description: '',
@@ -22,7 +22,8 @@ const InitialState = Record({
   editMode: false,
   source: 'wishes', // wishes or friend
   wish: new Wish,
-  wishOfFriend: new Wish
+  wishOfFriend: new Wish,
+  contact: undefined // Local contact associated to friend
 })
 
 export default InitialState;

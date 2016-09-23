@@ -1,10 +1,12 @@
 /* @flow */
 
 import { connect } from 'react-redux'
-import Immutable from 'immutable'
+import {Record} from 'immutable'
 import React, {Component, PropTypes} from 'react'
 import {View, StyleSheet} from 'react-native'
 import dismissKeyboard from 'dismissKeyboard'
+
+import {transliterate} from '../lib/transliteration'
 
 import ContactsPermission from '../components/ContactsPermission'
 import ContactsWizard from '../components/ContactsWizard'
@@ -13,11 +15,12 @@ import {SearchBar} from '../components/AppBar'
 
 import {
   onSearchFieldChange,
-  loadFriendProfile,
   invite,
   toggleFavorite,
   refreshContacts
 } from '../actions/contacts'
+
+import {loadFriendProfile} from '../actions/profile'
 
 class Contacts extends Component {
 
@@ -28,7 +31,7 @@ class Contacts extends Component {
   }
 
   getListData(contacts, filterText) {
-    const r = new RegExp(filterText)
+    const r = new RegExp(transliterate(filterText), 'i')
     const result = {favorites: [], contacts: []}
     contacts.forEach(c => {
       if (!r.test(c.nameTransliterated)) {
@@ -90,7 +93,7 @@ class Contacts extends Component {
 }
 
 Contacts.propTypes = {
-  contactsState: PropTypes.instanceOf(Immutable.Record).isRequired,
+  contactsState: PropTypes.instanceOf(Record).isRequired,
 }
 
 const styles = StyleSheet.create({

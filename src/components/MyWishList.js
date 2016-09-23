@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     color: 'rgb(244, 230, 56)'
   },
   emptyList: {
+    paddingHorizontal: 10,
     textAlign: 'center'
   }
 })

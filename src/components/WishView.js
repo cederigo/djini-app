@@ -1,22 +1,23 @@
+/* @flow */
+
 import { connect } from 'react-redux';
 
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import FulfillWishButton from './FulfillWishButton'
-import DjiniButton from '../DjiniButton'
-import DjiniBackground from '../DjiniBackground'
-import {AppBar, ActionButton} from '../AppBar'
-import {DjiniDarkText as DjiniText} from '../DjiniText'
+import DjiniButton from './DjiniButton'
+import DjiniBackground from './DjiniBackground'
+import {AppBar, ActionButton} from './AppBar'
+import {DjiniDarkText as DjiniText} from './DjiniText'
 
-import {User, Wish} from '../../lib/types'
+import type {User, Wish, Contact} from '../lib/types'
 
 // Utils
-import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser} from '../../lib/wishUtil'
+import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser} from '../lib/wishUtil'
 
 // Actions
-import {editWish, copyWish} from '../../actions/wishes'
+import {editWish, copyWish, toggleFulfilled} from '../actions/wishes'
 
 const WIDTH = Dimensions.get('window').width
 const IMAGE_HEIGHT = 250 
@@ -24,10 +25,20 @@ const IMAGE_HEIGHT = 250
 class WishView extends Component {
 
   props: {
+    dispatch: () => void,
     currentUser: User,
     source: string,
-    wish: Wish
+    wish: Wish,
+    contact: Contact
   }
+
+  state: {
+    imageExpanded: bool,
+    imageHeight: number
+  }
+
+  renderImage: (wish: Wish) => void
+  imageClicked: () => void
 
   constructor(props) {
     super(props)
@@ -117,31 +128,20 @@ class WishView extends Component {
       //its a wish for me so I'm not interested
       return
     }
-    const {dispatch} = this.props
+    const {dispatch, contact} = this.props
     return (
       <View style={styles.buttonGroup}>
         <DjiniButton style={styles.buttonGroupButton} iconName="playlist-add" caption="Will ich auch" onPress={() => dispatch(copyWish(wish, currentUser))}/> 
         {fulfillable(wish, currentUser) ?
-          <FulfillWishButton style={styles.buttonGroupButton} wish={wish}/>
+          <DjiniButton 
+            style={styles.buttonGroupButton}
+            iconName="check" caption={fulfilled(wish) ? "Doch nicht?" : "Erfüllen"}
+            onPress={() => dispatch(toggleFulfilled(wish, contact))}/>
           : undefined
         }
       </View>
     )
   }
-
-  renderPrivateAttributes(wish, currentUser) {
-    if(!toUser(wish, currentUser)) {
-      //NOT for me
-      return
-    }
-    return (
-      <View style={styles.privateAttributes}>
-        {wish.isFavorite ? <Icon style={styles.favoriteIcon} name="star"/> : undefined }
-        {wish.isPrivate ? <Icon style={styles.privateIcon} name="lock"/> : undefined }
-      </View>
-    )
-  }
-
 
   render() {
     const {dispatch, currentUser, wish, source} = this.props
@@ -183,7 +183,10 @@ class WishView extends Component {
               </TouchableOpacity>
             </View>
 
-            {this.renderPrivateAttributes(wish, currentUser)}
+            <View style={styles.privateAttributes}>
+              {wish.isFavorite ? <Icon style={styles.favoriteIcon} name="star"/> : undefined }
+              {wish.isPrivate ? <Icon style={styles.privateIcon} name="lock"/> : undefined }
+            </View>
 
             {this.renderActionButtons(wish, currentUser)}
           </View>

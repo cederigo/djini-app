@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
   emptyList: {
     marginTop: 50,
     textAlign: 'center'
+  },
+  favoriteIcon: {
+    color: 'rgb(244, 230, 56)'
   }
 })
 
@@ -20,15 +23,15 @@ const styles = StyleSheet.create({
 import {fulfilled, fulfilledByUser} from '../lib/wishUtil'
 
 // actions
-import {showWish, copyWish} from '../actions/wishes'
+import {showWish, copyWish, toggleFulfilled} from '../actions/wishes'
 
 class FriendWishesList extends Component {
 
   static propTypes = {
     wishes: PropTypes.array.isRequired,
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    contact: PropTypes.object.isRequired
   }
-  _innerRef: ?PureListView;
 
   constructor(props) {
     super(props)
@@ -65,23 +68,31 @@ class FriendWishesList extends Component {
     return 'Wird erfüllt'
   }
 
-  swipeoutBtns (wish) {
-    const {dispatch, user} = this.props
+  _swipeoutBtns (wish) {
+    const {dispatch, user, contact} = this.props
     return [
       { 
-        component: <SwipeoutButton name="playlist-add"/>,
-        onPress: () => dispatch(copyWish(wish, user)),
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName='playlist-add' />,
+        onPress: () => dispatch(copyWish(wish, user))
       },
+      { 
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName={fulfilled(wish) ? 'clear' : 'check'} />,
+        onPress: () => dispatch(toggleFulfilled(wish, contact)),
+      }
     ]
   }
 
   renderRow (wish) {
-    const {dispatch, user} = this.props
+    const {dispatch, user, contact} = this.props
     return (
       <ListRow
         title={wish.title}
+        swipeoutBtns={this._swipeoutBtns(wish)}
         description={this.getRowDescription(wish, user)}
-        onPress={() => dispatch(showWish(wish, 'friend'))}>
+        onPress={() => dispatch(showWish(wish, 'friend', contact))}>
+       {wish.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="star"/> : undefined}
        {fulfilled(wish) ? <ListRowIcon name="check"/> : undefined}
       </ListRow>
     )

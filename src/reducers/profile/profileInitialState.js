@@ -9,7 +9,7 @@ const InitialState = Record({
   fields: new (Record({
     name: '',
     email: '',
-    birthday: Date(0) 
+    birthday: ''
   }))
 })
 

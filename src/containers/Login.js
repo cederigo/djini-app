@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { Actions } from 'react-native-router-flux'
-import {StyleSheet, Platform, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import {AppBar} from '../components/AppBar'
 import DjiniButton from '../components/DjiniButton'

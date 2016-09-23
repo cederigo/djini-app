@@ -4,16 +4,16 @@ import React, {Component, PropTypes} from 'react';
 import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import {AppBar, ActionButton} from '../AppBar'
-import DjiniButton from '../DjiniButton'
-import {DjiniDarkText as DjiniText} from '../DjiniText'
-import DjiniTextInput from '../DjiniTextInput'
+import {AppBar, ActionButton} from './AppBar'
+import DjiniButton from './DjiniButton'
+import {DjiniDarkText as DjiniText} from './DjiniText'
+import DjiniTextInput from './DjiniTextInput'
 
 // Actions
-import {saveWish, onWishFieldChange, uploadWishImage, deleteWish} from '../../actions/wishes'
+import {saveWish, onWishFieldChange, uploadWishImage, deleteWish} from '../actions/wishes'
 
 // Utils
-import {isIdea} from '../../lib/wishUtil'
+import {isIdea} from '../lib/wishUtil'
 
 const IMAGE_WIDTH = Dimensions.get('window').width
 const IMAGE_HEIGHT = 200
@@ -157,7 +157,6 @@ class WishEditView extends Component {
             <DjiniTextInput
               placeholder="Wo kann dein Wunsch gefunden werden…"
               onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
-              autoCorrect={false}
               value={wish.seenAt}
             />
 

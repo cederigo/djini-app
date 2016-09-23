@@ -6,7 +6,9 @@ import {
   MY_PROFILE_LOADED,
   LOGIN_SUCCESS,
   PROFILE_UPDATE_SUCCESS,
-  LOGOUT
+  LOGOUT,
+  CLEAR_BADGE,
+  SET_BADGE
 } from '../../lib/constants'
 
 import InitialState from './globalInitialState';
@@ -37,6 +39,10 @@ export default function globalReducer(state = initialState, {type, payload}) {
       return state.set('currentUser', null)
     case MY_PROFILE_LOADED:
       return state.set('currentUser', fromParseUser(payload.user))
+    case CLEAR_BADGE:
+      return state.setIn(['badges', payload], false)
+    case SET_BADGE:
+      return state.setIn(['badges', payload], true)
   }
 
   return state;

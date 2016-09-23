@@ -1,6 +1,5 @@
 import {OrderedMap} from 'immutable';
-import {Platform, Linking, InteractionManager} from 'react-native'
-import {Actions} from 'react-native-router-flux'
+import {Platform, Linking} from 'react-native'
 
 import {
   RESTORE_CONTACTS_REQUEST,
@@ -11,10 +10,6 @@ import {
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
 
-  GET_FRIEND_PROFILE_REQUEST,
-  GET_FRIEND_PROFILE_SUCCESS,
-  GET_FRIEND_PROFILE_FAILURE,
-
   ON_SEARCH_FIELD_CHANGE,
   SAVE_CONTACTS,
 
@@ -22,6 +17,7 @@ import {
   INVITE_CONTACT
 } from '../lib/constants'
 
+import {newReminderNote} from './notes'
 import Contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
@@ -121,6 +117,9 @@ export function onSearchFieldChange(text) {
 export function toggleFavorite(contact) {
   return dispatch => {
     dispatch({type: TOGGLE_FAVORITE, payload: contact})
+    if (!contact.isFavorite) {
+      dispatch(newReminderNote({...contact, isFavorite: true}))
+    }
     dispatch(saveContacts())
   }
 }
@@ -138,54 +137,5 @@ export function invite(contact) {
       // ?
       Linking.openURL(`sms:${contact.phoneNumber}?body=${message}`)
     }
-  }
-}
-
-/*
-* Get Friend profile
-*/
-function getFriendProfileRequest(contact) {
-  return {
-    type: GET_FRIEND_PROFILE_REQUEST,
-    payload: contact
-  }
-}
-
-function getFriendProfileSuccess(friendProfile) {
-  return {
-    type: GET_FRIEND_PROFILE_SUCCESS,
-    payload: friendProfile
-  }
-}
-
-function getFriendProfileFailure(error) {
-  return {
-    type: GET_FRIEND_PROFILE_FAILURE,
-    payload: error
-  }
-}
-
-export function loadFriendProfile(contact) {
-  return (dispatch, getState) => {
-
-    const me = getState().global.currentUser
-
-    if (contact.phoneNumber === me.phoneNumber) {
-      //not allowed
-      return;   
-    }
-
-    dispatch(getFriendProfileRequest(contact))
-    Actions.friend()
-    Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
-      .then((profile) => {
-        InteractionManager.runAfterInteractions(() => {
-          const contacts = getState().contacts.contacts
-          dispatch(getFriendProfileSuccess({profile, contacts}))
-        })
-      })
-      .catch(error => {
-        dispatch(getFriendProfileFailure(error))
-      })
   }
 }

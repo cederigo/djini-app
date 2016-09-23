@@ -6,7 +6,6 @@ export const EDIT_PROFILE = 'edit-profile'
 export const CANCEL_EDIT_PROFILE = 'cancel-edit-profile'
 export const ON_PROFILE_FIELD_CHANGE = 'on-profile-field-change'
 
-
 //wish
 export const SHOW_WISH = 'show-wish'
 export const EDIT_WISH = 'edit-wish'
@@ -67,3 +66,14 @@ export const FEEDBACK_REQUEST = 'feedback-request'
 export const FEEDBACK_SUCCESS = 'feedback-success'
 export const FEEDBACK_FAILURE = 'feedback-failure'
 export const ON_FEEDBACK_CHANGE = 'on-feedback-change'
+
+export const SAVE_NOTE = 'save-note'
+export const DELETE_NOTE = 'delete-note'
+export const SHOW_NOTE = 'show-note'
+export const EDIT_NOTE = 'edit-note'
+export const CANCEL_EDIT_NOTE = 'cancel-edit-note'
+export const NOTES_REHYDRATED = 'notes-rehydrated'
+export const NOTES_PERSISTED = 'notes-persisted'
+
+export const CLEAR_BADGE = 'clear-badge'
+export const SET_BADGE = 'set-badge'

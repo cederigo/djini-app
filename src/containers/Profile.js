@@ -25,6 +25,7 @@ class Profile extends Component {
   render() {
     const {dispatch, user, edit, isValid, isFetching, fields} = this.props
     const editable = edit && !isFetching
+          // <DjiniButton style={styles.logoutButton} onPress={() => dispatch(logout())} caption="Abmelden"/>
     return(
       <View style={styles.container}>
         <View style={styles.appBar}>
@@ -44,10 +45,9 @@ class Profile extends Component {
               editable={editable} onChangeText={(text) => { dispatch(onFieldChange('name', text))}}/>
           <ProfileField iconName="mail" value={edit ? fields.email : user.email}
               editable={editable} onChangeText={(text) => { dispatch(onFieldChange('email', text))}}/>
-          <ProfileField iconName="cake" value={edit ? fields.birthday : user.birthday}
+          <ProfileField iconName="cake" isBirthday={true} value={edit ? fields.birthday : user.birthday}
               editable={editable} onDateChange={(date) => {dispatch(onFieldChange('birthday', date))}}/>
           <ProfileField iconName="phone" value={user.phoneNumber}/>
-          <DjiniButton style={styles.logoutButton} onPress={() => dispatch(logout())} caption="Abmelden"/>
         </View>
       </View>
     );

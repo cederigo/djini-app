@@ -1,11 +1,20 @@
+import { connect } from 'react-redux'
 import React, {PropTypes} from 'react'
 import { AppRegistry, View, StyleSheet, Dimensions, Image, StatusBar} from 'react-native'
-import { Scene, Router} from 'react-native-router-flux'
+import { Scene, Router, Switch, Actions} from 'react-native-router-flux'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Provider} from 'react-redux'
 import Parse from 'parse/react-native'
+import moment from 'moment'
+import 'moment/locale/de'
+
+/* Set default locale */
+moment.locale('de')
 
 /* Custom navigation reducer */
 import {createReducer as createRoutesReducer} from './reducers/routes/routesReducer'
+
+import {clearBadge} from './actions/tabs'
 
 import configureStore from './lib/configureStore'
 import * as images from '../img'
@@ -25,16 +34,14 @@ import Welcome from './containers/Welcome'
 import Login from './containers/Login'
 import Wishes from './containers/Wishes'
 import Contacts from './containers/Contacts'
-import Pots from './containers/Pots'
+import Notes from './containers/Notes'
+import Note, {NoteDialog} from './containers/Note'
 import More from './containers/More'
 import Profile from './containers/Profile'
 import Friend from './containers/Friend'
 import Wish from './containers/Wish'
 
 import DjiniBackground from './components/DjiniBackground'
-
-/* Actions */
-import {restoreContacts} from './actions/contacts'
 
 /* Initial States */
 import globalInitialState from './reducers/global/globalInitialState'
@@ -56,21 +63,26 @@ function getInitialState() {
   return _initState
 }
 
-class TabIcon extends React.Component {
+const TabIcon = connect((state) => ({badges: state.global.badges.toJS()}))(class TabIcon extends React.Component {
   static propTypes = {
+    sceneKey: PropTypes.string.isRequired,
     iconName: PropTypes.string.isRequired,
-    selected: PropTypes.bool
+    selected: PropTypes.bool,
+    badges: PropTypes.object.isRequired
   }
   render(){
-    const {selected, iconName} = this.props
+    const {selected, iconName, badges, sceneKey} = this.props
+    const badge = badges[sceneKey]
     const imageName = `${iconName}${selected ? '_active' : ''}`
     return (
       <View style={styles.tab}>
+        {badge ? <Icon style={styles.tabBadge} name="error-outline"/> : undefined }
         <Image style={styles.tabIcon} resizeMode="contain" source={images[imageName]}/>
       </View>
       )
   }
-}
+})
+
 
 const styles = StyleSheet.create({
   scene: {
@@ -99,21 +111,25 @@ const styles = StyleSheet.create({
     width: 50,
     height: 25 
   },
-  tabIconSelected: {
-    color: 'white'
+  tabBadge: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    right: 20, top: 5,
+    color: 'red',
+    fontSize: 20
   },
 })
 
+const getActiveScene = (state) => {
+  let cbase, result = state;
+  while((cbase = result.children)) { result = cbase[result.index]; }
+  return result
+}
+
 const getSceneStyleFn = (os) => { 
   return (props) => {
-    const navigationState = props.scene.navigationState
-    let statusBarStyle = 'light-content' //default
-    if (navigationState.statusBarStyle) {
-      statusBarStyle = props.scene.navigationState.statusBarStyle
-    }
-    if (navigationState.children && navigationState.children[navigationState.index].statusBarStyle) {
-      statusBarStyle = navigationState.children[navigationState.index].statusBarStyle
-    }
+    const activeScene = getActiveScene(props.scene.navigationState)
+    const statusBarStyle = activeScene.statusBarStyle || 'light-content' //default
     if (os === 'ios') {
       StatusBar.setBarStyle(statusBarStyle)
     } else {
@@ -124,16 +140,23 @@ const getSceneStyleFn = (os) => {
   }
 }
 
+
+
 export default function init(os) {
 
+  let initialized = false
   //init parse sdk
   Parse.initialize(PARSE_APP_ID);
   Parse.serverURL = `${PARSE_BASE_URL}`;
+  const store = configureStore(getInitialState())
 
+  const onTabPress = (key) => {
+    store.dispatch(clearBadge(key))
+    Actions[key]()
+  }
+  
   let Djini = React.createClass( {
     render() {
-      const store = configureStore(getInitialState())
-      store.dispatch(restoreContacts())
       return (
         <DjiniBackground>
           <Provider store={store}>
@@ -145,18 +168,33 @@ export default function init(os) {
 
                 <Scene key="login" type="replace" component={Login} sceneStyle={styles.scene}/>
 
-                <Scene key="home" type="replace" tabs={true} tabBarStyle={styles.tabBar}>
-                  <Scene key="wishesTab" icon={TabIcon} iconName="lamp">
-                    <Scene key="wishes" animation="fade" duration={0} initial={true} sceneStyle={styles.tabScene} component={Wishes}/>
+                <Scene 
+                  key="home" type="replace"
+                  tabs={true} tabBarStyle={styles.tabBar}
+                  component={Switch}
+                  selector={(props) => {
+                    let sceneKey = props.children[props.index].sceneKey
+                    if (!initialized && props.initialScene) {
+                      sceneKey = props.initialScene
+                    }
+                    initialized = true
+                    return sceneKey
+                  }}>
+                  <Scene key="wishesTab" icon={TabIcon} iconName="lamp" onPress={() => onTabPress('wishesTab')}>
+                    <Scene key="wishes" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Wishes} initial={true}/>
                     <Scene key="wish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="wishes" statusBarStyle="default"/>
                   </Scene>
-                  <Scene key="contactsTab" icon={TabIcon} iconName="group">
-                    <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} initial={true} component={Contacts}/>
+                  <Scene key="contactsTab" icon={TabIcon} iconName="group" onPress={() => onTabPress('contactsTab')}>
+                    <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Contacts} initial={true}/>
                     <Scene key="friend" animation="fade" statusBarStyle="default" component={Friend}/>
                     <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend" statusBarStyle="default"/>
+                    <Scene key="noteDialog" animation="fade" sceneStyle={styles.tabScene} component={NoteDialog} statusBarStyle="default"/>
                   </Scene>
-                  <Scene key="pots" sceneStyle={styles.tabScene} component={Pots} icon={TabIcon} iconName="todo"/>
-                  <Scene key="profileTab" icon={TabIcon} iconName="person" statusBarStyle="default">
+                  <Scene key="notesTab" icon={TabIcon} iconName="todo" onPress={() => onTabPress('notesTab')}>
+                    <Scene key="notes" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Notes} initial={true}/>
+                    <Scene key="note" animation="fade" sceneStyle={styles.tabScene} component={Note} statusBarStyle="default"/>
+                  </Scene>
+                  <Scene key="profileTab" icon={TabIcon} iconName="person" onPress={() => onTabPress('profileTab')}>
                     <Scene key="profile" animation="fade" duration={0} statusBarStyle="default" sceneStyle={styles.tabScene} component={Profile}/>
                     <Scene key="more" type="replace" statusBarStyle="default" sceneStyle={styles.tabScene} component={More}/>
                   </Scene>

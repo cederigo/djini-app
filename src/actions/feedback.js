@@ -12,7 +12,7 @@ import {
   ON_FEEDBACK_CHANGE
 } from '../lib/constants'
 
-import {User} from '../lib/types'
+import type {User} from '../lib/types'
 
 const ParseFeedback = Parse.Object.extend('Feedback')
 const ParseUser = Parse.Object.extend('User')
@@ -25,12 +25,12 @@ export function feedbackSuccess() {
   return {type: FEEDBACK_SUCCESS}
 }
 
-export function feedbackFailure(e) {
+export function feedbackFailure(e: Error) {
   return {type: FEEDBACK_FAILURE, payload: e}
 }
 
 export function sendFeedback(user: User, description: string) {
-  return (dispatch) => {
+  return (dispatch: () => void) => {
     dispatch(feedbackRequest())
 
     const feedback = new ParseFeedback({
@@ -50,6 +50,6 @@ export function sendFeedback(user: User, description: string) {
   }
 }
 
-export function onFeedbackChange(text) {
+export function onFeedbackChange(text: string) {
   return {type: ON_FEEDBACK_CHANGE, payload: text}
 }

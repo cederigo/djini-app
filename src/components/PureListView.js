@@ -19,9 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE
  *
- * @flow
  */
-'use strict';
 
 var ListView = require('ListView');
 var Dimensions = require('Dimensions');
@@ -128,6 +126,9 @@ PureListView.defaultProps = {
 function cloneWithData(dataSource: ListView.DataSource, data: ?Data) {
   if (!data) {
     return dataSource.cloneWithRows([]);
+  }
+  if (Array.isArray(data) && data.length === 0) {
+    return dataSource.cloneWithRowsAndSections([],[],[])
   }
   if (Array.isArray(data)) {
     return dataSource.cloneWithRows(data);

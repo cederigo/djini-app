@@ -40,6 +40,7 @@ export default class ProfileForm extends Component {
           <DjiniTextInput
             ref="email"
             type="light"
+            autoCapitalize="none"
             style={styles.formGroupInput}
             editable={!authState.isFetching}
             keyboardType="email-address"

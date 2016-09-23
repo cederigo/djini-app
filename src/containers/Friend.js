@@ -1,9 +1,9 @@
-/* @flow */
-
 import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
+import {formatBirthday} from '../lib/dateUtil'
 
 import DjiniBackground from '../components/DjiniBackground'
 import DjiniText from '../components/DjiniText'
@@ -39,14 +39,18 @@ class Friend extends Component {
   }
 
   renderProfileView() {
-    const {friend, contact, dispatch} = this.props
+    const {friend, contact, dispatch, isFetching} = this.props
+    let birthdayText = isFetching ? '' : 'Geb. unbekannt ;-('
+    if (friend.birthday) {
+      birthdayText = formatBirthday(friend.birthday)
+    }
     return (
       <View style={styles.profile}>
         <DjiniText textStyle="dark" style={styles.profileName} numberOfLines={2}>
           {contact.name}
         </DjiniText>
         <DjiniText textStyle="dark" style={styles.profileBirthday}>
-          Wird am 28. Juli 28 Jahre alt
+          {birthdayText}
         </DjiniText>
         <DjiniButton
           style={styles.favoriteButton}
@@ -74,9 +78,9 @@ class Friend extends Component {
       ) 
     }
     if (activeTab === 'wishes') {
-      return <FriendWishesList style={styles.list} wishes={wishes.toArray()} user={user}/>
+      return <FriendWishesList style={styles.list} wishes={wishes.toArray()} user={user} contact={contact}/>
     } else {
-      return <FriendIdeasList style={styles.list} wishes={ideas.toArray()} user={user} friend={friend}/>
+      return <FriendIdeasList style={styles.list} wishes={ideas.toArray()} user={user} friend={friend} contact={contact}/>
     }
   }
 

@@ -92,16 +92,19 @@ export function loginRequest() {
     type: LOGIN_REQUEST
   };
 }
-export function loginSuccess(parseUser) {
+export function loginSuccess(parseUser, navigate = true) {
   return (dispatch) => {
     dispatch({ type: LOGIN_SUCCESS, payload: parseUser })
     if (parseUser.get('email')) {
-      //everything is fine
       dispatch(loadMyProfile())
-      Actions.home()
+      if (navigate) {
+        Actions.home()
+      }
     } else {
       dispatch(profileForm())
-      Actions.login()
+      if (navigate) {
+        Actions.login()
+      }
     }
   } 
 }
