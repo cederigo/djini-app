@@ -17,10 +17,9 @@ import {
   NEW_WISH
 } from '../lib/constants'
 
-import {newTaskNote, updateTaskNote} from './notes'
+import {updateTaskNote, getTaskNote} from './notes'
+import {setBadge} from './tabs'
 import {fromParseWish} from '../reducers/wishes/wishesReducer'
-
-import {isIdea} from '../lib/wishUtil'
 
 const ParseWish = Parse.Object.extend('Wish')
 const ParseUser = Parse.Object.extend('User')
@@ -163,19 +162,31 @@ export function deleteWish(wish: Wish, source: ?string = 'swipe') {
   }
 }
 
-export function fulfillWish(wish, contact) {
+export function fulfillWish(wishRecord, contact) {
   return dispatch => {
-    dispatch(saveWishRequest())
-    Parse.Cloud.run('fulfillWish', {wishId: wish.id})
-    .then(data => {
-      dispatch(wishUpdated(data))
-      dispatch(newTaskNote(contact, fromParseWish(data).toJS()))
-    })
-    .catch(error => {
-      dispatch(saveWishFailure(error))
-      if (error.message.code === 'Wish is already fulfilled.') {
-        Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
-      }
+    const wish = wishRecord.toJS()
+    const onConfirmed = () => {
+      Actions.pop() // Lets be optimistic and close the dialog to get an immediate feedback
+      dispatch(saveWishRequest())
+      Parse.Cloud.run('fulfillWish', {wishId: wish.id})
+      .then(data => {
+        dispatch(wishUpdated(data))
+        dispatch(setBadge('notesTab'))
+      })
+      .catch(error => {
+        dispatch(saveWishFailure(error))
+        if (error.message.code === 'Wish is already fulfilled.') {
+          Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
+        }
+      })
+    }
+    // Show Note edit
+    Actions.noteDialog({
+      dispatch,
+      edit: true,
+      note: getTaskNote(contact, wish),
+      onSave: onConfirmed,
+      saveText: 'Erfüllen'
     })
   }
 }
@@ -193,8 +204,6 @@ export function copyWish(wish: Record<Wish>, user: User) {
   return dispatch => {
     const copy = wish.merge({id: null, isFavorite: false, fromUserId: user.id, toUserId: user.id, fulfillerId: null})
     dispatch(saveWish(copy, 'copy'))
-      .then(() => {
-        Alert.alert((isIdea(wish) ? 'Idee' : 'Wunsch') + ' kopiert', 'Du hast nun einen neuen Eintrag in deiner Wunschliste.')
-      })
+    dispatch(setBadge('wishesTab'))
   }
 }

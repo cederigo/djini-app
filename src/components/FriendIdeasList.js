@@ -10,7 +10,7 @@ import ListRow from './ListRow'
 import ListRowIcon from './ListRowIcon'
 import SwipeoutButton from './ListRowSwipeoutButton'
 
-import {newWish} from '../actions/wishes'
+import {newWish, copyWish} from '../actions/wishes'
 
 import {fulfilled} from '../lib/wishUtil'
 
@@ -70,12 +70,17 @@ class FriendIdeasList extends Component {
   }
   
   _swipeoutBtns (wish) {
-    const {dispatch} = this.props
+    const {dispatch, user} = this.props
     return [
       { 
         backgroundColor: 'transparent',
         component: <SwipeoutButton iconName="delete"/>,
         onPress: () => dispatch(deleteWish(wish)),
+      },
+      { 
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName='playlist-add' />,
+        onPress: () => dispatch(copyWish(wish, user))
       },
       { 
         backgroundColor: 'transparent',

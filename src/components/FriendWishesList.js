@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 import {fulfilled, fulfilledByUser} from '../lib/wishUtil'
 
 // actions
-import {showWish, copyWish} from '../actions/wishes'
+import {showWish, copyWish, saveWish, fulfillWish} from '../actions/wishes'
 
 class FriendWishesList extends Component {
 
@@ -65,13 +65,28 @@ class FriendWishesList extends Component {
     return 'Wird erfüllt'
   }
 
-  swipeoutBtns (wish) {
+  toggleFulfilled(wish) {
+    const {dispatch, contact} = this.props
+    if (fulfilled(wish)) {
+      dispatch(saveWish(wish.set('fulfillerId', null)))
+    } else {
+      dispatch(fulfillWish(wish, contact))
+    }
+  }
+  
+  _swipeoutBtns (wish) {
     const {dispatch, user} = this.props
     return [
       { 
-        component: <SwipeoutButton name="playlist-add"/>,
-        onPress: () => dispatch(copyWish(wish, user)),
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName='playlist-add' />,
+        onPress: () => dispatch(copyWish(wish, user))
       },
+      { 
+        backgroundColor: 'transparent',
+        component: <SwipeoutButton iconName={fulfilled(wish) ? 'clear' : 'check'} />,
+        onPress: () => this.toggleFulfilled(wish),
+      }
     ]
   }
 
@@ -80,6 +95,7 @@ class FriendWishesList extends Component {
     return (
       <ListRow
         title={wish.title}
+        swipeoutBtns={this._swipeoutBtns(wish)}
         description={this.getRowDescription(wish, user)}
         onPress={() => dispatch(showWish(wish, 'friend', contact))}>
        {fulfilled(wish) ? <ListRowIcon name="check"/> : undefined}

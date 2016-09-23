@@ -35,7 +35,7 @@ import Login from './containers/Login'
 import Wishes from './containers/Wishes'
 import Contacts from './containers/Contacts'
 import Notes from './containers/Notes'
-import Note from './containers/Note'
+import Note, {NoteDialog} from './containers/Note'
 import More from './containers/More'
 import Profile from './containers/Profile'
 import Friend from './containers/Friend'
@@ -188,6 +188,7 @@ export default function init(os) {
                     <Scene key="contacts" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Contacts} initial={true}/>
                     <Scene key="friend" animation="fade" statusBarStyle="default" component={Friend}/>
                     <Scene key="friendWish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="friend" statusBarStyle="default"/>
+                    <Scene key="noteDialog" animation="fade" sceneStyle={styles.tabScene} component={NoteDialog} statusBarStyle="default"/>
                   </Scene>
                   <Scene key="notesTab" icon={TabIcon} iconName="todo" onPress={() => onTabPress('notesTab')}>
                     <Scene key="notes" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Notes} initial={true}/>

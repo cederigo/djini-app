@@ -56,26 +56,21 @@ export function deleteNote(note) {
   }
 }
 
-export function newTaskNote(contact, wish) {
-  return (dispatch) => {
-    let note = {...initialState.note}
-    note.id = wish.id
-    note.type = 'task'
-    note.title = wish.title
-    note.dueDate = getDueDate(contact.birthday)
-    note.contact = {...contact}
-    note.wish = {...wish}
-    dispatch(setBadge('notesTab'))
-    dispatch(saveNote(note))
-  }
+export function getTaskNote(contact, wish) {
+  let note = {...initialState.note}
+  note.id = wish.id
+  note.type = 'task'
+  note.title = 'Geburtstag'
+  note.dueDate = getDueDate(contact.birthday)
+  note.contact = {...contact}
+  note.wish = {...wish}
+  return note
 }
 
-export function updateTaskNote(wish) {
+export function newTaskNote(contact, wish) {
   return (dispatch) => {
-    let note = {...initialState.note}
-    note.id = wish.id
-    note.wish = {...wish}
-    dispatch(saveNote(note, false))
+    dispatch(setBadge('notesTab'))
+    dispatch(saveNote(getTaskNote(contact, wish)))
   }
 }
 

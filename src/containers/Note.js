@@ -21,7 +21,9 @@ class Note extends Component {
 
   static propTypes = {
     note: PropTypes.object.isRequired,
-    edit: PropTypes.bool
+    edit: PropTypes.bool,
+    onSave: PropTypes.func.isRequired,
+    saveText: PropTypes.string.isRequired,
   }
 
   constructor(props) {
@@ -69,10 +71,10 @@ class Note extends Component {
   }
 
   save() {
-    const {dispatch, note} = this.props
+    const {dispatch, note, onSave} = this.props
     const {title, dueDate} = this.state
     dispatch(saveNote({...note, title: title.value, dueDate: dueDate.value}))
-    this.setState({edit: false})
+    onSave(this)
   }
 
   onValueChange(field, value) {
@@ -81,13 +83,14 @@ class Note extends Component {
   }
 
   render() {
-    const {type, title, dueDate, contact, wish} = this.props.note
+    const {note} = this.props
+    const {title, dueDate, contact, wish} = note
     const {editable, edit, ...fields} = this.state
     return (
       <View style={styles.container}>
         <AppBar title="Notiz" textStyle="dark" showBackButton={true}>
           {edit ? 
-            <ActionButton textStyle="dark" text="Fertig" onPress={() => this.save()}/>  
+            <ActionButton textStyle="dark" text={this.props.saveText} onPress={() => this.save()}/>  
             : editable ? <ActionButton textStyle="dark" text="Bearbeiten" onPress={() => this.edit()}/>
               : undefined
           }
@@ -144,6 +147,11 @@ class Note extends Component {
   }
 }
 
+Note.defaultProps = {
+  onSave: (component) => component.setState({edit: false}),
+  saveText: 'Fertig'
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -188,9 +196,10 @@ const styles = StyleSheet.create({
 });
 
 function select(state) {
-  return {
-    note: state.note.toJS()
-  }
+  const note = state.note.toJS()
+  return {note}
 }
 
 export default connect(select)(Note)
+
+export {Note as NoteDialog}
