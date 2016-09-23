@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 import {fulfilled, fulfilledByUser} from '../lib/wishUtil'
 
 // actions
-import {showWish, copyWish, saveWish, fulfillWish} from '../actions/wishes'
+import {showWish, copyWish, toggleFulfilled} from '../actions/wishes'
 
 class FriendWishesList extends Component {
 
@@ -68,17 +68,8 @@ class FriendWishesList extends Component {
     return 'Wird erfüllt'
   }
 
-  toggleFulfilled(wish) {
-    const {dispatch, contact} = this.props
-    if (fulfilled(wish)) {
-      dispatch(saveWish(wish.set('fulfillerId', null)))
-    } else {
-      dispatch(fulfillWish(wish, contact))
-    }
-  }
-  
   _swipeoutBtns (wish) {
-    const {dispatch, user} = this.props
+    const {dispatch, user, contact} = this.props
     return [
       { 
         backgroundColor: 'transparent',
@@ -88,7 +79,7 @@ class FriendWishesList extends Component {
       { 
         backgroundColor: 'transparent',
         component: <SwipeoutButton iconName={fulfilled(wish) ? 'clear' : 'check'} />,
-        onPress: () => this.toggleFulfilled(wish),
+        onPress: () => dispatch(toggleFulfilled(wish, contact)),
       }
     ]
   }

@@ -146,7 +146,7 @@ class Note extends Component {
           <View style={[styles.row, styles.field]}>
             <DjiniIcon style={styles.icon} size={20} name={'list'}/>
             {fields.comment.editable && edit ?
-              <DjiniTextInput style={styles.value} maxLength={100} autoGrow={true} value={fields.comment.value} onChangeText={(val) => this.onValueChange('comment', val)}/>
+              <DjiniTextInput style={styles.value} maxLength={100} autoGrow={true} placeholder="Kommentar..." value={fields.comment.value} onChangeText={(val) => this.onValueChange('comment', val)}/>
               : <DjiniText style={styles.value} numberOfLines={3}>{comment}</DjiniText>
             }
           </View>

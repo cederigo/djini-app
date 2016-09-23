@@ -4,8 +4,8 @@ import Immutable from 'immutable';
 import React, {Component, PropTypes} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import WishView from '../components/wish/WishView'
-import WishEditView from '../components/wish/WishEditView'
+import WishView from '../components/WishView'
+import WishEditView from '../components/WishEditView'
 
 class Wish extends Component {
 

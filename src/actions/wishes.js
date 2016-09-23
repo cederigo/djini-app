@@ -4,6 +4,8 @@ import {Actions} from 'react-native-router-flux'
 
 import { Alert } from 'react-native';
 
+import {fulfilled} from '../lib/wishUtil'
+
 import {
   SAVE_WISH_REQUEST, 
   SAVE_WISH_FAILURE, 
@@ -205,5 +207,15 @@ export function copyWish(wish: Record<Wish>, user: User) {
     const copy = wish.merge({id: null, isFavorite: false, fromUserId: user.id, toUserId: user.id, fulfillerId: null})
     dispatch(saveWish(copy, 'copy'))
     dispatch(setBadge('wishesTab'))
+  }
+}
+
+export function toggleFulfilled(wish, contact) {
+  return (dispatch) => {
+    if (fulfilled(wish)) {
+      dispatch(saveWish(wish.set('fulfillerId', null)))
+    } else {
+      dispatch(fulfillWish(wish, contact))
+    }
   }
 }

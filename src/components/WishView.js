@@ -1,25 +1,23 @@
 /* @flow */
 
 import { connect } from 'react-redux';
-import {Record} from 'immutable';
 
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import FulfillWishButton from './FulfillWishButton'
-import DjiniButton from '../DjiniButton'
-import DjiniBackground from '../DjiniBackground'
-import {AppBar, ActionButton} from '../AppBar'
-import {DjiniDarkText as DjiniText} from '../DjiniText'
+import DjiniButton from './DjiniButton'
+import DjiniBackground from './DjiniBackground'
+import {AppBar, ActionButton} from './AppBar'
+import {DjiniDarkText as DjiniText} from './DjiniText'
 
-import type {User, Wish, Contact} from '../../lib/types'
+import type {User, Wish, Contact} from '../lib/types'
 
 // Utils
-import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser} from '../../lib/wishUtil'
+import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser} from '../lib/wishUtil'
 
 // Actions
-import {editWish, copyWish} from '../../actions/wishes'
+import {editWish, copyWish, toggleFulfilled} from '../actions/wishes'
 
 const WIDTH = Dimensions.get('window').width
 const IMAGE_HEIGHT = 250 
@@ -135,7 +133,10 @@ class WishView extends Component {
       <View style={styles.buttonGroup}>
         <DjiniButton style={styles.buttonGroupButton} iconName="playlist-add" caption="Will ich auch" onPress={() => dispatch(copyWish(wish, currentUser))}/> 
         {fulfillable(wish, currentUser) ?
-          <FulfillWishButton style={styles.buttonGroupButton} wish={wish.toJS()} contact={contact}/>
+          <DjiniButton 
+            style={styles.buttonGroupButton}
+            iconName="check" caption={fulfilled(wish) ? "Doch nicht?" : "Erfüllen"}
+            onPress={() => dispatch(toggleFulfilled(wish, contact))}/>
           : undefined
         }
       </View>

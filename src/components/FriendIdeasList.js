@@ -10,7 +10,7 @@ import ListRow from './ListRow'
 import ListRowIcon from './ListRowIcon'
 import SwipeoutButton from './ListRowSwipeoutButton'
 
-import {newWish, copyWish} from '../actions/wishes'
+import {newWish, copyWish, showWish, deleteWish, toggleFulfilled} from '../actions/wishes'
 
 import {fulfilled} from '../lib/wishUtil'
 
@@ -24,9 +24,6 @@ const styles = StyleSheet.create({
     marginVertical: 25
   }
 })
-
-// actions
-import {showWish, deleteWish, fulfillWish, saveWish} from '../actions/wishes'
 
 class FriendIdeasList extends Component {
 
@@ -60,17 +57,8 @@ class FriendIdeasList extends Component {
     );
   }
 
-  toggleFulfilled(wish) {
-    const {dispatch, contact} = this.props
-    if (fulfilled(wish)) {
-      dispatch(saveWish(wish.set('fulfillerId', null)))
-    } else {
-      dispatch(fulfillWish(wish, contact))
-    }
-  }
-  
   _swipeoutBtns (wish) {
-    const {dispatch, user} = this.props
+    const {dispatch, user, contact} = this.props
     return [
       { 
         backgroundColor: 'transparent',
@@ -85,7 +73,7 @@ class FriendIdeasList extends Component {
       { 
         backgroundColor: 'transparent',
         component: <SwipeoutButton iconName={fulfilled(wish) ? 'clear' : 'check'} />,
-        onPress: () => this.toggleFulfilled(wish),
+        onPress: () => dispatch(toggleFulfilled(wish, contact)),
       }
     ]
   }
