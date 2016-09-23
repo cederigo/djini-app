@@ -36,7 +36,7 @@ export default class DjiniTextInput extends Component {
 
   constructor(props) {
      super(props);
-     this.state = {text: '', height: 0};
+     this.state = {height: 0};
   }
 
   focus() {
@@ -49,12 +49,11 @@ export default class DjiniTextInput extends Component {
     }
     return {
       multiline: true,
-      onChange: (event) => {
-         this.setState({
-           text: event.nativeEvent.text,
-           height: event.nativeEvent.contentSize.height,
-         });
-      }
+      onContentSizeChange: (event) => {
+        this.setState({
+          height: event.nativeEvent.contentSize.height
+        });
+      },
     }
   }
 

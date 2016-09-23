@@ -40,7 +40,8 @@ class Note extends Component {
   getFields(note) {
     return {
       title: {value: note.title, editable: note.type === 'task'},
-      dueDate: {value: note.dueDate, editable: note.type === 'task' || !note.contact.registered}
+      dueDate: {value: note.dueDate, editable: note.type === 'task' || !note.contact.registered},
+      comment: {value: note.comment, editable: note.type === 'task'}
     }
   }
   getFormattedDate(note) {
@@ -72,8 +73,8 @@ class Note extends Component {
 
   save() {
     const {dispatch, note, onSave} = this.props
-    const {title, dueDate} = this.state
-    dispatch(saveNote({...note, title: title.value, dueDate: dueDate.value}))
+    const {title, dueDate, comment} = this.state
+    dispatch(saveNote({...note, title: title.value, dueDate: dueDate.value, comment: comment.value}))
     onSave(this)
   }
 
@@ -84,7 +85,7 @@ class Note extends Component {
 
   render() {
     const {note} = this.props
-    const {title, dueDate, contact, wish} = note
+    const {title, comment, dueDate, contact, wish} = note
     const {editable, edit, ...fields} = this.state
     return (
       <View style={styles.container}>
@@ -138,6 +139,17 @@ class Note extends Component {
             </TouchableOpacity>
           </View>
 
+          : undefined
+        }
+
+        {wish ?
+          <View style={[styles.row, styles.field]}>
+            <DjiniIcon style={styles.icon} size={20} name={'list'}/>
+            {fields.comment.editable && edit ?
+              <DjiniTextInput style={styles.value} maxLength={100} autoGrow={true} value={fields.comment.value} onChangeText={(val) => this.onValueChange('comment', val)}/>
+              : <DjiniText style={styles.value} numberOfLines={3}>{comment}</DjiniText>
+            }
+          </View>
           : undefined
         }
 

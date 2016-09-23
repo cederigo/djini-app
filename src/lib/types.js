@@ -37,10 +37,10 @@ export type Wish = {
 export type Note = {
   id: ?string,
   title: string,
-  description: string,
+  comment: string,
   dueDate: string, // YYYY-MM-DD
   type: 'reminder' | 'task', 
   done: boolean, // For type task
-  contact: ?Contact, // A note is always associated with one of our contacts
+  contact: Contact, // A note is always associated with one of our contacts
   wish: ?Wish, // For type task
 }

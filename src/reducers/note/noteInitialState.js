@@ -6,7 +6,7 @@ import type {Note} from '../../lib/types'
 export const note:Note = {
   id: undefined,
   title: '',
-  description: '',
+  comment: '',
   type: 'reminder',
   done: false,
   dueDate: '',
