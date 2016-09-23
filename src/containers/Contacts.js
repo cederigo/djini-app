@@ -15,11 +15,12 @@ import {SearchBar} from '../components/AppBar'
 
 import {
   onSearchFieldChange,
-  loadFriendProfile,
   invite,
   toggleFavorite,
   refreshContacts
 } from '../actions/contacts'
+
+import {loadFriendProfile} from '../actions/profile'
 
 class Contacts extends Component {
 

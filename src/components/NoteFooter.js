@@ -6,7 +6,7 @@ import DjiniText from './DjiniText'
 import DjiniIcon from './DjiniIcon'
 import DjiniButton from './DjiniButton'
 
-import {loadFriendProfile} from '../actions/contacts'
+import {loadFriendProfile} from '../actions/profile'
 import {saveNote} from '../actions/notes'
 
 const styles = StyleSheet.create({

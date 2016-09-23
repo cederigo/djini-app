@@ -1,7 +1,10 @@
+import {InteractionManager} from 'react-native'
 import Parse from 'parse/react-native'
 import {Actions} from 'react-native-router-flux'
 
 import {User} from '../lib/types'
+import {findWishInProfile} from '../reducers/profile/profileReducer'
+import {showWish} from './wishes'
 
 import {
   MY_PROFILE_REQUEST,
@@ -13,6 +16,10 @@ import {
   PROFILE_UPDATE_REQUEST,
   PROFILE_UPDATE_SUCCESS,
   PROFILE_UPDATE_FAILURE,
+
+  GET_FRIEND_PROFILE_REQUEST,
+  GET_FRIEND_PROFILE_SUCCESS,
+  GET_FRIEND_PROFILE_FAILURE,
 
   ON_PROFILE_FIELD_CHANGE
 } from '../lib/constants'
@@ -26,6 +33,60 @@ export function loadMyProfile() {
       })
       .catch((error) => {
         dispatch({type: MY_PROFILE_FAILURE, payload: error})
+      })
+  }
+}
+
+/*
+* Get Friend profile
+*/
+function getFriendProfileRequest(contact) {
+  return {
+    type: GET_FRIEND_PROFILE_REQUEST,
+    payload: contact
+  }
+}
+
+function getFriendProfileSuccess(friendProfile) {
+  return {
+    type: GET_FRIEND_PROFILE_SUCCESS,
+    payload: friendProfile
+  }
+}
+
+function getFriendProfileFailure(error) {
+  return {
+    type: GET_FRIEND_PROFILE_FAILURE,
+    payload: error
+  }
+}
+
+export function loadFriendProfile(contact, wishId) {
+  return (dispatch, getState) => {
+
+    const me = getState().global.currentUser
+
+    if (contact.phoneNumber === me.phoneNumber) {
+      return Promise.reject(new Error('Not allowed to load own profile'));   
+    }
+
+    dispatch(getFriendProfileRequest(contact))
+    Actions.friend()
+    return Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
+      .then((profile) => {
+        InteractionManager.runAfterInteractions(() => {
+          const contacts = getState().contacts.contacts
+          dispatch(getFriendProfileSuccess({profile, contacts}))
+          if (wishId) {
+            const wish = findWishInProfile(getState().friend, wishId)
+            if (wish) {
+              dispatch(showWish(wish, 'friend', contact))
+            }
+          }
+        })
+      })
+      .catch(error => {
+        dispatch(getFriendProfileFailure(error))
       })
   }
 }

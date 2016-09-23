@@ -5,7 +5,7 @@ import moment from 'moment'
 import {Actions} from 'react-native-router-flux'
 
 import {formatBirthday} from '../lib/dateUtil'
-import {loadFriendProfile} from '../actions/contacts'
+import {loadFriendProfile} from '../actions/profile'
 import {showWish} from '../actions/wishes'
 import {saveNote} from '../actions/notes'
 import {Wish} from '../reducers/wish/wishInitialState'
@@ -59,10 +59,7 @@ class Note extends Component {
     // TODO Find a better way to link ;-(
     Actions.contacts({type: 'reset', duration: 0})
     InteractionManager.runAfterInteractions(() => {
-      dispatch(loadFriendProfile(note.contact))
-        .then(() => {
-          dispatch(showWish(new Wish(note.wish), 'friend', note.contact))
-        })
+      dispatch(loadFriendProfile(note.contact, note.wish.id))
     })
   }
 
