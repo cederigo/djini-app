@@ -133,8 +133,12 @@ const getSceneStyleFn = (os) => {
     if (os === 'ios') {
       StatusBar.setBarStyle(statusBarStyle)
     } else {
-      // android: TODO more styling
       StatusBar.setTranslucent(true)
+      if (statusBarStyle === 'light-content') {
+        StatusBar.setBackgroundColor('transparent')
+      } else {
+        StatusBar.setBackgroundColor('rgba(0,0,0,0.5)')
+      }
     }
     return styles.scene
   }

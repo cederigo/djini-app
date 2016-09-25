@@ -36,9 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
-            new ReactNativeContacts(),
-            new LinearGradientPackage(),
+          new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
+          new LinearGradientPackage(),
           new ImagePickerPackage(),
           new VectorIconsPackage(),
           new ReactNativeContacts()

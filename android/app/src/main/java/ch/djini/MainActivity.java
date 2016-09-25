@@ -1,4 +1,4 @@
-package com.djini;
+package ch.djini;
 
 import com.facebook.react.ReactActivity;
 import com.oblador.vectoricons.VectorIconsPackage;

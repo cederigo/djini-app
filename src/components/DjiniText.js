@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
-import {Text, StyleSheet} from 'react-native';
+import {Text, StyleSheet, Platform} from 'react-native';
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'Asap',
+    fontFamily: Platform.select({ios: 'Asap', android: 'asap'}),
     color: 'white',
     fontSize: 17,
   },

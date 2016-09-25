@@ -1,6 +1,6 @@
 {
   "name": "Djini",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -18,7 +18,7 @@
     "react": "15.3.1",
     "react-native": "0.32.1",
     "react-native-code-push": "^1.14.6-beta",
-    "react-native-contacts": "^0.4.1",
+    "react-native-contacts": "^0.5.0",
     "react-native-image-picker": "^0.22.2",
     "react-native-linear-gradient": "^1.5.12",
     "react-native-router-flux": "^3.35.0",

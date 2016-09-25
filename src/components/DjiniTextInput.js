@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
   input: {
-    fontFamily: 'Asap',
+    fontFamily: Platform.select({ios: 'Asap', android: 'asap'}),
     fontSize: 17,
     flex: 1,
     color: 'rgb(61,63,148)',
