@@ -168,19 +168,9 @@ export function fulfillWish(wishRecord, contact) {
   return dispatch => {
     const wish = wishRecord.toJS()
     const onConfirmed = () => {
-      Actions.pop() // Lets be optimistic and close the dialog to get an immediate feedback
-      dispatch(saveWishRequest())
-      Parse.Cloud.run('fulfillWish', {wishId: wish.id})
-      .then(data => {
-        dispatch(wishUpdated(data))
-        dispatch(setBadge('notesTab'))
-      })
-      .catch(error => {
-        dispatch(saveWishFailure(error))
-        if (error.message.code === 'Wish is already fulfilled.') {
-          Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
-        }
-      })
+      Actions.pop() // lets be optimistic ;-)
+      dispatch(setBadge('notesTab')) //lets be optimistic ;-)
+      dispatch(runCloudFn('fulfillWish', wish.id))
     }
     // Show Note edit
     Actions.noteDialog({
@@ -190,6 +180,12 @@ export function fulfillWish(wishRecord, contact) {
       onSave: onConfirmed,
       saveText: 'Erfüllen'
     })
+  }
+}
+
+export function unfulfillWish(wish) {
+  return dispatch => {
+    dispatch(runCloudFn('unfulfillWish', wish.id))
   }
 }
 
@@ -213,9 +209,27 @@ export function copyWish(wish: Record<Wish>, user: User) {
 export function toggleFulfilled(wish, contact) {
   return (dispatch) => {
     if (fulfilled(wish)) {
-      dispatch(saveWish(wish.set('fulfillerId', null)))
+      dispatch(unfulfillWish(wish, contact))
     } else {
       dispatch(fulfillWish(wish, contact))
     }
+  }
+}
+
+/**
+ * Helper
+ */
+function runCloudFn(fnName, wishId) {
+  return dispatch => {
+    Parse.Cloud.run(fnName, {wishId: wishId})
+      .then(data => {
+        dispatch(wishUpdated(data))
+      })
+      .catch(error => {
+        dispatch(saveWishFailure(error))
+        if (error.message.code === 'Wish is already fulfilled.') {
+          Alert.alert('Jemand war schneller', 'Dieser Wunsch ist schon erfüllt.')
+        }
+      })
   }
 }

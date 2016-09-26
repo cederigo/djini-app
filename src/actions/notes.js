@@ -1,3 +1,4 @@
+import {Alert} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import initialState from '../reducers/note/noteInitialState'
 import moment from 'moment'
@@ -6,7 +7,9 @@ import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED, D
 import db from '../lib/db'
 import {updateLocalNotifications} from '../lib/pushNotification'
 import {parseDate, formatDate} from '../lib/dateUtil'
+import {isIdea} from '../lib/wishUtil'
 import {setBadge} from '../actions/tabs'
+import {unfulfillWish} from '../actions/wishes'
 
 function getDueDate(birthday) {
   if (!birthday) {
@@ -49,6 +52,16 @@ export function deleteNote(note) {
   return (dispatch) => {
     dispatch({type: DELETE_NOTE, payload: note})
     dispatch(persistNotes())
+    if (note.type === 'task' && !isIdea(note.wish)) {
+      Alert.alert(
+        'Djini sagt:',
+        `${note.contact.name}s Wunsch wird immer noch von dir erfüllt.`,
+        [
+          {style: 'cancel', text: 'Ok'},
+          {text: 'Freigeben', onPress: () => dispatch(unfulfillWish(note.wish))}
+        ]
+      )
+    }
   }
 }
 
