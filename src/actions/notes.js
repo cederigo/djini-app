@@ -2,9 +2,10 @@ import {Actions} from 'react-native-router-flux'
 import initialState from '../reducers/note/noteInitialState'
 import moment from 'moment'
 
-import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED } from '../lib/constants'
+import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED, DEFER_PAST_NOTE } from '../lib/constants'
 import db from '../lib/db'
 import {updateLocalNotifications} from '../lib/pushNotification'
+import {parseDate, formatDate} from '../lib/dateUtil'
 import {setBadge} from '../actions/tabs'
 
 function getDueDate(birthday) {
@@ -12,11 +13,11 @@ function getDueDate(birthday) {
     return undefined
   }
   const now = moment()
-  const dueDate = moment(birthday, 'YYYY-MM-DD').year(now.year())
+  const dueDate = parseDate(birthday).year(now.year())
   if (dueDate.isBefore(now)) {
     dueDate.add(1, 'year')
   }
-  return dueDate.format('YYYY-MM-DD')
+  return formatDate(dueDate)
 }
 
 export function persistNotes() {
@@ -83,12 +84,35 @@ export function newReminderNote(contact) {
   }
 }
 
-export function saveNote(note, upsert = true) {
+export function saveNote(note, upsert = true, persist = true) {
   return dispatch => {
     if (!note.id) {
       throw new Error('Note has no `id` ', note)
     } 
     dispatch({type: SAVE_NOTE, payload: {note, upsert}})
-    dispatch(persistNotes())
+    if (persist) {
+      dispatch(persistNotes())
+    }
+  }
+}
+
+export function deferPastNote(note) {
+  return (dispatch) => {
+    dispatch({type: DEFER_PAST_NOTE, payload: note})
+    const now = moment()
+    const due = parseDate(note.dueDate)
+    if (now.diff(due, 'days') > 0) {
+      dispatch(saveNote({dueDate: formatDate(due.add(1, 'year'))}, false, false))
+    }
+  }
+}
+
+export function deferPastNotes(notes) {
+  return dispatch => {
+    const reminders = notes.filter((n) => n.type === 'reminder')
+    reminders.forEach((n) => dispatch(deferPastNote(n)))
+    if (reminders.length > 0) {
+      dispatch(persistNotes())
+    }
   }
 }
