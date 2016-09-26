@@ -1,6 +1,6 @@
 /* global setInterval, clearInterval */
 import React, {Component} from 'react';
-import {StyleSheet, Image, StatusBar, Dimensions} from 'react-native';
+import {StyleSheet, Image, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 const colors = [[101,103,255],[84,172,255],[145,116,247],[144,74,206]]
@@ -15,8 +15,6 @@ const styles = StyleSheet.create({
   },
   image: {
     position: 'absolute',
-    bottom: -50,
-    left: -110,
     width: width,
     height: width/1.629
   }
@@ -84,12 +82,12 @@ export default class DjiniBackground extends Component {
   }
 
   render() {
+    const {offsetLeft, offsetBottom} = this.props
     return (
       <LinearGradient style={[this.props.style, styles.container]}
         start={[0, 0]} end={[1, 1]}
         colors={[this.state.colorTop, this.state.colorBottom]}>
-        <StatusBar translucent={true} barStyle="light-content"/>
-        <Image style={styles.image} resizeMode='stretch' source={require('../../img/clouds.png')}/>
+        <Image style={[styles.image, {left: offsetLeft, bottom: offsetBottom}]} resizeMode='stretch' source={require('../../img/clouds.png')}/>
         {this.props.children}
       </LinearGradient>
     )
@@ -97,5 +95,7 @@ export default class DjiniBackground extends Component {
 }
 
 DjiniBackground.defaultProps = {
-  animated: true
+  animated: true,
+  offsetLeft: -110,
+  offsetBottom: -50
 }

@@ -73,7 +73,7 @@ class WishView extends Component {
       <TouchableOpacity style={wish.imageURL ? {} : styles.cloudsContainer} onPress={this.imageClicked}>
         {wish.imageURL ? 
           <Image source={{uri: wish.imageURL}} style={imageStyle}/>
-          : <DjiniBackground/>
+          : <DjiniBackground offsetBottom={-100}/>
         }
       </TouchableOpacity>
     )
