@@ -17,6 +17,7 @@ import {createReducer as createRoutesReducer} from './reducers/routes/routesRedu
 import {clearBadge} from './actions/tabs'
 
 import configureStore from './lib/configureStore'
+import {configurePushNotification} from './lib/pushNotification'
 import * as images from '../img'
 
 const WIDTH = Dimensions.get('window').width
@@ -149,9 +150,12 @@ const getSceneStyleFn = (os) => {
 export default function init(os) {
 
   let initialized = false
-  //init parse sdk
+  // Init parse sdk
   Parse.initialize(PARSE_APP_ID);
   Parse.serverURL = `${PARSE_BASE_URL}`;
+  // Configure push notifications
+  configurePushNotification()
+
   const store = configureStore(getInitialState())
 
   const onTabPress = (key) => {

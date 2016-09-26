@@ -43,9 +43,9 @@ export default class DateInput extends Component {
     let {day, month, year} = this.state
     let result
     if (autoYear) {
-      result = moment(`${month}-${day}`, 'MM-DD', true)
+      result = moment(`${month}-${day}`, 'MM-DD')
     } else {
-      result = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD', true)
+      result = moment(`${year}-${month}-${day}`, 'YYYY-MM-DD')
     }
 
     if (!result.isValid()){

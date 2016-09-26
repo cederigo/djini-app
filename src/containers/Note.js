@@ -39,7 +39,7 @@ class Note extends Component {
   getFields(note) {
     return {
       title: {value: note.title, editable: note.type === 'task'},
-      dueDate: {value: note.dueDate, editable: note.type === 'task' || !note.contact.registered},
+      dueDate: {value: note.dueDate, editable: note.type === 'task' || !note.contact.birthday},
       comment: {value: note.comment, editable: note.type === 'task'}
     }
   }

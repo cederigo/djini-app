@@ -10,8 +10,9 @@ import {PushNotificationIOS, Platform} from 'react-native'
 import PushNotification from 'react-native-push-notification'
 
 import {listString, quantityString} from './stringUtil'
+import {parseDate} from './dateUtil'
 
-export function configure() {
+export function configurePushNotification() {
   PushNotification.configure({
     // (required) Called when a remote or local notification is opened or received
     onNotification: function() { 
@@ -65,11 +66,15 @@ export function updateLocalNotifications(notes) {
 export function scheduleLocalNotifications(notifications) {
   notifications.forEach((n) => {
     console.log('schedule notification', n)
-    PushNotification.localNotificationSchedule({
-      date: n.fireDate,
-      message: n.alertBody,
-      smallIcon: "ic_notification"
-    })
+    if (Platform.OS === 'android') {
+      PushNotification.localNotificationSchedule({ 
+        date: new Date(n.fireDate),
+        message: n.alertBody,
+        smallIcon: "ic_notification"
+      })
+    } else {
+      PushNotificationIOS.scheduleLocalNotification(n)
+    }
   })
 } 
 
@@ -95,7 +100,7 @@ export function getLocalNotifications(notes) {
       const names = entries.map((e) => e.contact.name)
       // 1 Week before @ 9.00h
       result.push({
-        fireDate: moment(dueDate).subtract(7, 'days').hours(9).minute(0).toDate(),
+        fireDate: parseDate(dueDate).subtract(7, 'days').hours(9).minute(0).valueOf(),
         alertBody: 
           type === 'reminder' ?
             `${listString(names)} ${quantityString(names.length, 'hat', 'haben')} am ${moment(dueDate).format('Do MMMM')} Geburtstag`
@@ -103,7 +108,7 @@ export function getLocalNotifications(notes) {
       })
       // The same day @ 9.00h
       result.push({
-        fireDate: moment(dueDate).hours(9).minute(0).toDate(),
+        fireDate: parseDate(dueDate).hours(9).minute(0).valueOf(),
         alertBody: 
           type === 'reminder' ?
             `${listString(names)} ${quantityString(names.length, 'hat', 'haben')} heute Geburtstag`

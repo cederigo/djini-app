@@ -5,7 +5,7 @@ export function formatDate(m) {
 }
 
 export function parseDate(dateString) {
-  return moment(dateString, 'YYYY-MM-DD')
+  return moment(dateString, 'YYYY-MM-DD', true)
 }
 
 export function formatBirthday(birthday) {

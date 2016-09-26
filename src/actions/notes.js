@@ -109,22 +109,22 @@ export function saveNote(note, upsert = true, persist = true) {
   }
 }
 
-export function deferPastNote(note) {
-  return (dispatch) => {
-    dispatch({type: DEFER_PAST_NOTE, payload: note})
-    const now = moment()
-    const due = parseDate(note.dueDate)
-    if (now.diff(due, 'days') > 0) {
-      dispatch(saveNote({dueDate: formatDate(due.add(1, 'year'))}, false, false))
-    }
-  }
-}
-
 export function deferPastNotes(notes) {
-  return dispatch => {
+  let persist = false
+  const now = moment()
+  const isPast = (due) => {
+    return now.diff(due, 'days') > 0
+  }
+  return (dispatch) => {
     const reminders = notes.filter((n) => n.type === 'reminder')
-    reminders.forEach((n) => dispatch(deferPastNote(n)))
-    if (reminders.length > 0) {
+    reminders.forEach((n) => {
+      const due = parseDate(n.dueDate)
+      if (isPast(due)) {
+        dispatch(saveNote({dueDate: formatDate(due.add(1, 'year'))}, false, false))
+        persist = true
+      }
+    })
+    if (persist) {
       dispatch(persistNotes())
     }
   }
