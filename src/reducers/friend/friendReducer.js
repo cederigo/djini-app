@@ -29,6 +29,7 @@ export default function friendReducer(state = initialState, {type, payload}) {
   switch (type) {
     case GET_FRIEND_PROFILE_REQUEST:
       return state.set('isFetching', true)
+        .set('error', null)
         .set('user', initialState.user)
         .set('contact', payload)
 

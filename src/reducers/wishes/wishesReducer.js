@@ -64,6 +64,7 @@ export default function wishesReducer(state = initialState, {type, payload}) {
   switch (type) {
     case MY_PROFILE_REQUEST:
       return state.set('isFetching', true)
+        .set('error', null)
 
     case MY_PROFILE_FAILURE:
       return state.set('isFetching', false)

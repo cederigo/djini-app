@@ -8,6 +8,7 @@ import {formatBirthday} from '../lib/dateUtil'
 import DjiniBackground from '../components/DjiniBackground'
 import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
+import DjiniError from '../components/DjiniError'
 
 import Tabs from '../components/Tabs'
 import FriendWishesList from '../components/FriendWishesList'
@@ -16,6 +17,7 @@ import {AppBar} from '../components/AppBar'
 
 import {toggleFavorite, invite} from '../actions/contacts'
 import {newWish} from '../actions/wishes'
+import {loadFriendProfile} from '../actions/profile'
 
 class Friend extends Component {
 
@@ -25,7 +27,8 @@ class Friend extends Component {
     friend: PropTypes.object,
     contact: PropTypes.object,
     wishes: PropTypes.object,
-    ideas: PropTypes.object
+    ideas: PropTypes.object,
+    error: PropTypes.object
   }
 
   constructor(props) {
@@ -39,8 +42,8 @@ class Friend extends Component {
   }
 
   renderProfileView() {
-    const {friend, contact, dispatch, isFetching} = this.props
-    let birthdayText = isFetching ? '' : 'Geb. unbekannt ;-('
+    const {friend, contact, dispatch, isFetching, error} = this.props
+    let birthdayText = isFetching || error ? '' : 'Geb. unbekannt ;-('
     if (friend.birthday) {
       birthdayText = formatBirthday(friend.birthday)
     }
@@ -104,7 +107,7 @@ class Friend extends Component {
   }
 
   render() {
-    const {isFetching} = this.props
+    const {dispatch, isFetching, error, contact} = this.props
     return (
       <DjiniBackground>
         <View style={styles.appBar}>
@@ -113,6 +116,10 @@ class Friend extends Component {
         {this.renderProfileView()}
         {isFetching ? 
           <DjiniText style={styles.loadingText}>Laden..</DjiniText>
+          : error ? 
+            <DjiniError style={styles.error} errorText="Oops. Wünsche konnten nicht geladen werden"
+              onReloadPress={() => dispatch(loadFriendProfile(contact))} 
+              reloadButtonText="Nochmals versuchen"/>
           : this.renderTabs()
         }
       </DjiniBackground>
@@ -194,7 +201,8 @@ function select(state) {
     contact: friendState.contact,
     isFetching: friendState.isFetching,
     wishes: friendState.wishes,
-    ideas: friendState.ideas
+    ideas: friendState.ideas,
+    error: friendState.error
   }
 }
 

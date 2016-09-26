@@ -5,9 +5,11 @@ import { StyleSheet, View, ScrollView, Alert, Image, TouchableOpacity} from 'rea
 import {djini_logo, lamp_ani} from '../../img'
 
 import {newWish} from '../actions/wishes'
+import {loadMyProfile} from '../actions/profile'
 
 import MyWishList from '../components/MyWishList'
 import DjiniText from '../components/DjiniText'
+import DjiniError from '../components/DjiniError'
 
 class Wishes extends Component {
 
@@ -20,12 +22,7 @@ class Wishes extends Component {
   }
   
   render() {
-
     const {wishes, isFetching, error, user, showSwipeoutHint, dispatch} = this.props
-
-    if (error) {
-      Alert.alert('Oops', 'Wünsche konnten nicht geladen werden')
-    }
     return (
       <View style={styles.container}>
         <ScrollView
@@ -38,7 +35,10 @@ class Wishes extends Component {
           </TouchableOpacity>
           {isFetching ? 
             <DjiniText style={styles.loading}>Laden..</DjiniText> :
-            <MyWishList wishes={wishes.toArray()} showSwipeoutHint={showSwipeoutHint} scrollEnabled={false} />
+            error ? <DjiniError style={styles.error} errorText="Oops. Wünsche konnten nicht geladen werden"
+                onReloadPress={() => dispatch(loadMyProfile())} 
+                reloadButtonText="Nochmals versuchen"/>
+              : <MyWishList wishes={wishes.toArray()} showSwipeoutHint={showSwipeoutHint} scrollEnabled={false} />
           }
         </ScrollView>
       </View>
@@ -70,6 +70,9 @@ const styles = StyleSheet.create({
   loading: {
     flex: 1,
     textAlign: 'center'
+  },
+  error: {
+    padding: 25
   }
 })
 
