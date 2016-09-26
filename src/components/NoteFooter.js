@@ -8,20 +8,18 @@ import DjiniButton from './DjiniButton'
 
 import {loadFriendProfile} from '../actions/profile'
 import {saveNote} from '../actions/notes'
+import {isIdea} from '../lib/wishUtil'
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flex: 1,
-    justifyContent: 'flex-end',
-    height: 50
+    marginTop: 20
   },
   text: {
     fontWeight: 'normal'
   },
   djiniText: {
     fontWeight: 'bold',
-    height: 70
   },
   taskState: {
     height: 60,
@@ -46,8 +44,11 @@ const styles = StyleSheet.create({
 })
 
 export default function NoteFooter (props) {
-  const {note} = props
-  if (note.type === 'reminder') {
+  const {note, isNew} = props
+  if (isNew) {
+    return <NewNoteFooter {...props}/>
+  }
+  else if (note.type === 'reminder') {
     return <ReminderNoteFooter {...props}/>
   } else {
     return <TaskNoteFooter {...props}/>
@@ -75,14 +76,33 @@ const ReminderNoteFooter = (props) => {
   )
 }
 
+const NewNoteFooter = (props) => {
+  const {note, saveNote} = props
+  const {wish} = note
+  const title = isIdea(wish) ? 'Idee' : 'Wunsh'
+
+  return (
+    <View style={styles.container}>
+      <DjiniText textStyle="dark" style={styles.djiniText}>
+        Djini fragt: 
+        <DjiniText textStyle="dark" style={styles.text}>{` Willst du ${note.contact.name}s ${title} wirklich erfüllen?`}</DjiniText>
+      </DjiniText>
+      <DjiniButton
+        type="primary" caption={`${title} erfüllen!`}
+        style={styles.button}
+        onPress={saveNote}/>
+    </View>
+  )
+}
+
 const TaskNoteFooter = (props) => {
   const {note, dispatch} = props
   return (
     <View style={styles.container}>
       <View style={styles.taskState}>
         <View style={styles.hr}/>
-        <DjiniIcon style={styles.task} name={note.done ? 'gift' : 'giftdark'} size={40}/>
-        <DjiniIcon style={styles.taskDone} name={note.done ? 'giftdark_done' : 'gift_done'} size={45}/>
+        <DjiniIcon style={styles.task} name={note.done ? 'gift' : 'giftlightblue'} size={40}/>
+        <DjiniIcon style={styles.taskDone} name={note.done ? 'giftlightblue_done' : 'gift_done'} size={45}/>
       </View>
       <DjiniText textStyle="dark" style={styles.djiniText}>
         Djini sagt:

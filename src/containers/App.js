@@ -7,10 +7,11 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
 import Parse from 'parse/react-native'
 import React, {Component} from 'react'
-import { View, StyleSheet, PushNotificationIOS} from 'react-native';
+import { View, StyleSheet} from 'react-native';
 import codePush from "react-native-code-push";
 
 import {version} from '../lib/config'
+import {getInitialNotification} from '../lib/pushNotification'
 
 import DjiniLogo from '../components/DjiniLogo'
 
@@ -23,10 +24,6 @@ import {rehydrateNotes} from '../actions/notes'
 class App extends Component {
 
   componentDidMount() {
-    // HACK: see https://github.com/facebook/react-native/issues/9105
-    // You absolutely need this for requestPermissions() promise to resolve.
-    PushNotificationIOS.addEventListener('register', () => {});
-    
     const {dispatch} = this.props
     updateInstallation({version})
     dispatch(restoreContacts())
@@ -39,7 +36,7 @@ class App extends Component {
         dispatch(refreshContacts())
         dispatch(loginSuccess(parseUser, false))
         // If app was opened through notification, navigate to notes tab
-        PushNotificationIOS.getInitialNotification()
+        getInitialNotification()
           .then((notification) => {
             Actions.home({initialScene: notification ? 'notesTab' : undefined})
           })

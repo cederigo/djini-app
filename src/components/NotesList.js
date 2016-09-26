@@ -87,7 +87,7 @@ class NotesList extends Component {
       icon = <ListRowIcon name="cake"/>
     }
     else if (note.type === 'task') {
-      icon = <ListRowIcon name={note.done ? "gift_done" : "gift"}/>
+      icon = <ListRowIcon name={note.done ? "giftwhite_done" : "giftwhite"}/>
     }
     return (
       <ListRow 

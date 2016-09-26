@@ -185,7 +185,7 @@ export function fulfillWish(wishRecord, contact) {
     // Show Note edit
     Actions.noteDialog({
       dispatch,
-      edit: true,
+      edit: true, isNew: true,
       note: getTaskNote(contact, wish),
       onSave: onConfirmed,
       saveText: 'Erfüllen'

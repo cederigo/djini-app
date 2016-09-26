@@ -2,34 +2,55 @@
 
 /**
  * Utility / Wrapper for push notifications on ios/android
- * 
- * TODO: android
  */
 
 import {List} from 'immutable'
 import moment from 'moment'
-import {PushNotificationIOS} from 'react-native'
+import {PushNotificationIOS, Platform} from 'react-native'
+import PushNotification from 'react-native-push-notification'
 
 import {listString, quantityString} from './stringUtil'
 
-function groupNote(note) {
-  if (note.type === 'task') {
-    //dont group them
-    return note.id
-  } else {
-    //group reminders by dueDate
-    return note.dueDate
-  }
+export function configure() {
+  PushNotification.configure({
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function() { 
+      /* nothing to do here, but required. see:
+       * https://github.com/facebook/react-native/issues/9105
+       */ 
+    },
+    // IOS ONLY (optional): default: all - Permissions to register.
+    permissions: { alert: true , badge: false, sound: false },
+    // Should the initial notification be popped automatically
+    // default: true
+    popInitialNotification: false,
+    /**
+      * (optional) default: true
+      * - Specified if permissions (ios) and token (android and ios) will requested or not,
+      * - if not, you must call PushNotificationsHandler.requestPermissions() later
+      */
+    requestPermissions: false,
+  });
+}
+
+export function getInitialNotification() {
+  return new Promise((resolve) => {
+    PushNotification.popInitialNotification(resolve)
+  })
 }
 
 export function checkPermissions() {
   return new Promise((resolve) => {
-    PushNotificationIOS.checkPermissions(resolve)
+    if (Platform.OS === 'ios') {
+      PushNotificationIOS.checkPermissions(resolve)
+    } else {
+      resolve({alert: true})
+    }
   })
 }
 
 export function requestPermissions() {
-  return PushNotificationIOS.requestPermissions({alert: true})
+  return PushNotification.requestPermissions()
 }
 
 export function updateLocalNotifications(notes) {
@@ -44,12 +65,16 @@ export function updateLocalNotifications(notes) {
 export function scheduleLocalNotifications(notifications) {
   notifications.forEach((n) => {
     console.log('schedule notification', n)
-    PushNotificationIOS.scheduleLocalNotification(n)
+    PushNotification.localNotificationSchedule({
+      date: n.fireDate,
+      message: n.alertBody,
+      smallIcon: "ic_notification"
+    })
   })
 } 
 
 export function cancelAllLocalNotifications() {
-  PushNotificationIOS.cancelAllLocalNotifications()
+  PushNotification.cancelAllLocalNotifications()
 }
 
 export function getLocalNotifications(notes) {
@@ -70,7 +95,7 @@ export function getLocalNotifications(notes) {
       const names = entries.map((e) => e.contact.name)
       // 1 Week before @ 9.00h
       result.push({
-        fireDate: moment(dueDate).subtract(7, 'days').hours(9).minute(0).valueOf(),
+        fireDate: moment(dueDate).subtract(7, 'days').hours(9).minute(0).toDate(),
         alertBody: 
           type === 'reminder' ?
             `${listString(names)} ${quantityString(names.length, 'hat', 'haben')} am ${moment(dueDate).format('Do MMMM')} Geburtstag`
@@ -78,7 +103,7 @@ export function getLocalNotifications(notes) {
       })
       // The same day @ 9.00h
       result.push({
-        fireDate: moment(dueDate).hours(9).minute(0).valueOf(),
+        fireDate: moment(dueDate).hours(9).minute(0).toDate(),
         alertBody: 
           type === 'reminder' ?
             `${listString(names)} ${quantityString(names.length, 'hat', 'haben')} heute Geburtstag`
@@ -87,4 +112,17 @@ export function getLocalNotifications(notes) {
     })
 
   return result
+}
+
+/**
+ * Helper
+ */
+function groupNote(note) {
+  if (note.type === 'task') {
+    //dont group them
+    return note.id
+  } else {
+    //group reminders by dueDate
+    return note.dueDate
+  }
 }
