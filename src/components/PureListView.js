@@ -65,6 +65,7 @@ class PureListView extends React.Component {
     };
 
     this.renderFooter = this.renderFooter.bind(this);
+    this.renderHeader = this.renderHeader.bind(this);
     this.onContentSizeChange = this.onContentSizeChange.bind(this);
   }
 
@@ -87,6 +88,7 @@ class PureListView extends React.Component {
         ref="listview"
         dataSource={this.state.dataSource}
         renderFooter={this.renderFooter}
+        renderHeader={this.renderHeader}
         onContentSizeChange={this.onContentSizeChange}
       />
     );
@@ -112,6 +114,13 @@ class PureListView extends React.Component {
     }
 
     return this.props.renderFooter && this.props.renderFooter();
+  }
+  renderHeader(): ?ReactElement {
+    if (this.state.dataSource.getRowCount() === 0) {
+      return undefined
+    }
+
+    return this.props.renderHeader && this.props.renderHeader();
   }
 }
 

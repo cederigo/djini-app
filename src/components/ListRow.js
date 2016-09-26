@@ -31,8 +31,9 @@ const styles = StyleSheet.create({
   }
 })
 export default function ListRow(props) {
+  const {swipeoutBtns, swipeoutRef, ...others} = props
   return (
-    <Swipeout {...props} style={styles.container} right={props.swipeoutBtns} autoClose={true}>
+    <Swipeout {...others} style={styles.container} right={swipeoutBtns} ref={swipeoutRef} autoClose={true}>
       <TouchableOpacity onPress={props.onPress}>
         <View style={styles.row}>
           <View style={styles.content}>
@@ -50,5 +51,6 @@ ListRow.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   onPress: PropTypes.func.isRequired,
-  swipeoutBtns: PropTypes.array
+  swipeoutBtns: PropTypes.array,
+  swipeoutRef: PropTypes.func,
 }

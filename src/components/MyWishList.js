@@ -47,6 +47,7 @@ class MyWishList extends Component {
         renderRow={this.renderRow}
         renderSeparator={this.renderSeparator}
         renderEmptyList={this.renderEmptyList}
+        renderHeader={() => <ListRowSeperator/>}
         {...this.props}
       />
     );
@@ -88,7 +89,7 @@ class MyWishList extends Component {
       <ListRow 
         title={wish.title}
         swipeoutBtns={this.swipeoutBtns(wish)}
-        ref={showSwipeoutHint ? this.showSwipeoutAnimation : undefined}
+        swipeoutRef={showSwipeoutHint ? this.showSwipeoutAnimation : undefined}
         onPress={() => dispatch(showWish(wish))}>
         {wish.isPrivate ? <ListRowIcon name="lock"/> : undefined}
         {wish.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="star"/> : undefined}
