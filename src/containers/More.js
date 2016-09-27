@@ -39,9 +39,9 @@ class More extends Component {
               <DjiniText style={styles.titleText}>Feedback schreiben</DjiniText>
               <DjiniTextInput
                 type="light"
-                placeholder="Sag Djini deine Verbesserungswünsche für die App…"
+                placeholder="Gib Djini Feedback! Er freut sich über Nettes, Vorschläge und Kritik gleichermassen"
                 autoGrow={true}
-                minHeight={55}
+                minHeight={75}
                 value={description}
                 onChangeText={(text) => dispatch(onFeedbackChange(text))}
                 />

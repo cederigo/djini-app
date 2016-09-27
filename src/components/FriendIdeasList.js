@@ -22,6 +22,11 @@ const styles = StyleSheet.create({
   },
   emptyButton: {
     marginVertical: 25
+  },
+  newButton: {
+    marginHorizontal: 25,
+    marginVertical: 10
+
   }
 })
 
@@ -79,10 +84,12 @@ class FriendIdeasList extends Component {
   }
 
   renderEmptyList() {
-    const {dispatch, user, friend} = this.props
+    const {dispatch, user, friend, contact} = this.props
     return (
       <View style={styles.empty}>
-        <DjiniText style={styles.emptyText}>Du hast noch keine Ideen erfasst</DjiniText>
+        <DjiniText style={styles.emptyText}>
+          {`Merke dir Geschenkideen für „${contact.name}“`}
+        </DjiniText>
         <DjiniButton style={styles.emptyButton} caption="Idee erfassen" onPress={() => dispatch(newWish(user, friend, 'friend'))}/>
       </View>
     );

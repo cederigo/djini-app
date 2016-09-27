@@ -11,7 +11,10 @@ export default class ContactsPermission extends Component {
     return (
       <View style={styles.container}>
         <AppBar title="Freunde" showBackButton={false}/>
-        <DjiniText style={styles.text}>Weil Djini ziemlich nett ist, kannst du es dir jederzeit anders überlegen und die Freigabe in den App-Einstellungen in deinen Smartphone-Einstellungen erteilen</DjiniText>
+        <DjiniText style={styles.text}>
+          Du hast den Zugriff auf deine Kontakte verweigert.
+          Weil Djini ziemlich nett ist, kannst du es dir jederzeit anders überlegen und die Freigabe über die App-Einstellungen auf deinem Mobilgerät manuell erteilen.
+        </DjiniText>
         <DjiniButton style={styles.button} onPress={refreshContacts} caption="Neu laden" />
       </View>
     )

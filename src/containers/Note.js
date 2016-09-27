@@ -45,12 +45,13 @@ class Note extends Component {
   }
   getFormattedDate(note) {
     const contact = note.contact
+    const hint = note.type === 'reminder' ?
+      'Leider kennt Djini den Geburtstag nicht. Hilf und trage diesen manuell nach'
+      : 'Leider kennt Djini das Datum nicht. Hilf und trage es manuell nach'
     if (note.type === 'reminder' && contact.birthday) {
         return formatBirthday(contact.birthday)
     }
-    return note.dueDate ?
-       moment(note.dueDate).format('DD.MM.YYYY')
-       : 'Damit Djini dich erinnern kann, musst du ein Datum eintragen'
+    return note.dueDate ? moment(note.dueDate).format('DD.MM.YYYY') : hint
   }
 
   openWish(note) {
@@ -114,7 +115,7 @@ class Note extends Component {
               <DjiniIcon style={styles.icon} size={20} name="event"/>
               {fields.dueDate.editable && edit ?
                 <DateInput autoFocus={!fields.title.editable} date={fields.dueDate.value} minHeight={20} autoYear={true} onDateChange={(val) => this.onValueChange('dueDate', val)}/>
-                : <DjiniText style={styles.value} numberOfLines={2}>
+                : <DjiniText style={styles.value} numberOfLines={3}>
                     {this.getFormattedDate(this.props.note)}
                     {dueDate ? undefined : <DjiniIcon style={styles.missingValue} name="error-outline"/>}
                   </DjiniText>
@@ -152,7 +153,10 @@ class Note extends Component {
               </View>
               : undefined
             }
-            <NoteFooter  {...this.props} saveNote={() => this.save()} />
+            {!edit || isNew ? 
+              <NoteFooter  {...this.props} saveNote={() => this.save()} />
+              : undefined
+            }
           </ScrollView>
         </KeyboardAvoidingView>
       </View>

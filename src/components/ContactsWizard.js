@@ -14,7 +14,9 @@ export default class ContactsWizard extends Component {
     return (
       <View style={styles.container}>
         <AppBar title="Freunde" showBackButton={false}/>
-        <DjiniText style={styles.text}>Djini verrät dir, was sich deine Freunde wünschen und hilft dir deine Geschenkideen festzuhalten. Dafür braucht er aber Zugriff auf deine Kontakte! Keine Angst, Djini gibt deine Kontakte nicht weiter!</DjiniText>
+        <DjiniText style={styles.text}>
+          Djini verrät dir, was sich deine Freunde wünschen und hilft dir deine Geschenkideen für sie festzuhalten. Dafür braucht er aber Zugriff auf deine Kontakte! Keine Angst, Djini gibt deine Kontakte nicht weiter!
+        </DjiniText>
         <DjiniButton style={styles.button} onPress={requestPermission} caption="Ja klar, bitte!"/>
       </View>
     )

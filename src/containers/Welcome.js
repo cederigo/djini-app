@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux'
 import React, {Component} from 'react'
 import { StyleSheet, View, Image } from 'react-native';
 
-import {lamp, group, todo} from '../../img'
+import {lamp, group, todo, giftwhite} from '../../img'
 import DjiniLogo from '../components/DjiniLogo'
 import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
@@ -16,7 +16,8 @@ export default class Welcome extends Component {
         <View style={styles.feature}>
           <Image resizeMode='contain' style={styles.featureIcon} source={lamp}/>
           <DjiniText style={styles.featureText}>
-            Wünsche festhalten und teilen
+            Wünsche festhalten &
+            mit Freunden teilen
           </DjiniText>
         </View>
         <View style={styles.feature}>
@@ -26,9 +27,15 @@ export default class Welcome extends Component {
           </DjiniText>
         </View>
         <View style={styles.feature}>
+          <Image resizeMode='contain' style={styles.featureIcon} source={giftwhite}/>
+          <DjiniText style={styles.featureText}>
+            Wünsche & Ideen erfüllen
+          </DjiniText>
+        </View>
+        <View style={styles.feature}>
           <Image resizeMode='contain' style={styles.featureIcon} source={todo}/>
           <DjiniText style={styles.featureText}>
-            Nie mehr Geschenke vergessen
+            Nie mehr Geburtstage & Geschenke vergessen
           </DjiniText>
         </View>
         <DjiniButton style={styles.button} onPress={Actions.login} caption="Los gehts!"/>
@@ -45,10 +52,10 @@ const styles = StyleSheet.create({
   },
   logo: {
     marginTop: 80,
-    marginBottom: 70,
+    marginBottom: 50,
   },
   feature: {
-    marginHorizontal: 40,
+    marginHorizontal: 20,
     marginBottom: 25,
     flexDirection: 'row',
     alignItems: 'center',
@@ -61,8 +68,8 @@ const styles = StyleSheet.create({
     height: 30
   },
   featureText: {
-    flex: 4,
-    fontSize: 20,
+    flex: 1,
+    fontSize: 17,
     fontStyle: 'italic'
   },
   button: {

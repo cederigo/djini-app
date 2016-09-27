@@ -25,7 +25,7 @@ export default class VerificationCodeForm extends Component {
     return ( 
       <View style={styles.container}>
         <DjiniText style={styles.text}>
-          Gib den 4-stelligen Verifizierungs-Code ein, den du per SMS erhalten hast:
+          Djini hat dir einen 4-stelligen Code per SMS geschickt. Gib ihn ein!
         </DjiniText>
         <View style={styles.formGroup}>
         <DjiniText style={styles.formGroupText}>Code</DjiniText>

@@ -4,13 +4,11 @@ import React, {Component, PropTypes} from 'react'
 import { StyleSheet, View} from 'react-native';
 import {Actions} from 'react-native-router-flux'
 
-import {logout} from '../actions/authActions'
 import {editProfile, updateProfile, cancelEditProfile, onFieldChange} from '../actions/profile'
 
 import {AppBar, ActionButton} from '../components/AppBar'
 import ProfileField from '../components/ProfileField'
 import DjiniText from '../components/DjiniText'
-import DjiniButton from '../components/DjiniButton'
 import Tabs from '../components/Tabs'
 
 class Profile extends Component {
@@ -25,7 +23,6 @@ class Profile extends Component {
   render() {
     const {dispatch, user, edit, isValid, isFetching, fields} = this.props
     const editable = edit && !isFetching
-          // <DjiniButton style={styles.logoutButton} onPress={() => dispatch(logout())} caption="Abmelden"/>
     return(
       <View style={styles.container}>
         <View style={styles.appBar}>

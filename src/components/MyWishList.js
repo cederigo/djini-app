@@ -99,7 +99,7 @@ class MyWishList extends Component {
 
   renderEmptyList() {
     return (
-      <DjiniText style={styles.emptyList}>Flüstere Djini deinen ersten Wunsch! Achtung: Wünsche können dank Djini in Erfüllung gehen! Djini haftet nicht für erfüllte Wünsche!</DjiniText>
+      <DjiniText style={styles.emptyList}>Reibe an der Lampe und flüstere Djini deinen ersten Wunsch! Achtung: Wünsche können dank Djini in Erfüllung gehen! Djini haftet nicht für erfüllte Wünsche!</DjiniText>
     );
   }
 

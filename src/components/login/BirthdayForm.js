@@ -17,7 +17,7 @@ export default class BirthdayForm extends Component {
     return ( 
       <View style={styles.container}>
         <DjiniText style={styles.text}>
-          Mit Angabe deines Geburtsdatums kann „Djini“ deine Freunde rechzeitig über deinen Geburtstag informieren.
+          Dank der Angabe deines Geburtsdatums kann Djini deinen Freunden helfen, ihre Geschenke rechtzeitig zu organisieren. Und dir auch!
         </DjiniText>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Geb.</DjiniText>

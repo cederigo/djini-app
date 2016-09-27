@@ -27,7 +27,6 @@ class Notes extends Component {
   }
 
   componentDidMount() {
-    console.log('componentDidMount()')
     const {dispatch, notes} = this.props
     this.checkPermissions()
     dispatch(deferPastNotes(notes))
@@ -54,7 +53,6 @@ class Notes extends Component {
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount()')
     if (this.timer) {
       clearInterval(this.timer);
     }
@@ -64,7 +62,7 @@ class Notes extends Component {
     const {showPermissionInfo} = this.state
     return(
       <View style={ styles.container}>
-        <AppBar title="Djini Notizen"/>
+        <AppBar title="Djinis Notizen"/>
         <NotesList notes={this.props.notes}/>
         {showPermissionInfo ? 
           <PermissionInfo style={styles.permissionInfo} requestPermissions={() => this.requestPermissions()}/>

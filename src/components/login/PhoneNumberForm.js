@@ -26,7 +26,7 @@ export default class PhoneNumberForm extends Component {
     return ( 
       <View style={styles.container}>
         <DjiniText style={styles.text}>
-          Deine Telefonnummer wird einmalig für die Registrierung benötigt. Du erhältst anschliessend einen 4-stelligen Code per SMS für die Verifizierung:
+          Djini soll dein Leben vereinfachen! Darum setzen wir auf einen bequemen SMS-Login statt einem schnell vergessenen Passwort.
         </DjiniText>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Telefon</DjiniText>

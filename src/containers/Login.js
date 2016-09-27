@@ -115,7 +115,7 @@ const formStyles = StyleSheet.create({
   container: {
     alignItems: 'flex-start',
     padding: 20,
-    paddingTop: 40
+    paddingTop: 20
   },
   text: {
     marginBottom: 10

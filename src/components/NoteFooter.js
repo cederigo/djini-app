@@ -79,7 +79,7 @@ const ReminderNoteFooter = (props) => {
 const NewNoteFooter = (props) => {
   const {note, saveNote} = props
   const {wish} = note
-  const title = isIdea(wish) ? 'Idee' : 'Wunsh'
+  const title = isIdea(wish) ? 'Idee' : 'Wunsch'
 
   return (
     <View style={styles.container}>

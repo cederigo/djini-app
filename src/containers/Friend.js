@@ -43,7 +43,7 @@ class Friend extends Component {
 
   renderProfileView() {
     const {friend, contact, dispatch, isFetching, error} = this.props
-    let birthdayText = isFetching || error ? '' : 'Geb. unbekannt ;-('
+    let birthdayText = isFetching || error ? '' : 'Djini kennt den Geburtstag leider nicht'
     if (friend.birthday) {
       birthdayText = formatBirthday(friend.birthday)
     }
@@ -71,7 +71,7 @@ class Friend extends Component {
       return (
         <View style={styles.inviteView}>
           <DjiniText>
-            {contact.name + ' hat noch kein eigenes Profil erstellt'}
+            {`Unbegreiflich! „${contact.name}“ hat Djini noch nicht installiert. Jetzt einladen und lass Djini ihre/seine Wünsche erfüllen.`}
           </DjiniText>
           <DjiniButton
             style={styles.inviteButton}
@@ -94,8 +94,8 @@ class Friend extends Component {
         <Tabs selected={this.state.activeTab} onSelect={(el) => this.setState({activeTab: el.props.name})}>
           <DjiniText style={styles.tabText} initial={true} name="wishes">Wünsche</DjiniText>
           <View style={styles.tabIdeas} name="ideas">
-            <DjiniText style={styles.tabText}>Meine Ideen</DjiniText>
-            <TouchableOpacity
+            <DjiniText style={styles.tabText} numberOfLines={1}>Ideen</DjiniText>
+            <TouchableOpacity style={styles.tabIconContainer}
               onPress={() => dispatch(newWish(user, friend, 'friend'))}>
               <Icon style={styles.tabIcon} name="add"/>
             </TouchableOpacity>
@@ -176,12 +176,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontStyle: 'italic',
     fontWeight: 'bold',
-    color: 'white'
+    color: 'white',
+  },
+  tabIconContainer: {
+    position: 'absolute',
+    top: 0, right: 0,
+    width: 50, height: 50,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   tabIcon: {
     color: 'white',
     fontSize: 34,
-    padding: 5 
   },
   tabIdeas: {
     flex: 1,
