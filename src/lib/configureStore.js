@@ -1,3 +1,4 @@
+/* global __DEV__ */
 /**
  * # configureStore.js
  * 
@@ -22,14 +23,14 @@ import createLogger from 'redux-logger';
 import reducer from '../reducers';
 
 const logger = createLogger();
+const middlewares = [thunk]
 
-/**
- * ## creatStoreWithMiddleware
- * Like the name...
- */ 
-const createStoreWithMiddleware = applyMiddleware(
-  thunk, logger
-)(createStore);
+if (__DEV__) {
+  console.log('Adding redux-logger as middleware')
+  middlewares.push(logger)
+}
+
+const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 
 /**
  * ## configureStore
