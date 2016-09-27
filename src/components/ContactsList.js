@@ -50,6 +50,7 @@ export default class ContactsList extends Component {
   render() {
     return (
       <PureListView
+        initialListSize={10}
         ref={this.storeInnerRef}
         data={this.props.contacts}
         keyboardShouldPersistTaps={true}
