@@ -1,13 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="ch.djini">
 
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.READ_CONTACTS" />
+  <!-- To restore scheduled local push notifications -->
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-  <uses-sdk
-    android:minSdkVersion="16"
-    android:targetSdkVersion="23" />
+  <!-- Image Picker -->
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-feature android:name="android.hardware.camera" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 
   <application
     android:name=".MainApplication"
@@ -18,7 +20,8 @@
     <activity
       android:name=".MainActivity"
       android:label="@string/app_name"
-      android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+      android:configChanges="orientation"
+      android:screenOrientation="portrait"
       android:windowSoftInputMode="adjustPan">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

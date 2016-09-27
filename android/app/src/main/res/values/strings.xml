@@ -1,9 +1,4 @@
 <resources>
-    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">wNQFBaSN5QXymFNhgtrjPADsE7NzV10zHO_h-</string>
-
-
-
-
-
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">WVZ5YuUyib8DpsXwRMzguhWY_qPhV10zHO_h-</string>
     <string name="app_name">Djini</string>
 </resources>

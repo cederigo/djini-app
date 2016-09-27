@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import React, {Component, PropTypes} from 'react';
-import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions} from 'react-native';
+import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions, KeyboardAvoidingView} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from './AppBar'
@@ -64,9 +64,9 @@ class WishEditView extends Component {
       cancelButtonTitle: 'Abbrechen',
       takePhotoButtonTitle: 'Eine Aufnahme machen...', // specify null or empty string to remove this button
       chooseFromLibraryButtonTitle: 'Aus Gallerie...', // specify null or empty string to remove this button
-      customButtons: {
-        'Bild löschen': 'remove-image', // [Button Text] : [String returned upon selection]
-      },
+      customButtons: [
+        {title: 'Bild löschen', name: 'remove-image'}, // [Button Text] : [String returned upon selection]
+      ],
       cameraType: 'back', // 'front' or 'back'
       mediaType: 'photo', // 'photo' or 'video'
       maxWidth: 3 * IMAGE_WIDTH, // photos only
@@ -124,7 +124,10 @@ class WishEditView extends Component {
           <ActionButton text="Fertig" textStyle="dark" disabled={this.state.uploading || !wish.title} onPress={() => dispatch(saveWish(wish))}/>
         </AppBar>
 
-        <ScrollView>
+        <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>
+        <ScrollView
+          style={styles.container}
+          keyboardShouldPersistTaps={true}>
 
           {this.renderImage()}
 
@@ -132,6 +135,8 @@ class WishEditView extends Component {
 
             <DjiniText style={styles.label}>Titel</DjiniText>
             <DjiniTextInput
+              blurOnSubmit={false}
+              onSubmitEditing={() => this.refs.details.focus()}
               placeholder="Gib einen aussagekräftigen Titel an…"
               onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
               value={wish.title}
@@ -139,6 +144,9 @@ class WishEditView extends Component {
 
             <DjiniText style={styles.label}>Details</DjiniText>
             <DjiniTextInput
+              ref="details"
+              onSubmitEditing={() => this.refs.price.focus()}
+              blurOnSubmit={false}
               placeholder="z.B. Grösse, Farbe, Modell, …"
               autoGrow={true}
               onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
@@ -147,6 +155,9 @@ class WishEditView extends Component {
 
             <DjiniText style={styles.label}>Preis</DjiniText>
             <DjiniTextInput
+              ref="price"
+              onSubmitEditing={() => this.refs.seenAt.focus()}
+              blurOnSubmit={false}
               placeholder="Ungefährer Preis"
               keyboardType="numeric"   
               onChangeText={(text) => dispatch(onWishFieldChange('price', text))}
@@ -155,6 +166,9 @@ class WishEditView extends Component {
 
             <DjiniText style={styles.label}>Wo gesehen</DjiniText>
             <DjiniTextInput
+              ref="seenAt"
+              onSubmitEditing={() => this.refs.url.focus()}
+              blurOnSubmit={false}
               placeholder="Wo kann dein Wunsch gefunden werden…"
               onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
               value={wish.seenAt}
@@ -162,6 +176,7 @@ class WishEditView extends Component {
 
             <DjiniText style={styles.label}>Web-Link</DjiniText>
             <DjiniTextInput
+              ref="url"
               placeholder="http://…"
               keyboardType="url"   
               onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
@@ -207,6 +222,7 @@ class WishEditView extends Component {
             </View>
           </View>
         </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     )
   }
@@ -216,6 +232,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgb(240, 240, 240)'
+  },
+  keyboardAvoid: {
+    flex: 1,
   },
   content: {
     margin: 20

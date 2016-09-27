@@ -43,10 +43,6 @@ type Props = {
   contentInset: { top: number; bottom: number; };
 };
 
-// FIXME: Android has a bug when scrolling ListView the view insertions
-// will make it go reverse. Temporary fix - pre-render more rows
-const LIST_VIEW_PAGE_SIZE = Platform.OS === 'android' ? 20 : 1;
-
 class PureListView extends React.Component {
   props: Props;
 
@@ -80,8 +76,6 @@ class PureListView extends React.Component {
   render() {
     return (
       <ListView
-        initialListSize={10}
-        pageSize={LIST_VIEW_PAGE_SIZE}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         {...this.props}

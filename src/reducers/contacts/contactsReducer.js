@@ -10,6 +10,8 @@ import {
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
 
+  CONTACTS_PERMISSION,
+
   ON_SEARCH_FIELD_CHANGE,
   SAVE_CONTACTS,
 
@@ -56,6 +58,9 @@ export default function contactsReducer(state = initialState, {type, payload}) {
       return state.set('isFetching', false)
         .set('permissionDenied', payload.message === 'permissionDenied')
         .set('error', payload)
+
+    case CONTACTS_PERMISSION:
+      return state.set('permissionDenied', payload === 'denied')
 
     case ON_SEARCH_FIELD_CHANGE:
         return state.set('filterText', payload)

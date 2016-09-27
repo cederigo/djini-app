@@ -8,6 +8,7 @@ import dismissKeyboard from 'dismissKeyboard'
 
 import {transliterate} from '../lib/transliteration'
 
+import DjiniText from '../components/DjiniText'
 import ContactsPermission from '../components/ContactsPermission'
 import ContactsWizard from '../components/ContactsWizard'
 import ContactsList from '../components/ContactsList'
@@ -17,7 +18,8 @@ import {
   onSearchFieldChange,
   invite,
   toggleFavorite,
-  refreshContacts
+  refreshContacts,
+  requestContactsPermission
 } from '../actions/contacts'
 
 import {loadFriendProfile} from '../actions/profile'
@@ -61,14 +63,13 @@ class Contacts extends Component {
 
   render() {
     const {contactsState, dispatch} = this.props
-    let {contacts, filterText} = contactsState
+    let {contacts, filterText, isFetching} = contactsState
 
-    if (contactsState.permissionDenied) {
-      return (<ContactsPermission/>)
+    if (!isFetching && contactsState.permissionDenied) {
+      return <ContactsPermission refreshContacts={() => dispatch(refreshContacts())}/>
     }
-
-    if (!contacts.size) {
-      return (<ContactsWizard/>)
+    if (!isFetching && !contacts.size) {
+      return <ContactsWizard requestPermission={() => dispatch(requestContactsPermission())}/>
     } 
 
     //contacts
@@ -81,12 +82,15 @@ class Contacts extends Component {
           inputPlaceholder="Freunde suchen ..."
           onChangeText={(text) => dispatch(onSearchFieldChange(text))}
           onSearchEnd={() => this.endSearch()}/>
-        <ContactsList
-          toggleFavorite={(c) => this.toggleFavorite(c)}
-          openContact={(c) => this.openContact(c)}
-          inviteContact={(c) => this.inviteContact(c)}
-          refreshContacts={() => dispatch(refreshContacts())}
-          contacts={this.getListData(contacts, filterText)}/>
+        {isFetching ?
+          <DjiniText style={styles.loading}>Laden..</DjiniText>
+          : <ContactsList
+            toggleFavorite={(c) => this.toggleFavorite(c)}
+            openContact={(c) => this.openContact(c)}
+            inviteContact={(c) => this.inviteContact(c)}
+            refreshContacts={() => dispatch(refreshContacts())}
+            contacts={this.getListData(contacts, filterText)}/>
+        }
       </View>
     )
   }
@@ -99,6 +103,10 @@ Contacts.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loading: {
+    marginTop: 50,
+    textAlign: 'center'
   }
 })
 

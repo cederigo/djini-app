@@ -57,6 +57,7 @@ export const SAVE_CONTACTS = 'save-contacts'
 export const INVITE_CONTACT = 'invite-contact'
 export const TOGGLE_FAVORITE = 'toggle-favorite'
 export const SHOW_CONTACT = 'show-contact'
+export const CONTACTS_PERMISSION = 'contacts-permission'
 
 export const GET_FRIEND_PROFILE_REQUEST = 'get-friend-profile-request'
 export const GET_FRIEND_PROFILE_SUCCESS = 'get-friend-profile-success'

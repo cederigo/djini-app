@@ -2,6 +2,7 @@
  * A thin wrapper over https://github.com/rt2zz/react-native-contacts
  */
 
+import {Platform, PermissionsAndroid} from 'react-native'
 import contacts from 'react-native-contacts'
 import {transliterate} from './transliteration'
 import {formatNumber} from './phoneUtil' 
@@ -27,6 +28,34 @@ class Contacts {
       contact.nameTransliterated = transliterate(contact.name.toLowerCase())
     })
     return contacts
+  }
+
+  requestPermission() {
+    if (Platform.OS === 'android') {
+      return PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
+        .then((granted) => {
+          return granted ? 'authorized' : 'denied'
+        })
+    }
+    return new Promise((resolve, reject) => {
+      contacts.requestPermission((err, permission) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(permission)
+      })
+    })
+  }
+
+  checkPermission() {
+    return new Promise((resolve, reject) => {
+      contacts.checkPermission((err, permission) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(permission)
+      })
+    })
   }
 
   getAll() {

@@ -1,5 +1,5 @@
 import {OrderedMap} from 'immutable';
-import {Platform, Linking} from 'react-native'
+import {Platform, Linking, InteractionManager} from 'react-native'
 
 import {
   RESTORE_CONTACTS_REQUEST,
@@ -14,7 +14,8 @@ import {
   SAVE_CONTACTS,
 
   TOGGLE_FAVORITE,
-  INVITE_CONTACT
+  INVITE_CONTACT,
+  CONTACTS_PERMISSION
 } from '../lib/constants'
 
 import {newReminderNote} from './notes'
@@ -85,14 +86,19 @@ export function refreshContacts(source: ?string = 'app') {
       //We want the user to actively trigger the permission dialog
       return;
     }
-    dispatch(contactsRequest())
-    return Contacts.getAll()
-      .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
-      .then((contacts) => Contacts.transliterate(contacts))
-      .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
-      .then((contacts) => dispatch(contactsSuccess(contacts)))
-      .then(() => dispatch(saveContacts()))
-      .catch((error) => dispatch(contactsFailure(error)))
+    const onAuthorized = () => {
+      dispatch(contactsRequest())
+      setTimeout(() => {
+        Contacts.getAll()
+          .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
+          .then((contacts) => Contacts.transliterate(contacts))
+          .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
+          .then((contacts) => dispatch(contactsSuccess(contacts)))
+          .then(() => dispatch(saveContacts()))
+          .catch((error) => dispatch(contactsFailure(error)))
+      }, 100)
+    }
+    dispatch(checkContactsPermission(onAuthorized))
   }
 }
 
@@ -137,5 +143,35 @@ export function invite(contact) {
       // ?
       Linking.openURL(`sms:${contact.phoneNumber}?body=${message}`)
     }
+  }
+}
+
+export function checkContactsPermission(onAuthorized) {
+  return dispatch => {
+    Contacts.checkPermission()
+      .then((permission) => {
+        dispatch({type: CONTACTS_PERMISSION, payload: permission})
+        if (permission === 'authorized'){
+          onAuthorized && onAuthorized()
+        }
+      })
+      .catch((e) => {
+        console.log('could not check contacts permission', e)
+      })
+  }
+}
+
+export function requestContactsPermission() {
+  return dispatch => {
+    Contacts.requestPermission()
+      .then((permission) => {
+        dispatch({type: CONTACTS_PERMISSION, payload: permission})
+        if (permission === 'authorized') {
+          dispatch(refreshContacts('user'))
+        }
+      })
+      .catch((e) => {
+        console.log('could not request contacts permission', e)
+      })
   }
 }
