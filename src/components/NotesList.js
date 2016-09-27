@@ -1,7 +1,8 @@
 import { connect } from 'react-redux'
 import React, {Component, PropTypes} from 'react'
 import {StyleSheet} from 'react-native'
-import moment from 'moment'
+
+import {parseDate} from '../lib/dateUtil'
 
 import DjiniText from './DjiniText'
 import PureListView from './PureListView'
@@ -74,10 +75,18 @@ class NotesList extends Component {
   }
 
   getDescription(note) {
-    const dueDate = note.dueDate
-    return note.contact.name + (dueDate ?
-      `, ${moment(dueDate, 'YYYY-MM-DD').format('Do MMMM')}`
-      : ', Datum unbekannt ;-(')
+    let result = ''
+    if (note.type === 'task') {
+      result += `${note.contact.name}, `
+    }
+    if (note.dueDate) {
+      result += parseDate(note.dueDate).format('Do MMMM')
+    }
+    return result
+  }
+
+  getTitle(note) {
+    return note.type === 'reminder' ? note.contact.name : note.title
   }
 
   renderRow (note) {
@@ -91,7 +100,7 @@ class NotesList extends Component {
     }
     return (
       <ListRow 
-        title={note.title}
+        title={this.getTitle(note)}
         description={this.getDescription(note)}
         swipeoutBtns={this.swipeoutBtns(note)}
         onPress={() => dispatch(showNote(note))}>
