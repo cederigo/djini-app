@@ -28,14 +28,18 @@ import {Platform} from 'react-native'
 import Parse from 'parse/react-native'
 
 async function currentInstallation(): Promise<Parse.Installation> {
-  const installationId = await Parse._getInstallationId();
-  return new Parse.Installation({
-    installationId,
-    appName: 'Djini',
-    deviceType: Platform.OS,
-    // TODO: Get this information from the app itself
-    appIdentifier: Platform.OS === 'ios' ? 'ch.djini' : 'ch.djini',
-  });
+  try {
+    const session = await Parse.Session.current()
+    return new Parse.Installation({
+      installationId: session.get('installationId'),
+      appName: 'Djini',
+      deviceType: Platform.OS,
+      // TODO: Get this information from the app itself
+      appIdentifier: Platform.OS === 'ios' ? 'ch.djini' : 'ch.djini',
+    });
+  } catch(e) {
+    console.log('Could not update installation')
+  }
 }
 
 export async function updateInstallation(updates: Object = {}): Promise<void> {
