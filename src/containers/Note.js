@@ -68,6 +68,10 @@ class Note extends Component {
     this.setState({...this.getFields(note), edit: true})
   }
 
+  cancelEdit() {
+    this.setState({edit: false})
+  }
+
   save() {
     const {dispatch, note, onSave} = this.props
     const {title, dueDate, comment} = this.state
@@ -86,7 +90,10 @@ class Note extends Component {
     const {editable, edit, ...fields} = this.state
     return (
       <View style={styles.container}>
-        <AppBar title="Notiz" textStyle="dark" showBackButton={true}>
+        <AppBar 
+          title="Notiz" textStyle="dark" 
+          showBackButton={true} backButtonText={edit ? "Abbrechen" : undefined}
+          onBack={edit ? () => this.cancelEdit() : undefined}>
           {edit ? 
             <ActionButton textStyle="dark" text={this.props.saveText} onPress={() => this.save()}/>  
             : editable ? <ActionButton textStyle="dark" text="Bearbeiten" onPress={() => this.edit()}/>
@@ -96,7 +103,7 @@ class Note extends Component {
 
         <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>
 
-          <ScrollView style={styles.container}>
+          <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
 
             <View style={[styles.row, styles.titleField]}>
               <DjiniIcon style={styles.titleIcon} size={60} name={type === 'reminder' ? 'cake' : 'giftdarkblue'}/>
