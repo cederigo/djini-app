@@ -76,7 +76,7 @@ class NotesList extends Component {
 
   getDescription(note) {
     if (note.type === 'reminder') {
-      return note.contact.name;
+      return (note.dueDate ? `${parseDate(note.dueDate).format('Do MMMM')}`: '')
     }
     return note.contact.name + (note.dueDate ? `, ${parseDate(note.dueDate).format('Do MMMM')}`: '')
   }
