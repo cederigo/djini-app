@@ -134,8 +134,7 @@ export function deferPastNotes(notes) {
 
 export function syncNote(note) {
   return dispatch => {
-    const wish = note.wish
-    if (note.type === 'reminder' || isIdea(wish)) {
+    if (note.type === 'reminder') {
       return; // Nothing to sync
     }
     new Parse.Query(ParseWish).get(note.wish.id)

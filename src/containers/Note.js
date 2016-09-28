@@ -5,6 +5,7 @@ import moment from 'moment'
 import {Actions} from 'react-native-router-flux'
 
 import {formatBirthday} from '../lib/dateUtil'
+import {isIdea} from '../lib/wishUtil'
 import {loadFriendProfile} from '../actions/profile'
 import {saveNote, syncNote} from '../actions/notes'
 
@@ -43,9 +44,6 @@ class Note extends Component {
     }
   }
 
-  /**
-   * "Business" Rules
-   */
   getFields(note) {
     return {
       title: {value: note.title, editable: note.type === 'task'},
@@ -53,6 +51,7 @@ class Note extends Component {
       comment: {value: note.comment, editable: note.type === 'task'}
     }
   }
+
   getFormattedDate(note) {
     const contact = note.contact
     const hint = note.type === 'reminder' ?
@@ -63,6 +62,35 @@ class Note extends Component {
     }
     return note.dueDate ? moment(note.dueDate).format('DD.MM.YYYY') : hint
   }
+
+  renderWishField(note) {
+    const {wish, state, contact} = note
+    let value
+    if (state === 'wish-deleted') {
+      value = (
+        <DjiniText style={styles.value} numberOfLines={3}>
+          {isIdea(wish) ? 
+            `Du hast diese Idee bereits gelöscht`
+            : `Leider hat ${contact.name} den Wunsch "${wish.title}" gelöscht`
+          }
+          <DjiniIcon style={styles.missingValue} name="error-outline"/>
+        </DjiniText>
+      )
+    } else {
+      value = (
+        <TouchableOpacity style={styles.value} onPress={() => this.openWish(note)}>
+          <DjiniText style={[styles.value, styles.wishText]} numberOfLines={1}>{wish.title}</DjiniText>
+        </TouchableOpacity>
+      )
+    }
+    return (
+      <View style={[styles.row, styles.field]}>
+        <DjiniIcon style={styles.icon} size={20} name="giftlightblue"/>
+        {value}
+      </View>
+    )
+  }
+  
 
   openWish(note) {
     const {dispatch} = this.props
@@ -96,7 +124,7 @@ class Note extends Component {
 
   render() {
     const {note, isNew} = this.props
-    const {type, title, comment, dueDate, contact, wish, state} = note
+    const {type, title, comment, dueDate, contact, wish} = note
     const {editable, edit, ...fields} = this.state
     return (
       <View style={styles.container}>
@@ -150,20 +178,7 @@ class Note extends Component {
             }
 
             {wish && !isNew ?
-              <View style={[styles.row, styles.field]}>
-                <DjiniIcon style={styles.icon} size={20} name="giftlightblue"/>
-                {state === 'wish-deleted' ? 
-                  <DjiniText style={styles.value} numberOfLines={3}>
-                    {`Leider hat ${contact.name} den Wunsch "${wish.title}" gelöscht`}
-                    <DjiniIcon style={styles.missingValue} name="error-outline"/>
-                  </DjiniText>
-                  : <TouchableOpacity style={styles.value} onPress={() => this.openWish(this.props.note)}>
-                      <DjiniText style={[styles.value, styles.wishText]} numberOfLines={1}>{wish.title}</DjiniText>
-                    </TouchableOpacity>
-                }
-              </View>
-
-              : undefined
+              this.renderWishField(this.props.note) : undefined
             }
 
             {wish ?
