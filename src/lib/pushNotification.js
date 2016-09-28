@@ -64,7 +64,11 @@ export function updateLocalNotifications(notes) {
 }
 
 export function scheduleLocalNotifications(notifications) {
+  const now = Date.now()
   notifications.forEach((n) => {
+    if (n.fireDate < now) {
+      return; // Dont schedule past push notifications
+    }
     console.log('schedule notification', n)
     if (Platform.OS === 'android') {
       PushNotification.localNotificationSchedule({ 
