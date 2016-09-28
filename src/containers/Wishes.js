@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   error: {
-    padding: 25
+    padding: 0,
+    paddingHorizontal: 25
   }
 })
 

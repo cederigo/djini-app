@@ -117,7 +117,7 @@ class Friend extends Component {
         {isFetching ? 
           <DjiniText style={styles.loadingText}>Laden..</DjiniText>
           : error ? 
-            <DjiniError style={styles.error} errorText="Oops. Wünsche konnten nicht geladen werden"
+            <DjiniError style={styles.error} errorText="Oops. Profil konnte nicht geladen werden"
               onReloadPress={() => dispatch(loadFriendProfile(contact))} 
               reloadButtonText="Nochmals versuchen"/>
           : this.renderTabs()
