@@ -93,7 +93,7 @@ class Note extends Component {
         <AppBar 
           title="Notiz" textStyle="dark" 
           showBackButton={true} backButtonText={edit ? "Abbrechen" : undefined}
-          onBack={edit ? () => this.cancelEdit() : undefined}>
+          onBack={edit && !isNew ? () => this.cancelEdit() : undefined}>
           {edit ? 
             <ActionButton textStyle="dark" text={this.props.saveText} onPress={() => this.save()}/>  
             : editable ? <ActionButton textStyle="dark" text="Bearbeiten" onPress={() => this.edit()}/>

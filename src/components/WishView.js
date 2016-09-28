@@ -131,7 +131,7 @@ class WishView extends Component {
     const {dispatch, contact} = this.props
     return (
       <View style={styles.buttonGroup}>
-        <DjiniButton style={styles.buttonGroupButton} iconName="playlist-add" caption="Will ich!" onPress={() => dispatch(copyWish(wish, currentUser))}/> 
+        <DjiniButton style={styles.buttonGroupButton} iconName="playlist-add" caption="Will ich auch!" onPress={() => dispatch(copyWish(wish, currentUser))}/> 
         {fulfillable(wish, currentUser) ?
           <DjiniButton 
             style={styles.buttonGroupButton}
@@ -274,16 +274,12 @@ const styles = StyleSheet.create({
     margin: 10
   },
   buttonGroup: {
-    marginTop: 40,
+    flex: 1,
+    marginTop: 30,
     marginHorizontal: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   buttonGroupButton: {
-    flex: 1,
-    borderColor: 'white',
-    borderRightWidth: 1,
+    marginTop: 10,
     backgroundColor: 'rgb(101,104,244)'
   }
 })

@@ -9,6 +9,8 @@ import ListRow from './ListRow'
 import ListRowIcon from './ListRowIcon'
 import SwipeoutButton from './ListRowSwipeoutButton'
 
+import {fulfillable} from '../lib/wishUtil'
+
 const styles = StyleSheet.create({
   emptyList: {
     marginTop: 50,
@@ -70,18 +72,21 @@ class FriendWishesList extends Component {
 
   _swipeoutBtns (wish) {
     const {dispatch, user, contact} = this.props
-    return [
+    const result = [
       { 
         backgroundColor: 'transparent',
         component: <SwipeoutButton iconName='playlist-add' />,
         onPress: () => dispatch(copyWish(wish, user))
-      },
-      { 
+      }
+    ]
+    if (fulfillable(wish, user)){
+      result.push({ 
         backgroundColor: 'transparent',
         component: <SwipeoutButton iconName={fulfilled(wish) ? 'clear' : 'check'} />,
         onPress: () => dispatch(toggleFulfilled(wish, contact)),
-      }
-    ]
+      })
+    }
+    return result
   }
 
   renderRow (wish) {

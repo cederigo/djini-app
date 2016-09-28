@@ -31,10 +31,21 @@ const styles = StyleSheet.create({
   }
 })
 export default function ListRow(props) {
+  let swipeout
   const {swipeoutBtns, swipeoutRef, ...others} = props
+  const ref = (comp) => {
+    swipeout = comp
+    typeof swipeoutRef === 'function' && swipeoutRef(comp)
+  }
+  const onPress = () => {
+    if (swipeout && swipeout.state.openedRight) {
+      return swipeout._close()
+    }
+    props.onPress()
+  }
   return (
-    <Swipeout {...others} style={styles.container} right={swipeoutBtns} ref={swipeoutRef} autoClose={true}>
-      <TouchableOpacity onPress={props.onPress}>
+    <Swipeout {...others} style={styles.container} right={swipeoutBtns} ref={ref} autoClose={true} sensitivity={1}>
+      <TouchableOpacity onPress={onPress}>
         <View style={styles.row}>
           <View style={styles.content}>
             <DjiniText style={styles.title} numberOfLines={1}>{props.title}</DjiniText>
