@@ -1,7 +1,7 @@
 
 import { connect } from 'react-redux';
 import React, {Component, PropTypes} from 'react'
-import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
+import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, TouchableOpacity, Linking} from 'react-native';
 import dismissKeyboard from 'dismissKeyboard'
 import {Actions} from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -22,6 +22,9 @@ class More extends Component {
     description: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
   }
+  openLink(href) {
+    Linking.openURL('http://djini.ch/WordPress/' + href)
+  }
   render() {
     const {isFetching, isValid, description, user, dispatch} = this.props
     return(
@@ -29,22 +32,22 @@ class More extends Component {
         <View style={styles.appBar}>
           <AppBar textStyle="dark" title="Mein Profil" showBackButton={false}/>
         </View>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps={true}>
           <Tabs selected="more">
             <DjiniText style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Details</DjiniText>
             <DjiniText style={styles.tabText} name="more">Mehr</DjiniText>
           </Tabs>
           <TouchableWithoutFeedback onPress={dismissKeyboard}>
             <View style={styles.feedbackC}>
-              <DjiniText style={styles.titleText}>Feedback schreiben</DjiniText>
-              <DjiniTextInput
-                type="light"
-                placeholder="Gib Djini Feedback! Er freut sich über Nettes, Vorschläge und Kritik gleichermassen"
-                autoGrow={true}
-                minHeight={75}
-                value={description}
-                onChangeText={(text) => dispatch(onFeedbackChange(text))}
-                />
+                <DjiniText style={styles.titleText}>Feedback schreiben</DjiniText>
+                <DjiniTextInput
+                  type="light"
+                  placeholder="Gib Djini Feedback! Er freut sich über Nettes, Vorschläge und Kritik gleichermassen"
+                  autoGrow={true}
+                  minHeight={75}
+                  value={description}
+                  onChangeText={(text) => dispatch(onFeedbackChange(text))}
+                  />
               <DjiniButton
                 style={styles.feedbackSubmit}
                 disabled={isFetching || !isValid}
@@ -54,17 +57,17 @@ class More extends Component {
           </TouchableWithoutFeedback>
           <View>
             <ListRowSeperator/>
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity style={styles.item} onPress={() => this.openLink('faq')}>
               <DjiniText style={styles.itemText}>FAQ</DjiniText>
               <Icon style={styles.itemIcon} name="chevron-right"/>
             </TouchableOpacity>
             <ListRowSeperator/>
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity style={styles.item} onPress={() => this.openLink('agb')}>
               <DjiniText style={styles.itemText}>Nutzungsbedingungen (ABG)</DjiniText>
               <Icon style={styles.itemIcon} name="chevron-right"/>
             </TouchableOpacity>
             <ListRowSeperator/>
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity style={styles.item} onPress={() => this.openLink('credits')}>
               <DjiniText style={styles.itemText}>Credits</DjiniText>
               <Icon style={styles.itemIcon} name="chevron-right"/>
             </TouchableOpacity>
