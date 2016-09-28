@@ -36,6 +36,7 @@ export type Wish = {
 
 export type Note = {
   id: ?string,
+  state: 'ok' | 'wish-removed',
   title: string,
   comment: string,
   dueDate: string, // YYYY-MM-DD

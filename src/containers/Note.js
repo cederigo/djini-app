@@ -6,7 +6,7 @@ import {Actions} from 'react-native-router-flux'
 
 import {formatBirthday} from '../lib/dateUtil'
 import {loadFriendProfile} from '../actions/profile'
-import {saveNote} from '../actions/notes'
+import {saveNote, syncNote} from '../actions/notes'
 
 import {DjiniDarkIcon as DjiniIcon} from '../components/DjiniIcon'
 import {DjiniDarkTextInput as DjiniTextInput} from '../components/DjiniTextInput'
@@ -31,6 +31,16 @@ class Note extends Component {
     this.onValueChange = this.onValueChange.bind(this)
     const fields = this.getFields(note)
     this.state = {...fields, edit: props.edit, editable: Object.values(fields).some((f) => f.editable)}
+  }
+
+  /**
+   * Lifecycle
+   */
+  componentDidMount() {
+    const {dispatch, note, isNew} = this.props
+    if (!isNew) {
+      dispatch(syncNote(note))
+    }
   }
 
   /**
@@ -86,7 +96,7 @@ class Note extends Component {
 
   render() {
     const {note, isNew} = this.props
-    const {type, title, comment, dueDate, contact, wish} = note
+    const {type, title, comment, dueDate, contact, wish, state} = note
     const {editable, edit, ...fields} = this.state
     return (
       <View style={styles.container}>
@@ -142,9 +152,15 @@ class Note extends Component {
             {wish && !isNew ?
               <View style={[styles.row, styles.field]}>
                 <DjiniIcon style={styles.icon} size={20} name="giftlightblue"/>
-                <TouchableOpacity style={styles.value} onPress={() => this.openWish(this.props.note)}>
-                  <DjiniText style={[styles.value, styles.wishText]} numberOfLines={1}>{wish.title}</DjiniText>
-                </TouchableOpacity>
+                {state === 'wish-deleted' ? 
+                  <DjiniText style={styles.value} numberOfLines={3}>
+                    {`Leider hat ${contact.name} den Wunsch "${wish.title}" gelöscht`}
+                    <DjiniIcon style={styles.missingValue} name="error-outline"/>
+                  </DjiniText>
+                  : <TouchableOpacity style={styles.value} onPress={() => this.openWish(this.props.note)}>
+                      <DjiniText style={[styles.value, styles.wishText]} numberOfLines={1}>{wish.title}</DjiniText>
+                    </TouchableOpacity>
+                }
               </View>
 
               : undefined

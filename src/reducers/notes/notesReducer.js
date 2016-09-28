@@ -3,7 +3,7 @@
 import {List} from 'immutable'
 
 import type {Note} from '../../lib/types'
-import {MY_PROFILE_LOADED, DELETE_NOTE, SAVE_NOTE, NOTES_REHYDRATED } from '../../lib/constants'
+import {MY_PROFILE_LOADED, DELETE_NOTE, SAVE_NOTE, NOTES_REHYDRATED, SYNC_NOTE} from '../../lib/constants'
 
 const initialState = new List
 

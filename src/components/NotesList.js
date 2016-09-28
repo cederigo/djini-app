@@ -100,7 +100,7 @@ class NotesList extends Component {
         description={this.getDescription(note)}
         swipeoutBtns={this.swipeoutBtns(note)}
         onPress={() => dispatch(showNote(note))}>
-        {note.dueDate ? undefined : <ListRowIcon style={styles.incomplete} name="error-outline"/>}
+        {!note.dueDate || note.state === 'wish-deleted' ? <ListRowIcon style={styles.incomplete} name="error-outline"/> : undefined}
         {icon}
       </ListRow>
     )

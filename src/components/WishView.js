@@ -14,7 +14,7 @@ import {DjiniDarkText as DjiniText} from './DjiniText'
 import type {User, Wish, Contact} from '../lib/types'
 
 // Utils
-import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser} from '../lib/wishUtil'
+import {allowEdit, fulfilled, toUser, fulfillable, fulfilledByUser, isIdea} from '../lib/wishUtil'
 
 // Actions
 import {editWish, copyWish, toggleFulfilled} from '../actions/wishes'
@@ -145,10 +145,11 @@ class WishView extends Component {
 
   render() {
     const {dispatch, currentUser, wish, source} = this.props
+    const title = isIdea(wish) ? 'Idee' : 'Wunsch'
 
     return ( 
       <View style={styles.container}>
-        <AppBar showBackButton={true} title="Wunsch" textStyle="dark">
+        <AppBar showBackButton={true} title={title} textStyle="dark">
           {allowEdit(wish, currentUser) ? <ActionButton text="Bearbeiten" textStyle="dark" onPress={() => dispatch(editWish(wish, source))}/> : undefined }
         </AppBar>
 

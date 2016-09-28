@@ -23,7 +23,7 @@ import {updateTaskNote, getTaskNote} from './notes'
 import {setBadge} from './tabs'
 import {fromParseWish} from '../reducers/wishes/wishesReducer'
 
-const ParseWish = Parse.Object.extend('Wish')
+export const ParseWish = Parse.Object.extend('Wish')
 const ParseUser = Parse.Object.extend('User')
 
 function toParseWish(wish: Record<Wish>) {

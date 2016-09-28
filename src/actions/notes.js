@@ -1,15 +1,17 @@
 import {Alert} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import initialState from '../reducers/note/noteInitialState'
+import Parse from 'parse/react-native'
 import moment from 'moment'
 
-import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED, DEFER_PAST_NOTE } from '../lib/constants'
+import initialState from '../reducers/note/noteInitialState'
+
+import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED} from '../lib/constants'
 import db from '../lib/db'
 import {updateLocalNotifications} from '../lib/pushNotification'
 import {parseDate, formatDate} from '../lib/dateUtil'
 import {isIdea} from '../lib/wishUtil'
 import {setBadge} from '../actions/tabs'
-import {unfulfillWish} from '../actions/wishes'
+import {unfulfillWish, ParseWish} from '../actions/wishes'
 
 function getDueDate(birthday) {
   if (!birthday) {
@@ -127,5 +129,24 @@ export function deferPastNotes(notes) {
     if (persist) {
       dispatch(persistNotes())
     }
+  }
+}
+
+export function syncNote(note) {
+  return dispatch => {
+    const wish = note.wish
+    if (note.type === 'reminder' || isIdea(wish)) {
+      return; // Nothing to sync
+    }
+    new Parse.Query(ParseWish).get(note.wish.id)
+      .then((parseWish) => {
+        const state = parseWish.get('isPrivate') ? 'wish-deleted' : 'ok'
+        dispatch(saveNote({...note, state}, false))
+      })
+      .catch((e) => {
+        if (e.code === 101 /* Object not found. */) {
+          dispatch(saveNote({...note, state: 'wish-deleted'}, false))
+        }
+      })
   }
 }

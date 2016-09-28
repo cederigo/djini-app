@@ -8,6 +8,7 @@ export const note:Note = {
   title: '',
   comment: '',
   type: 'reminder',
+  state: 'ok',
   done: false,
   dueDate: '',
   wish: undefined,
