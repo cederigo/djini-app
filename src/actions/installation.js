@@ -31,7 +31,7 @@ async function currentInstallation(): Promise<Parse.Installation> {
   try {
     const session = await Parse.Session.current()
     return new Parse.Installation({
-      installationId: session.get('installationId'),
+      installationId: session ? session.get('installationId') : undefined,
       appName: 'Djini',
       deviceType: Platform.OS,
       // TODO: Get this information from the app itself
