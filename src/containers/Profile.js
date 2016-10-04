@@ -5,6 +5,7 @@ import { StyleSheet, View} from 'react-native';
 import {Actions} from 'react-native-router-flux'
 
 import {editProfile, updateProfile, cancelEditProfile, onFieldChange} from '../actions/profile'
+import {version} from '../lib/config'
 
 import {AppBar, ActionButton} from '../components/AppBar'
 import ProfileField from '../components/ProfileField'
@@ -46,6 +47,8 @@ class Profile extends Component {
               editable={editable} onDateChange={(date) => {dispatch(onFieldChange('birthday', date))}}/>
           <ProfileField iconName="phone" value={user.phoneNumber}/>
         </View>
+
+        <DjiniText style={styles.versionText}>{version}</DjiniText>
       </View>
     );
   }
@@ -73,6 +76,11 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     marginTop: 40
+  },
+  versionText: {
+    position: 'absolute',
+    bottom: 0, right: 0,
+    fontSize: 11
   }
 });
 
