@@ -13,6 +13,7 @@ import {listString, quantityString} from './stringUtil'
 import {parseDate} from './dateUtil'
 
 export function configurePushNotification() {
+  console.log('configure')
   PushNotification.configure({
     // (required) Called when a remote or local notification is opened or received
     onNotification: function() { 
@@ -55,20 +56,19 @@ export function requestPermissions() {
 }
 
 export function updateLocalNotifications(notes) {
+  console.log('updateLocalNotifications()')
   cancelAllLocalNotifications()
+  scheduleLocalNotifications(getLocalNotifications(notes))
   // Give some time before rescheduling
   // Doesnt work on real hw otherwise
-  setTimeout(function() {
-    scheduleLocalNotifications(getLocalNotifications(notes))
-  }, 1000);
+  // setTimeout(function() { }, 2000);
 }
 
 export function scheduleLocalNotifications(notifications) {
   const now = Date.now()
   notifications.forEach((n) => {
-    if (n.fireDate < now) {
-      return; // Dont schedule past push notifications
-    }
+    // Dont schedule past push notifications 
+    if (n.fireDate < now) { return; }
     console.log('schedule notification', n)
     if (Platform.OS === 'android') {
       PushNotification.localNotificationSchedule({ 
@@ -83,6 +83,7 @@ export function scheduleLocalNotifications(notifications) {
 } 
 
 export function cancelAllLocalNotifications() {
+  console.log('cancelAllLocalNotifications()')
   PushNotification.cancelAllLocalNotifications()
 }
 

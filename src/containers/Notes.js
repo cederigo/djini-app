@@ -10,8 +10,7 @@ import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
 
 import {deferPastNotes} from '../actions/notes'
-import {checkPermissions, requestPermissions, updateLocalNotifications} from '../lib/pushNotification'
-
+import {checkPermissions, requestPermissions} from '../lib/pushNotification'
 
 class Notes extends Component {
   static propTypes = {
@@ -40,7 +39,6 @@ class Notes extends Component {
   }
 
   updatePermissions(permissions) {
-    updateLocalNotifications()
     this.setState({showPermissionInfo: !permissions.alert && this.props.notes.length})
   }
 
