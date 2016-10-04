@@ -122,7 +122,7 @@ export function deferPastNotes(notes) {
     reminders.forEach((n) => {
       const due = parseDate(n.dueDate)
       if (isPast(due)) {
-        dispatch(saveNote({dueDate: formatDate(due.add(1, 'year'))}, false, false))
+        dispatch(saveNote({id: n.id, dueDate: formatDate(due.add(1, 'year'))}, false, false))
         persist = true
       }
     })
