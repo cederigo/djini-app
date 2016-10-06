@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 
 import React, {Component, PropTypes} from 'react';
-import {View, ScrollView, StyleSheet, TouchableOpacity, Image, NativeModules, Dimensions, KeyboardAvoidingView} from 'react-native';
+import {View, ScrollView, StyleSheet, TouchableOpacity, Image,
+  NativeModules, Dimensions, KeyboardAvoidingView, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from './AppBar'
@@ -22,7 +23,9 @@ class WishEditView extends Component {
 
   static propTypes = {
     wish: PropTypes.object.isRequired,
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    error: PropTypes.object
   }
 
   static defaultProps = {
@@ -116,12 +119,17 @@ class WishEditView extends Component {
   }
 
   render() {
-    const {dispatch, wish, title} = this.props
+    const {dispatch, wish, title, isFetching, error} = this.props
     const isWish = !isIdea(wish)
+    const disableSave = this.state.uploading || !wish.title || isFetching;
+    
+    if (error) {
+      Alert.alert('Djini Fehler', 'Oops, Wunsch konnte nicht gespeichert werden. Stelle sicher, dass du eine Internet Verbindung hast.')
+    }
     return ( 
       <View style={styles.container}>
         <AppBar showBackButton={true} backButtonText="Abbrechen" title={title} textStyle="dark">
-          <ActionButton text="Fertig" textStyle="dark" disabled={this.state.uploading || !wish.title} onPress={() => dispatch(saveWish(wish))}/>
+          <ActionButton text="Fertig" textStyle="dark" disabled={disableSave} onPress={() => dispatch(saveWish(wish))}/>
         </AppBar>
 
         <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>

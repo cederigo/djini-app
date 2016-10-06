@@ -20,8 +20,12 @@ class Wish extends Component {
     return (
       <View style={styles.container}>
         {wishState.editMode ?
-          <WishEditView {...this.props} wish={wish} source={source}/> :
-          <WishView {...this.props} wish={wish} source={source} contact={wishState.contact}/>
+          <WishEditView {...this.props} 
+            wish={wish}
+            source={source}
+            isFetching={wishState.isFetching}
+            error={wishState.error}/>
+          : <WishView {...this.props} wish={wish} source={source} contact={wishState.contact}/>
         }
       </View>
     )

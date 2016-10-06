@@ -31,6 +31,7 @@ export default function wishReducer(state = initialState, {type, payload}) {
 
     case EDIT_WISH:
       return updateWish(state, payload)
+        .set('error', null)
         .set('editMode', true)
 
     case NEW_WISH: {
