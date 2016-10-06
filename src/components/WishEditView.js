@@ -6,15 +6,10 @@ import {View, ScrollView, StyleSheet, TouchableOpacity, Image,
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from './AppBar'
-import DjiniButton from './DjiniButton'
-import {DjiniDarkText as DjiniText} from './DjiniText'
-import DjiniTextInput from './DjiniTextInput'
+import WishEditForm from './WishEditForm'
 
 // Actions
-import {saveWish, onWishFieldChange, uploadWishImage, deleteWish} from '../actions/wishes'
-
-// Utils
-import {isIdea} from '../lib/wishUtil'
+import {onWishFieldChange, uploadWishImage} from '../actions/wishes'
 
 const IMAGE_WIDTH = Dimensions.get('window').width
 const IMAGE_HEIGHT = 200
@@ -39,11 +34,10 @@ class WishEditView extends Component {
     this.state = {
       uploading: false,
       uploadFailure: false,
-      imageSource: undefined
+      imageSource: undefined,
+      isValid: false
     }
   }
-
-  
 
   uploadImage(base64Data) {
     if (this.state.uploading) {
@@ -117,11 +111,16 @@ class WishEditView extends Component {
       </TouchableOpacity>
     )
   }
+  
+  onValidationChange(isValid) {
+    this.setState({isValid})
+  }
 
   render() {
-    const {dispatch, wish, title, isFetching, error} = this.props
-    const isWish = !isIdea(wish)
-    const disableSave = this.state.uploading || !wish.title || isFetching;
+    console.log('WishEditView()')
+    const {wish, title, isFetching, error, dispatch} = this.props
+    const {isValid} = this.state
+    const disableSave = this.state.uploading || !isValid || isFetching;
     
     if (error) {
       Alert.alert('Djini Fehler', 'Oops, Wunsch konnte nicht gespeichert werden. Stelle sicher, dass du eine Internet Verbindung hast.')
@@ -129,107 +128,16 @@ class WishEditView extends Component {
     return ( 
       <View style={styles.container}>
         <AppBar showBackButton={true} backButtonText="Abbrechen" title={title} textStyle="dark">
-          <ActionButton text="Fertig" textStyle="dark" disabled={disableSave} onPress={() => dispatch(saveWish(wish))}/>
+          <ActionButton text="Fertig" textStyle="dark" disabled={disableSave} onPress={() => this._form.save()}/>
         </AppBar>
 
         <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>
-        <ScrollView
-          style={styles.container}
-          keyboardShouldPersistTaps={true}>
-
-          {this.renderImage()}
-
-          <View style={styles.content}>
-
-            <DjiniText style={styles.label}>Titel</DjiniText>
-            <DjiniTextInput
-              blurOnSubmit={false}
-              onSubmitEditing={() => this.refs.details.focus()}
-              placeholder="Gib einen aussagekräftigen Titel an…"
-              onChangeText={(text) => dispatch(onWishFieldChange('title', text))}
-              value={wish.title}
-            />
-
-            <DjiniText style={styles.label}>Details</DjiniText>
-            <DjiniTextInput
-              ref="details"
-              onSubmitEditing={() => this.refs.price.focus()}
-              blurOnSubmit={false}
-              placeholder="z.B. Grösse, Farbe, Modell, …"
-              autoGrow={true}
-              onChangeText={(text) => dispatch(onWishFieldChange('description', text))}
-              value={wish.description}
-            />
-
-            <DjiniText style={styles.label}>Preis</DjiniText>
-            <DjiniTextInput
-              ref="price"
-              onSubmitEditing={() => this.refs.seenAt.focus()}
-              blurOnSubmit={false}
-              placeholder="Ungefährer Preis"
-              keyboardType="numeric"   
-              onChangeText={(text) => dispatch(onWishFieldChange('price', text))}
-              value={wish.price}
-            />
-
-            <DjiniText style={styles.label}>Wo gesehen</DjiniText>
-            <DjiniTextInput
-              ref="seenAt"
-              onSubmitEditing={() => this.refs.url.focus()}
-              blurOnSubmit={false}
-              placeholder="Wo kann dein Wunsch gefunden werden…"
-              onChangeText={(text) => dispatch(onWishFieldChange('seenAt', text))}
-              value={wish.seenAt}
-            />
-
-            <DjiniText style={styles.label}>Web-Link</DjiniText>
-            <DjiniTextInput
-              ref="url"
-              placeholder="http://…"
-              keyboardType="url"   
-              onChangeText={(text) => dispatch(onWishFieldChange('url', text))}
-              value={wish.url}
-            />
-
-            <View style={styles.toggles}>
-              {isWish ?
-              <View style={styles.toggle}>
-                <DjiniButton
-                  type="primary"
-                  style={styles.toggleButton}
-                  iconStyle={wish.isFavorite ? styles.starIcon : {}}
-                  active={wish.isFavorite}
-
-                  iconName={wish.isFavorite ? 'star' : 'star-border'}
-                  onPress={() => dispatch(onWishFieldChange('isFavorite', !wish.isFavorite))}/>
-                <DjiniText style={styles.toggleText}>Djini, das will ich unbedingt haben!</DjiniText>
-              </View>
-              : undefined
-              }
-              {isWish ?
-              <View style={styles.toggle}>
-                <DjiniButton 
-                  type="primary"
-                  style={styles.toggleButton}
-                  active={wish.isPrivate}
-                  iconName={wish.isPrivate ? 'lock' : 'lock-open'}
-                  onPress={() => dispatch(onWishFieldChange('isPrivate', !wish.isPrivate)) }/>
-                <DjiniText style={styles.toggleText}>Uhh, das sollte besser niemand sehen</DjiniText>
-              </View>
-              : undefined
-              }
-              <View style={styles.toggle}>
-                <DjiniButton 
-                  type="danger"
-                  style={styles.toggleButton}
-                  iconName="delete"
-                  onPress={() => dispatch(deleteWish(wish, 'details'))}
-                />
-                <DjiniText style={styles.toggleText}>Eintrag löschen</DjiniText>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
+          <ScrollView
+            style={styles.container}
+            keyboardShouldPersistTaps={true}>
+            {this.renderImage()} 
+            <WishEditForm dispatch={dispatch} wish={wish} ref={(form) => this._form = form} onValidationChange={(isValid) => this.onValidationChange(isValid)}/>
+          </ScrollView>
         </KeyboardAvoidingView>
       </View>
     )
@@ -243,31 +151,6 @@ const styles = StyleSheet.create({
   },
   keyboardAvoid: {
     flex: 1,
-  },
-  content: {
-    margin: 20
-  },
-  label: {
-    marginTop: 30,
-    fontSize: 14,
-  },
-  toggles: {
-    marginVertical: 20
-  },
-  toggle: {
-    marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  toggleButton: {
-    padding: 10
-  },
-  starIcon: {
-    color: 'rgb(244, 230, 56)',
-  },
-  toggleText: {
-    marginLeft: 10,
-    fontSize: 14
   },
   imageWrapper: {
     height: IMAGE_HEIGHT,
