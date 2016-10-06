@@ -8,15 +8,22 @@ Note: Make sure your target binary version (Info.plist, build.gradle)
 matches the one you are targeting out in the field!
 
 Ex. to update the target binary version:
+```
 $ code-push patch djini-Android Staging -t 0.9.5
+$ code-push patch djini-iOS Staging -t 0.9.x #semver
+```
 
 Android:
+```
 $ code-push release-react djini-Android android
+```
 
 iOS:
+```
 $ code-push release-react djini-iOS ios
+```
 
-## Making a release ##
+## Release ##
 
 Edit the version in the following files (I know, its a pane)
 
