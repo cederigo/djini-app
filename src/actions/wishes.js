@@ -19,9 +19,8 @@ import {
   NEW_WISH
 } from '../lib/constants'
 
-import {updateTaskNote, getTaskNote} from './notes'
+import {getTaskNote} from './notes'
 import {setBadge} from './tabs'
-import {fromParseWish} from '../reducers/wishes/wishesReducer'
 
 export const ParseWish = Parse.Object.extend('Wish')
 const ParseUser = Parse.Object.extend('User')
@@ -120,7 +119,6 @@ export function saveWish(wish: Record<Wish>, source: string = "details") {
     return parseWish.save().then((data) => {
       if (wish.id) {
         dispatch(wishUpdated(data, source))
-        dispatch(updateTaskNote(fromParseWish(data).toJS()))
       } else {
         if (source === 'details') {
           Actions.pop()
