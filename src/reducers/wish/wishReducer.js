@@ -41,6 +41,7 @@ export default function wishReducer(state = initialState, {type, payload}) {
        .set('toUserId', toUser.id)
      return updateWish(state.set('source', source), newWish)
        .set('editMode', true)
+       .set('error', null)
     }
 
     case SAVE_WISH_REQUEST:
