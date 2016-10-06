@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-
 import React, {Component, PropTypes} from 'react';
 import {View, ScrollView, StyleSheet, TouchableOpacity, Image,
-  NativeModules, Dimensions, KeyboardAvoidingView, Alert} from 'react-native';
+  NativeModules, Dimensions, KeyboardAvoidingView, Alert, Platform} from 'react-native';
+import { Actions} from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import {AppBar, ActionButton} from './AppBar'
@@ -38,7 +38,11 @@ class WishEditView extends Component {
       isValid: false
     }
   }
-
+  
+  componentDidMount() {
+    Actions.refresh({hideTabBar: true, sceneStyle: null})
+  }
+  
   uploadImage(base64Data) {
     if (this.state.uploading) {
       return;
@@ -117,7 +121,6 @@ class WishEditView extends Component {
   }
 
   render() {
-    console.log('WishEditView()')
     const {wish, title, isFetching, error, dispatch} = this.props
     const {isValid} = this.state
     const disableSave = this.state.uploading || !isValid || isFetching;
@@ -125,20 +128,26 @@ class WishEditView extends Component {
     if (error) {
       Alert.alert('Djini Fehler', 'Oops, Wunsch konnte nicht gespeichert werden. Stelle sicher, dass du eine Internet Verbindung hast.')
     }
+    
+    const content = 
+      <ScrollView
+        style={styles.container}
+        keyboardShouldPersistTaps={true}>
+        {this.renderImage()} 
+        <WishEditForm dispatch={dispatch} wish={wish} ref={(form) => this._form = form} onValidationChange={(isValid) => this.onValidationChange(isValid)}/>
+      </ScrollView>
+
     return ( 
       <View style={styles.container}>
         <AppBar showBackButton={true} backButtonText="Abbrechen" title={title} textStyle="dark">
           <ActionButton text="Fertig" textStyle="dark" disabled={disableSave} onPress={() => this._form.save()}/>
         </AppBar>
-
-        <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>
-          <ScrollView
-            style={styles.container}
-            keyboardShouldPersistTaps={true}>
-            {this.renderImage()} 
-            <WishEditForm dispatch={dispatch} wish={wish} ref={(form) => this._form = form} onValidationChange={(isValid) => this.onValidationChange(isValid)}/>
-          </ScrollView>
-        </KeyboardAvoidingView>
+        {Platform.OS === 'ios' ?
+          <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>
+            {content}
+          </KeyboardAvoidingView>
+          : content
+        }
       </View>
     )
   }
@@ -147,7 +156,7 @@ class WishEditView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgb(240, 240, 240)'
+    backgroundColor: 'rgb(240, 240, 240)',
   },
   keyboardAvoid: {
     flex: 1,

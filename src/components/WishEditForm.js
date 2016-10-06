@@ -55,6 +55,7 @@ export default class WishEditForm extends Component {
       <View style={styles.content}>
         <DjiniText style={styles.label}>Titel</DjiniText>
         <DjiniTextInput
+          autoFocus={true}
           blurOnSubmit={false}
           onSubmitEditing={() => this.refs.details.focus()}
           placeholder="Gib einen aussagekräftigen Titel an…"

@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {ScrollView, View, StyleSheet, TouchableOpacity, InteractionManager, KeyboardAvoidingView} from 'react-native'
+import {ScrollView, View, StyleSheet, TouchableOpacity, InteractionManager, KeyboardAvoidingView, Platform} from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import {Actions} from 'react-native-router-flux'
@@ -41,6 +41,8 @@ class Note extends Component {
     const {dispatch, note, isNew} = this.props
     if (!isNew) {
       dispatch(syncNote(note))
+    } else {
+      Actions.refresh({hideTabBar: true, sceneStyle: null})
     }
   }
 
@@ -104,10 +106,12 @@ class Note extends Component {
   edit() {
     const {note} = this.props
     this.setState({...this.getFields(note), edit: true})
+    Actions.refresh({hideTabBar: true, sceneStyle: null})
   }
 
   cancelEdit() {
     this.setState({edit: false})
+    Actions.refresh({hideTabBar: false})
   }
 
   save() {
@@ -123,9 +127,8 @@ class Note extends Component {
   }
 
   render() {
-    const {note, isNew} = this.props
-    const {type, title, comment, dueDate, contact, wish} = note
-    const {editable, edit, ...fields} = this.state
+    const {isNew} = this.props
+    const {editable, edit} = this.state
     return (
       <View style={styles.container}>
         <AppBar 
@@ -138,66 +141,77 @@ class Note extends Component {
               : undefined
           }
         </AppBar>
-
-        <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>
-
-          <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-
-            <View style={[styles.row, styles.titleField]}>
-              <DjiniIcon style={styles.titleIcon} size={60} name={type === 'reminder' ? 'cake' : 'giftdarkblue'}/>
-              {fields.title.editable && edit ?
-                <DjiniTextInput autoFocus={true} style={styles.value} inputStyle={styles.title} minHeight={45} value={fields.title.value} onChangeText={(val) => this.onValueChange('title', val)}/>
-                : <DjiniText style={[styles.value, styles.title]} numberOfLines={2}>{title}</DjiniText>
-              }
-            </View>
-
-            <View style={[styles.row, styles.field]}>
-              <DjiniIcon style={styles.icon} size={20} name="person"/>
-              <DjiniText style={styles.value}>{contact.name}</DjiniText>
-            </View>
-
-            <TouchableOpacity style={[styles.row, styles.field]} disabled={!!dueDate} onPress={() => this.edit()}>
-              <DjiniIcon style={styles.icon} size={20} name="event"/>
-              {fields.dueDate.editable && edit ?
-                <DateInput autoFocus={!fields.title.editable} date={fields.dueDate.value} minHeight={20} autoYear={true} onDateChange={(val) => this.onValueChange('dueDate', val)}/>
-                : <DjiniText style={styles.value} numberOfLines={3}>
-                    {this.getFormattedDate(this.props.note)}
-                    {dueDate ? undefined : <DjiniIcon style={styles.missingValue} name="error-outline"/>}
-                  </DjiniText>
-              }
-            </TouchableOpacity>
-
-            {dueDate ?
-              <View style={[styles.row, styles.field]}>
-                <DjiniIcon style={styles.icon} size={20} name="alarm"/>
-                <DjiniText style={styles.value} numberOfLines={2}>
-                  Djini wird dich 1 Woche vorher und am Tag selbst erinnern
-                </DjiniText>
-              </View>
-              : undefined
-            }
-
-            {wish && !isNew ?
-              this.renderWishField(this.props.note) : undefined
-            }
-
-            {wish ?
-              <View style={[styles.row, styles.field]}>
-                <DjiniIcon style={styles.icon} size={20} name={'list'}/>
-                {fields.comment.editable && edit ?
-                  <DjiniTextInput style={styles.value} maxLength={100} autoGrow={true} placeholder="Kommentar..." value={fields.comment.value} onChangeText={(val) => this.onValueChange('comment', val)}/>
-                  : <DjiniText style={styles.value} numberOfLines={3}>{comment}</DjiniText>
-                }
-              </View>
-              : undefined
-            }
-            {!edit || isNew ? 
-              <NoteFooter  {...this.props} saveNote={() => this.save()} />
-              : undefined
-            }
-          </ScrollView>
-        </KeyboardAvoidingView>
+        
+        {Platform.OS === 'ios' ?
+          <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>
+            {this.renderContent()}
+          </KeyboardAvoidingView>
+          : this.renderContent()
+        }
       </View>
+    )
+  }
+  
+  renderContent() {
+    const {note, isNew} = this.props
+    const {type, title, comment, dueDate, contact, wish} = note
+    const {edit, ...fields} = this.state
+    return (
+    <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
+
+      <View style={[styles.row, styles.titleField]}>
+        <DjiniIcon style={styles.titleIcon} size={60} name={type === 'reminder' ? 'cake' : 'giftdarkblue'}/>
+        {fields.title.editable && edit ?
+          <DjiniTextInput autoFocus={true} style={styles.value} inputStyle={styles.title} minHeight={45} value={fields.title.value} onChangeText={(val) => this.onValueChange('title', val)}/>
+          : <DjiniText style={[styles.value, styles.title]} numberOfLines={2}>{title}</DjiniText>
+        }
+      </View>
+
+      <View style={[styles.row, styles.field]}>
+        <DjiniIcon style={styles.icon} size={20} name="person"/>
+        <DjiniText style={styles.value}>{contact.name}</DjiniText>
+      </View>
+
+      <TouchableOpacity style={[styles.row, styles.field]} disabled={!!dueDate} onPress={() => this.edit()}>
+        <DjiniIcon style={styles.icon} size={20} name="event"/>
+        {fields.dueDate.editable && edit ?
+          <DateInput autoFocus={!fields.title.editable} date={fields.dueDate.value} minHeight={20} autoYear={true} onDateChange={(val) => this.onValueChange('dueDate', val)}/>
+          : <DjiniText style={styles.value} numberOfLines={3}>
+              {this.getFormattedDate(this.props.note)}
+              {dueDate ? undefined : <DjiniIcon style={styles.missingValue} name="error-outline"/>}
+            </DjiniText>
+        }
+      </TouchableOpacity>
+
+      {dueDate ?
+        <View style={[styles.row, styles.field]}>
+          <DjiniIcon style={styles.icon} size={20} name="alarm"/>
+          <DjiniText style={styles.value} numberOfLines={2}>
+            Djini wird dich 1 Woche vorher und am Tag selbst erinnern
+          </DjiniText>
+        </View>
+        : undefined
+      }
+
+      {wish && !isNew ?
+        this.renderWishField(this.props.note) : undefined
+      }
+
+      {wish ?
+        <View style={[styles.row, styles.field]}>
+          <DjiniIcon style={styles.icon} size={20} name={'list'}/>
+          {fields.comment.editable && edit ?
+            <DjiniTextInput style={styles.value} maxLength={100} autoGrow={true} placeholder="Kommentar..." value={fields.comment.value} onChangeText={(val) => this.onValueChange('comment', val)}/>
+            : <DjiniText style={styles.value} numberOfLines={3}>{comment}</DjiniText>
+          }
+        </View>
+        : undefined
+      }
+      {!edit || isNew ? 
+        <NoteFooter  {...this.props} saveNote={() => this.save()} />
+        : undefined
+      }
+    </ScrollView>
     )
   }
 }
