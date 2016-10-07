@@ -9,7 +9,7 @@ import {AppBar, ActionButton} from './AppBar'
 import WishEditForm from './WishEditForm'
 
 // Actions
-import {onWishFieldChange, uploadWishImage} from '../actions/wishes'
+import {uploadWishImage} from '../actions/wishes'
 
 const IMAGE_WIDTH = Dimensions.get('window').width
 const IMAGE_HEIGHT = 200
@@ -35,11 +35,12 @@ class WishEditView extends Component {
       uploading: false,
       uploadFailure: false,
       imageSource: undefined,
-      isValid: false
+      isValid: false,
+      imageURL: props.wish.imageURL
     }
   }
   
-  componentDidMount() {
+  componentWillMount() {
     Actions.refresh({hideTabBar: true, sceneStyle: null})
   }
   
@@ -50,8 +51,8 @@ class WishEditView extends Component {
     const {dispatch} = this.props
     this.setState({ uploading: true, uploadFailure: false })
     dispatch(uploadWishImage(base64Data))
-      .then(() => {
-        this.setState({uploading: false, uploadFailure: false})
+      .then((imageURL) => {
+        this.setState({uploading: false, uploadFailure: false, imageURL})
       })
       .catch(() => {
         this.setState({uploading: false, uploadFailure: true})
@@ -59,7 +60,6 @@ class WishEditView extends Component {
   }
 
   showImagePicker() {
-    const {dispatch} = this.props
     let options = {
       title: 'Bild auswählen',
       cancelButtonTitle: 'Abbrechen',
@@ -85,22 +85,19 @@ class WishEditView extends Component {
         return;
       }
 
-      //clear image
-      dispatch(onWishFieldChange('imageURL', null)) 
-      this.setState({
-        imageSource: {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true}
-      })
-
       if (response.data) {
+        this.setState({ imageSource: {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true} })
         this.uploadImage(response.data)
+      } else {
+        //clear image
+        this.setState({imageSource: null, imageURL: null})
       }
     })
   }
 
   renderImage() {
-    const {uploading, uploadFailure} = this.state
-    const {wish} = this.props
-    const imageSource = wish.imageURL ? {uri: wish.imageURL} : this.state.imageSource
+    const {uploading, uploadFailure, imageURL} = this.state
+    const imageSource = imageURL ? {uri: imageURL} : this.state.imageSource
     let image
     if (imageSource) {
       image = <Image style={[styles.image, uploading ? styles.imageUploading : undefined]} source={imageSource}/>
@@ -122,7 +119,7 @@ class WishEditView extends Component {
 
   render() {
     const {wish, title, isFetching, error, dispatch} = this.props
-    const {isValid} = this.state
+    const {isValid, imageURL} = this.state
     const disableSave = this.state.uploading || !isValid || isFetching;
     
     if (error) {
@@ -140,7 +137,7 @@ class WishEditView extends Component {
     return ( 
       <View style={styles.container}>
         <AppBar showBackButton={true} backButtonText="Abbrechen" title={title} textStyle="dark">
-          <ActionButton text="Fertig" textStyle="dark" disabled={disableSave} onPress={() => this._form.save()}/>
+          <ActionButton text="Fertig" textStyle="dark" disabled={disableSave} onPress={() => this._form.save(imageURL)}/>
         </AppBar>
         {Platform.OS === 'ios' ?
           <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>

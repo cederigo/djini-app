@@ -19,8 +19,6 @@ export const UPLOAD_WISH_IMAGE = 'upload-wish-image'
 
 export const WISH_DELETED = 'wish-deleted'
 
-export const ON_WISH_FIELD_CHANGE = 'on-wish-field-change'
-
 export const SET_PLATFORM = 'set-platform'
 export const SET_VERSION = 'set-version'
 

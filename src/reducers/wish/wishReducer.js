@@ -2,13 +2,11 @@ import InitialState from './wishInitialState'
 
 import {
   SAVE_WISH_REQUEST, 
-  WISH_ADDED, 
   WISH_UPDATED, 
   SAVE_WISH_FAILURE, 
   SHOW_WISH,
   EDIT_WISH,
-  NEW_WISH,
-  ON_WISH_FIELD_CHANGE
+  NEW_WISH
 } from '../../lib/constants'
 
 import {fromParseWish} from '../wishes/wishesReducer'
@@ -32,6 +30,7 @@ export default function wishReducer(state = initialState, {type, payload}) {
     case EDIT_WISH:
       return updateWish(state, payload)
         .set('error', null)
+        .set('isFetching', false)
         .set('editMode', true)
 
     case NEW_WISH: {
@@ -42,14 +41,14 @@ export default function wishReducer(state = initialState, {type, payload}) {
      return updateWish(state.set('source', source), newWish)
        .set('editMode', true)
        .set('error', null)
+       .set('isFetching', false)
     }
 
     case SAVE_WISH_REQUEST:
      return state.set('isFetching', true)
        .set('error', null)
 
-    case WISH_UPDATED:
-    case WISH_ADDED: {
+    case WISH_UPDATED: {
       const wish = fromParseWish(payload.wish)
       const source = payload.source
 
@@ -67,14 +66,6 @@ export default function wishReducer(state = initialState, {type, payload}) {
     case SAVE_WISH_FAILURE:
       return state.set('isFetching', false)
         .set('error', payload)
-
-    case ON_WISH_FIELD_CHANGE: {
-      let {field, value} = payload
-      if (field === 'price' && Number.isNaN(Number(value))) {
-        value = state.getIn([state.source === 'friend' ? 'wishOfFriend' : 'wish', field]) // Previous value
-      }
-      return state.setIn([state.source === 'friend' ? 'wishOfFriend' : 'wish', field], value)
-    }
   }
   /**
    * ## Default

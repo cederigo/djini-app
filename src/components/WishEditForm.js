@@ -29,9 +29,9 @@ export default class WishEditForm extends Component {
     this.props.onValidationChange(this.state.isValid)
   }
   
-  save() {
+  save(imageURL) {
     const {dispatch} = this.props
-    dispatch(saveWish(new Wish(this.state.fields)))
+    dispatch(saveWish(new Wish({...this.state.fields, imageURL})))
   }
   
   _isValid(wish) {

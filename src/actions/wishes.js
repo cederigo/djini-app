@@ -13,7 +13,6 @@ import {
   WISH_UPDATED,
   WISH_DELETED,
   UPLOAD_WISH_IMAGE,
-  ON_WISH_FIELD_CHANGE,
   SHOW_WISH,
   EDIT_WISH,
   NEW_WISH
@@ -56,21 +55,9 @@ export function showWish(wish, source = 'wishes', contact) {
   }
 }
 
-export function editWish(wish, source='wishes') {
+export function editWish(wish) {
   return dispatch => {
     dispatch({type: EDIT_WISH, payload: wish})
-    if (source === 'wishes') {
-      Actions.wish()
-    } else {
-      Actions.friendWish()
-    }
-  }
-}
-
-export function onWishFieldChange(field, value) {
-  return {
-    type: ON_WISH_FIELD_CHANGE,
-    payload: {field, value}
   }
 }
 
@@ -120,10 +107,10 @@ export function saveWish(wish: Record<Wish>, source: string = "details") {
       if (wish.id) {
         dispatch(wishUpdated(data, source))
       } else {
+        dispatch(wishAdded(data, source))
         if (source === 'details') {
           Actions.pop()
         }
-        dispatch(wishAdded(data, source))
       }
     })
     .catch((error) => {
@@ -192,7 +179,7 @@ export function uploadWishImage(base64Data) {
     dispatch({type: UPLOAD_WISH_IMAGE})
     const imageFile = new Parse.File('wish-image.jpg', {base64: base64Data})
     return imageFile.save()
-      .then((uploadedFile) => dispatch(onWishFieldChange('imageURL', uploadedFile.url())))
+      .then((uploadedFile) => uploadedFile.url())
   }
 }
 

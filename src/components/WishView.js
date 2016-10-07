@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, TouchableOpacity, Linking, Image, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { Actions} from 'react-native-router-flux'
 
 import DjiniButton from './DjiniButton'
 import DjiniBackground from './DjiniBackground'
@@ -48,6 +49,10 @@ class WishView extends Component {
       imageExpanded: false,
       imageHeight: IMAGE_HEIGHT
     }
+  }
+  
+  componentWillMount() {
+    Actions.refresh({hideTabBar: false})
   }
 
   componentDidMount() {
