@@ -127,25 +127,20 @@ const getActiveScene = (state) => {
   return result
 }
 
-const getSceneStyleFn = (os) => { 
-  return (props) => {
-    const activeScene = getActiveScene(props.scene.navigationState)
-    const statusBarStyle = activeScene.statusBarStyle || 'light-content' //default
-    if (os === 'ios') {
-      StatusBar.setBarStyle(statusBarStyle)
+const setStatusBarStyle = (os, navigationState) => { 
+  const activeScene = getActiveScene(navigationState)
+  const statusBarStyle = activeScene.statusBarStyle || 'light-content' //default
+  console.log('setStatusBarStyle() activeScene: ', activeScene.key)
+  if (os === 'ios') {
+    StatusBar.setBarStyle(statusBarStyle)
+  } else {
+    if (statusBarStyle === 'light-content') {
+      StatusBar.setBackgroundColor('transparent')
     } else {
-      StatusBar.setTranslucent(true)
-      if (statusBarStyle === 'light-content') {
-        StatusBar.setBackgroundColor('transparent')
-      } else {
-        StatusBar.setBackgroundColor('rgba(0,0,0,0.5)')
-      }
+      StatusBar.setBackgroundColor('rgba(0,0,0,0.5)')
     }
-    return styles.scene
   }
 }
-
-
 
 export default function init(os) {
 
@@ -168,7 +163,7 @@ export default function init(os) {
       return (
         <DjiniBackground>
           <Provider store={store}>
-            <Router hideNavBar={true} createReducer={createRoutesReducer} getSceneStyle={getSceneStyleFn(os)}>
+            <Router hideNavBar={true} createReducer={createRoutesReducer} getSceneStyle={() => styles.scene}>
               <Scene key="root">
                 <Scene key="app" component={App} initial={true}/>
 
@@ -181,6 +176,7 @@ export default function init(os) {
                   tabs={true} tabBarStyle={styles.tabBar}
                   component={Switch}
                   selector={(props) => {
+                    setStatusBarStyle(os, props.navigationState)
                     let sceneKey = props.children[props.index].sceneKey
                     if (!initialized && props.initialScene) {
                       sceneKey = props.initialScene
@@ -189,7 +185,7 @@ export default function init(os) {
                     return sceneKey
                   }}>
                   <Scene key="wishesTab" icon={TabIcon} iconName="lamp" onPress={() => onTabPress('wishesTab')}>
-                    <Scene key="wishes" animation="fade" duration={0} sceneStyle={styles.tabScene} component={Wishes} initial={true}/>
+                    <Scene key="wishes" animation="fade" sceneStyle={styles.tabScene} duration={0} component={Wishes} initial={true}/>
                     <Scene key="wish" animation="fade" sceneStyle={styles.tabScene} component={Wish} source="wishes" statusBarStyle="default"/>
                   </Scene>
                   <Scene key="contactsTab" icon={TabIcon} iconName="group" onPress={() => onTabPress('contactsTab')}>
