@@ -1,5 +1,5 @@
 import {OrderedMap} from 'immutable';
-import {Platform, Linking, InteractionManager} from 'react-native'
+import {Platform, Linking} from 'react-native'
 
 import {
   RESTORE_CONTACTS_REQUEST,
@@ -9,16 +9,17 @@ import {
   CONTACTS_REQUEST,
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
+  
+  UPDATE_CONTACT,
 
   ON_SEARCH_FIELD_CHANGE,
   SAVE_CONTACTS,
 
-  TOGGLE_FAVORITE,
   INVITE_CONTACT,
   CONTACTS_PERMISSION
 } from '../lib/constants'
 
-import {newReminderNote} from './notes'
+import {syncReminderNote} from './notes'
 import Contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
@@ -102,6 +103,14 @@ export function refreshContacts(source: ?string = 'app') {
   }
 }
 
+export function updateContact(contact, fields = {}) {
+  return (dispatch) => {
+    const update = {...contact, ...fields}
+    dispatch({type: UPDATE_CONTACT, payload: update})
+    dispatch(saveContacts())
+  }
+}
+
 export function saveContacts() {
   return (dispatch, getState) => {
     const state = getState().contacts
@@ -120,13 +129,13 @@ export function onSearchFieldChange(text) {
   }
 }
 
-export function toggleFavorite(contact) {
+export function setFavorite(contact, isFavorite, syncWithNotes = true) {
   return dispatch => {
-    dispatch({type: TOGGLE_FAVORITE, payload: contact})
-    if (!contact.isFavorite) {
-      dispatch(newReminderNote({...contact, isFavorite: true}))
-    }
+    dispatch(updateContact(contact, {isFavorite}))
     dispatch(saveContacts())
+    if (syncWithNotes) {
+      dispatch(syncReminderNote({...contact, isFavorite}))
+    }
   }
 }
 

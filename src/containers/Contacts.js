@@ -17,7 +17,7 @@ import {SearchBar} from '../components/AppBar'
 import {
   onSearchFieldChange,
   invite,
-  toggleFavorite,
+  setFavorite,
   refreshContacts,
   requestContactsPermission
 } from '../actions/contacts'
@@ -46,7 +46,7 @@ class Contacts extends Component {
 
   toggleFavorite(contact) {
     const {dispatch} = this.props
-    dispatch(toggleFavorite(contact))
+    dispatch(setFavorite(contact, !contact.isFavorite))
     dispatch(onSearchFieldChange('')) //clear search
   }
 

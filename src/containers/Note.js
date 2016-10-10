@@ -7,7 +7,7 @@ import {Actions} from 'react-native-router-flux'
 import {formatBirthday} from '../lib/dateUtil'
 import {isIdea} from '../lib/wishUtil'
 import {loadFriendProfile} from '../actions/profile'
-import {saveNote, syncNote} from '../actions/notes'
+import {saveNote, updateNoteState} from '../actions/notes'
 
 import {DjiniDarkIcon as DjiniIcon} from '../components/DjiniIcon'
 import {DjiniDarkTextInput as DjiniTextInput} from '../components/DjiniTextInput'
@@ -40,7 +40,7 @@ class Note extends Component {
   componentDidMount() {
     const {dispatch, note, isNew} = this.props
     if (!isNew) {
-      dispatch(syncNote(note))
+      dispatch(updateNoteState(note))
     } else {
       Actions.refresh({hideTabBar: true, sceneStyle: null})
     }

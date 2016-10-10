@@ -3,7 +3,7 @@ import {Actions} from 'react-native-router-flux'
 import Parse from 'parse/react-native'
 import moment from 'moment'
 
-import initialState from '../reducers/note/noteInitialState'
+import {getReminderNote, getTaskNote } from '../reducers/notes/notesReducer'
 
 import { SHOW_NOTE, SAVE_NOTE, DELETE_NOTE, NOTES_PERSISTED, NOTES_REHYDRATED} from '../lib/constants'
 import db from '../lib/db'
@@ -12,18 +12,7 @@ import {parseDate, formatDate} from '../lib/dateUtil'
 import {isIdea} from '../lib/wishUtil'
 import {setBadge} from '../actions/tabs'
 import {unfulfillWish, ParseWish} from '../actions/wishes'
-
-function getDueDate(birthday) {
-  if (!birthday) {
-    return undefined
-  }
-  const now = moment()
-  const dueDate = parseDate(birthday).year(now.year())
-  if (dueDate.isBefore(now)) {
-    dueDate.add(1, 'year')
-  }
-  return formatDate(dueDate)
-}
+import {setFavorite} from '../actions/contacts'
 
 export function persistNotes() {
   return (dispatch, getState) => {
@@ -53,6 +42,7 @@ export function showNote(note) {
 export function deleteNote(note) {
   return (dispatch) => {
     dispatch({type: DELETE_NOTE, payload: note})
+    dispatch(setFavorite(note.contact, false, false))
     dispatch(persistNotes())
     if (note.type === 'task' && !isIdea(note.wish)) {
       Alert.alert(
@@ -67,17 +57,6 @@ export function deleteNote(note) {
   }
 }
 
-export function getTaskNote(contact, wish) {
-  let note = {...initialState.note}
-  note.id = wish.id
-  note.type = 'task'
-  note.title = 'Geburtstag'
-  note.dueDate = getDueDate(contact.birthday)
-  note.contact = {...contact}
-  note.wish = {...wish}
-  return note
-}
-
 export function newTaskNote(contact, wish) {
   return (dispatch) => {
     dispatch(setBadge('notesTab'))
@@ -87,15 +66,19 @@ export function newTaskNote(contact, wish) {
 
 export function newReminderNote(contact) {
   return dispatch => {
-    let note = {...initialState.note} //clone
-    //prefill 
-    note.id = contact.phoneNumber
-    note.type = 'reminder'
-    note.title = 'Geburtstagserinnerung'
-    note.dueDate = getDueDate(contact.birthday)
-    note.contact = {...contact} //clone
     dispatch(setBadge('notesTab'))
-    dispatch(saveNote(note))
+    dispatch(saveNote(getReminderNote(contact)))
+  }
+}
+
+export function syncReminderNote(contact) {
+  return dispatch => {
+    if (contact.isFavorite) {
+      dispatch(newReminderNote(contact))
+    } else {
+      dispatch({type: DELETE_NOTE, payload: {id: contact.phoneNumber}})
+      dispatch(persistNotes())
+    }
   }
 }
 
@@ -132,7 +115,7 @@ export function deferPastNotes(notes) {
   }
 }
 
-export function syncNote(note) {
+export function updateNoteState(note) {
   return dispatch => {
     if (note.type === 'reminder') {
       return; // Nothing to sync

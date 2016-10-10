@@ -187,7 +187,7 @@ export function copyWish(wish: Record<Wish>, user: User) {
   return dispatch => {
     const copy = wish.merge({id: null, isFavorite: false, fromUserId: user.id, toUserId: user.id, fulfillerId: null})
     dispatch(saveWish(copy, 'copy'))
-    dispatch(setBadge('wishesTab'))
+    Alert.alert('Will ich auch!', 'Du hast nun einen neuen Eintrag in deiner Wunschliste.')
   }
 }
 

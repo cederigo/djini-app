@@ -15,7 +15,7 @@ import FriendWishesList from '../components/FriendWishesList'
 import FriendIdeasList from '../components/FriendIdeasList'
 import {AppBar} from '../components/AppBar'
 
-import {toggleFavorite, invite} from '../actions/contacts'
+import {setFavorite, invite} from '../actions/contacts'
 import {newWish} from '../actions/wishes'
 import {loadFriendProfile} from '../actions/profile'
 
@@ -59,7 +59,7 @@ class Friend extends Component {
           style={styles.favoriteButton}
           iconStyle={styles.favoriteIcon}
           iconName={contact.isFavorite ? 'favorite' : 'favorite-border'}
-          onPress={() => dispatch(toggleFavorite(contact))}/>
+          onPress={() => dispatch(setFavorite(contact, !contact.isFavorite))}/>
       </View>
     )
   }

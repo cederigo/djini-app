@@ -17,7 +17,7 @@ import {
 
   INVITE_CONTACT,
   SHOW_CONTACT,
-  TOGGLE_FAVORITE,
+  UPDATE_CONTACT,
 } from '../../lib/constants'
 
 const initialState = new InitialState;
@@ -64,11 +64,11 @@ export default function contactsReducer(state = initialState, {type, payload}) {
 
     case ON_SEARCH_FIELD_CHANGE:
         return state.set('filterText', payload)
-
-    case TOGGLE_FAVORITE: {
+        
+    case UPDATE_CONTACT: {
       const contact = payload
       const contacts = state.get('contacts')
-      return state.set('contacts', contacts.set(contact.phoneNumber, {...contact, isFavorite: !contact.isFavorite}))
+      return state.set('contacts', contacts.set(contact.phoneNumber, contact))
     }
 
     case SHOW_CONTACT:

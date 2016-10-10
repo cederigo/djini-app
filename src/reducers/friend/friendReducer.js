@@ -11,7 +11,7 @@ import {
   WISH_DELETED,
   WISH_ADDED,
   WISH_UPDATED,
-  TOGGLE_FAVORITE
+  UPDATE_CONTACT
 } from '../../lib/constants'
 
 import {isIdea} from '../../lib/wishUtil'
@@ -76,9 +76,9 @@ export default function friendReducer(state = initialState, {type, payload}) {
       return state.set('ideas', ideas.delete(idx)) //delete
     }
 
-    case TOGGLE_FAVORITE: {
+    case UPDATE_CONTACT: {
       const contact = payload
-      return state.set('contact', {...contact, isFavorite: !contact.isFavorite})
+      return state.set('contact', contact)
     }
 
   }

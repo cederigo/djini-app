@@ -13,7 +13,7 @@ import SwipeoutButton from './ListRowSwipeoutButton'
 
 const styles = StyleSheet.create({
   favoriteIcon: {
-    color: 'rgb(244, 230, 56)'
+    color: 'rgb(239,71,98)'
   },
   emptyList: {
     marginTop: 50,
@@ -60,7 +60,9 @@ class NotesList extends Component {
     const result = [
       { 
         backgroundColor: 'transparent',
-        component: <SwipeoutButton iconName="delete"/>,
+        component: <SwipeoutButton 
+          iconStyle={note.type === 'reminder' ? styles.favoriteIcon : {}}
+          iconName={note.type === 'reminder' ? 'favorite' : 'delete'}/>,
         onPress: () => dispatch(deleteNote(note)),
       },
     ]

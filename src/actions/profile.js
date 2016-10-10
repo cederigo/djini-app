@@ -5,6 +5,7 @@ import {Actions} from 'react-native-router-flux'
 import {User} from '../lib/types'
 import {findWishInProfile} from '../reducers/profile/profileReducer'
 import {showWish} from './wishes'
+import {updateContact} from './contacts'
 
 import {
   MY_PROFILE_REQUEST,
@@ -74,11 +75,14 @@ export function loadFriendProfile(contact, wishId) {
     Actions.friend()
     return Parse.Cloud.run('getFriendProfile', {phoneNumber: contact.phoneNumber})
       .then((profile) => {
+        const contacts = getState().contacts.contacts
+        dispatch(getFriendProfileSuccess({profile, contacts}))
         InteractionManager.runAfterInteractions(() => {
-          const contacts = getState().contacts.contacts
-          dispatch(getFriendProfileSuccess({profile, contacts}))
+          const friendState = getState().friend
+          const friend = friendState.user
+          dispatch(updateContact(contact, {registered: friend.registered, birthday: friend.birthday}))
           if (wishId) {
-            const wish = findWishInProfile(getState().friend, wishId)
+            const wish = findWishInProfile(friendState, wishId)
             if (wish) {
               dispatch(showWish(wish, 'friend', contact))
             }
