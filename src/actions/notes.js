@@ -19,8 +19,15 @@ export function persistNotes() {
     const notes = getState().notes.toArray()
     db.saveNotes(notes)
       .then(() => dispatch({type: NOTES_PERSISTED}))
-      .then(() => updateLocalNotifications(notes)) // No matter what the permissions are
+      .then(() => dispatch(updateNotesNotifications())) 
       .catch((e) => console.log('Could not persist notes. error: ', e))
+  }
+}
+
+export function updateNotesNotifications() {
+  return (dispatch, getState) => {
+    const notes = getState().notes.toArray()
+    updateLocalNotifications(notes)// No matter what the permissions are
   }
 }
 

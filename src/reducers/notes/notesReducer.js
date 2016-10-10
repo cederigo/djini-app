@@ -5,7 +5,7 @@ import moment from 'moment'
 
 import type {Note} from '../../lib/types'
 import {parseDate, formatDate} from '../../lib/dateUtil'
-import {DELETE_NOTE, SAVE_NOTE, NOTES_REHYDRATED, UPDATE_CONTACT} from '../../lib/constants'
+import {DELETE_NOTE, SAVE_NOTE, NOTES_REHYDRATED, UPDATE_CONTACT, CONTACTS_SUCCESS} from '../../lib/constants'
 
 const initialState = new List
 
@@ -47,14 +47,24 @@ export function getTaskNote(contact, wish) {
 }
 
 export default function notesReducer(state: List<Note> = initialState, {type, payload}: any) {
-  // TODO sync contacts on `CONTACTS_SUCCESS`
   if (type === UPDATE_CONTACT) {
     const contact = payload
     let idx = state.findIndex((t) => t.id === contact.phoneNumber)
-    // const existing = state.get(idx)
     if (idx >= 0) {
       return state.set(idx, getReminderNote(contact)).sortBy(sortByDueDate)
     }
+  }
+  else if (type === CONTACTS_SUCCESS) {
+    const contacts = payload
+    return state.map((note) => {
+      const contact = note.contact
+      const updatedContact = contacts.get(contact.phoneNumber)
+      if (updatedContact && note.type === 'reminder') {
+        return getReminderNote(updatedContact)
+      } else {
+        return note
+      }
+    })
   }
   else if (type === SAVE_NOTE) {
     const {note, upsert} = payload

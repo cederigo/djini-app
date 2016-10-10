@@ -19,7 +19,7 @@ import {
   CONTACTS_PERMISSION
 } from '../lib/constants'
 
-import {syncReminderNote} from './notes'
+import {syncReminderNote, persistNotes, updateNotesNotifications} from './notes'
 import Contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
@@ -95,7 +95,10 @@ export function refreshContacts(source: ?string = 'app') {
           .then((contacts) => Contacts.transliterate(contacts))
           .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
           .then((contacts) => dispatch(contactsSuccess(contacts)))
-          .then(() => dispatch(saveContacts()))
+          .then(() => {
+            dispatch(saveContacts())
+            dispatch(persistNotes())
+          })
           .catch((error) => dispatch(contactsFailure(error)))
       }, 100)
     }
@@ -107,7 +110,7 @@ export function updateContact(contact, fields = {}) {
   return (dispatch) => {
     const update = {...contact, ...fields}
     dispatch({type: UPDATE_CONTACT, payload: update})
-    dispatch(saveContacts())
+    dispatch(updateNotesNotifications())
   }
 }
 
