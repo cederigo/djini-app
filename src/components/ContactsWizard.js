@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
+    textAlign: 'center',
     marginTop: 36,
     marginHorizontal: 25
   },

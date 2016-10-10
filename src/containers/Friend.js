@@ -71,7 +71,7 @@ class Friend extends Component {
       return (
         <View style={styles.inviteView}>
           <DjiniText>
-            {`Unbegreiflich! „${contact.name}“ hat Djini noch nicht installiert. Jetzt einladen und lass Djini ihre/seine Wünsche erfüllen.`}
+            {`Unbegreiflich! ${contact.name} hat Djini noch nicht installiert. Jetzt einladen und lass Djini ihre/seine Wünsche erfüllen.`}
           </DjiniText>
           <DjiniButton
             style={styles.inviteButton}

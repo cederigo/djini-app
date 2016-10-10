@@ -20,7 +20,7 @@ export default class ProfileForm extends Component {
     return ( 
       <View style={styles.container}>
         <DjiniText style={styles.text}>
-          Für einen möglichen Support brauchen wir Name und E-Mail. Djini schwört auf seine Lampe, diese Angaben nicht weiterzugeben!
+          In Supportfällen braucht Djini die folgenden Angaben von dir. Djini schwört auf seine Lampe, deine Angaben nicht weiterzugeben!
         </DjiniText>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Name</DjiniText>

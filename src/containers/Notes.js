@@ -87,7 +87,7 @@ const PermissionInfo = (props) => {
   const {requestPermissions, ...other} = props
   return (
     <View {...other}>
-      <DjiniText style={styles.permissionText}>Djini kann dich auch gerne mit Push-Nachrichten an deine Notizen erinnern.</DjiniText>
+      <DjiniText style={styles.permissionText}>Soll Djini dich mit Push-Nachrichten an deine Notizen erinnern?</DjiniText>
       <DjiniButton onPress={requestPermissions} caption="Ja klar, bitte!"/>
     </View>
   )

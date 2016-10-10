@@ -186,8 +186,8 @@ class Note extends Component {
       {dueDate ?
         <View style={[styles.row, styles.field]}>
           <DjiniIcon style={styles.icon} size={20} name="alarm"/>
-          <DjiniText style={styles.value} numberOfLines={2}>
-            Djini wird dich 1 Woche vorher und am Tag selbst erinnern
+          <DjiniText style={styles.value}>
+            Djini wird dich ein erstes mal 2 Wochen, ein zweites mal 7 Tage vorher und ein letztes mal am Tag selbst daran erinnern
           </DjiniText>
         </View>
         : undefined

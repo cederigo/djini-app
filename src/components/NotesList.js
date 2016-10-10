@@ -111,7 +111,7 @@ class NotesList extends Component {
   renderEmptyList() {
     return (
       <DjiniText style={styles.emptyList}>
-        Favorisiere einer deiner Kontakte und Djini erstellt dir eine Geburtstagserinnerung. Erfülle einen Wunsch oder eine Idee und du wirst hier daran erinnert.
+        Favorisiere Kontakte und erfülle Wünsche oder eigene Ideen. Djini erinnert dich an Geburtstage von favorisierten Kontakten und an Geschenke, die du machen willst. 
       </DjiniText>
     );
   }

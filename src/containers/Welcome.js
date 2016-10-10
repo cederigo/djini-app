@@ -1,41 +1,43 @@
 
 import { Actions } from 'react-native-router-flux'
 import React, {Component} from 'react'
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, Dimensions} from 'react-native';
 
-import {lamp, group, todo, giftwhite} from '../../img'
+import {lamp, group, todo, giftwelcome} from '../../img'
 import DjiniLogo from '../components/DjiniLogo'
 import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
 
+const {height} = Dimensions.get('window')
+
 export default class Welcome extends Component {
   render() {
+    console.log('Window.height()', height)
     return(
       <View style={styles.container}>
         <DjiniLogo style={styles.logo}/>
         <View style={styles.feature}>
           <Image resizeMode='contain' style={styles.featureIcon} source={lamp}/>
           <DjiniText style={styles.featureText}>
-            Wünsche festhalten &
-            mit Freunden teilen
+            Halte Wünsche fest und teile sie mit Freunden
           </DjiniText>
         </View>
         <View style={styles.feature}>
           <Image resizeMode='contain' style={styles.featureIcon} source={group}/>
           <DjiniText style={styles.featureText}>
-            Geschenkideen für Freunde merken
+            Sammle Geschenkideen für Freunde
           </DjiniText>
         </View>
         <View style={styles.feature}>
-          <Image resizeMode='contain' style={styles.featureIcon} source={giftwhite}/>
+          <Image resizeMode='contain' style={styles.featureIcon} source={giftwelcome}/>
           <DjiniText style={styles.featureText}>
-            Wünsche & Ideen erfüllen
+            Erfülle Wünsche und Geschenkideen
           </DjiniText>
         </View>
-        <View style={styles.feature}>
+        <View style={[styles.feature, {opacity: height > 1200 ? 0 : 1}]}>
           <Image resizeMode='contain' style={styles.featureIcon} source={todo}/>
           <DjiniText style={styles.featureText}>
-            Nie mehr Geburtstage & Geschenke vergessen
+            Vergiss nie mehr Geburtstage oder Geschenke
           </DjiniText>
         </View>
         <DjiniButton style={styles.button} onPress={Actions.login} caption="Los gehts!"/>
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
   },
   featureText: {
     flex: 1,
-    fontSize: 17,
+    fontSize: height > 600 ? 20 : 16,
     fontStyle: 'italic'
   },
   button: {

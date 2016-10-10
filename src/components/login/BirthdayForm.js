@@ -17,10 +17,10 @@ export default class BirthdayForm extends Component {
     return ( 
       <View style={styles.container}>
         <DjiniText style={styles.text}>
-          Dank der Angabe deines Geburtsdatums kann Djini deinen Freunden helfen, ihre Geschenke rechtzeitig zu organisieren. Und dir auch!
+          Djini hilft dir an Geburtstage von Freunden zu denken – und deinen Freunden an deinen. So kannst du Geschenke rechtzeitig organisieren.
         </DjiniText>
         <View style={styles.formGroup}>
-          <DjiniText style={styles.formGroupText}>Geb.</DjiniText>
+          <DjiniText style={styles.formGroupText}>Geburtstag</DjiniText>
           <DateInput 
             type="light"
             style={styles.formGroupInput}

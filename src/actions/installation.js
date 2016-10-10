@@ -44,5 +44,7 @@ async function currentInstallation(): Promise<Parse.Installation> {
 
 export async function updateInstallation(updates: Object = {}): Promise<void> {
   const installation = await currentInstallation();
-  await installation.save(updates);
+  if (installation) {
+    await installation.save(updates);
+  }
 }
