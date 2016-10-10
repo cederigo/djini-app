@@ -169,7 +169,7 @@ class WishView extends Component {
 
             <View style={styles.attr}>
               <Icon style={styles.attrIcon} name="list"/>
-              <DjiniText style={styles.attrText}>{wish.description || '-'}</DjiniText>
+              <DjiniText collapsible={true} numberOfLines={3} style={styles.attrText}>{wish.description || '-'}</DjiniText>
             </View>
 
             <View style={styles.attr}>

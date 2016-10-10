@@ -1,5 +1,5 @@
-import React, {PropTypes} from 'react';
-import {Text, StyleSheet, Platform} from 'react-native';
+import React, {PropTypes, Component} from 'react';
+import {Text, StyleSheet, Platform, TouchableOpacity} from 'react-native';
 
 const styles = StyleSheet.create({
   text: {
@@ -12,17 +12,45 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function DjiniText (props) {
-  const style = [styles.text]
-  if (props.textStyle === 'dark') {
-    style.push(styles.textDark)
+export default class DjiniText extends Component {
+  
+  constructor(props) {
+    super(props)
+    this.state = {collapsed: true}
   }
-  style.push(props.style)
-  return (
-    <Text {...props} style={style}>
-      {props.children}
-    </Text>
-  )
+  
+  _onPress() {
+    if (!this.props.collapsible) {
+      return
+    }
+    this.setState({ collapsed: !this.state.collapsed })
+  }
+  
+  render() {
+    const {numberOfLines, ...props} = this.props
+    const {collapsed} = this.state
+    const style = [styles.text]
+    if (props.textStyle === 'dark') {
+      style.push(styles.textDark)
+    }
+    style.push(props.style)
+    
+    const textComponent = (
+      <Text {...props} numberOfLines={collapsed ? numberOfLines : undefined} style={style}>
+        {props.children}
+      </Text>
+    )
+
+    if (props.collapsible) {
+      return (
+        <TouchableOpacity onPress={() => this._onPress()}>
+          {textComponent}
+        </TouchableOpacity>
+      )
+    } else {
+      return textComponent
+    }
+  }
 }
 
 export function DjiniDarkText (props) {
@@ -34,7 +62,9 @@ export function DjiniDarkText (props) {
 }
 
 DjiniText.propTypes = {
-  textStyle: PropTypes.oneOf(['light', 'dark'])
+  textStyle: PropTypes.oneOf(['light', 'dark']),
+  collapsible: PropTypes.bool,
+  numberOfLines: PropTypes.number
 }
 
 DjiniText.defaultProps = {
