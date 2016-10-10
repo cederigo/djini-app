@@ -134,16 +134,17 @@ const setStatusBarStyle = (os, navigationState) => {
   if (os === 'ios') {
     StatusBar.setBarStyle(statusBarStyle)
   } else {
+    StatusBar.setTranslucent(true)
     if (statusBarStyle === 'light-content') {
-      StatusBar.setBackgroundColor('transparent')
+      StatusBar.setBackgroundColor('transparent', true)
     } else {
-      StatusBar.setBackgroundColor('rgba(0,0,0,0.5)')
+      StatusBar.setBackgroundColor('rgba(0,0,0,0.5)', true)
     }
   }
 }
 
 export default function init(os) {
-
+  
   let initialized = false
   // Init parse sdk
   Parse.initialize(PARSE_APP_ID);
