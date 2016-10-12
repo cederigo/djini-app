@@ -48,16 +48,22 @@ export function showNote(note) {
 
 export function deleteNote(note) {
   return (dispatch) => {
-    dispatch({type: DELETE_NOTE, payload: note})
-    dispatch(setFavorite(note.contact, false, false))
-    dispatch(persistNotes())
+    const onConfirmed = (unfulfill = false) => {
+      dispatch({type: DELETE_NOTE, payload: note})
+      dispatch(setFavorite(note.contact, false, false))
+      dispatch(persistNotes())
+      if (unfulfill) {
+        dispatch(unfulfillWish(note.wish))
+      }
+    }
     if (note.type === 'task' && !isIdea(note.wish)) {
       Alert.alert(
-        'Djini sagt:',
-        `${note.contact.name}s Wunsch wird immer noch von dir erfüllt.`,
+        'Notiz löschen',
+        `${note.contact.name}s Wunsch wird auch nach dem Löschen der Notiz immer noch von dir erfüllt.`,
         [
-          {style: 'cancel', text: 'Ok'},
-          {text: 'Freigeben', onPress: () => dispatch(unfulfillWish(note.wish))}
+          {text: 'Ok', onPress: () => onConfirmed(false)},
+          {text: 'Wunsch freigeben', onPress: () => onConfirmed(true)},
+          {style: 'cancel', text: 'Abbrechen'},
         ]
       )
     }

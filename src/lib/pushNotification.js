@@ -4,16 +4,11 @@
  * Utility / Wrapper for push notifications on ios/android
  */
 
-import {List} from 'immutable'
-import moment from 'moment'
 import {PushNotificationIOS, Platform} from 'react-native'
 import PushNotification from 'react-native-push-notification'
-
-import {listString, quantityString} from './stringUtil'
-import {parseDate} from './dateUtil'
+import {getNotesNotifications} from './pushNotificationFactory'
 
 export function configurePushNotification() {
-  console.log('configure')
   PushNotification.configure({
     // (required) Called when a remote or local notification is opened or received
     onNotification: function() { 
@@ -56,9 +51,8 @@ export function requestPermissions() {
 }
 
 export function updateLocalNotifications(notes) {
-  console.log('updateLocalNotifications()')
   cancelAllLocalNotifications()
-  scheduleLocalNotifications(getLocalNotifications(notes))
+  scheduleLocalNotifications(getNotesNotifications(notes))
   // Give some time before rescheduling
   // Doesnt work on real hw otherwise
   // setTimeout(function() { }, 2000);
@@ -83,56 +77,5 @@ export function scheduleLocalNotifications(notifications) {
 } 
 
 export function cancelAllLocalNotifications() {
-  console.log('cancelAllLocalNotifications()')
   PushNotification.cancelAllLocalNotifications()
-}
-
-export function getLocalNotifications(notes) {
-  if (!notes || !notes.length) {
-    return []
-  }
-
-  let result = []
-  List(notes)
-    .filter((note) => note.dueDate && !note.done)
-    .groupBy(groupNote)
-    .forEach((entries) => {
-      entries = entries.toJS()
-      // All entries share the same type. See `groupBy` above.
-      const note = entries[0]
-      const type = note.type
-      const dueDate = note.dueDate
-      const names = entries.map((e) => e.contact.name)
-      // 1 Week before @ 9.00h
-      result.push({
-        fireDate: parseDate(dueDate).subtract(7, 'days').hours(9).minute(0).valueOf(),
-        alertBody: 
-          type === 'reminder' ?
-            `${listString(names)} ${quantityString(names.length, 'hat', 'haben')} am ${moment(dueDate).format('Do MMMM')} Geburtstag`
-            : `Nicht vergessen, du musst noch "${note.wish.title}" für ${note.contact.name} besorgen`
-      })
-      // The same day @ 9.00h
-      result.push({
-        fireDate: parseDate(dueDate).hours(9).minute(0).valueOf(),
-        alertBody: 
-          type === 'reminder' ?
-            `${listString(names)} ${quantityString(names.length, 'hat', 'haben')} heute Geburtstag`
-            : `Nicht vergessen, du musst noch "${note.wish.title}" für ${note.contact.name} besorgen`
-      })
-    })
-
-  return result
-}
-
-/**
- * Helper
- */
-function groupNote(note) {
-  if (note.type === 'task') {
-    //dont group them
-    return note.id
-  } else {
-    //group reminders by dueDate
-    return note.dueDate
-  }
 }

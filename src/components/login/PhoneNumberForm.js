@@ -29,7 +29,7 @@ export default class PhoneNumberForm extends Component {
           Djini soll dein Leben vereinfachen! Darum setzt er auf einen bequemen SMS-Login statt auf schnell vergessene Passwörter.
         </DjiniText>
         <View style={styles.formGroup}>
-          <DjiniText style={styles.formGroupText}>Telefon-Nummer</DjiniText>
+          <DjiniText style={styles.formGroupText}>Telefon</DjiniText>
           <DjiniTextInput
             placeholder="z.B. 079 999 999"
             style={styles.formGroupInput}

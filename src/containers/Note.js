@@ -31,7 +31,12 @@ class Note extends Component {
     const {note} = this.props
     this.onValueChange = this.onValueChange.bind(this)
     const fields = this.getFields(note)
-    this.state = {...fields, edit: props.edit, editable: Object.values(fields).some((f) => f.editable)}
+    this.state = {
+      edit: props.edit,
+      editable: Object.values(fields).some((f) => f.editable),
+      fields,
+      isValid: this.validate(fields)
+    }
   }
 
   /**
@@ -53,12 +58,16 @@ class Note extends Component {
       comment: {value: note.comment, editable: note.type === 'task'}
     }
   }
+  
+  validate(fields) {
+    return !!fields.title.value
+  }
 
   getFormattedDate(note) {
     const contact = note.contact
     const hint = note.type === 'reminder' ?
       'Leider kennt Djini den Geburtstag nicht. Hilf und trage diesen manuell nach'
-      : 'Leider kennt Djini das Datum nicht. Hilf und trage es manuell nach'
+      : 'Du hast kein Datum angegeben. Trage das Datum manuell nach'
     if (note.type === 'reminder' && contact.birthday) {
         return formatBirthday(contact.birthday)
     }
@@ -116,19 +125,21 @@ class Note extends Component {
 
   save() {
     const {dispatch, note, onSave} = this.props
-    const {title, dueDate, comment} = this.state
+    const {title, dueDate, comment} = this.state.fields
     dispatch(saveNote({...note, title: title.value, dueDate: dueDate.value, comment: comment.value}))
     onSave(this)
   }
-
-  onValueChange(field, value) {
-    const existingField = this.state[field]
-    this.setState({[field]: {...existingField, value}})
+  
+  onValueChange(fieldName, value) {
+    const {fields} = this.state
+    const field = fields[fieldName]
+    const updatedFields = {...fields, [fieldName]: {...field, value}}
+    this.setState({fields: updatedFields, isValid: this.validate(updatedFields)})
   }
 
   render() {
     const {isNew} = this.props
-    const {editable, edit} = this.state
+    const {editable, edit, isValid} = this.state
     return (
       <View style={styles.container}>
         <AppBar 
@@ -136,7 +147,7 @@ class Note extends Component {
           showBackButton={true} backButtonText={edit ? "Abbrechen" : undefined}
           onBack={edit && !isNew ? () => this.cancelEdit() : undefined}>
           {edit ? 
-            <ActionButton textStyle="dark" text={this.props.saveText} onPress={() => this.save()}/>  
+            <ActionButton disabled={!isValid} textStyle="dark" text={this.props.saveText} onPress={() => this.save()}/>  
             : editable ? <ActionButton textStyle="dark" text="Bearbeiten" onPress={() => this.edit()}/>
               : undefined
           }
@@ -154,15 +165,15 @@ class Note extends Component {
   
   renderContent() {
     const {note, isNew} = this.props
-    const {type, title, comment, dueDate, contact, wish} = note
-    const {edit, ...fields} = this.state
+    const {type, title, comment, dueDate, contact, wish, done} = note
+    const {edit, isValid, fields} = this.state
     return (
     <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
 
       <View style={[styles.row, styles.titleField]}>
         <DjiniIcon style={styles.titleIcon} size={60} name={type === 'reminder' ? 'cake' : 'giftdarkblue'}/>
         {fields.title.editable && edit ?
-          <DjiniTextInput autoFocus={true} style={styles.value} inputStyle={styles.title} minHeight={45} value={fields.title.value} onChangeText={(val) => this.onValueChange('title', val)}/>
+          <DjiniTextInput placeholder="Anlass..." autoFocus={true} style={styles.value} inputStyle={styles.title} minHeight={45} value={fields.title.value} onChangeText={(val) => this.onValueChange('title', val)}/>
           : <DjiniText style={[styles.value, styles.title]} numberOfLines={2}>{title}</DjiniText>
         }
       </View>
@@ -187,7 +198,12 @@ class Note extends Component {
         <View style={[styles.row, styles.field]}>
           <DjiniIcon style={styles.icon} size={20} name="alarm"/>
           <DjiniText style={styles.value}>
-            Djini wird dich ein erstes mal 2 Wochen, ein zweites mal 7 Tage vorher und ein letztes mal am Tag selbst daran erinnern
+            {type === 'reminder'
+              ? 'Djini wird dich ein erstes mal 2 Wochen, ein zweites mal 7 Tage vorher und ein letztes mal am Tag selbst daran erinnern'
+              : done
+                ? 'Djini erinnert dich nicht mehr an das Geschenk'
+                : 'Djini wird dich eine erstes mal 10 und ein zweites mal 4 Tage vorher daran erinnern'
+            }
           </DjiniText>
         </View>
         : undefined
@@ -208,7 +224,7 @@ class Note extends Component {
         : undefined
       }
       {!edit || isNew ? 
-        <NoteFooter  {...this.props} saveNote={() => this.save()} />
+        <NoteFooter  {...this.props} isValid={isValid} saveNote={() => this.save()} />
         : undefined
       }
     </ScrollView>

@@ -73,7 +73,6 @@ class WishView extends Component {
     } else {
       imageStyle = {resizeMode: 'cover', height: IMAGE_HEIGHT}
     }
-          // : <Image style={styles.clouds} resizeMode='stretch' source={clouds}/>
     return (
       <TouchableOpacity style={wish.imageURL ? {} : styles.cloudsContainer} onPress={this.imageClicked}>
         {wish.imageURL ? 

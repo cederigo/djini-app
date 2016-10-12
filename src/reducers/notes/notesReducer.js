@@ -39,7 +39,7 @@ export function getTaskNote(contact, wish) {
   return {
     id: wish.id,
     type: 'task',
-    title: 'Geburtstag',
+    title: '',
     dueDate: getDueDate(contact.birthday),
     contact: {...contact},
     wish: {...wish}

@@ -18,7 +18,7 @@ import {
   NEW_WISH
 } from '../lib/constants'
 
-import {getTaskNote} from './notes'
+import {getTaskNote} from '../reducers/notes/notesReducer'
 import {setBadge} from './tabs'
 
 export const ParseWish = Parse.Object.extend('Wish')

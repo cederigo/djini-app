@@ -1,3 +1,4 @@
+/* global setTimeout */
 import React, {Component, PropTypes} from 'react';
 import {RefreshControl, StyleSheet} from 'react-native';
 
@@ -28,6 +29,7 @@ export default class ContactsList extends Component {
     openContact: PropTypes.func.isRequired,
     inviteContact: PropTypes.func.isRequired,
     refreshContacts: PropTypes.func.isRequired,
+    showSwipeoutHint: PropTypes.bool.isRequired
   }
 
   constructor(props) {
@@ -45,6 +47,15 @@ export default class ContactsList extends Component {
       this.setState({ refreshing: false })
       this._innerRef.scrollTo({animated: false})
     }
+  }
+  
+  showSwipeoutAnimation (swipeout) {
+    if (!swipeout) {
+      return
+    }
+    swipeout.setState({btnWidth: 50, btnsRightWidth: 150})
+    setTimeout(() => swipeout._tweenContent('contentPos', -100), 2000)
+    setTimeout(() => swipeout._close(), 4000)
   }
 
   render() {
@@ -97,11 +108,13 @@ export default class ContactsList extends Component {
     return result
   }
 
-  renderRow (contact) {
-    const {openContact} = this.props
+  renderRow (contact, section, idx) {
+    const {openContact, showSwipeoutHint} = this.props
+    const showSwipeoutAnimation = showSwipeoutHint && idx === '0'
     return (
       <ListRow
         title={contact.name}
+        swipeoutRef={showSwipeoutAnimation ? this.showSwipeoutAnimation : undefined}
         swipeoutBtns={this.swipeoutBtns(contact)}
         onPress={() => openContact(contact)}>
         {contact.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="favorite"/> : undefined}

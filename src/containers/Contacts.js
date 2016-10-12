@@ -25,6 +25,14 @@ import {
 import {loadFriendProfile} from '../actions/profile'
 
 class Contacts extends Component {
+  
+  constructor(props) {
+    super(props)
+    console.log('Contacts.constructor()')
+    this.state = {
+      showSwipeoutHint: false
+    }
+  }
 
   endSearch() {
     const {dispatch} = this.props
@@ -60,16 +68,27 @@ class Contacts extends Component {
     const {dispatch} = this.props
     dispatch(invite(c))
   }
+  
+  requestPermission() {
+    const {dispatch} = this.props
+    dispatch(requestContactsPermission())
+    this.setState({showSwipeoutHint: true})
+  }
+  
+  refreshContacts() {
+    const {dispatch} = this.props
+    dispatch(refreshContacts())
+  }
 
   render() {
     const {contactsState, dispatch} = this.props
     let {contacts, filterText, isFetching} = contactsState
 
     if (!isFetching && contactsState.permissionDenied) {
-      return <ContactsPermission refreshContacts={() => dispatch(refreshContacts())}/>
+      return <ContactsPermission refreshContacts={() => this.refreshContacts()}/>
     }
     if (!isFetching && !contacts.size) {
-      return <ContactsWizard requestPermission={() => dispatch(requestContactsPermission())}/>
+      return <ContactsWizard requestPermission={() => this.requestPermission()}/>
     } 
 
     //contacts
@@ -85,10 +104,11 @@ class Contacts extends Component {
         {isFetching ?
           <DjiniText style={styles.loading}>Laden..</DjiniText>
           : <ContactsList
+            showSwipeoutHint={this.state.showSwipeoutHint}
             toggleFavorite={(c) => this.toggleFavorite(c)}
             openContact={(c) => this.openContact(c)}
             inviteContact={(c) => this.inviteContact(c)}
-            refreshContacts={() => dispatch(refreshContacts())}
+            refreshContacts={() => this.refreshContacts()}
             contacts={this.getListData(contacts, filterText)}/>
         }
       </View>

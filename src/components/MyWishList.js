@@ -58,8 +58,8 @@ class MyWishList extends Component {
       return
     }
     swipeout.setState({btnWidth: 50, btnsRightWidth: 150})
-    setTimeout(() => swipeout._tweenContent('contentPos', -100), 1000)
-    setTimeout(() => swipeout._close(), 1500)
+    setTimeout(() => swipeout._tweenContent('contentPos', -150), 2000)
+    setTimeout(() => swipeout._close(), 4000)
   }
 
   swipeoutBtns (wish) {

@@ -76,18 +76,16 @@ const ReminderNoteFooter = (props) => {
 }
 
 const NewNoteFooter = (props) => {
-  const {note, saveNote} = props
+  const {note, saveNote, isValid} = props
   const {wish} = note
   const title = isIdea(wish) ? 'Idee' : 'Wunsch'
 
   return (
     <View style={styles.container}>
-      <DjiniText textStyle="dark" style={styles.djiniText}>
-        Djini fragt: 
-        <DjiniText textStyle="dark" style={styles.text}>{` Willst du ${note.contact.name}s ${title} wirklich erfüllen?`}</DjiniText>
-      </DjiniText>
+      <DjiniText textStyle="dark" style={styles.text}>{` Willst du ${note.contact.name}s ${title} wirklich erfüllen?`}</DjiniText>
       <DjiniButton
         type="primary" caption={`${title} erfüllen!`}
+        disabled={!isValid}
         style={styles.button}
         onPress={saveNote}/>
     </View>
@@ -103,15 +101,16 @@ const TaskNoteFooter = (props) => {
         <DjiniIcon style={styles.task} name={note.done ? 'gift' : 'giftlightblue'} size={40}/>
         <DjiniIcon style={styles.taskDone} name={note.done ? 'giftlightblue_done' : 'gift_done'} size={45}/>
       </View>
-      <DjiniText textStyle="dark" style={styles.djiniText}>
-        Djini sagt:
-        {note.done ? 
-          <DjiniText textStyle="dark" style={styles.text}> Yeah, well done! Du bist bereit für die Party!</DjiniText>
-          : <DjiniText textStyle="dark" style={styles.text}> Gut, du weist, was du schenken möchtest. Organisiere nun das Geschenk! Hopp Hopp!</DjiniText>
-        }
-      </DjiniText>
+      {note.done ? 
+        <DjiniText textStyle="dark" style={styles.text}>
+          Yeah, well done! Du bist bereit für die Party!
+        </DjiniText>
+        : <DjiniText textStyle="dark" style={styles.text}>
+            Gut, du weisst, was du schenken möchtest. Nun musst du das Geschenk nur noch organisieren.
+          </DjiniText>
+      }
       <DjiniButton
-        type="primary" caption={note.done ? 'Ah, doch nicht?' : 'Geschenk gekauft?'}
+        type="primary" caption={note.done ? 'Ah, doch nicht?' : 'Geschenk organisiert?'}
         style={styles.button}
         onPress={() => {
           dispatch(saveNote({...note, done: !note.done}))
