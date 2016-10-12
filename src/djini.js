@@ -167,11 +167,8 @@ export default function init(os) {
             <Router hideNavBar={true} createReducer={createRoutesReducer} getSceneStyle={() => styles.scene}>
               <Scene key="root">
                 <Scene key="app" component={App} initial={true}/>
-
                 <Scene key="welcome" type="replace" component={Welcome} sceneStyle={styles.scene}/>
-
                 <Scene key="login" type="replace" component={Login} sceneStyle={styles.scene}/>
-
                 <Scene 
                   key="home" type="replace"
                   tabs={true} tabBarStyle={styles.tabBar}

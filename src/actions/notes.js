@@ -66,6 +66,9 @@ export function deleteNote(note) {
           {style: 'cancel', text: 'Abbrechen'},
         ]
       )
+    } else {
+      onConfirmed(false)
+
     }
   }
 }
