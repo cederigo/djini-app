@@ -157,7 +157,7 @@ class WishView extends Component {
           {allowEdit(wish, currentUser) ? <ActionButton text="Bearbeiten" textStyle="dark" onPress={() => dispatch(editWish(wish, source))}/> : undefined }
         </AppBar>
 
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.scroll}>
           <View style={styles.content}>
             {this.renderImage(wish)}
             {this.renderFulfillment(wish, currentUser)}
@@ -206,6 +206,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgb(240, 240, 240)'
   },
+  scroll: {
+    flex: 1,
+  },
   content: {
     flex: 1,
     marginBottom: 50
@@ -213,6 +216,7 @@ const styles = StyleSheet.create({
   cloudsContainer: {
     backgroundColor: 'rgb(61, 63, 148)',
     height: 150,
+    overflow: 'hidden'
   },
   clouds: {
     position: 'absolute',
@@ -230,6 +234,7 @@ const styles = StyleSheet.create({
     marginTop: 18
   },
   attrIcon: {
+    backgroundColor: 'transparent',
     color: 'rgb(61, 63, 148)',
     position: 'absolute',
     left: 18,
