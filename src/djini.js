@@ -127,10 +127,12 @@ const getActiveScene = (state) => {
   return result
 }
 
-const setStatusBarStyle = (os, navigationState) => { 
+const onSceneSelect = (os, navigationState) => {
   const activeScene = getActiveScene(navigationState)
-  const statusBarStyle = activeScene.statusBarStyle || 'light-content' //default
-  console.log('setStatusBarStyle() activeScene: ', activeScene.key)
+  setStatusBarStyle(os, activeScene.statusBarStyle)
+}
+
+const setStatusBarStyle = (os, statusBarStyle = 'light-content') => { 
   if (os === 'ios') {
     StatusBar.setBarStyle(statusBarStyle)
   } else {
@@ -159,7 +161,10 @@ export default function init(os) {
     Actions[key]()
   }
   
-  let Djini = React.createClass( {
+  let Djini = React.createClass({
+    componentWillMount() {
+      setStatusBarStyle(os, 'light-content')
+    },
     render() {
       return (
         <DjiniBackground>
@@ -174,7 +179,7 @@ export default function init(os) {
                   tabs={true} tabBarStyle={styles.tabBar}
                   component={Switch}
                   selector={(props) => {
-                    setStatusBarStyle(os, props.navigationState)
+                    onSceneSelect(os, props.navigationState)
                     let sceneKey = props.children[props.index].sceneKey
                     if (!initialized && props.initialScene) {
                       sceneKey = props.initialScene
