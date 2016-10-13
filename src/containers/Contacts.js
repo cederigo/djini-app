@@ -72,7 +72,8 @@ class Contacts extends Component {
   requestPermission() {
     const {dispatch} = this.props
     dispatch(requestContactsPermission())
-    this.setState({showSwipeoutHint: true})
+    // Disable atm.
+    // this.setState({showSwipeoutHint: true})
   }
   
   refreshContacts() {
