@@ -1,55 +1,56 @@
-import Immutable from 'immutable';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import React, {
-  Component,
-  PropTypes,
-  View,
-  TextInput
-} from 'react-native';
+import React, {Component} from 'react';
+import {View,} from 'react-native';
+
+import DjiniText from '../DjiniText'
+import DjiniTextInput from '../DjiniTextInput'
 
 export default class ProfileForm extends Component {
 
+  props: {
+    onFormFieldChange: (name: string, text: string) => void,
+    onNext: () => void,
+    authState: any,
+    styles: any,
+  }
+
   render() {
 
-    const {actions, authState, styles} = this.props
+    const {onFormFieldChange, authState, styles, onNext} = this.props
     const {name, email} = authState.fields
     return ( 
       <View style={styles.container}>
-        <Icon name="account-circle" style={styles.icon} size={90} />
-
-        <TextInput
-          style={styles.input}
-          editable={!authState.isFetching}
-          placeholder="Username"
-          onChangeText={(text) => { actions.onFormFieldChange('name', text)}}
-          autoFocus={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-          returnKeyType="next"
-          value={name}
-          onSubmitEditing={() => this.refs.email.focus()}
-        />
-
-        <TextInput
-          ref="email"
-          style={styles.input}
-          editable={!authState.isFetching}
-          placeholder="E-Mail"
-          keyboardType="email-address"
-          onChangeText={(text) => { actions.onFormFieldChange('email', text)}}
-          autoCapitalize="none"
-          autoCorrect={false}
-          returnKeyType="next"
-          value={email}
-        />
-
+        <DjiniText style={styles.text}>
+          In Supportfällen braucht Djini die folgenden Angaben von dir. Djini schwört auf seine Lampe, deine Angaben nicht weiterzugeben!
+        </DjiniText>
+        <View style={styles.formGroup}>
+          <DjiniText style={styles.formGroupText}>Name</DjiniText>
+          <DjiniTextInput
+            style={styles.formGroupInput}
+            type="light"
+            editable={!authState.isFetching}
+            onChangeText={(text) => { onFormFieldChange('name', text)}}
+            autoFocus={true}
+            returnKeyType="next"
+            value={name}
+            onSubmitEditing={() => this.refs.email.focus()}
+          />
+        </View>
+        <View style={styles.formGroup}>
+          <DjiniText style={styles.formGroupText}>E-Mail</DjiniText>
+          <DjiniTextInput
+            ref="email"
+            type="light"
+            autoCapitalize="none"
+            style={styles.formGroupInput}
+            editable={!authState.isFetching}
+            keyboardType="email-address"
+            onChangeText={(text) => { onFormFieldChange('email', text)}}
+            returnKeyType="next"
+            onSubmitEditing={onNext}
+            value={email}
+          />
+        </View>
       </View>
     )
   }
-}
-
-ProfileForm.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired
 }

@@ -1,55 +1,70 @@
 /**
  * # app.js
- *  Display startup screen and navigate according to auth state
+ *  Bootstrap and navigate according to auth state
  */
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux'
-import React, { Component, StyleSheet, View, Text, PropTypes } from 'react-native';
-import * as authActions from '../reducers/auth/authActions';
+import Parse from 'parse/react-native'
+import React, {Component} from 'react'
+import { View, StyleSheet} from 'react-native';
+import codePush from "react-native-code-push";
 
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  summary: {
-    fontSize: 18,
-    fontWeight: 'bold'
-  }
-});
+import {version} from '../lib/config'
+import {getInitialNotification} from '../lib/pushNotification'
+
+import DjiniLogo from '../components/DjiniLogo'
+
+/* actions */
+import {refreshContacts, restoreContacts} from '../actions/contacts';
+import {loginSuccess, loginFailure} from '../actions/authActions';
+import {updateInstallation} from '../actions/installation'
+import {rehydrateNotes} from '../actions/notes'
 
 class App extends Component {
 
   componentDidMount() {
-    this.props.actions.getSessionToken()
-      .then(() => this.props.actions.getCurrentUser())
-      .then(() => Actions.home())
-      .catch(() => {
-        Actions.login()
+    const {dispatch} = this.props
+    updateInstallation({version})
+    dispatch(restoreContacts())
+    dispatch(rehydrateNotes())
+    Parse.User.currentAsync()
+      .then((parseUser) => {
+        if (!parseUser) {
+          throw new Error('User not logged in')
+        }
+        dispatch(refreshContacts())
+        dispatch(loginSuccess(parseUser, false))
+        // If app was opened through notification, navigate to notes tab
+        getInitialNotification()
+          .then((notification) => {
+            Actions.home({initialScene: notification ? 'notesTab' : undefined})
+          })
+      })
+      .catch((error) => {
+        dispatch(loginFailure(error))
+        Actions.welcome()
       })
   }
 
   render() {
-    console.log('App.render()')
-    return(
-      <View style={ styles.container }>
-        <Text style={ styles.summary }>Wishmaster</Text>
+    return (
+      <View style={styles.container}>
+        <DjiniLogo style={styles.logo}/>
       </View>
-    );
+    )
   }
 }
 
-App.propTypes = {
-  actions: PropTypes.object.isRequired
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  logo: {
+    marginTop: 80
+  }
+})
 
-/**
- * ## Redux boilerplate
- */
-function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(authActions, dispatch) };
-}
-export default connect(null, mapDispatchToProps)(App);
+export default connect()(codePush(App));

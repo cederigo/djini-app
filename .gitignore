@@ -33,7 +33,14 @@ local.properties
 node_modules/
 npm-debug.log
 
+# BUCK
+# buck-out/
+# \.buckd/
+# android/app/libs
+# android/keystores/debug.keystore
+
 src/lib/config.js
+src/lib/config/index.js
 android/app/my-release-key.keystore
 tsconfig.json
 .vscode/

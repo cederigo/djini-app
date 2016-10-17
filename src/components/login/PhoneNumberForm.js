@@ -1,46 +1,50 @@
-import Immutable from 'immutable';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import React, {
-  Component,
-  PropTypes,
-  View,
-  Text,
-  TextInput
-} from 'react-native';
+import React, {Component} from 'react';
+import {View, Alert} from 'react-native';
+import DjiniText from '../DjiniText'
+
+import DjiniTextInput from '../DjiniTextInput'
 
 export default class PhoneNumberForm extends Component {
 
+  props: {
+    onFormFieldChange: (name: string, text: string) => void,
+    onNext: () => void,
+    authState: any,
+    styles: any,
+  }
+
   render() {
 
-    const {actions, authState, styles, onNext} = this.props
-    const iconName = authState.isValid ? 'sentiment-satisfied' : 'phone'
+    const {onFormFieldChange, authState, styles, onNext} = this.props
     const {phoneNumber} = authState.fields
+    const errorMsg = authState.error ? authState.error.message : ''
+
+    if (errorMsg.indexOf('is not a mobile number') >= 0) {
+      Alert.alert('Ungültige Nummer', 'Dies ist keine Natel-Nummer')
+    }
 
     return ( 
       <View style={styles.container}>
-        <Icon name={iconName} style={styles.icon} size={90} />
-        <Text style={styles.text}>Deine Telefon Nummer..</Text>
-        <TextInput
-          style={styles.input}
-          editable={!authState.isFetching}
-          autoFocus={true}
-          autoCorrect={false}
-          keyboardType="phone-pad"
-          placeholder="+41 79 123 456"
-          onSubmitEditing={onNext}
-          onChangeText={(text) => {
-            actions.onFormFieldChange('phoneNumber', text)
-          }}
-          value={phoneNumber}
-        />
+        <DjiniText style={styles.text}>
+          Djini soll dein Leben vereinfachen! Darum setzt er auf einen bequemen SMS-Login statt auf schnell vergessene Passwörter.
+        </DjiniText>
+        <View style={styles.formGroup}>
+          <DjiniText style={styles.formGroupText}>Telefon</DjiniText>
+          <DjiniTextInput
+            placeholder="z.B. 079 999 999"
+            style={styles.formGroupInput}
+            type="light"
+            editable={!authState.isFetching}
+            autoFocus={true}
+            keyboardType="phone-pad"
+            onSubmitEditing={onNext}
+            onChangeText={(text) => {
+              onFormFieldChange('phoneNumber', text)
+            }}
+            value={phoneNumber}
+          />
+        </View>
       </View>
     )
   }
-}
-
-PhoneNumberForm.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired,
-  onNext: PropTypes.func
 }

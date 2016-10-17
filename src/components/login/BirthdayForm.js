@@ -1,30 +1,33 @@
-import Immutable from 'immutable';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import React, {
-  Component,
-  PropTypes,
-  View
-} from 'react-native';
-import BirthdayInput from '../BirthdayInput'
+import React, {Component} from 'react';
+import {View} from 'react-native';
+import DateInput from '../DateInput'
 
+import DjiniText from '../DjiniText'
 
 export default class BirthdayForm extends Component {
 
-  render() {
+  props: {
+    onFormFieldChange: (name: string, value: Date) => void,
+    authState: any,
+    styles: any,
+  }
 
-    const {actions, authState, styles} = this.props
-    const {birthday} = authState.fields
+  render() {
+    const {onFormFieldChange, styles} = this.props
     return ( 
       <View style={styles.container}>
-        <Icon name="cake" style={styles.icon} size={90} />
-        <BirthdayInput initialDate={birthday} onDateChange={date => actions.onFormFieldChange('birthday', date)} />
+        <DjiniText style={styles.text}>
+          Djini hilft dir an Geburtstage von Freunden zu denken – und deinen Freunden an deinen. So kannst du Geschenke rechtzeitig organisieren.
+        </DjiniText>
+        <View style={styles.formGroup}>
+          <DjiniText style={styles.formGroupText}>Geburtstag</DjiniText>
+          <DateInput 
+            type="light"
+            style={styles.formGroupInput}
+            autoFocus={true}
+            onDateChange={date => onFormFieldChange('birthday', date)} />
+        </View>
       </View>
     )
   }
-}
-
-BirthdayForm.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired,
-  styles: PropTypes.object.isRequired
 }

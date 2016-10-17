@@ -1,3 +1,4 @@
+/* global __DEV__ */
 /**
  * # configureStore.js
  * 
@@ -10,26 +11,27 @@
  * 
  * redux functions
  */
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import createLogger from 'redux-logger'
+import {enableReduxLogger} from './config'
 
 /**
 * ## Reducer
 * The reducer contains the reducers from 
 * device, global
 */
-import reducer from '../reducers';
+import reducer from '../reducers'
 
 const logger = createLogger();
+const middlewares = [thunk]
 
-/**
- * ## creatStoreWithMiddleware
- * Like the name...
- */ 
-const createStoreWithMiddleware = applyMiddleware(
-  thunk, logger
-)(createStore);
+if (__DEV__ && enableReduxLogger) {
+  console.log('Adding redux-logger as middleware')
+  middlewares.push(logger)
+}
+
+const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 
 /**
  * ## configureStore

@@ -1,19 +1,23 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
-import React, {
-  Platform,
-  Alert,
-  Component,
-  TouchableOpacity,
-  View,
-  Text,
-  PropTypes,
-  StyleSheet,
-  StatusBar
-} from 'react-native';
+import React, {Component} from 'react';
+import { Actions } from 'react-native-router-flux'
+import {StyleSheet, View} from 'react-native';
 
-import * as authActions from '../reducers/auth/authActions'
+import {AppBar} from '../components/AppBar'
+import DjiniButton from '../components/DjiniButton'
+
+import {
+  profileForm,
+  birthdayForm,
+  phoneNumberForm,
+  verificationCodeForm,
+  login,
+  sendCode,
+  onFormFieldChange,
+} from '../actions/authActions'
+
+import { loadMyProfile, updateProfile } from '../actions/profile'
+
 import PhoneNumberForm from '../components/login/PhoneNumberForm'
 import VerificationCodeForm from '../components/login/VerificationCodeForm'
 import ProfileForm from '../components/login/ProfileForm'
@@ -22,126 +26,126 @@ import {
   LOGIN_PHONENUMBER_FORM,
   LOGIN_VERIFICATIONCODE_FORM,
   LOGIN_PROFILE_FORM,
-  LOGIN_BIRTHDAY_FORM
+  LOGIN_BIRTHDAY_FORM,
 } from '../lib/constants'
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    padding: 10,
-    alignItems: 'flex-start'
-  },
-  navbar: {
-    marginTop: 20,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#CDCDCD'
-  },
-  button: {
-    padding: 15,
-    alignSelf: 'flex-end'
-  },
-  buttonText: {
-    fontSize: 17,
-    fontWeight: '500'
-  },
-  text: {},
-  icon: {
-    alignSelf: 'center',
-    marginBottom: 30
-  },
-
-  input: {
-    marginLeft: Platform.OS === 'android' ? -5 : 0,
-    height: 50,
-    marginTop: 10
-  }
-});
-
-class NavButton extends React.Component {
-  render() {
-    const {enabled, onPress, text} = this.props
-    return (
-      <TouchableOpacity
-        activeOpacity={enabled ? 0 : 1}
-        style={styles.button}
-        onPress={() => { if (enabled) { onPress() }}}>
-        <Text style={[styles.buttonText, {color: enabled ? 'rgb(0, 122, 155)' : 'grey'}]}>{text}</Text>
-      </TouchableOpacity>
-    );
-  }
-}
 
 class Login extends Component {
 
+  props: {
+    authState: any
+  }
+
   render() {
 
-    console.log('Login.render()')
+    const {authState, dispatch} = this.props
+    const {formName, isValid, fields, isFetching} = authState
 
-    const {formName, error, isValid, fields} = this.props.authState
-    const {phoneNumberForm, birthdayForm, sendCode, login} = this.props.actions
-
-    let form, onNext, nextText
+    let title, form, onNext, onBack
+    let nextCaption = "Weiter"
 
     switch(formName) {
-      case LOGIN_PROFILE_FORM: /* 1. Screen */
-        onNext = () => birthdayForm()
-        nextText = "Weiter"
-        form = <ProfileForm {...this.props} styles={styles} />
-        break
-      case LOGIN_BIRTHDAY_FORM: /* 2. Screen */
-        onNext = () => phoneNumberForm()
-        nextText = "Weiter"
-        form = <BirthdayForm {...this.props} styles={styles} />
-        break
-      case LOGIN_PHONENUMBER_FORM: /* 3. Screen */
-        onNext = () => sendCode(fields.get('phoneNumberFormatted'))
-        nextText = "Code senden"
-        form = <PhoneNumberForm {...this.props} styles={styles} onNext={isValid ? onNext: null}/>
-        break;
-      case LOGIN_VERIFICATIONCODE_FORM: /* 4. Screen */
+      case LOGIN_PHONENUMBER_FORM:
+        title = "Telefon"
+        onBack = Actions.welcome
         onNext = () => {
-          const {name, email, birthday} = fields
-          login(
-            fields.get('phoneNumberFormatted'), /* username */
-            fields.get('code'), /* password */
-            { name, email, birthday } /* additional fields */
-          )
+          dispatch(sendCode(fields.get('phoneNumberFormatted')))
         }
-        nextText = "Login"
-        form = <VerificationCodeForm {...this.props} styles={styles} error={error} onNext={isValid ? onNext : null}/>
+        form = <PhoneNumberForm 
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          styles={formStyles}
+          onNext={isValid ? onNext: null}/>
         break;
+      case LOGIN_VERIFICATIONCODE_FORM:
+        title = "Code"
+        onBack = () => dispatch(phoneNumberForm())
+        onNext = () => {
+          dispatch(login(
+            fields.get('phoneNumberFormatted'), /* username */
+            fields.get('code') /* password */
+          ))
+        }
+        form = <VerificationCodeForm 
+          styles={formStyles}
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          onNext={isValid ? onNext : null}/>
+        break;
+      case LOGIN_PROFILE_FORM:
+        title = "Name & E-Mail"
+        onBack = () => dispatch(verificationCodeForm())
+        onNext = () => dispatch(birthdayForm())
+        form = <ProfileForm 
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          styles={formStyles}
+          onNext={isValid? onNext: null}
+        />
+        break
+      case LOGIN_BIRTHDAY_FORM: {
+        title = "Geburtstag"
+        nextCaption = "Abschliessen"
+        const {name, email, birthday} = fields
+        onBack = () => dispatch(profileForm())
+        onNext = () => {
+          dispatch(updateProfile({name, email, birthday}))
+            .then(() => dispatch(loadMyProfile()))
+            .then(() => Actions.home())
+        }
+        form = <BirthdayForm 
+          styles={formStyles}
+          authState={authState}
+          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+        />
+        break
+      }
     }
 
     return (
-      <View style={{flex: 1}}>
-
-        <StatusBar translucent={true} />
-
-        <View style={styles.navbar}>
-          <NavButton enabled={isValid} onPress={onNext} text={nextText}/>
-        </View>
+      <View style={styles.container}>
+        <AppBar title={title} showBackButton={onBack ? true : false} onBack={onBack}/>
         {form}
+        <DjiniButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>
       </View>
     )
   }
 }
 
-Login.propTypes = {
-  authState: PropTypes.instanceOf(Immutable.Record).isRequired,
-  actions: PropTypes.object.isRequired
-}
+const formStyles = StyleSheet.create({
+  container: {
+    alignItems: 'flex-start',
+    padding: 20,
+    paddingTop: 20
+  },
+  text: {
+    marginBottom: 10
+  },
+  formGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20
+  },
+  formGroupText: {
+    flex: 1
+  },
+  formGroupInput: {
+    flex: 2,
+  },
+})
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  button: {
+    margin: 20
+  }
+})
 
 /**
  * Redux boilerplate
  */
-function mapStateToProps(state) {
-  return { authState: state.auth};
+function select(state) {
+  return { authState: state.auth };
 }
-
-function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(authActions, dispatch) };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(select)(Login)

@@ -1,35 +1,34 @@
 /*
  * A thin wrapper over react's AsyncStorage
- *
  */
 
 import {AsyncStorage} from 'react-native'
 
+const getJsonItem = (key) => {
+   return AsyncStorage.getItem(key)
+      .then(json => {
+        if (!json) {
+          throw('no data')
+        }
+        return JSON.parse(json)
+      })
+}
+
 class Database {
-
-  saveSessionToken(sessionToken) {
-    return AsyncStorage.setItem('session-token', sessionToken)
+  saveContacts(contacts) {
+    return AsyncStorage.setItem('contacts', JSON.stringify(contacts))
   }
 
-  getSessionToken() {
-    return AsyncStorage.getItem('session-token');
+  getContacts() {
+    return getJsonItem('contacts')
   }
 
-  deleteSessionToken() {
-    return AsyncStorage.removeItem('session-token');
+  saveNotes(notes) {
+    return AsyncStorage.setItem('notes', JSON.stringify(notes))
   }
 
-  saveCurrentUser(user) {
-    return AsyncStorage.setItem('current-user', JSON.stringify(user))
-  }
-
-  getCurrentUser() {
-    return AsyncStorage.getItem('current-user')
-      .then(json => JSON.parse(json))
-  }
-
-  deleteCurrentUser() {
-    return AsyncStorage.removeItem('current-user');
+  getNotes() {
+    return getJsonItem('notes')
   }
 }
 

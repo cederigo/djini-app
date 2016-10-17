@@ -1,55 +1,44 @@
 # README #
 
-### Requirements ###
+## Code push ##
+A cloud service that enables React Native developers to deploy mobile app updates directly to their users’ devices.
+https://github.com/Microsoft/code-push
 
-1. OS X - This guide assumes OS X which is needed for iOS development.
+Note: Make sure your target binary version (Info.plist, build.gradle)
+matches the one you are targeting out in the field!
 
-2. Homebrew is the recommended way to install Watchman and Flow.
-
-3. Install Node.js 4.0 or newer.
-
-4. brew install watchman. We recommend installing watchman, otherwise you might hit a node file watching bug.
-
-### iOS Setup ###
-Xcode 7.0 or higher is required. It can be installed from the App Store.
-
-### Android Setup ###
-To write React Native apps for Android, you will need to install the Android SDK (and an Android emulator if you want to work on your app without having to use a physical device).
-
-### Quick start ###
-Install the React Native command line tools:
-
-
+Ex. to update the target binary version:
 ```
-#!bash
-$ npm install -g react-native-cli
-
+$ code-push patch djini-Android Staging -t 0.9.5
+$ code-push patch djini-iOS Staging -t 0.9.x #semver
 ```
 
-NOTE: If you see the error, EACCES: permission denied, please run the command: sudo npm install -g react-native-cli.
-
-Create a React Native project:
-
+Android:
 ```
-#!bash
-$ react-native init AwesomeProject
+$ code-push release-react djini-Android android
 ```
 
-**To run the iOS app:**
+iOS:
+```
+$ code-push release-react djini-iOS ios
+```
 
-* $ cd AwesomeProject
-* Open ios/AwesomeProject.xcodeproj and hit run in Xcode.
-* Open index.ios.js in your text editor of choice and edit some lines.
-* Hit ⌘-R in your iOS simulator to reload the app and see your change!
+## Release ##
 
-Note: If you are using an iOS device, see the [Running on iOS Device page](https://github.com/facebook/react-native/blob/master/docs/docs/running-on-device-ios.html#content).
+Edit the version in the following files (I know, its a pane)
 
-**To run the Android app:**
+ - package.json
+ - src/lib/config.js
+ - ios/Djini/Info.plist
+ - android/app/build.gradle
 
-* $ cd AwesomeProject
-* $ react-native run-android
-* Open index.android.js in your text editor of choice and edit some lines.
-* Press the menu button (F2 by default, or ⌘-M in Genymotion) and select Reload JS to see your change!
-* Run adb logcat *:S ReactNative:V ReactNativeJS:V in a terminal to see your app's logs
+Build IOS release in XCode
 
-Note: If you are using an Android device, see the [Running on Android Device page](https://github.com/facebook/react-native/blob/master/docs/docs/running-on-device-android.html#content).
+ - On the top choose "Generic iOS Device"
+ - Build archive (Product -> Archive)
+ - Export../Upload to App Store.. your archive in the Organizer window (Window > Organizer)
+
+Build Android release
+```
+$ cd android && ./gradlew assembleRelease
+```

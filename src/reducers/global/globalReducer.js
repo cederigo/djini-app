@@ -3,34 +3,46 @@
  */
 
 import {
-  SESSION_TOKEN_SUCCESS,
-  PROFILE_UPDATE_SUCCESS,
+  MY_PROFILE_LOADED,
   LOGIN_SUCCESS,
-  CURRENT_USER_SUCCESS,
-  LOGOUT
+  PROFILE_UPDATE_SUCCESS,
+  LOGOUT,
+  CLEAR_BADGE,
+  SET_BADGE
 } from '../../lib/constants'
 
 import InitialState from './globalInitialState';
+import {User} from '../../lib/types'
 
 const initialState = new InitialState;
 
+/**
+ * Helpers
+ */
+export function fromParseUser(user: Object): User {
+  return {
+    id: user.id,
+    name: user.get('name'),
+    email: user.get('email'),
+    birthday: user.get('birthday'),
+    registered: user.get('registered'),
+    phoneNumber: user.get('username')
+  }
+}
+
 export default function globalReducer(state = initialState, {type, payload}) {
-
   switch (type) {
-    case SESSION_TOKEN_SUCCESS:
-      return state.set('sessionToken', payload);
-
-    case LOGIN_SUCCESS:
-      return state.set('currentUser', payload)
-        .set('sessionToken', payload.sessionToken)
-
-    case CURRENT_USER_SUCCESS:
     case PROFILE_UPDATE_SUCCESS:
-      return state.set('currentUser', payload);
-
+    case LOGIN_SUCCESS:
+      return state.set('currentUser', fromParseUser(payload))
     case LOGOUT:
       return state.set('currentUser', null)
-        .set('sessionToken', '')
+    case MY_PROFILE_LOADED:
+      return state.set('currentUser', fromParseUser(payload.user))
+    case CLEAR_BADGE:
+      return state.setIn(['badges', payload], false)
+    case SET_BADGE:
+      return state.setIn(['badges', payload], true)
   }
 
   return state;
