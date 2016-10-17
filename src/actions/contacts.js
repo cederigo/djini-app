@@ -145,8 +145,8 @@ export function setFavorite(contact, isFavorite, syncWithNotes = true) {
 export function invite(contact) {
   return dispatch => {
     dispatch({type: INVITE_CONTACT})
-    // const url = 'https://tsfr.io/j9n6rp'
-    const message = 'Hey! Schau dir mal die App «Djini» an. Damit kannst du Wünsche und Geschenkideen schnell und einfach festhalten und mit Freunden teilen. Yeah! Nie wieder Socken zum Geburtstag! Link App Store / google play store'
+    const url = 'http://djini.ch/dl'
+    const message = 'Hey! Schau dir mal die App «Djini» an. Damit kannst du Wünsche und Geschenkideen schnell und einfach festhalten und mit Freunden teilen. Yeah! Nie wieder Socken zum Geburtstag! ' + url
     //see: http://stackoverflow.com/questions/6480462/how-to-pre-populate-the-sms-body-text-via-an-html-link
     if (Platform.OS === 'ios') {
       // &
