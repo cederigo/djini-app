@@ -23,7 +23,7 @@ class More extends Component {
     user: PropTypes.object.isRequired,
   }
   openLink(href) {
-    Linking.openURL('http://djini.ch/WordPress/' + href)
+    Linking.openURL('http://djini.ch/' + href)
   }
   render() {
     const {isFetching, isValid, description, user, dispatch} = this.props
