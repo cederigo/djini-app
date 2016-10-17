@@ -5,16 +5,25 @@
 import {Platform, PermissionsAndroid} from 'react-native'
 import contacts from 'react-native-contacts'
 import {transliterate} from './transliteration'
-import {formatNumber} from './phoneUtil' 
+import {formatNumber, isMobileNumber} from './phoneUtil' 
 
 class Contacts {
+  
+  _findFirstMobileNumber(phoneNumbers) {
+    return phoneNumbers.find((number) => isMobileNumber(number))
+  }
 
   _formatContact(raw) {
     const firstName = raw.givenName ? raw.givenName : ''
     const lastName = raw.familyName ? raw.familyName : ''
+    let phoneNumber = this._findFirstMobileNumber(raw.phoneNumbers.map((phoneNumber) => phoneNumber.number))
+    if (!phoneNumber) {
+      // Fallback
+      phoneNumber = raw.phoneNumbers[0].number
+    }
     return {
       name: firstName + ' ' + lastName,
-      phoneNumber: formatNumber(raw.phoneNumbers[0].number)
+      phoneNumber: formatNumber(phoneNumber)
     }
   }
 
@@ -71,9 +80,13 @@ class Contacts {
           if (!this._isValidContact(c)) {
             return; //nothing to do
           }
-
-          let formattedContact = this._formatContact(c)
-          result[formattedContact.phoneNumber] = formattedContact
+          
+          try {
+            let formattedContact = this._formatContact(c)
+            result[formattedContact.phoneNumber] = formattedContact
+          } catch(e) {
+            console.log('Could not format contact', c)
+          }
         })
 
         resolve(result)
