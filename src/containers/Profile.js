@@ -5,7 +5,7 @@ import { StyleSheet, View} from 'react-native';
 import {Actions} from 'react-native-router-flux'
 
 import {editProfile, updateProfile, cancelEditProfile, onFieldChange} from '../actions/profile'
-import {version} from '../lib/config'
+import {version, showVersionNumber} from '../lib/config'
 
 import {AppBar, ActionButton} from '../components/AppBar'
 import ProfileField from '../components/ProfileField'
@@ -48,7 +48,10 @@ class Profile extends Component {
           <ProfileField iconName="phone" value={user.phoneNumber}/>
         </View>
 
-        <DjiniText style={styles.versionText}>{version}</DjiniText>
+        {showVersionNumber ? 
+          <DjiniText style={styles.versionText}>{version}</DjiniText>
+          : undefined
+        }
       </View>
     );
   }
