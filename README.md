@@ -10,6 +10,7 @@ How to get up and running for development
 
 - Setup react-native: https://facebook.github.io/react-native/docs/getting-started.html
 - Edit `PARSE_SERVER_ID` in src/lib/config.js
+- npm install
 - Run simulator: `react-native run-ios` 
 - To enable Debugging / Hot Reloading: Shake device / simulator ;-)
 
@@ -64,7 +65,7 @@ $ code-push patch djini-iOS Staging -t 1.0.1
 
 # App store release
 
-Edit the version in the following files (I know, its a pane)
+Edit the version in the following files (I know, its a pain)
 
  - package.json
  - src/lib/config.js
