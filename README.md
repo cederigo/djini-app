@@ -3,8 +3,11 @@
  - react-native - Build Native Mobile Apps using JavaScript and React. https://facebook.github.io/react-native/
  - parse-server - Parse-compatible API server module for Node/Express. https://github.com/ParsePlatform/parse-server
  - code-push - Push code updates to your apps, instantly. http://microsoft.github.io/code-push/
- 
 
+# Tool requirements
+ - XCode
+ - Android SDK with "Google Play Services" and "Google Repositories" installed
+ 
 # Getting started
 How to get up and running for development
 
@@ -63,6 +66,21 @@ $ code-push patch djini-Android Staging -t 1.0.1
 $ code-push patch djini-iOS Staging -t 1.0.1
 ```
 
+# Bug fixing and test releases
+ - Fix bugs
+
+## iOS
+- Test locally (XCode Simulator)
+- Build IOS release in XCode (see below)
+- login to itunesconnect.apple.com using Apple Developer Account (ask cre or mfl)
+- Test internal (TestFlight => Intern Testen => choose version to test)
+
+## Android
+ - Test locally (on device)
+ - Build Android release (see below)
+ - login to testfairy.com
+ - New Upload => Upload Android APK
+
 # App store release
 
 Edit the version in the following files (I know, its a pain)
@@ -81,7 +99,15 @@ Build IOS release in XCode
  - Export../Upload to App Store.. your archive in the Organizer window (Window > Organizer)
  
 ## Android
- - Ask cre for the "signing key"
+ - edit ~/.gradle/gradle.properties (ask cre): 
+```
+  org.gradle.daemon=true
+  DJINI_RELEASE_STORE_FILE=my-release-key.keystore
+  DJINI_RELEASE_KEY_ALIAS=my-key-alias
+  DJINI_RELEASE_STORE_PASSWORD=...
+  DJINI_RELEASE_KEY_PASSWORD=...
+```
+ - Ask cre for the "signing key" (aka "my-release-key.keystore") => cp to android/app
  - Build Android release
 ```
 $ cd android && ./gradlew assembleRelease
