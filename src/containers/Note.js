@@ -66,7 +66,7 @@ class Note extends Component {
   getFormattedDate(note) {
     const contact = note.contact
     const hint = note.type === 'reminder' ?
-      'Leider kennt Djini den Geburtstag nicht. Hilf und trage diesen manuell nach'
+      'Leider kennt Djini den Geburtstag nicht. Hilf ihm und trage diesen manuell nach'
       : 'Du hast kein Datum angegeben. Trage das Datum manuell nach'
     if (note.type === 'reminder' && contact.birthday) {
         return formatBirthday(contact.birthday)
@@ -199,10 +199,10 @@ class Note extends Component {
           <DjiniIcon style={styles.icon} size={20} name="alarm"/>
           <DjiniText style={styles.value}>
             {type === 'reminder'
-              ? 'Djini wird dich ein erstes mal 2 Wochen, ein zweites mal 7 Tage vorher und ein letztes mal am Tag selbst daran erinnern'
+              ? 'Djini erinnert dich 2 Wochen vorher, eine Woche vorher sowie am Geburtstag selbst'
               : done
                 ? 'Djini erinnert dich nicht mehr an das Geschenk'
-                : 'Djini wird dich eine erstes mal 10 und ein zweites mal 4 Tage vorher daran erinnern'
+                : 'Djini erinnert dich 10 Tage vorher und 4 Tage vorher'
             }
           </DjiniText>
         </View>

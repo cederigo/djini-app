@@ -78,11 +78,12 @@ const ReminderNoteFooter = (props) => {
 const NewNoteFooter = (props) => {
   const {note, saveNote, isValid} = props
   const {wish} = note
-  const title = isIdea(wish) ? 'Idee' : 'Wunsch'
-
+  const title = isIdea(wish) ? 
+    `Geschenkidee für ${note.contact.name} wirklich erfüllen?` : 
+    `Willst du ${note.contact.name}s Wunsch wirklich erfüllen?`
   return (
     <View style={styles.container}>
-      <DjiniText textStyle="dark" style={styles.text}>{` Willst du ${note.contact.name}s ${title} wirklich erfüllen?`}</DjiniText>
+      <DjiniText textStyle="dark" style={styles.text}>{title}</DjiniText>
       <DjiniButton
         type="primary" caption={`${title} erfüllen!`}
         disabled={!isValid}
