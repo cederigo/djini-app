@@ -5,7 +5,7 @@
 import {Platform, PermissionsAndroid} from 'react-native'
 import contacts from 'react-native-contacts'
 import {transliterate} from './transliteration'
-import {formatNumber, isMobileNumber} from './phoneUtil' 
+import {formatNumber, isMobileNumber, isValidNumber} from './phoneUtil' 
 
 class Contacts {
   
@@ -20,6 +20,10 @@ class Contacts {
     if (!phoneNumber) {
       // Fallback
       phoneNumber = raw.phoneNumbers[0].number
+      // Ensure its a valid number
+      if (!isValidNumber(phoneNumber)) {
+        throw new Error(phoneNumber + ' is not a valid number')
+      }
     }
     return {
       name: firstName + ' ' + lastName,
