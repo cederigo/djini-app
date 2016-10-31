@@ -85,7 +85,7 @@ const NewNoteFooter = (props) => {
     <View style={styles.container}>
       <DjiniText textStyle="dark" style={styles.text}>{title}</DjiniText>
       <DjiniButton
-        type="primary" caption={`${title} erfüllen!`}
+        type="primary" caption={`${isIdea(wish) ? 'Idee' : 'Wunsch'} erfüllen!`}
         disabled={!isValid}
         style={styles.button}
         onPress={saveNote}/>
