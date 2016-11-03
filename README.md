@@ -40,6 +40,7 @@ After you release an update the user needs to restart the Djini-App 2 times:
  1. App downloads update if necessary
  2. App installs downloaded update
 
+Warning: Dont use --mandatory for android users
 You can mark an update as "--mandatory" to merge step 1 & 2.
 
 ## Setup
