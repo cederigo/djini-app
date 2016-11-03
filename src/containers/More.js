@@ -63,7 +63,7 @@ class More extends Component {
             </TouchableOpacity>
             <ListRowSeperator/>
             <TouchableOpacity style={styles.item} onPress={() => this.openLink('agb')}>
-              <DjiniText style={styles.itemText}>Nutzungsbedingungen (ABG)</DjiniText>
+              <DjiniText style={styles.itemText}>Nutzungsbedingungen (AGB)</DjiniText>
               <Icon style={styles.itemIcon} name="chevron-right"/>
             </TouchableOpacity>
             <ListRowSeperator/>

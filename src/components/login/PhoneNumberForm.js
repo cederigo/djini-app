@@ -31,7 +31,7 @@ export default class PhoneNumberForm extends Component {
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Telefon</DjiniText>
           <DjiniTextInput
-            placeholder="z.B. 079 999 999"
+            placeholder="z.B. 079 999 99 99"
             style={styles.formGroupInput}
             type="light"
             editable={!authState.isFetching}

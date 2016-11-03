@@ -88,7 +88,7 @@ class FriendIdeasList extends Component {
     return (
       <View style={styles.empty}>
         <DjiniText style={styles.emptyText}>
-          {`Merke dir Geschenkideen für „${contact.name}“`}
+          {`Merke dir Geschenkideen für ${contact.name}`}
         </DjiniText>
         <DjiniButton style={styles.emptyButton} caption="Idee erfassen" onPress={() => dispatch(newWish(user, friend, 'friend'))}/>
       </View>
