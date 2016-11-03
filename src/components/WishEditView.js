@@ -70,8 +70,8 @@ class WishEditView extends Component {
       ],
       cameraType: 'back', // 'front' or 'back'
       mediaType: 'photo', // 'photo' or 'video'
-      maxWidth: 3 * IMAGE_WIDTH, // photos only
-      maxHeight: 3 * IMAGE_HEIGHT, // photos only
+      maxWidth: parseInt(3 * IMAGE_WIDTH), // photos only
+      maxHeight: parseInt(3 * IMAGE_HEIGHT), // photos only
       aspectX: 2, // android only - aspectX:aspectY, the cropping image's ratio of width to height
       aspectY: 1, // android only - aspectX:aspectY, the cropping image's ratio of width to height
       quality: 0.6, // 0 to 1, photos only
