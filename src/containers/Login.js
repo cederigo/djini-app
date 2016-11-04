@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import { Actions } from 'react-native-router-flux'
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ScrollView} from 'react-native';
 
-import {AppBar} from '../components/AppBar'
+import {AppBar, ActionButton} from '../components/AppBar'
 import DjiniButton from '../components/DjiniButton'
 
 import {
@@ -103,9 +103,16 @@ class Login extends Component {
 
     return (
       <View style={styles.container}>
-        <AppBar title={title} showBackButton={onBack ? true : false} onBack={onBack}/>
-        {form}
-        <DjiniButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>
+        <AppBar title={title} showBackButton={onBack ? true : false} onBack={onBack}>
+          <ActionButton text={nextCaption} disabled={!isValid || isFetching} onPress={onNext}/>
+        </AppBar>
+        <ScrollView
+          keyboardShouldPersistTaps={true}
+          keyboardDismissMode="on-drag"
+          style={styles.flex}>
+          {form}
+          <DjiniButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>
+        </ScrollView>
       </View>
     )
   }
@@ -117,8 +124,11 @@ const formStyles = StyleSheet.create({
     padding: 20,
     paddingTop: 20
   },
+  flex: {
+    flex: 1
+  },
   text: {
-    marginBottom: 10
+    marginBottom: 0
   },
   formGroup: {
     flexDirection: 'row',
