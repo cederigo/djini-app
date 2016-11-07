@@ -64,7 +64,7 @@ class WishEditView extends Component {
       title: 'Bild auswählen',
       cancelButtonTitle: 'Abbrechen',
       takePhotoButtonTitle: 'Eine Aufnahme machen...', // specify null or empty string to remove this button
-      chooseFromLibraryButtonTitle: 'Aus Gallerie...', // specify null or empty string to remove this button
+      chooseFromLibraryButtonTitle: 'Aus Galerie...', // specify null or empty string to remove this button
       customButtons: [
         {title: 'Bild löschen', name: 'remove-image'}, // [Button Text] : [String returned upon selection]
       ],
