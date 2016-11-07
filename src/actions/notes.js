@@ -50,7 +50,9 @@ export function deleteNote(note) {
   return (dispatch) => {
     const onConfirmed = (unfulfill = false) => {
       dispatch({type: DELETE_NOTE, payload: note})
-      dispatch(setFavorite(note.contact, false, false))
+      if (note.type === 'reminder') {
+        dispatch(setFavorite(note.contact, false, false))
+      }
       dispatch(persistNotes())
       if (unfulfill) {
         dispatch(unfulfillWish(note.wish))
