@@ -63,7 +63,7 @@ export default function notesReducer(state: List<Note> = initialState, {type, pa
       const contact = note.contact
       const updatedContact = contacts.get(contact.phoneNumber)
       if (updatedContact && note.type === 'reminder') {
-        return getReminderNote(updatedContact)
+        return getReminderNote(updatedContact, note)
       } else {
         return note
       }
