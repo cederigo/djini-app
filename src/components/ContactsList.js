@@ -117,6 +117,7 @@ export default class ContactsList extends Component {
         swipeoutRef={showSwipeoutAnimation ? this.showSwipeoutAnimation : undefined}
         swipeoutBtns={this.swipeoutBtns(contact)}
         onPress={() => openContact(contact)}>
+        {contact.registered ? <ListRowIcon name="lamp_filled" size={40}/> : undefined}
         {contact.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="favorite"/> : undefined}
       </ListRow>
     );
