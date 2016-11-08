@@ -109,8 +109,16 @@ export function refreshContacts(source: ?string = 'app') {
 export function updateContact(contact, fields = {}) {
   return (dispatch) => {
     const update = {...contact, ...fields}
-    dispatch({type: UPDATE_CONTACT, payload: update})
-    dispatch(updateNotesNotifications())
+    let changed = false
+    for (let field in fields) {
+      if (fields[field] !== contact[field]) {
+        changed = true
+      }
+    }
+    if (changed) {
+      dispatch({type: UPDATE_CONTACT, payload: update})
+      dispatch(updateNotesNotifications())
+    }
   }
 }
 
