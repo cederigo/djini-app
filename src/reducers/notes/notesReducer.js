@@ -25,14 +25,13 @@ function getDueDate(birthday) {
   return formatDate(dueDate)
 }
 
-export function getReminderNote(contact, existingNote?) {
-  const existingDueDate = existingNote ? existingNote.dueDate : undefined;
+export function getReminderNote(contact, existingNote = {}) {
   return {
     id: contact.phoneNumber,
     type: 'reminder',
     title: 'Geburtstag',
-    dueDate: getDueDate(contact.birthday ? contact.birthday : existingDueDate), // use existing dueDate as fallback
-    contact: {...contact} //clone
+    dueDate: getDueDate(contact.birthday ? contact.birthday : existingNote.dueDate), // use existing dueDate as fallback
+    contact: {...existingNote.contact, ...contact} //clone
   }
 }
 
