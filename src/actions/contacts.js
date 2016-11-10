@@ -93,7 +93,7 @@ export function refreshContacts(source: ?string = 'app') {
         Contacts.getAll()
           .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
           .then((contacts) => Contacts.transliterate(contacts))
-          .then((contacts) => OrderedMap(contacts).sortBy(f => f.name))
+          .then((contacts) => OrderedMap(contacts).sortBy(f => f.nameTransliterated))
           .then((contacts) => dispatch(contactsSuccess(contacts)))
           .then(() => {
             dispatch(saveContacts())
