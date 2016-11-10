@@ -87,6 +87,7 @@ export function refreshContacts(source: ?string = 'app') {
       //We want the user to actively trigger the permission dialog
       return;
     }
+    const existingContacts = getState().contacts.contacts
     const onAuthorized = () => {
       dispatch(contactsRequest())
       setTimeout(() => {
@@ -94,6 +95,13 @@ export function refreshContacts(source: ?string = 'app') {
           .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
           .then((contacts) => Contacts.transliterate(contacts))
           .then((contacts) => OrderedMap(contacts).sortBy(f => f.nameTransliterated))
+          .then((contacts) => {
+            //keep local favorites
+            return contacts.map(newContact => {
+              const contact = existingContacts.get(newContact.phoneNumber)
+              return {...newContact, isFavorite: contact && contact.isFavorite}
+            })
+          })
           .then((contacts) => dispatch(contactsSuccess(contacts)))
           .then(() => {
             dispatch(saveContacts())
