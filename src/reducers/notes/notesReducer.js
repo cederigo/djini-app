@@ -19,7 +19,7 @@ function getDueDate(birthday) {
   }
   const now = moment()
   const dueDate = parseDate(birthday).year(now.year())
-  if (dueDate.isBefore(now)) {
+  if (dueDate.isBefore(now, 'day')) {
     dueDate.add(1, 'year')
   }
   return formatDate(dueDate)
@@ -66,7 +66,7 @@ export default function notesReducer(state: List<Note> = initialState, {type, pa
       } else {
         return note
       }
-    })
+    }).sortBy(sortByDueDate)
   }
   else if (type === SAVE_NOTE) {
     const {note, upsert} = payload

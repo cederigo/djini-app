@@ -52,7 +52,7 @@ export default class DateInput extends Component {
       return;
     }
 
-    if (autoYear && result.isBefore(moment())) {
+    if (autoYear && result.isBefore(moment(), 'day')) {
       result.add(1, 'year')
     }
 

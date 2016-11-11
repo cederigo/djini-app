@@ -115,17 +115,14 @@ export function saveNote(note, upsert = true, persist = true) {
 export function deferPastNotes(notes) {
   let persist = false
   const now = moment()
-  const isPast = (due) => {
-    return now.diff(due, 'days') > 0
-  }
   return (dispatch) => {
     const reminders = notes.filter((n) => n.type === 'reminder')
     reminders.forEach((n) => {
       const due = parseDate(n.dueDate)
-      if (isPast(due)) {
+       if (due.isBefore(now, 'day')) {
         dispatch(saveNote({id: n.id, dueDate: formatDate(due.add(1, 'year'))}, false, false))
         persist = true
-      }
+       }
     })
     if (persist) {
       dispatch(persistNotes())
