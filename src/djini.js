@@ -15,6 +15,7 @@ moment.locale('de')
 import {createReducer as createRoutesReducer} from './reducers/routes/routesReducer'
 
 import {clearBadge} from './actions/tabs'
+import {deferPastNotes} from './actions/notes'
 
 import configureStore from './lib/configureStore'
 import {configurePushNotification} from './lib/pushNotification'
@@ -158,6 +159,9 @@ export default function init(os) {
 
   const onTabPress = (key) => {
     store.dispatch(clearBadge(key))
+    if (key === 'notesTab') {
+      store.dispatch(deferPastNotes())
+    }
     Actions[key]()
   }
   

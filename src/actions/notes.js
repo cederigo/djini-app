@@ -112,10 +112,12 @@ export function saveNote(note, upsert = true, persist = true) {
   }
 }
 
-export function deferPastNotes(notes) {
-  let persist = false
-  const now = moment()
-  return (dispatch) => {
+export function deferPastNotes() {
+  return (dispatch, getState) => {
+    console.log('Defer past notes')
+    let persist = false
+    const now = moment()
+    const notes = getState().notes.toArray()
     const reminders = notes.filter((n) => n.type === 'reminder')
     reminders.forEach((n) => {
       const due = parseDate(n.dueDate)
