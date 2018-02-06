@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {View, StyleSheet} from 'react-native'
 import moment from 'moment'
 import DjiniTextInput from './DjiniTextInput'
@@ -52,7 +53,7 @@ export default class DateInput extends Component {
       return;
     }
 
-    if (autoYear && result.isBefore(moment())) {
+    if (autoYear && result.isBefore(moment(), 'day')) {
       result.add(1, 'year')
     }
 
@@ -148,5 +149,3 @@ const styles = StyleSheet.create({
     marginRight: 0,
   }
 })
-
-

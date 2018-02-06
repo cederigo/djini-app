@@ -50,7 +50,9 @@ export function deleteNote(note) {
   return (dispatch) => {
     const onConfirmed = (unfulfill = false) => {
       dispatch({type: DELETE_NOTE, payload: note})
-      dispatch(setFavorite(note.contact, false, false))
+      if (note.type === 'reminder') {
+        dispatch(setFavorite(note.contact, false, false))
+      }
       dispatch(persistNotes())
       if (unfulfill) {
         dispatch(unfulfillWish(note.wish))
@@ -110,20 +112,19 @@ export function saveNote(note, upsert = true, persist = true) {
   }
 }
 
-export function deferPastNotes(notes) {
-  let persist = false
-  const now = moment()
-  const isPast = (due) => {
-    return now.diff(due, 'days') > 0
-  }
-  return (dispatch) => {
+export function deferPastNotes() {
+  return (dispatch, getState) => {
+    console.log('Defer past notes')
+    let persist = false
+    const now = moment()
+    const notes = getState().notes.toArray()
     const reminders = notes.filter((n) => n.type === 'reminder')
     reminders.forEach((n) => {
       const due = parseDate(n.dueDate)
-      if (isPast(due)) {
+       if (due.isBefore(now, 'day')) {
         dispatch(saveNote({id: n.id, dueDate: formatDate(due.add(1, 'year'))}, false, false))
         persist = true
-      }
+       }
     })
     if (persist) {
       dispatch(persistNotes())

@@ -1,6 +1,8 @@
 import {Actions} from 'react-native-router-flux';
 
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 
@@ -9,11 +11,11 @@ import DjiniTextInput from './DjiniTextInput'
 
 export class AppBar extends Component {
   static propTypes = {
-    showBackButton: React.PropTypes.bool,
-    backButtonText: React.PropTypes.string,
-    onBack: React.PropTypes.func,
-    title: React.PropTypes.string,
-    children: React.PropTypes.element,
+    showBackButton: PropTypes.bool,
+    backButtonText: PropTypes.string,
+    onBack: PropTypes.func,
+    title: PropTypes.string,
+    children: PropTypes.element,
     textStyle: PropTypes.oneOf(['light', 'dark'])
   }
 

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 export default function ListRowIcon(props) {
   return (
     <View style={styles.container}>
-      <DjiniIcon {...props} size={28}/>
+      <DjiniIcon size={28} {...props}/>
     </View>
   )
 }

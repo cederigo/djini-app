@@ -1,5 +1,5 @@
-
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Swipeout from 'react-native-swipeout'
 

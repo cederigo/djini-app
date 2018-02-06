@@ -1,8 +1,11 @@
+import { connect } from 'react-redux';
+import {Record} from 'immutable'
+
 /* @flow */
 
-import { connect } from 'react-redux'
-import {Record} from 'immutable'
-import React, {Component, PropTypes} from 'react'
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import {View, StyleSheet} from 'react-native'
 import dismissKeyboard from 'dismissKeyboard'
 

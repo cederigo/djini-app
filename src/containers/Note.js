@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {ScrollView, View, StyleSheet, TouchableOpacity, InteractionManager, KeyboardAvoidingView, Platform} from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
@@ -168,7 +169,7 @@ class Note extends Component {
     const {type, title, comment, dueDate, contact, wish, done} = note
     const {edit, isValid, fields} = this.state
     return (
-    <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
+    <ScrollView keyboardShouldPersistTaps="always" style={styles.container}>
 
       <View style={[styles.row, styles.titleField]}>
         <DjiniIcon style={styles.titleIcon} size={60} name={type === 'reminder' ? 'cake' : 'giftdarkblue'}/>

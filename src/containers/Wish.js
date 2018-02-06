@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import WishView from '../components/WishView'

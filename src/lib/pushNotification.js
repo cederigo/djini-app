@@ -1,5 +1,3 @@
-/* global setTimeout: false */
-
 /**
  * Utility / Wrapper for push notifications on ios/android
  */
@@ -53,9 +51,6 @@ export function requestPermissions() {
 export function updateLocalNotifications(notes) {
   cancelAllLocalNotifications()
   scheduleLocalNotifications(getNotesNotifications(notes))
-  // Give some time before rescheduling
-  // Doesnt work on real hw otherwise
-  // setTimeout(function() { }, 2000);
 }
 
 export function scheduleLocalNotifications(notifications) {

@@ -19,19 +19,19 @@ function getDueDate(birthday) {
   }
   const now = moment()
   const dueDate = parseDate(birthday).year(now.year())
-  if (dueDate.isBefore(now)) {
+  if (dueDate.isBefore(now, 'day')) {
     dueDate.add(1, 'year')
   }
   return formatDate(dueDate)
 }
 
-export function getReminderNote(contact) {
+export function getReminderNote(contact, existingNote = {}) {
   return {
     id: contact.phoneNumber,
     type: 'reminder',
     title: 'Geburtstag',
-    dueDate: getDueDate(contact.birthday),
-    contact: {...contact} //clone
+    dueDate: getDueDate(contact.birthday ? contact.birthday : existingNote.dueDate), // use existing dueDate as fallback
+    contact: {...existingNote.contact, ...contact} //clone
   }
 }
 
@@ -51,7 +51,9 @@ export default function notesReducer(state: List<Note> = initialState, {type, pa
     const contact = payload
     let idx = state.findIndex((t) => t.id === contact.phoneNumber)
     if (idx >= 0) {
-      return state.set(idx, getReminderNote(contact)).sortBy(sortByDueDate)
+      // update reminder note
+      const existing = state.get(idx)
+      return state.set(idx, getReminderNote(contact, existing)).sortBy(sortByDueDate)
     }
   }
   else if (type === CONTACTS_SUCCESS) {
@@ -60,11 +62,11 @@ export default function notesReducer(state: List<Note> = initialState, {type, pa
       const contact = note.contact
       const updatedContact = contacts.get(contact.phoneNumber)
       if (updatedContact && note.type === 'reminder') {
-        return getReminderNote(updatedContact)
+        return getReminderNote(updatedContact, note)
       } else {
         return note
       }
-    })
+    }).sortBy(sortByDueDate)
   }
   else if (type === SAVE_NOTE) {
     const {note, upsert} = payload

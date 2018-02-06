@@ -3,44 +3,49 @@
  * One minor change: Allow to pass style prop to wrapped text element.
  * TODO: Pull request -> Remove this file
  */
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { Text, View } from 'react-native';
 
-export default ViewMoreText = React.createClass({
-  propTypes: {
-    renderViewMore: React.PropTypes.func,
-    renderViewLess: React.PropTypes.func,
-    numberOfLines: React.PropTypes.number.isRequired
-  },
-  isTruncated: false,
-  originalHeight: 0,
-  shouldShowMore: false, 
-  contentHeight: 0,
+export default ViewMoreText = class extends React.Component {
+  static propTypes = {
+    renderViewMore: PropTypes.func,
+    renderViewLess: PropTypes.func,
+    numberOfLines: PropTypes.number.isRequired
+  };
 
-  getInitialState(){
+  constructor(props, context) {
+    super(props, context);
     this.resetData();
-    return {
+
+    this.state = {
       numberOfLines: null,
       opacity: 0
-    }
-  },
+    };
+  }
 
-  resetData(){
+  isTruncated = false;
+  originalHeight = 0;
+  shouldShowMore = false;
+  contentHeight = 0;
+
+  resetData = () => {
     this.isTruncated = false;
     this.originalHeight = 0;
     this.shouldShowMore = false;
-  },
+  };
 
-  componentWillReceiveProps(){
+  componentWillReceiveProps() {
     this.resetData();
 
     this.setState({
       numberOfLines: null,
       opacity: 0
     })
-  },
+  }
 
-  onLayout(event){
+  onLayout = (event) => {
     const {x, y, width, height} = event.nativeEvent.layout;
 
     if(height === 0 || this.state.opacity === 1) return false;
@@ -52,9 +57,9 @@ export default ViewMoreText = React.createClass({
         opacity: 1
       })
     }
-  },
-  
-  setOriginalHeight(height){
+  };
+
+  setOriginalHeight = (height) => {
     if(this.originalHeight === 0){
       this.originalHeight = height;
 
@@ -62,43 +67,43 @@ export default ViewMoreText = React.createClass({
         numberOfLines: this.props.numberOfLines
       })
     }
-  },
+  };
 
-  checkTextTruncated(height){
+  checkTextTruncated = (height) => {
     if(height < this.originalHeight){
       this.shouldShowMore = true;
     }
-  },
+  };
 
-  onPressMore(){
+  onPressMore = () => {
     this.setState({
       numberOfLines: null
     });
-  },
+  };
 
-  onPressLess(){
+  onPressLess = () => {
     this.setState({
       numberOfLines: this.props.numberOfLines
     })
-  },
+  };
 
-  renderViewMore(){
+  renderViewMore = () => {
     return (
       <Text onPress={this.onPressMore}>
         View More
       </Text>
     )
-  },
-  
-  renderViewLess(){
+  };
+
+  renderViewLess = () => {
     return (
       <Text onPress={this.onPressLess}>
         View Less
       </Text>
     )
-  },
+  };
 
-  renderFooter(){
+  renderFooter = () => {
     let {
       numberOfLines
     } = this.state;
@@ -110,9 +115,9 @@ export default ViewMoreText = React.createClass({
         return (this.props.renderViewLess || this.renderViewLess)(this.onPressLess);
       }
     }
-  },
+  };
 
-  render(){
+  render() {
 
     return (
       <View onLayout={this.onLayout} style={{opacity: this.state.opacity}}>
@@ -131,5 +136,4 @@ export default ViewMoreText = React.createClass({
       </View>
     )
   }
-
-})
+};

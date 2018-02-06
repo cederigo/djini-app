@@ -1,5 +1,5 @@
-
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import {Image, StyleSheet} from 'react-native';
 import * as images from '../../img'
 import Icon from 'react-native-vector-icons/MaterialIcons'

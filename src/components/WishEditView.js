@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {View, ScrollView, StyleSheet, TouchableOpacity, Image,
   NativeModules, Dimensions, KeyboardAvoidingView, Alert, Platform} from 'react-native';
 import { Actions} from 'react-native-router-flux'
@@ -64,7 +65,7 @@ class WishEditView extends Component {
       title: 'Bild auswählen',
       cancelButtonTitle: 'Abbrechen',
       takePhotoButtonTitle: 'Eine Aufnahme machen...', // specify null or empty string to remove this button
-      chooseFromLibraryButtonTitle: 'Aus Gallerie...', // specify null or empty string to remove this button
+      chooseFromLibraryButtonTitle: 'Aus Galerie...', // specify null or empty string to remove this button
       customButtons: [
         {title: 'Bild löschen', name: 'remove-image'}, // [Button Text] : [String returned upon selection]
       ],
@@ -129,7 +130,7 @@ class WishEditView extends Component {
     const content = 
       <ScrollView
         style={styles.container}
-        keyboardShouldPersistTaps={true}>
+        keyboardShouldPersistTaps="always">
         {this.renderImage()} 
         <WishEditForm dispatch={dispatch} wish={wish} ref={(form) => this._form = form} onValidationChange={(isValid) => this.onValidationChange(isValid)}/>
       </ScrollView>

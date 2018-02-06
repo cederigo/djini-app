@@ -1,7 +1,6 @@
-/* global setInterval, clearInterval */
-
 import { connect } from 'react-redux';
-import React, {Component, PropTypes} from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { StyleSheet, View} from 'react-native';
 
 import NotesList from '../components/NotesList'
@@ -9,7 +8,7 @@ import {AppBar} from '../components/AppBar'
 import DjiniText from '../components/DjiniText'
 import DjiniButton from '../components/DjiniButton'
 
-import {deferPastNotes} from '../actions/notes'
+import {deferPastNotes, updateNotesNotifications} from '../actions/notes'
 import {checkPermissions, requestPermissions} from '../lib/pushNotification'
 
 class Notes extends Component {
@@ -26,12 +25,9 @@ class Notes extends Component {
   }
 
   componentDidMount() {
-    const {dispatch, notes} = this.props
+    const {dispatch} = this.props
     this.checkPermissions()
-    dispatch(deferPastNotes(notes))
-    this.timer = setInterval(() => {
-      dispatch(deferPastNotes(notes))
-    }, 60 * 60 * 1000)
+    dispatch(deferPastNotes())
   }
 
   componentWillReceiveProps() {
@@ -47,15 +43,12 @@ class Notes extends Component {
   }
 
   requestPermissions() {
-    requestPermissions().then(this.updatePermissions)
+    const {dispatch} = this.props
+    requestPermissions()
+      .then(this.updatePermissions)
+      .then(() => dispatch(updateNotesNotifications()))
   }
 
-  componentWillUnmount() {
-    if (this.timer) {
-      clearInterval(this.timer);
-    }
-  }
-  
   render() {
     const {showPermissionInfo} = this.state
     return(

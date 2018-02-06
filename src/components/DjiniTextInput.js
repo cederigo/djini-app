@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {TextInput, StyleSheet, View, Platform} from 'react-native';
 
 const styles = StyleSheet.create({

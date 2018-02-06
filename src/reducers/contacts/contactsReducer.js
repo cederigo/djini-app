@@ -43,14 +43,8 @@ export default function contactsReducer(state = initialState, {type, payload}) {
     }
 
     case CONTACTS_SUCCESS: {
-      const newContacts = payload
-      const contacts = state.get('contacts')
       return state.set('isFetching', false)
-        .set('contacts', newContacts.map(newContact => {
-          //keep local favorites
-          const contact = contacts.get(newContact.phoneNumber)
-          return {...newContact, isFavorite: contact && contact.isFavorite}
-        }))
+        .set('contacts', payload)
     }
 
     case RESTORE_CONTACTS_FAILURE:
