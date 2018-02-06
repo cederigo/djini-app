@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import React, {Component, PropTypes} from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { StyleSheet, View, ScrollView, Alert, Image, TouchableOpacity} from 'react-native';
 
 import {djini_logo, lamp_ani} from '../../img'

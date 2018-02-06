@@ -1,12 +1,16 @@
 import { connect } from 'react-redux'
-import React, {PropTypes} from 'react'
-import { AppRegistry, View, StyleSheet, Dimensions, Image, StatusBar} from 'react-native'
+import PropTypes from 'prop-types';
+import React from 'react';
+import { AppRegistry, View, StyleSheet, Dimensions, Image, StatusBar, AsyncStorage} from 'react-native'
 import { Scene, Router, Switch, Actions} from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Provider} from 'react-redux'
 import Parse from 'parse/react-native'
 import moment from 'moment'
 import 'moment/locale/de'
+
+/* Set async storage */
+Parse.setAsyncStorage(AsyncStorage)
 
 /* Set default locale */
 moment.locale('de')
@@ -22,7 +26,7 @@ import {configurePushNotification} from './lib/pushNotification'
 import * as images from '../img'
 
 const WIDTH = Dimensions.get('window').width
-const TABBAR_HEIGHT = 50 
+const TABBAR_HEIGHT = 50
 
 /* Config */
 import {
@@ -147,7 +151,6 @@ const setStatusBarStyle = (os, statusBarStyle = 'light-content') => {
 }
 
 export default function init(os) {
-  
   let initialized = false
   // Init parse sdk
   Parse.initialize(PARSE_APP_ID);
@@ -164,11 +167,12 @@ export default function init(os) {
     }
     Actions[key]()
   }
-  
-  let Djini = React.createClass({
+
+  class Djini extends React.Component {
     componentWillMount() {
       setStatusBarStyle(os, 'light-content')
-    },
+    }
+
     render() {
       return (
         <DjiniBackground>
@@ -216,7 +220,7 @@ export default function init(os) {
         </DjiniBackground>
       )
     }
-  })
+  }
 
   AppRegistry.registerComponent('Djini', () => Djini)
 }

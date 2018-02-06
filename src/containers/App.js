@@ -8,7 +8,7 @@ import { Actions } from 'react-native-router-flux'
 import Parse from 'parse/react-native'
 import React, {Component} from 'react'
 import { View, StyleSheet} from 'react-native';
-import codePush from "react-native-code-push";
+// import codePush from "react-native-code-push";
 
 import {version} from '../lib/config'
 import {getInitialNotification} from '../lib/pushNotification'
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect()(codePush(App));
+export default connect()(App);

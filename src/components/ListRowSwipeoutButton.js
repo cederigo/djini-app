@@ -1,4 +1,4 @@
-
+import PropTypes from 'prop-types';
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -36,9 +36,9 @@ export default function ListRowSwipeoutButton(props) {
 }
 
 ListRowSwipeoutButton.propTypes = {
-  iconName: React.PropTypes.string.isRequired,
-  iconStyle: React.PropTypes.any,
-  iconType: React.PropTypes.oneOf(['image', 'icon']).isRequired
+  iconName: PropTypes.string.isRequired,
+  iconStyle: PropTypes.any,
+  iconType: PropTypes.oneOf(['image', 'icon']).isRequired
 }
 
 ListRowSwipeoutButton.defaultProps = {

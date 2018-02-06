@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {View, ScrollView, StyleSheet, TouchableOpacity, Image,
   NativeModules, Dimensions, KeyboardAvoidingView, Alert, Platform} from 'react-native';
 import { Actions} from 'react-native-router-flux'
@@ -129,7 +130,7 @@ class WishEditView extends Component {
     const content = 
       <ScrollView
         style={styles.container}
-        keyboardShouldPersistTaps={true}>
+        keyboardShouldPersistTaps="always">
         {this.renderImage()} 
         <WishEditForm dispatch={dispatch} wish={wish} ref={(form) => this._form = form} onValidationChange={(isValid) => this.onValidationChange(isValid)}/>
       </ScrollView>

@@ -1,6 +1,6 @@
-
 import { connect } from 'react-redux';
-import React, {Component, PropTypes} from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, TouchableOpacity, Linking} from 'react-native';
 import dismissKeyboard from 'dismissKeyboard'
 import {Actions} from 'react-native-router-flux'
@@ -32,7 +32,7 @@ class More extends Component {
         <View style={styles.appBar}>
           <AppBar textStyle="dark" title="Mein Profil" showBackButton={false}/>
         </View>
-        <ScrollView keyboardShouldPersistTaps={true}>
+        <ScrollView keyboardShouldPersistTaps="always">
           <Tabs selected="more">
             <DjiniText style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Details</DjiniText>
             <DjiniText style={styles.tabText} name="more">Mehr</DjiniText>

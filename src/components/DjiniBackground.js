@@ -85,7 +85,7 @@ export default class DjiniBackground extends Component {
     const {offsetLeft, offsetBottom} = this.props
     return (
       <LinearGradient style={[this.props.style, styles.container]}
-        start={[0, 0]} end={[1, 1]}
+        start={{x: 0, y:0}} end={{x:1, y:1}}
         colors={[this.state.colorTop, this.state.colorBottom]}>
         <Image style={[styles.image, {left: offsetLeft, bottom: offsetBottom}]} resizeMode='stretch' source={require('../../img/clouds.png')}/>
         {this.props.children}

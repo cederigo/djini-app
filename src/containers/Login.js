@@ -107,7 +107,7 @@ class Login extends Component {
           <ActionButton text={nextCaption} disabled={!isValid || isFetching} onPress={onNext}/>
         </AppBar>
         <ScrollView
-          keyboardShouldPersistTaps={true}
+          keyboardShouldPersistTaps="always"
           keyboardDismissMode="on-drag"
           style={styles.flex}>
           {form}

@@ -1,6 +1,7 @@
 /* global setTimeout */
-import React, {Component, PropTypes} from 'react';
-import {RefreshControl, StyleSheet} from 'react-native';
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import {RefreshControl, StyleSheet} from 'react-native'
 
 import DjiniText from './DjiniText'
 import PureListView from './PureListView'
@@ -64,7 +65,7 @@ export default class ContactsList extends Component {
         initialListSize={10}
         ref={this.storeInnerRef}
         data={this.props.contacts}
-        keyboardShouldPersistTaps={true}
+        keyboardShouldPersistTaps="always"
         keyboardDismissMode="on-drag"
         renderRow={this.renderRow}
         renderSeparator={this.renderSeparator}
