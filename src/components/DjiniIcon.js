@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import {Image, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Image, StyleSheet } from 'react-native'
 import * as images from '../../img'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import glyphMap from 'react-native-vector-icons/glyphmaps/MaterialIcons.json'
 
 const styles = StyleSheet.create({
   icon: {
-    color: 'white',
+    color: 'white'
   },
   iconDark: {
     color: 'rgb(61, 63, 148)'
@@ -20,17 +21,21 @@ export default function DjiniIcon(props) {
   }
   style.push(props.style)
   // Prefer Icons
-  if (Icon.glyphMap[props.name]) {
-    return <Icon {...props} style={style}/>
+  if (glyphMap[props.name]) {
+    return <Icon {...props} style={style} />
   } else {
-    return <Image {...props}
-      resizeMode="contain"
-      source={images[props.name]}
-      style={[{width: props.size, height: props.size}, props.style]}/>
+    return (
+      <Image
+        {...props}
+        resizeMode="contain"
+        source={images[props.name]}
+        style={[{ width: props.size, height: props.size }, props.style]}
+      />
+    )
   }
 }
 
-export function DjiniDarkIcon (props) {
+export function DjiniDarkIcon(props) {
   return (
     <DjiniIcon {...props} textStyle="dark">
       {props.children}
@@ -42,7 +47,7 @@ DjiniIcon.propTypes = {
   textStyle: PropTypes.oneOf(['light', 'dark']).isRequired,
   size: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  style: PropTypes.any,
+  style: PropTypes.any
 }
 
 DjiniIcon.defaultProps = {
