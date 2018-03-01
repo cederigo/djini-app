@@ -20,6 +20,7 @@ import { refreshContacts, restoreContacts } from '../actions/contacts'
 import { loginSuccess, loginFailure } from '../actions/authActions'
 import { updateInstallation } from '../actions/installation'
 import { rehydrateNotes } from '../actions/notes'
+import { trackEvent, setTrackerUser } from '../lib/analytics'
 
 class App extends Component {
   componentDidMount() {
@@ -32,10 +33,12 @@ class App extends Component {
         if (!parseUser) {
           throw new Error('User not logged in')
         }
+        setTrackerUser(parseUser.id)
         dispatch(refreshContacts())
         dispatch(loginSuccess(parseUser, false))
         // If app was opened through notification, navigate to notes tab
         getInitialNotification().then(notification => {
+          trackEvent('lifecycle', 'opened', { fromNotification: !!notification })
           Actions.home({ initialScene: notification ? 'notesTab' : undefined })
         })
       })

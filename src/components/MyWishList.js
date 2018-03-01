@@ -1,8 +1,8 @@
 /* global setTimeout */
 import { connect } from 'react-redux'
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {StyleSheet} from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import DjiniText from './DjiniText'
 import PureListView from './PureListView'
@@ -22,16 +22,14 @@ const styles = StyleSheet.create({
 })
 
 // actions
-import {showWish, deleteWish, saveWish} from '../actions/wishes'
-
+import { showWish, deleteWish, saveWish } from '../actions/wishes'
 
 class MyWishList extends Component {
-
   static propTypes = {
     showSwipeoutHint: PropTypes.bool.isRequired,
     wishes: PropTypes.arrayOf(PropTypes.object).isRequired
   }
-  _innerRef: ?PureListView;
+  _innerRef: ?PureListView
 
   constructor(props) {
     super(props)
@@ -48,32 +46,37 @@ class MyWishList extends Component {
         renderRow={this.renderRow}
         renderSeparator={this.renderSeparator}
         renderEmptyList={this.renderEmptyList}
-        renderHeader={() => <ListRowSeperator/>}
+        renderHeader={() => <ListRowSeperator />}
         {...this.props}
       />
-    );
+    )
   }
 
-  showSwipeoutAnimation (swipeout) {
+  showSwipeoutAnimation(swipeout) {
     if (!swipeout) {
       return
     }
-    swipeout.setState({btnWidth: 50, btnsRightWidth: 150})
+    swipeout.setState({ btnWidth: 50, btnsRightWidth: 150 })
     setTimeout(() => swipeout._tweenContent('contentPos', -150), 1500)
     setTimeout(() => swipeout._close(), 3000)
   }
 
-  swipeoutBtns (wish) {
-    const {dispatch} = this.props
+  swipeoutBtns(wish) {
+    const { dispatch } = this.props
     return [
-      { 
+      {
         backgroundColor: 'transparent',
-        component: <SwipeoutButton iconName="delete"/>,
-        onPress: () => dispatch(deleteWish(wish)),
+        component: <SwipeoutButton iconName="delete" />,
+        onPress: () => dispatch(deleteWish(wish))
       },
       {
         backgroundColor: 'transparent',
-        component: <SwipeoutButton iconStyle={wish.isFavorite ? styles.favoriteIcon : {}} iconName={wish.isFavorite ? 'star' : 'star-border'}/>,
+        component: (
+          <SwipeoutButton
+            iconStyle={wish.isFavorite ? styles.favoriteIcon : {}}
+            iconName={wish.isFavorite ? 'star' : 'star-border'}
+          />
+        ),
         onPress: () => dispatch(saveWish(wish.set('isFavorite', !wish.isFavorite)))
       },
       {
@@ -84,32 +87,35 @@ class MyWishList extends Component {
     ]
   }
 
-  renderRow (wish) {
-    const {dispatch, showSwipeoutHint} = this.props
+  renderRow(wish) {
+    const { dispatch, showSwipeoutHint } = this.props
     return (
-      <ListRow 
+      <ListRow
         title={wish.title}
         swipeoutBtns={this.swipeoutBtns(wish)}
         swipeoutRef={showSwipeoutHint ? this.showSwipeoutAnimation : undefined}
-        onPress={() => dispatch(showWish(wish))}>
-        {wish.isPrivate ? <ListRowIcon name="lock"/> : undefined}
-        {wish.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="star"/> : undefined}
+        onPress={() => dispatch(showWish(wish))}
+      >
+        {wish.isPrivate ? <ListRowIcon name="lock" /> : undefined}
+        {wish.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="star" /> : undefined}
       </ListRow>
     )
   }
 
   renderEmptyList() {
     return (
-      <DjiniText style={styles.emptyList}>Tippe auf die Lampe und flüstere Djini deinen ersten Wunsch!</DjiniText>
-    );
+      <DjiniText style={styles.emptyList}>
+        Tippe auf die Lampe und flüstere Djini deinen ersten Wunsch!
+      </DjiniText>
+    )
   }
 
   renderSeparator(sectionID, rowID) {
-    return <ListRowSeperator key={"SEP_" + sectionID + "_" + rowID}/>
+    return <ListRowSeperator key={'SEP_' + sectionID + '_' + rowID} />
   }
 
   storeInnerRef(ref: ?PureListView) {
-    this._innerRef = ref;
+    this._innerRef = ref
   }
 }
 

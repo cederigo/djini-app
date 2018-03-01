@@ -103,7 +103,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 4
-        versionName "1.0.6"
+        versionName "1.0.7-dev"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -147,6 +147,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-google-analytics-bridge')
     compile project(':react-native-push-notification')
     compile project(':react-native-code-push')
     compile project(':react-native-contacts')

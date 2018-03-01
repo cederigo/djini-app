@@ -11,10 +11,10 @@ import {
   SET_BADGE
 } from '../../lib/constants'
 
-import InitialState from './globalInitialState';
-import {User} from '../../lib/types'
+import InitialState from './globalInitialState'
+import { User } from '../../lib/types'
 
-const initialState = new InitialState;
+const initialState = new InitialState()
 
 /**
  * Helpers
@@ -30,7 +30,7 @@ export function fromParseUser(user: Object): User {
   }
 }
 
-export default function globalReducer(state = initialState, {type, payload}) {
+export default function globalReducer(state = initialState, { type, payload }) {
   switch (type) {
     case PROFILE_UPDATE_SUCCESS:
     case LOGIN_SUCCESS:
@@ -45,5 +45,5 @@ export default function globalReducer(state = initialState, {type, payload}) {
       return state.setIn(['badges', payload], true)
   }
 
-  return state;
+  return state
 }

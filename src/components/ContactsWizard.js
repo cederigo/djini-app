@@ -1,24 +1,26 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import {View, StyleSheet} from 'react-native'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { View, StyleSheet } from 'react-native'
 
 import DjiniButton from './DjiniButton'
 import DjiniText from './DjiniText'
-import {AppBar} from './AppBar'
+import { AppBar } from './AppBar'
 
 export default class ContactsWizard extends Component {
   static propTypes = {
     requestPermission: PropTypes.func.isRequired
   }
   render() {
-    const {requestPermission} = this.props
+    const { requestPermission } = this.props
     return (
       <View style={styles.container}>
-        <AppBar title="Freunde" showBackButton={false}/>
+        <AppBar title="Freunde" showBackButton={false} />
         <DjiniText style={styles.text}>
-          Djini verrät dir, was sich deine Freunde wünschen und hilft dir deine Geschenkideen für sie festzuhalten. Dafür braucht er aber Zugriff auf deine Kontakte! Keine Angst, Djini gibt deine Kontakte nicht weiter!
+          Djini verrät dir, was sich deine Freunde wünschen und hilft dir deine Geschenkideen für
+          sie festzuhalten. Dafür braucht er aber Zugriff auf deine Kontakte! Keine Angst, Djini
+          gibt deine Kontakte nicht weiter!
         </DjiniText>
-        <DjiniButton style={styles.button} onPress={requestPermission} caption="Ja klar, bitte!"/>
+        <DjiniButton style={styles.button} onPress={requestPermission} caption="Ja klar, bitte!" />
       </View>
     )
   }
@@ -26,7 +28,7 @@ export default class ContactsWizard extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   text: {
     textAlign: 'center',

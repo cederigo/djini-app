@@ -1,21 +1,21 @@
-import { connect } from 'react-redux';
-import {Record} from 'immutable'
+import { connect } from 'react-redux'
+import { Record } from 'immutable'
 
 /* @flow */
 
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import React, { Component } from 'react';
-import {View, StyleSheet} from 'react-native'
+import React, { Component } from 'react'
+import { View, StyleSheet } from 'react-native'
 import dismissKeyboard from 'dismissKeyboard'
 
-import {transliterate} from '../lib/transliteration'
+import { transliterate } from '../lib/transliteration'
 
 import DjiniText from '../components/DjiniText'
 import ContactsPermission from '../components/ContactsPermission'
 import ContactsWizard from '../components/ContactsWizard'
 import ContactsList from '../components/ContactsList'
-import {SearchBar} from '../components/AppBar'
+import { SearchBar } from '../components/AppBar'
 
 import {
   onSearchFieldChange,
@@ -25,30 +25,34 @@ import {
   requestContactsPermission
 } from '../actions/contacts'
 
-import {loadFriendProfile} from '../actions/profile'
+import { loadFriendProfile } from '../actions/profile'
+import { trackScreenView } from '../lib/analytics'
 
 class Contacts extends Component {
-  
   constructor(props) {
     super(props)
-    console.log('Contacts.constructor()')
+    this.searchBar = undefined
     this.state = {
       showSwipeoutHint: false
     }
   }
 
+  componentDidMount() {
+    trackScreenView('contacts')
+  }
+
   endSearch() {
-    const {dispatch} = this.props
+    const { dispatch } = this.props
     dispatch(onSearchFieldChange('')) //clear search
-    this.refs.searchBar.endSearch()
+    this.searchBar.endSearch()
   }
 
   getListData(contacts, filterText) {
     const r = new RegExp(transliterate(filterText), 'i')
-    const result = {favorites: [], contacts: []}
+    const result = { favorites: [], contacts: [] }
     contacts.forEach(c => {
       if (!r.test(c.nameTransliterated)) {
-        return;
+        return
       }
       result[c.isFavorite ? 'favorites' : 'contacts'].push(c)
     })
@@ -56,77 +60,80 @@ class Contacts extends Component {
   }
 
   toggleFavorite(contact) {
-    const {dispatch} = this.props
+    const { dispatch } = this.props
     dispatch(setFavorite(contact, !contact.isFavorite))
     dispatch(onSearchFieldChange('')) //clear search
   }
 
   openContact(contact) {
-    const {dispatch} = this.props
+    const { dispatch } = this.props
     dispatch(loadFriendProfile(contact))
     dismissKeyboard()
   }
 
   inviteContact(c) {
-    const {dispatch} = this.props
+    const { dispatch } = this.props
     dispatch(invite(c))
   }
-  
+
   requestPermission() {
-    const {dispatch} = this.props
+    const { dispatch } = this.props
     dispatch(requestContactsPermission())
     // Disable atm.
     // this.setState({showSwipeoutHint: true})
   }
-  
+
   refreshContacts() {
-    const {dispatch} = this.props
+    const { dispatch } = this.props
     dispatch(refreshContacts())
   }
 
   render() {
-    const {contactsState, dispatch} = this.props
-    let {contacts, filterText, isFetching} = contactsState
+    const { contactsState, dispatch } = this.props
+    let { contacts, filterText, isFetching } = contactsState
 
     if (!isFetching && contactsState.permissionDenied) {
-      return <ContactsPermission refreshContacts={() => this.refreshContacts()}/>
+      return <ContactsPermission refreshContacts={() => this.refreshContacts()} />
     }
     if (!isFetching && !contacts.size) {
-      return <ContactsWizard requestPermission={() => this.requestPermission()}/>
-    } 
+      return <ContactsWizard requestPermission={() => this.requestPermission()} />
+    }
 
     //contacts
     return (
       <View style={styles.container}>
         <SearchBar
-          ref="searchBar"
+          ref={searchBar => (this.searchBar = searchBar)}
           title="Freunde"
           inputValue={filterText}
           inputPlaceholder="Freunde suchen ..."
-          onChangeText={(text) => dispatch(onSearchFieldChange(text))}
-          onSearchEnd={() => this.endSearch()}/>
-        {isFetching ?
+          onChangeText={text => dispatch(onSearchFieldChange(text))}
+          onSearchEnd={() => this.endSearch()}
+        />
+        {isFetching ? (
           <DjiniText style={styles.loading}>Laden..</DjiniText>
-          : <ContactsList
+        ) : (
+          <ContactsList
             showSwipeoutHint={this.state.showSwipeoutHint}
-            toggleFavorite={(c) => this.toggleFavorite(c)}
-            openContact={(c) => this.openContact(c)}
-            inviteContact={(c) => this.inviteContact(c)}
+            toggleFavorite={c => this.toggleFavorite(c)}
+            openContact={c => this.openContact(c)}
+            inviteContact={c => this.inviteContact(c)}
             refreshContacts={() => this.refreshContacts()}
-            contacts={this.getListData(contacts, filterText)}/>
-        }
+            contacts={this.getListData(contacts, filterText)}
+          />
+        )}
       </View>
     )
   }
 }
 
 Contacts.propTypes = {
-  contactsState: PropTypes.instanceOf(Record).isRequired,
+  contactsState: PropTypes.instanceOf(Record).isRequired
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   loading: {
     marginTop: 50,
@@ -138,6 +145,6 @@ const styles = StyleSheet.create({
  * Redux boilerplate
  */
 function select(state) {
-  return { contactsState: state.contacts};
+  return { contactsState: state.contacts }
 }
 export default connect(select)(Contacts)

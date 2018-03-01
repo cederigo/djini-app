@@ -9,15 +9,18 @@
   "env": {
     "es6": true
   },
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react", "flowtype"],
   "globals": {
-    "fetch": false
+    "fetch": false,
+    "console": false,
+    "setTimeout": false,
+    "require": false
   },
   "rules": {
-    "react/prop-types": [2, {"ignore": ["dispatch"]}],
-    "comma-dangle": 0
+    "react/prop-types": ["warn", { "ignore": ["dispatch"] }],
+    "react/no-string-refs": "warn",
+    "comma-dangle": 0,
+    "no-console": "warn"
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"]
 }

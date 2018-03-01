@@ -1,4 +1,4 @@
-import {Record} from 'immutable'
+import { Record } from 'immutable'
 import InitialState from './profileInitialState'
 import profileFormValidation from './profileFormValidation'
 
@@ -10,37 +10,33 @@ import {
   PROFILE_UPDATE_REQUEST
 } from '../../lib/constants'
 
-const initialState = new InitialState;
+const initialState = new InitialState()
 
 export function findWishInProfile(state, wishId) {
-  let result = state.wishes.find((w) => w.id === wishId)
+  let result = state.wishes.find(w => w.id === wishId)
   if (!result) {
-    result = state.ideas.find((w) => w.id === wishId)
+    result = state.ideas.find(w => w.id === wishId)
   }
   return result
 }
 
-export default function profileReduer(state = initialState, {type, payload}) {
+export default function profileReduer(state = initialState, { type, payload }) {
   if (type === EDIT_PROFILE) {
-    const {name, email, birthday} = payload
+    const { name, email, birthday } = payload
     return state
       .set('isValid', true)
       .set('isFetching', false)
       .set('user', payload)
       .set('edit', true)
-      .set('fields', new (Record({name, email, birthday})))
-  }
-  else if (type == ON_PROFILE_FIELD_CHANGE) {
-    const {field, value} = payload
+      .set('fields', new (Record({ name, email, birthday }))())
+  } else if (type == ON_PROFILE_FIELD_CHANGE) {
+    const { field, value } = payload
     //clear error and set field value
-    state = state.set('error', null)
-      .setIn(['fields', field], value)
+    state = state.set('error', null).setIn(['fields', field], value)
     return profileFormValidation(state)
-  }
-  else if (type === CANCEL_EDIT_PROFILE || type === PROFILE_UPDATE_SUCCESS) {
+  } else if (type === CANCEL_EDIT_PROFILE || type === PROFILE_UPDATE_SUCCESS) {
     return state.set('edit', false)
-  }
-  else if (type === PROFILE_UPDATE_REQUEST) {
+  } else if (type === PROFILE_UPDATE_REQUEST) {
     return state.set('isFetching', true)
   }
   return state

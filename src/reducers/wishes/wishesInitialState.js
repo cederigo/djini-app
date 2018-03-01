@@ -1,4 +1,4 @@
-import {Record, List} from 'immutable'
+import { Record, List } from 'immutable'
 
 var InitialState = Record({
   isFetching: false,

@@ -1,4 +1,4 @@
-import {Record, OrderedMap} from 'immutable';
+import { Record, OrderedMap } from 'immutable'
 
 var InitialState = Record({
   isFetching: false,
@@ -7,7 +7,7 @@ var InitialState = Record({
   lastSavedAt: 0,
   pristine: true,
   permissionDenied: false,
-  contacts: OrderedMap(),
-});
+  contacts: OrderedMap()
+})
 
-export default InitialState;
+export default InitialState

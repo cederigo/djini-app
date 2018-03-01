@@ -1,5 +1,5 @@
-import {Record} from 'immutable'
-import {User} from '../../lib/types'
+import { Record } from 'immutable'
+import { User } from '../../lib/types'
 
 var InitialState = Record({
   currentUser: User,
@@ -7,8 +7,8 @@ var InitialState = Record({
     wishesTab: false,
     contactsTab: false,
     notesTab: false,
-    profileTab: false,
-  }))
-});
+    profileTab: false
+  }))()
+})
 
-export default InitialState;
+export default InitialState

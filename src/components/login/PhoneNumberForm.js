@@ -1,32 +1,36 @@
-import React, {Component} from 'react';
-import {View, Alert} from 'react-native';
+import React, { Component } from 'react'
+import { View, Alert } from 'react-native'
 import DjiniText from '../DjiniText'
 
 import DjiniTextInput from '../DjiniTextInput'
+import { trackScreenView } from '../../lib/analytics'
 
 export default class PhoneNumberForm extends Component {
-
   props: {
     onFormFieldChange: (name: string, text: string) => void,
     onNext: () => void,
     authState: any,
-    styles: any,
+    styles: any
+  }
+
+  componentDidMount() {
+    trackScreenView('login: phone number')
   }
 
   render() {
-
-    const {onFormFieldChange, authState, styles, onNext} = this.props
-    const {phoneNumber} = authState.fields
+    const { onFormFieldChange, authState, styles, onNext } = this.props
+    const { phoneNumber } = authState.fields
     const errorMsg = authState.error ? authState.error.message : ''
 
     if (errorMsg.indexOf('is not a mobile number') >= 0) {
       Alert.alert('Ungültige Nummer', 'Dies ist keine Natel-Nummer')
     }
 
-    return ( 
+    return (
       <View style={styles.container}>
         <DjiniText style={styles.text}>
-          Djini soll dein Leben vereinfachen! Darum setzt er auf einen bequemen SMS-Login statt auf schnell vergessene Passwörter.
+          Djini soll dein Leben vereinfachen! Darum setzt er auf einen bequemen SMS-Login statt auf
+          schnell vergessene Passwörter.
         </DjiniText>
         <View style={styles.formGroup}>
           <DjiniText style={styles.formGroupText}>Telefon</DjiniText>
@@ -38,7 +42,7 @@ export default class PhoneNumberForm extends Component {
             autoFocus={true}
             keyboardType="phone-pad"
             onSubmitEditing={onNext}
-            onChangeText={(text) => {
+            onChangeText={text => {
               onFormFieldChange('phoneNumber', text)
             }}
             value={phoneNumber}

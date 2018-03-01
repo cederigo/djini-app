@@ -1,1 +1,1 @@
-export {default as getNotesNotifications} from './notes'
+export { default as getNotesNotifications } from './notes'

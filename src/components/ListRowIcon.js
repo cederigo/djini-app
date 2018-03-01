@@ -1,6 +1,5 @@
-
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import DjiniIcon from './DjiniIcon'
 
 const styles = StyleSheet.create({
@@ -12,7 +11,7 @@ const styles = StyleSheet.create({
 export default function ListRowIcon(props) {
   return (
     <View style={styles.container}>
-      <DjiniIcon size={28} {...props}/>
+      <DjiniIcon size={28} {...props} />
     </View>
   )
 }

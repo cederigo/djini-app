@@ -1,4 +1,4 @@
-import {CLEAR_BADGE, SET_BADGE} from '../lib/constants'
+import { CLEAR_BADGE, SET_BADGE } from '../lib/constants'
 
 export function clearBadge(sceneKey) {
   return {

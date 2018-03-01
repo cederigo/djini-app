@@ -1,6 +1,6 @@
 export function allowEdit(wish, user) {
   return wish.fromUserId === user.id
-} 
+}
 
 export function fulfillable(wish, user) {
   return (!fulfilled(wish) || fulfilledByUser(wish, user)) && !toUser(wish, user)
@@ -11,7 +11,7 @@ export function fulfilledByUser(wish, user) {
 }
 
 export function fulfilled(wish) {
-  return !(!wish.fulfillerId)
+  return !!wish.fulfillerId
 }
 
 export function toUser(wish, user) {

@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { View, TouchableOpacity, StyleSheet } from 'react-native'
 import Swipeout from 'react-native-swipeout'
 
 import DjiniText from './DjiniText'
@@ -8,7 +8,7 @@ import DjiniText from './DjiniText'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   row: {
     backgroundColor: 'transparent',
@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
     paddingRight: 10
   },
   content: {
-    flex: 1,
+    flex: 1
   },
   tite: {
-    fontSize: 20,
+    fontSize: 20
   },
   description: {
     fontSize: 14,
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
 })
 export default function ListRow(props) {
   let swipeout
-  const {swipeoutBtns, swipeoutRef, ...others} = props
-  const ref = (comp) => {
+  const { swipeoutBtns, swipeoutRef, ...others } = props
+  const ref = comp => {
     swipeout = comp
     typeof swipeoutRef === 'function' && swipeoutRef(comp)
   }
@@ -44,18 +44,33 @@ export default function ListRow(props) {
     props.onPress()
   }
   return (
-    <Swipeout {...others} style={styles.container} right={swipeoutBtns} ref={ref} autoClose={true} sensitivity={1}>
+    <Swipeout
+      {...others}
+      style={styles.container}
+      right={swipeoutBtns}
+      ref={ref}
+      autoClose={true}
+      sensitivity={1}
+    >
       <TouchableOpacity onPress={onPress}>
         <View style={styles.row}>
           <View style={styles.content}>
-            <DjiniText style={styles.title} numberOfLines={1}>{props.title}</DjiniText>
-            {props.description ? <DjiniText style={styles.description} numberOfLines={1}>{props.description}</DjiniText> : undefined }
+            <DjiniText style={styles.title} numberOfLines={1}>
+              {props.title}
+            </DjiniText>
+            {props.description ? (
+              <DjiniText style={styles.description} numberOfLines={1}>
+                {props.description}
+              </DjiniText>
+            ) : (
+              undefined
+            )}
           </View>
           {props.children}
         </View>
       </TouchableOpacity>
     </Swipeout>
-  );
+  )
 }
 
 ListRow.propTypes = {
@@ -63,5 +78,5 @@ ListRow.propTypes = {
   description: PropTypes.string,
   onPress: PropTypes.func.isRequired,
   swipeoutBtns: PropTypes.array,
-  swipeoutRef: PropTypes.func,
+  swipeoutRef: PropTypes.func
 }

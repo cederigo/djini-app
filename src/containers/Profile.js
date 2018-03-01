@@ -13,6 +13,7 @@ import ProfileField from '../components/ProfileField'
 import DjiniText from '../components/DjiniText'
 import Tabs from '../components/Tabs'
 import DjiniButton from '../components/DjiniButton'
+import { trackScreenView } from '../lib/analytics'
 
 class Profile extends Component {
   static propTypes = {
@@ -21,6 +22,10 @@ class Profile extends Component {
     isValid: PropTypes.bool.isRequired,
     isFetching: PropTypes.bool.isRequired,
     fields: PropTypes.object.isRequired
+  }
+
+  componentDidMount() {
+    trackScreenView('profile')
   }
 
   render() {

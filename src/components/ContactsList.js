@@ -1,7 +1,7 @@
 /* global setTimeout */
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {RefreshControl, StyleSheet} from 'react-native'
+import { RefreshControl, StyleSheet } from 'react-native'
 
 import DjiniText from './DjiniText'
 import PureListView from './PureListView'
@@ -21,8 +21,7 @@ const styles = StyleSheet.create({
 })
 
 export default class ContactsList extends Component {
-
-  _innerRef: ?PureListView;
+  _innerRef: ?PureListView
 
   static propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -34,7 +33,7 @@ export default class ContactsList extends Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.renderRow = this.renderRow.bind(this)
     this.onRefresh = this.onRefresh.bind(this)
     this.storeInnerRef = this.storeInnerRef.bind(this)
@@ -46,15 +45,15 @@ export default class ContactsList extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.contacts !== this.props.contacts) {
       this.setState({ refreshing: false })
-      this._innerRef.scrollTo({animated: false})
+      this._innerRef.scrollTo({ animated: false })
     }
   }
-  
-  showSwipeoutAnimation (swipeout) {
+
+  showSwipeoutAnimation(swipeout) {
     if (!swipeout) {
       return
     }
-    swipeout.setState({btnWidth: 50, btnsRightWidth: 150})
+    swipeout.setState({ btnWidth: 50, btnsRightWidth: 150 })
     setTimeout(() => swipeout._tweenContent('contentPos', -100), 2000)
     setTimeout(() => swipeout._close(), 4000)
   }
@@ -71,10 +70,7 @@ export default class ContactsList extends Component {
         renderSeparator={this.renderSeparator}
         renderEmptyList={this.renderEmptyList}
         refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this.onRefresh}
-          />
+          <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
         }
         {...this.props}
       />
@@ -82,26 +78,31 @@ export default class ContactsList extends Component {
   }
 
   onRefresh() {
-    const {refreshContacts} = this.props
-    this.setState({refreshing: true})
+    const { refreshContacts } = this.props
+    this.setState({ refreshing: true })
     refreshContacts()
   }
 
-  swipeoutBtns (contact) {
-    const {toggleFavorite, inviteContact} = this.props
+  swipeoutBtns(contact) {
+    const { toggleFavorite, inviteContact } = this.props
     const result = [
       {
         backgroundColor: 'transparent',
-        component: <SwipeoutButton iconStyle={styles.favoriteIcon} iconName={contact.isFavorite ? 'favorite' : 'favorite-border'}/>,
+        component: (
+          <SwipeoutButton
+            iconStyle={styles.favoriteIcon}
+            iconName={contact.isFavorite ? 'favorite' : 'favorite-border'}
+          />
+        ),
         onPress: () => toggleFavorite(contact)
-      },
+      }
     ]
 
     if (!contact.registered) {
       // Add at the beginning
       result.unshift({
         backgroundColor: 'transparent',
-        component: <SwipeoutButton iconName="person-add"/>,
+        component: <SwipeoutButton iconName="person-add" />,
         onPress: () => inviteContact(contact)
       })
     }
@@ -109,23 +110,28 @@ export default class ContactsList extends Component {
     return result
   }
 
-  renderRow (contact, section, idx) {
-    const {openContact, showSwipeoutHint} = this.props
+  renderRow(contact, section, idx) {
+    const { openContact, showSwipeoutHint } = this.props
     const showSwipeoutAnimation = showSwipeoutHint && idx === '0'
     return (
       <ListRow
         title={contact.name}
         swipeoutRef={showSwipeoutAnimation ? this.showSwipeoutAnimation : undefined}
         swipeoutBtns={this.swipeoutBtns(contact)}
-        onPress={() => openContact(contact)}>
-        {contact.registered ? <ListRowIcon name="lamp_filled" size={40}/> : undefined}
-        {contact.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="favorite"/> : undefined}
+        onPress={() => openContact(contact)}
+      >
+        {contact.registered ? <ListRowIcon name="lamp_filled" size={40} /> : undefined}
+        {contact.isFavorite ? (
+          <ListRowIcon style={styles.favoriteIcon} name="favorite" />
+        ) : (
+          undefined
+        )}
       </ListRow>
-    );
+    )
   }
 
   renderSeparator(sectionID, rowID) {
-    return <ListRowSeperator key={"SEP_" + sectionID + "_" + rowID}/>
+    return <ListRowSeperator key={'SEP_' + sectionID + '_' + rowID} />
   }
 
   renderEmptyList() {
@@ -133,7 +139,6 @@ export default class ContactsList extends Component {
   }
 
   storeInnerRef(ref: ?PureListView) {
-    this._innerRef = ref;
+    this._innerRef = ref
   }
-
 }

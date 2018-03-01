@@ -1,4 +1,4 @@
-import {Record} from 'immutable';
+import { Record } from 'immutable'
 
 const InitialState = Record({
   isValid: false,
@@ -10,7 +10,7 @@ const InitialState = Record({
     name: '',
     email: '',
     birthday: ''
-  }))
+  }))()
 })
 
-export default InitialState;
+export default InitialState

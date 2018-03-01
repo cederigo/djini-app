@@ -2,16 +2,15 @@
  * A thin wrapper over react's AsyncStorage
  */
 
-import {AsyncStorage} from 'react-native'
+import { AsyncStorage } from 'react-native'
 
-const getJsonItem = (key) => {
-   return AsyncStorage.getItem(key)
-      .then(json => {
-        if (!json) {
-          throw('no data')
-        }
-        return JSON.parse(json)
-      })
+const getJsonItem = key => {
+  return AsyncStorage.getItem(key).then(json => {
+    if (!json) {
+      throw 'no data'
+    }
+    return JSON.parse(json)
+  })
 }
 
 class Database {

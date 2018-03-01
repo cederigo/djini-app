@@ -1,4 +1,4 @@
-import {Record} from 'immutable';
+import { Record } from 'immutable'
 
 import { LOGIN_PHONENUMBER_FORM } from '../../lib/constants'
 
@@ -14,7 +14,7 @@ const InitialState = Record({
     name: '',
     email: '',
     birthday: ''
-  }))
-});
+  }))()
+})
 
-export default InitialState;
+export default InitialState

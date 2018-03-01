@@ -2,21 +2,22 @@
  * A thin wrapper over https://github.com/rt2zz/react-native-contacts
  */
 
-import {Platform, PermissionsAndroid} from 'react-native'
+import { Platform, PermissionsAndroid } from 'react-native'
 import contacts from 'react-native-contacts'
-import {transliterate} from './transliteration'
-import {formatNumber, isMobileNumber, isValidNumber} from './phoneUtil' 
+import { transliterate } from './transliteration'
+import { formatNumber, isMobileNumber, isValidNumber } from './phoneUtil'
 
 class Contacts {
-  
   _findFirstMobileNumber(phoneNumbers) {
-    return phoneNumbers.find((number) => isMobileNumber(number))
+    return phoneNumbers.find(number => isMobileNumber(number))
   }
 
   _formatContact(raw) {
     const firstName = raw.givenName ? raw.givenName : ''
     const lastName = raw.familyName ? raw.familyName : ''
-    let phoneNumber = this._findFirstMobileNumber(raw.phoneNumbers.map((phoneNumber) => phoneNumber.number))
+    let phoneNumber = this._findFirstMobileNumber(
+      raw.phoneNumbers.map(phoneNumber => phoneNumber.number)
+    )
     if (!phoneNumber) {
       // Fallback
       phoneNumber = raw.phoneNumbers[0].number
@@ -32,12 +33,11 @@ class Contacts {
   }
 
   _isValidContact(raw) {
-    return raw.phoneNumbers && raw.phoneNumbers.length
-      && (raw.givenName || raw.familyName)
+    return raw.phoneNumbers && raw.phoneNumbers.length && (raw.givenName || raw.familyName)
   }
 
   transliterate(contacts) {
-    Object.values(contacts).forEach((contact) => {
+    Object.values(contacts).forEach(contact => {
       contact.nameTransliterated = transliterate(contact.name.toLowerCase())
     })
     return contacts
@@ -45,10 +45,11 @@ class Contacts {
 
   requestPermission() {
     if (Platform.OS === 'android') {
-      return PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.READ_CONTACTS)
-        .then((granted) => {
-          return granted ? 'authorized' : 'denied'
-        })
+      return PermissionsAndroid.requestPermission(
+        PermissionsAndroid.PERMISSIONS.READ_CONTACTS
+      ).then(granted => {
+        return granted ? 'authorized' : 'denied'
+      })
     }
     return new Promise((resolve, reject) => {
       contacts.requestPermission((err, permission) => {
@@ -80,15 +81,15 @@ class Contacts {
 
         let result = {} //contacts dictionary with phoneNumber as key
 
-        records.forEach((c) => {
+        records.forEach(c => {
           if (!this._isValidContact(c)) {
-            return; //nothing to do
+            return //nothing to do
           }
-          
+
           try {
             let formattedContact = this._formatContact(c)
             result[formattedContact.phoneNumber] = formattedContact
-          } catch(e) {
+          } catch (e) {
             console.log('Could not format contact', c)
           }
         })

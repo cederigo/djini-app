@@ -1,5 +1,4 @@
-
-import {isValidNumber, formatNumber} from '../../lib/phoneUtil'
+import { isValidNumber, formatNumber } from '../../lib/phoneUtil'
 import {
   LOGIN_PHONENUMBER_FORM,
   LOGIN_VERIFICATIONCODE_FORM,
@@ -8,16 +7,16 @@ import {
 } from '../../lib/constants'
 
 export default function authFormValidation(state) {
-
-  const {formName, fields} = state
-  const {phoneNumber, code, email, name, birthday} = fields
+  const { formName, fields } = state
+  const { phoneNumber, code, email, name, birthday } = fields
 
   switch (formName) {
-    case LOGIN_BIRTHDAY_FORM: 
+    case LOGIN_BIRTHDAY_FORM:
       return state.set('isValid', birthday ? true : false)
-    case LOGIN_PHONENUMBER_FORM: 
-      return state.set('isValid', isValidNumber(phoneNumber))
-          .setIn(['fields', 'phoneNumberFormatted'], formatNumber(phoneNumber))
+    case LOGIN_PHONENUMBER_FORM:
+      return state
+        .set('isValid', isValidNumber(phoneNumber))
+        .setIn(['fields', 'phoneNumberFormatted'], formatNumber(phoneNumber))
     case LOGIN_VERIFICATIONCODE_FORM:
       return state.set('isValid', code ? true : false)
     case LOGIN_PROFILE_FORM: {

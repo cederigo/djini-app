@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
-import React, {Component} from 'react';
+import { connect } from 'react-redux'
+import React, { Component } from 'react'
 import { Actions } from 'react-native-router-flux'
-import {StyleSheet, View, ScrollView} from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native'
 
-import {AppBar, ActionButton} from '../components/AppBar'
+import { AppBar, ActionButton } from '../components/AppBar'
 import DjiniButton from '../components/DjiniButton'
 
 import {
@@ -13,7 +13,7 @@ import {
   verificationCodeForm,
   login,
   sendCode,
-  onFormFieldChange,
+  onFormFieldChange
 } from '../actions/authActions'
 
 import { loadMyProfile, updateProfile } from '../actions/profile'
@@ -26,77 +26,87 @@ import {
   LOGIN_PHONENUMBER_FORM,
   LOGIN_VERIFICATIONCODE_FORM,
   LOGIN_PROFILE_FORM,
-  LOGIN_BIRTHDAY_FORM,
+  LOGIN_BIRTHDAY_FORM
 } from '../lib/constants'
 
 class Login extends Component {
-
   props: {
     authState: any
   }
 
   render() {
-
-    const {authState, dispatch} = this.props
-    const {formName, isValid, fields, isFetching} = authState
+    const { authState, dispatch } = this.props
+    const { formName, isValid, fields, isFetching } = authState
 
     let title, form, onNext, onBack
-    let nextCaption = "Weiter"
+    let nextCaption = 'Weiter'
 
-    switch(formName) {
+    switch (formName) {
       case LOGIN_PHONENUMBER_FORM:
-        title = "Telefon"
+        title = 'Telefon'
         onBack = Actions.welcome
         onNext = () => {
           dispatch(sendCode(fields.get('phoneNumberFormatted')))
         }
-        form = <PhoneNumberForm 
-          authState={authState}
-          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
-          styles={formStyles}
-          onNext={isValid ? onNext: null}/>
-        break;
+        form = (
+          <PhoneNumberForm
+            authState={authState}
+            onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+            styles={formStyles}
+            onNext={isValid ? onNext : null}
+          />
+        )
+        break
       case LOGIN_VERIFICATIONCODE_FORM:
-        title = "Code"
+        title = 'Code'
         onBack = () => dispatch(phoneNumberForm())
         onNext = () => {
-          dispatch(login(
-            fields.get('phoneNumberFormatted'), /* username */
-            fields.get('code') /* password */
-          ))
+          dispatch(
+            login(
+              fields.get('phoneNumberFormatted') /* username */,
+              fields.get('code') /* password */
+            )
+          )
         }
-        form = <VerificationCodeForm 
-          styles={formStyles}
-          authState={authState}
-          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
-          onNext={isValid ? onNext : null}/>
-        break;
+        form = (
+          <VerificationCodeForm
+            styles={formStyles}
+            authState={authState}
+            onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+            onNext={isValid ? onNext : null}
+          />
+        )
+        break
       case LOGIN_PROFILE_FORM:
-        title = "Name & E-Mail"
+        title = 'Name & E-Mail'
         onBack = () => dispatch(verificationCodeForm())
         onNext = () => dispatch(birthdayForm())
-        form = <ProfileForm 
-          authState={authState}
-          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
-          styles={formStyles}
-          onNext={isValid? onNext: null}
-        />
+        form = (
+          <ProfileForm
+            authState={authState}
+            onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+            styles={formStyles}
+            onNext={isValid ? onNext : null}
+          />
+        )
         break
       case LOGIN_BIRTHDAY_FORM: {
-        title = "Geburtstag"
-        nextCaption = "Abschliessen"
-        const {name, email, birthday} = fields
+        title = 'Geburtstag'
+        nextCaption = 'Abschliessen'
+        const { name, email, birthday } = fields
         onBack = () => dispatch(profileForm())
         onNext = () => {
-          dispatch(updateProfile({name, email, birthday}))
+          dispatch(updateProfile({ name, email, birthday }))
             .then(() => dispatch(loadMyProfile()))
             .then(() => Actions.home())
         }
-        form = <BirthdayForm 
-          styles={formStyles}
-          authState={authState}
-          onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
-        />
+        form = (
+          <BirthdayForm
+            styles={formStyles}
+            authState={authState}
+            onFormFieldChange={(name, text) => dispatch(onFormFieldChange(name, text))}
+          />
+        )
         break
       }
     }
@@ -104,14 +114,20 @@ class Login extends Component {
     return (
       <View style={styles.container}>
         <AppBar title={title} showBackButton={onBack ? true : false} onBack={onBack}>
-          <ActionButton text={nextCaption} disabled={!isValid || isFetching} onPress={onNext}/>
+          <ActionButton text={nextCaption} disabled={!isValid || isFetching} onPress={onNext} />
         </AppBar>
         <ScrollView
           keyboardShouldPersistTaps="always"
           keyboardDismissMode="on-drag"
-          style={styles.flex}>
+          style={styles.flex}
+        >
           {form}
-          <DjiniButton style={styles.button} caption={nextCaption} onPress={onNext} disabled={!isValid || isFetching}/>
+          <DjiniButton
+            style={styles.button}
+            caption={nextCaption}
+            onPress={onNext}
+            disabled={!isValid || isFetching}
+          />
         </ScrollView>
       </View>
     )
@@ -139,13 +155,13 @@ const formStyles = StyleSheet.create({
     flex: 1
   },
   formGroupInput: {
-    flex: 2,
-  },
+    flex: 2
+  }
 })
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   button: {
     margin: 20
@@ -156,6 +172,6 @@ const styles = StyleSheet.create({
  * Redux boilerplate
  */
 function select(state) {
-  return { authState: state.auth };
+  return { authState: state.auth }
 }
 export default connect(select)(Login)

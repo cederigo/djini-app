@@ -1,10 +1,10 @@
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import {formatBirthday} from '../lib/dateUtil'
+import { formatBirthday } from '../lib/dateUtil'
 
 import DjiniBackground from '../components/DjiniBackground'
 import DjiniText from '../components/DjiniText'
@@ -14,14 +14,13 @@ import DjiniError from '../components/DjiniError'
 import Tabs from '../components/Tabs'
 import FriendWishesList from '../components/FriendWishesList'
 import FriendIdeasList from '../components/FriendIdeasList'
-import {AppBar} from '../components/AppBar'
+import { AppBar } from '../components/AppBar'
 
-import {setFavorite, invite} from '../actions/contacts'
-import {newWish} from '../actions/wishes'
-import {loadFriendProfile} from '../actions/profile'
+import { setFavorite, invite } from '../actions/contacts'
+import { newWish } from '../actions/wishes'
+import { loadFriendProfile } from '../actions/profile'
 
 class Friend extends Component {
-
   static propTypes = {
     isFetching: PropTypes.bool,
     user: PropTypes.object, // me
@@ -43,7 +42,7 @@ class Friend extends Component {
   }
 
   renderProfileView() {
-    const {friend, contact, dispatch, isFetching, error} = this.props
+    const { friend, contact, dispatch, isFetching, error } = this.props
     let birthdayText = isFetching || error ? '' : 'Djini kennt den Geburtstag leider nicht'
     if (friend.birthday) {
       birthdayText = formatBirthday(friend.birthday)
@@ -60,14 +59,15 @@ class Friend extends Component {
           style={styles.favoriteButton}
           iconStyle={styles.favoriteIcon}
           iconName={contact.isFavorite ? 'favorite' : 'favorite-border'}
-          onPress={() => dispatch(setFavorite(contact, !contact.isFavorite))}/>
+          onPress={() => dispatch(setFavorite(contact, !contact.isFavorite))}
+        />
       </View>
     )
   }
 
   renderTab() {
-    const {user, friend, contact, wishes, ideas, dispatch} = this.props
-    const {activeTab} = this.state
+    const { user, friend, contact, wishes, ideas, dispatch } = this.props
+    const { activeTab } = this.state
     if (activeTab === 'wishes' && !friend.registered) {
       return (
         <View style={styles.inviteView}>
@@ -77,28 +77,53 @@ class Friend extends Component {
           <DjiniButton
             style={styles.inviteButton}
             caption={contact.name + ' einladen'}
-            onPress={() => dispatch(invite(contact))} />
+            onPress={() => dispatch(invite(contact))}
+          />
         </View>
-      ) 
+      )
     }
     if (activeTab === 'wishes') {
-      return <FriendWishesList style={styles.list} wishes={wishes.toArray()} user={user} contact={contact}/>
+      return (
+        <FriendWishesList
+          style={styles.list}
+          wishes={wishes.toArray()}
+          user={user}
+          contact={contact}
+        />
+      )
     } else {
-      return <FriendIdeasList style={styles.list} wishes={ideas.toArray()} user={user} friend={friend} contact={contact}/>
+      return (
+        <FriendIdeasList
+          style={styles.list}
+          wishes={ideas.toArray()}
+          user={user}
+          friend={friend}
+          contact={contact}
+        />
+      )
     }
   }
 
   renderTabs() {
-    const {user, friend, dispatch} = this.props
+    const { user, friend, dispatch } = this.props
     return (
       <View style={styles.container}>
-        <Tabs selected={this.state.activeTab} onSelect={(el) => this.setState({activeTab: el.props.name})}>
-          <DjiniText style={styles.tabText} initial={true} name="wishes">Wünsche</DjiniText>
+        <Tabs
+          selected={this.state.activeTab}
+          onSelect={el => this.setState({ activeTab: el.props.name })}
+        >
+          <DjiniText style={styles.tabText} initial={true} name="wishes">
+            Wünsche
+          </DjiniText>
           <View style={styles.tabIdeas} name="ideas">
-            <DjiniText style={styles.tabText} numberOfLines={1}>Ideen</DjiniText>
-            <TouchableOpacity style={styles.tabIconContainer}
-              onPress={() => dispatch(newWish(user, friend, 'friend'))}>
-              <Icon style={styles.tabIcon} name="add"/>
+            <DjiniText style={styles.tabText} numberOfLines={1}>
+              Ideen
+            </DjiniText>
+            <TouchableOpacity
+              style={styles.tabIconContainer}
+              onPress={() => dispatch(newWish(user, friend, 'friend'))}
+            >
+              <Icon style={styles.tabIcon} name="add" />
             </TouchableOpacity>
           </View>
         </Tabs>
@@ -108,21 +133,25 @@ class Friend extends Component {
   }
 
   render() {
-    const {dispatch, isFetching, error, contact} = this.props
+    const { dispatch, isFetching, error, contact } = this.props
     return (
       <DjiniBackground>
         <View style={styles.appBar}>
-          <AppBar textStyle="dark" showBackButton={true} title="Freunde"/>
+          <AppBar textStyle="dark" showBackButton={true} title="Freunde" />
         </View>
         {this.renderProfileView()}
-        {isFetching ? 
+        {isFetching ? (
           <DjiniText style={styles.loadingText}>Laden..</DjiniText>
-          : error ? 
-            <DjiniError style={styles.error} errorText="Oops. Profil konnte nicht geladen werden"
-              onReloadPress={() => dispatch(loadFriendProfile(contact))} 
-              reloadButtonText="Nochmals versuchen"/>
-          : this.renderTabs()
-        }
+        ) : error ? (
+          <DjiniError
+            style={styles.error}
+            errorText="Oops. Profil konnte nicht geladen werden"
+            onReloadPress={() => dispatch(loadFriendProfile(contact))}
+            reloadButtonText="Nochmals versuchen"
+          />
+        ) : (
+          this.renderTabs()
+        )}
       </DjiniBackground>
     )
   }
@@ -130,7 +159,7 @@ class Friend extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   list: {
     marginBottom: 50 // Tabbar
@@ -157,7 +186,7 @@ const styles = StyleSheet.create({
     right: 25,
     top: 0,
     backgroundColor: 'transparent',
-    padding: 10 
+    padding: 10
   },
   favoriteIcon: {
     color: 'rgb(239,71,98)',
@@ -168,7 +197,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   inviteView: {
-    padding: 25,
+    padding: 25
   },
   inviteButton: {
     marginVertical: 25
@@ -177,23 +206,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontStyle: 'italic',
     fontWeight: 'bold',
-    color: 'white',
+    color: 'white'
   },
   tabIconContainer: {
     position: 'absolute',
-    top: 0, right: 0,
-    width: 50, height: 50,
+    top: 0,
+    right: 0,
+    width: 50,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center'
   },
   tabIcon: {
     color: 'white',
-    fontSize: 34,
+    fontSize: 34
   },
   tabIdeas: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   }
 })
 

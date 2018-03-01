@@ -1,28 +1,25 @@
-import {OrderedMap} from 'immutable';
-import {Platform, Linking} from 'react-native'
+import { OrderedMap } from 'immutable'
+import { Platform, Linking } from 'react-native'
 
 import {
   RESTORE_CONTACTS_REQUEST,
   RESTORE_CONTACTS_SUCCESS,
   RESTORE_CONTACTS_FAILURE,
-
   CONTACTS_REQUEST,
   CONTACTS_SUCCESS,
   CONTACTS_FAILURE,
-  
   UPDATE_CONTACT,
-
   ON_SEARCH_FIELD_CHANGE,
   SAVE_CONTACTS,
-
   INVITE_CONTACT,
   CONTACTS_PERMISSION
 } from '../lib/constants'
 
-import {syncReminderNote, persistNotes, updateNotesNotifications} from './notes'
+import { syncReminderNote, persistNotes, updateNotesNotifications } from './notes'
 import Contacts from '../lib/contacts'
 import Parse from 'parse/react-native'
 import db from '../lib/db'
+import { trackException, trackEvent } from '../lib/analytics'
 
 /*
  * Restore contacts
@@ -47,8 +44,9 @@ export function restoreContactsFailure(error) {
 export function restoreContacts() {
   return dispatch => {
     dispatch(restoreContactsRequest())
-    return db.getContacts()
-      .then((contacts) => dispatch(restoreContactsSuccess(contacts)))
+    return db
+      .getContacts()
+      .then(contacts => dispatch(restoreContactsSuccess(contacts)))
       .catch(error => dispatch(restoreContactsFailure(error)))
   }
 }
@@ -62,12 +60,15 @@ export function contactsRequest() {
   }
 }
 export function contactsSuccess(contacts) {
+  trackEvent('contacts', 'sync succeeded', { count: contacts.length })
   return {
     type: CONTACTS_SUCCESS,
     payload: contacts
   }
 }
 export function contactsFailure(error) {
+  trackEvent('contacts', 'sync failed')
+  trackException(error)
   return {
     type: CONTACTS_FAILURE,
     payload: error
@@ -85,29 +86,29 @@ export function refreshContacts(source: ?string = 'app') {
     if (source === 'app' && getState().contacts.pristine) {
       //Don't try to access contacts on app startup when state is pristine.
       //We want the user to actively trigger the permission dialog
-      return;
+      return
     }
     const existingContacts = getState().contacts.contacts
     const onAuthorized = () => {
       dispatch(contactsRequest())
       setTimeout(() => {
         Contacts.getAll()
-          .then((contacts) => Parse.Cloud.run('mergeWithUsers', {contacts}))
-          .then((contacts) => Contacts.transliterate(contacts))
-          .then((contacts) => OrderedMap(contacts).sortBy(f => f.nameTransliterated))
-          .then((contacts) => {
+          .then(contacts => Parse.Cloud.run('mergeWithUsers', { contacts }))
+          .then(contacts => Contacts.transliterate(contacts))
+          .then(contacts => OrderedMap(contacts).sortBy(f => f.nameTransliterated))
+          .then(contacts => {
             //keep local favorites
             return contacts.map(newContact => {
               const contact = existingContacts.get(newContact.phoneNumber)
-              return {...newContact, isFavorite: contact && contact.isFavorite}
+              return { ...newContact, isFavorite: contact && contact.isFavorite }
             })
           })
-          .then((contacts) => dispatch(contactsSuccess(contacts)))
+          .then(contacts => dispatch(contactsSuccess(contacts)))
           .then(() => {
             dispatch(saveContacts())
             dispatch(persistNotes())
           })
-          .catch((error) => dispatch(contactsFailure(error)))
+          .catch(error => dispatch(contactsFailure(error)))
       }, 100)
     }
     dispatch(checkContactsPermission(onAuthorized))
@@ -115,8 +116,8 @@ export function refreshContacts(source: ?string = 'app') {
 }
 
 export function updateContact(contact, fields = {}) {
-  return (dispatch) => {
-    const update = {...contact, ...fields}
+  return dispatch => {
+    const update = { ...contact, ...fields }
     let changed = false
     for (let field in fields) {
       if (fields[field] !== contact[field]) {
@@ -124,7 +125,7 @@ export function updateContact(contact, fields = {}) {
       }
     }
     if (changed) {
-      dispatch({type: UPDATE_CONTACT, payload: update})
+      dispatch({ type: UPDATE_CONTACT, payload: update })
       dispatch(updateNotesNotifications())
     }
   }
@@ -133,11 +134,10 @@ export function updateContact(contact, fields = {}) {
 export function saveContacts() {
   return (dispatch, getState) => {
     const state = getState().contacts
-    dispatch({type: SAVE_CONTACTS, payload: Date.now()})
-    db.saveContacts(state.contacts.entrySeq())
-      .catch(e => {
-        console.log('Could not save state. error: ', e)
-      })
+    dispatch({ type: SAVE_CONTACTS, payload: Date.now() })
+    db.saveContacts(state.contacts.entrySeq()).catch(e => {
+      console.log('Could not save state. error: ', e)
+    })
   }
 }
 
@@ -150,19 +150,23 @@ export function onSearchFieldChange(text) {
 
 export function setFavorite(contact, isFavorite, syncWithNotes = true) {
   return dispatch => {
-    dispatch(updateContact(contact, {isFavorite}))
+    trackEvent('contacts', `favorite ${isFavorite ? 'added' : 'removed'}`)
+    dispatch(updateContact(contact, { isFavorite }))
     dispatch(saveContacts())
     if (syncWithNotes) {
-      dispatch(syncReminderNote({...contact, isFavorite}))
+      dispatch(syncReminderNote({ ...contact, isFavorite }))
     }
   }
 }
 
 export function invite(contact) {
   return dispatch => {
-    dispatch({type: INVITE_CONTACT})
+    trackEvent('contacts', 'contact invited')
+    dispatch({ type: INVITE_CONTACT })
     const url = 'http://djini.ch/dl'
-    const message = 'Hey! Schau dir mal die App «Djini» an. Damit kannst du Wünsche und Geschenkideen schnell und einfach festhalten und mit Freunden teilen. Yeah! Nie wieder Socken zum Geburtstag! ' + url
+    const message =
+      'Hey! Schau dir mal die App «Djini» an. Damit kannst du Wünsche und Geschenkideen schnell und einfach festhalten und mit Freunden teilen. Yeah! Nie wieder Socken zum Geburtstag! ' +
+      url
     //see: http://stackoverflow.com/questions/6480462/how-to-pre-populate-the-sms-body-text-via-an-html-link
     if (Platform.OS === 'ios') {
       // &
@@ -177,28 +181,32 @@ export function invite(contact) {
 export function checkContactsPermission(onAuthorized) {
   return dispatch => {
     Contacts.checkPermission()
-      .then((permission) => {
-        dispatch({type: CONTACTS_PERMISSION, payload: permission})
-        if (permission === 'authorized'){
+      .then(permission => {
+        dispatch({ type: CONTACTS_PERMISSION, payload: permission })
+        if (permission === 'authorized') {
           onAuthorized && onAuthorized()
         }
       })
-      .catch((e) => {
+      .catch(e => {
         console.log('could not check contacts permission', e)
       })
   }
 }
 
 export function requestContactsPermission() {
+  trackEvent('contacts', 'permission requested')
   return dispatch => {
     Contacts.requestPermission()
-      .then((permission) => {
-        dispatch({type: CONTACTS_PERMISSION, payload: permission})
+      .then(permission => {
+        dispatch({ type: CONTACTS_PERMISSION, payload: permission })
         if (permission === 'authorized') {
+          trackEvent('contacts', 'permission granted')
           dispatch(refreshContacts('user'))
+        } else {
+          trackEvent('contacts', 'permission rejected')
         }
       })
-      .catch((e) => {
+      .catch(e => {
         console.log('could not request contacts permission', e)
       })
   }

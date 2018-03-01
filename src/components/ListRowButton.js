@@ -1,6 +1,5 @@
-
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React from 'react'
+import { StyleSheet } from 'react-native'
 import DjiniButton from './DjiniButton'
 
 const styles = StyleSheet.create({
@@ -16,8 +15,8 @@ const styles = StyleSheet.create({
 
 export default function ListRowButton(props) {
   return (
-    <DjiniButton 
-      {...props} 
+    <DjiniButton
+      {...props}
       style={[styles.button, props.style]}
       iconStyle={[styles.icon, props.iconStyle]}
     />

@@ -3,7 +3,7 @@
  */
 
 import Parse from 'parse/react-native'
-import {Alert} from 'react-native'
+import { Alert } from 'react-native'
 
 import {
   FEEDBACK_REQUEST,
@@ -12,21 +12,21 @@ import {
   ON_FEEDBACK_CHANGE
 } from '../lib/constants'
 
-import type {User} from '../lib/types'
+import type { User } from '../lib/types'
 
 const ParseFeedback = Parse.Object.extend('Feedback')
 const ParseUser = Parse.Object.extend('User')
 
 export function feedbackRequest() {
-  return {type: FEEDBACK_REQUEST}
+  return { type: FEEDBACK_REQUEST }
 }
 
 export function feedbackSuccess() {
-  return {type: FEEDBACK_SUCCESS}
+  return { type: FEEDBACK_SUCCESS }
 }
 
 export function feedbackFailure(e: Error) {
-  return {type: FEEDBACK_FAILURE, payload: e}
+  return { type: FEEDBACK_FAILURE, payload: e }
 }
 
 export function sendFeedback(user: User, description: string) {
@@ -38,12 +38,13 @@ export function sendFeedback(user: User, description: string) {
       description
     })
 
-    feedback.save()
+    feedback
+      .save()
       .then(() => {
         dispatch(feedbackSuccess())
         Alert.alert('Feedback', 'Merci für dein Feedback!')
       })
-      .catch((e) => {
+      .catch(e => {
         dispatch(feedbackFailure(e))
         Alert.alert('Feedback', 'Sorry, dein Feedback konnte nicht übermittelt werden')
       })
@@ -51,5 +52,5 @@ export function sendFeedback(user: User, description: string) {
 }
 
 export function onFeedbackChange(text: string) {
-  return {type: ON_FEEDBACK_CHANGE, payload: text}
+  return { type: ON_FEEDBACK_CHANGE, payload: text }
 }

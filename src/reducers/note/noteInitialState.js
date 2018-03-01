@@ -1,9 +1,9 @@
 /* @flow */
 
-import {Record} from 'immutable';
-import type {Note} from '../../lib/types'
+import { Record } from 'immutable'
+import type { Note } from '../../lib/types'
 
-export const note:Note = {
+export const note: Note = {
   id: undefined,
   title: '',
   comment: '',

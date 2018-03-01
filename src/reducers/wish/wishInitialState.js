@@ -1,4 +1,4 @@
-import {Record} from 'immutable';
+import { Record } from 'immutable'
 
 export const Wish = Record({
   id: undefined,
@@ -9,11 +9,11 @@ export const Wish = Record({
   seenAt: '',
   isPrivate: false,
   isFavorite: false,
-  imageURL: '', 
+  imageURL: '',
   fromUserId: '',
   toUserId: '',
   fulfillerId: '',
-  fulfillerName: '',
+  fulfillerName: ''
 })
 
 const InitialState = Record({
@@ -21,9 +21,9 @@ const InitialState = Record({
   error: null,
   editMode: false,
   source: 'wishes', // wishes or friend
-  wish: new Wish,
-  wishOfFriend: new Wish,
+  wish: new Wish(),
+  wishOfFriend: new Wish(),
   contact: undefined // Local contact associated to friend
 })
 
-export default InitialState;
+export default InitialState

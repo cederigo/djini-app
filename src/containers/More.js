@@ -1,87 +1,110 @@
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import {TouchableWithoutFeedback, StyleSheet, View, ScrollView, TouchableOpacity, Linking} from 'react-native';
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import {
+  TouchableWithoutFeedback,
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Linking
+} from 'react-native'
 import dismissKeyboard from 'dismissKeyboard'
-import {Actions} from 'react-native-router-flux'
+import { Actions } from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import {sendFeedback, onFeedbackChange} from '../actions/feedback'
+import { sendFeedback, onFeedbackChange } from '../actions/feedback'
 
-import {AppBar} from '../components/AppBar'
+import { AppBar } from '../components/AppBar'
 import DjiniButton from '../components/DjiniButton'
 import DjiniText from '../components/DjiniText'
 import DjiniTextInput from '../components/DjiniTextInput'
 import ListRowSeperator from '../components/ListRowSeperator'
 import Tabs from '../components/Tabs'
+import { trackScreenView } from '../lib/analytics'
 
 class More extends Component {
   static propTypes = {
     isFetching: PropTypes.bool.isRequired,
     isValid: PropTypes.bool.isRequired,
     description: PropTypes.string.isRequired,
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
+  }
+  componentDidMount() {
+    trackScreenView('more')
   }
   openLink(href) {
     Linking.openURL('http://djini.ch/' + href)
   }
   render() {
-    const {isFetching, isValid, description, user, dispatch} = this.props
-    return(
+    const { isFetching, isValid, description, user, dispatch } = this.props
+    return (
       <View style={styles.container}>
         <View style={styles.appBar}>
-          <AppBar textStyle="dark" title="Mein Profil" showBackButton={false}/>
+          <AppBar textStyle="dark" title="Mein Profil" showBackButton={false} />
         </View>
         <ScrollView keyboardShouldPersistTaps="always">
           <Tabs selected="more">
-            <DjiniText style={styles.tabText} name="profile" onSelect={() => Actions.profile({type: 'replace'})}>Details</DjiniText>
-            <DjiniText style={styles.tabText} name="more">Mehr</DjiniText>
+            <DjiniText
+              style={styles.tabText}
+              name="profile"
+              onSelect={() => Actions.profile({ type: 'replace' })}
+            >
+              Details
+            </DjiniText>
+            <DjiniText style={styles.tabText} name="more">
+              Mehr
+            </DjiniText>
           </Tabs>
           <TouchableWithoutFeedback onPress={dismissKeyboard}>
             <View style={styles.feedbackC}>
-                <DjiniText style={styles.titleText}>Feedback schreiben</DjiniText>
-                <DjiniTextInput
-                  type="light"
-                  placeholder="Gib Djini Feedback! Er freut sich über Nettes, Vorschläge und Kritik gleichermassen"
-                  autoGrow={true}
-                  minHeight={75}
-                  value={description}
-                  onChangeText={(text) => dispatch(onFeedbackChange(text))}
-                  />
+              <DjiniText style={styles.titleText}>Feedback schreiben</DjiniText>
+              <DjiniTextInput
+                type="light"
+                placeholder="Gib Djini Feedback! Er freut sich über Nettes, Vorschläge und Kritik gleichermassen"
+                autoGrow={true}
+                minHeight={75}
+                value={description}
+                onChangeText={text => dispatch(onFeedbackChange(text))}
+              />
               <DjiniButton
                 style={styles.feedbackSubmit}
                 disabled={isFetching || !isValid}
-                onPress={() => {dispatch(sendFeedback(user, description)); dismissKeyboard()}}
-                caption="Senden"/>
+                onPress={() => {
+                  dispatch(sendFeedback(user, description))
+                  dismissKeyboard()
+                }}
+                caption="Senden"
+              />
             </View>
           </TouchableWithoutFeedback>
           <View>
-            <ListRowSeperator/>
+            <ListRowSeperator />
             <TouchableOpacity style={styles.item} onPress={() => this.openLink('faq')}>
               <DjiniText style={styles.itemText}>FAQ</DjiniText>
-              <Icon style={styles.itemIcon} name="chevron-right"/>
+              <Icon style={styles.itemIcon} name="chevron-right" />
             </TouchableOpacity>
-            <ListRowSeperator/>
+            <ListRowSeperator />
             <TouchableOpacity style={styles.item} onPress={() => this.openLink('agb')}>
               <DjiniText style={styles.itemText}>Nutzungsbedingungen (AGB)</DjiniText>
-              <Icon style={styles.itemIcon} name="chevron-right"/>
+              <Icon style={styles.itemIcon} name="chevron-right" />
             </TouchableOpacity>
-            <ListRowSeperator/>
+            <ListRowSeperator />
             <TouchableOpacity style={styles.item} onPress={() => this.openLink('credits')}>
               <DjiniText style={styles.itemText}>Credits</DjiniText>
-              <Icon style={styles.itemIcon} name="chevron-right"/>
+              <Icon style={styles.itemIcon} name="chevron-right" />
             </TouchableOpacity>
-            <ListRowSeperator/>
+            <ListRowSeperator />
           </View>
         </ScrollView>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   appBar: {
     backgroundColor: 'rgb(240, 240, 240)'
@@ -93,7 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white',
     fontStyle: 'italic',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   item: {
     flexDirection: 'row',
@@ -109,7 +132,7 @@ const styles = StyleSheet.create({
   },
   itemIcon: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 30
   },
   feedbackC: {
     padding: 25
@@ -117,11 +140,11 @@ const styles = StyleSheet.create({
   feedbackSubmit: {
     marginTop: 25,
     paddingVertical: 10,
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-end'
   }
-});
+})
 
 function select(state) {
-  return {...state.feedback.toJS(), user: state.global.currentUser}
+  return { ...state.feedback.toJS(), user: state.global.currentUser }
 }
-export default connect(select)(More);
+export default connect(select)(More)

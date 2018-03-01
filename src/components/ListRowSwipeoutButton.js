@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { View, StyleSheet, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import * as images from '../../img'
 
@@ -20,17 +20,22 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 30,
-    height: 30 
+    height: 30
   }
 })
 
 export default function ListRowSwipeoutButton(props) {
   return (
     <View style={styles.container}>
-      {props.iconType === 'icon' ?
-        <Icon style={[styles.icon, props.iconStyle]} name={props.iconName}/>
-        : <Image resizeMode="contain" source={images[props.iconName]} style={[styles.image, props.iconStyle]}/>
-      }
+      {props.iconType === 'icon' ? (
+        <Icon style={[styles.icon, props.iconStyle]} name={props.iconName} />
+      ) : (
+        <Image
+          resizeMode="contain"
+          source={images[props.iconName]}
+          style={[styles.image, props.iconStyle]}
+        />
+      )}
     </View>
   )
 }

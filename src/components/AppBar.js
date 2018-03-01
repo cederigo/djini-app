@@ -1,10 +1,10 @@
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux'
 
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 
 import DjiniText from './DjiniText'
 import DjiniTextInput from './DjiniTextInput'
@@ -24,33 +24,36 @@ export class AppBar extends Component {
   }
 
   render() {
-    const {showBackButton, backButtonText, onBack, title, textStyle} = this.props
-    const actionButtonProps = backButtonText ? {text: backButtonText} : {iconName: 'chevron-left'}
+    const { showBackButton, backButtonText, onBack, title, textStyle } = this.props
+    const actionButtonProps = backButtonText
+      ? { text: backButtonText }
+      : { iconName: 'chevron-left' }
     return (
       <View style={styles.appBar}>
         <View style={styles.center}>
-          <DjiniText textStyle={textStyle} style={styles.title} numberOfLines={1}>{title}</DjiniText>
+          <DjiniText textStyle={textStyle} style={styles.title} numberOfLines={1}>
+            {title}
+          </DjiniText>
         </View>
         <View style={styles.left}>
-          {showBackButton ? 
-            <ActionButton 
+          {showBackButton ? (
+            <ActionButton
               {...actionButtonProps}
               onPress={onBack}
               textStyle={textStyle}
-              style={[styles.actionButton, styles.actionButtonLeft]}/>
-            : undefined
-          }
+              style={[styles.actionButton, styles.actionButtonLeft]}
+            />
+          ) : (
+            undefined
+          )}
         </View>
-        <View style={styles.right}>
-          {this.props.children}
-        </View>
+        <View style={styles.right}>{this.props.children}</View>
       </View>
     )
   }
 }
 
 export class SearchBar extends Component {
-
   constructor(props) {
     super(props)
     this.startSearch = this.startSearch.bind(this)
@@ -62,25 +65,25 @@ export class SearchBar extends Component {
   }
 
   startSearch() {
-    this.setState({searchActive: true})
+    this.setState({ searchActive: true })
   }
 
   endSearch() {
-    this.setState({searchActive: false})
+    this.setState({ searchActive: false })
   }
 
   _endSearch() {
-    const {onSearchEnd} = this.props
-    this.setState({searchActive: false})
+    const { onSearchEnd } = this.props
+    this.setState({ searchActive: false })
     onSearchEnd && onSearchEnd()
   }
 
   render() {
-    const {title, onChangeText, inputValue, inputPlaceholder} = this.props
+    const { title, onChangeText, inputValue, inputPlaceholder } = this.props
     return (
       <View style={styles.appBar}>
         <View style={styles.center}>
-          {this.state.searchActive ?
+          {this.state.searchActive ? (
             <DjiniTextInput
               type="light"
               onChangeText={onChangeText}
@@ -90,15 +93,19 @@ export class SearchBar extends Component {
               placeholder={inputPlaceholder}
               clearButtonMode="never"
             />
-            : <DjiniText style={styles.title} numberOfLines={1}>{title}</DjiniText>
-          }
+          ) : (
+            <DjiniText style={styles.title} numberOfLines={1}>
+              {title}
+            </DjiniText>
+          )}
         </View>
-        <View style={styles.left}/>
+        <View style={styles.left} />
         <View style={styles.right}>
-          {this.state.searchActive ? 
-            <ActionButton onPress={this._endSearch} iconName="cancel"/>
-            : <ActionButton onPress={this.startSearch} iconName="search"/>
-          }
+          {this.state.searchActive ? (
+            <ActionButton onPress={this._endSearch} iconName="cancel" />
+          ) : (
+            <ActionButton onPress={this.startSearch} iconName="search" />
+          )}
         </View>
       </View>
     )
@@ -106,7 +113,6 @@ export class SearchBar extends Component {
 }
 
 export class ActionButton extends React.Component {
-
   static propTypes = {
     onPress: PropTypes.func.isRequired,
     disabled: PropTypes.bool,
@@ -115,7 +121,7 @@ export class ActionButton extends React.Component {
     textStyle: PropTypes.oneOf(['light', 'dark'])
   }
   render() {
-    const {disabled, onPress, text, iconName, textStyle} = this.props
+    const { disabled, onPress, text, iconName, textStyle } = this.props
     const style = [styles.actionText]
     if (textStyle === 'dark') {
       style.push(styles.actionTextDark)
@@ -128,13 +134,21 @@ export class ActionButton extends React.Component {
       <TouchableOpacity
         activeOpacity={disabled ? 1 : 0}
         style={[styles.actionButton, this.props.style]}
-        onPress={() => { if (!disabled) { onPress() }}}>
-        {iconName ? 
-          <Icon style={style} size={30} name={iconName}/> :
-          <DjiniText numberOfLines={1} style={style}>{text}</DjiniText>
-        }
+        onPress={() => {
+          if (!disabled) {
+            onPress()
+          }
+        }}
+      >
+        {iconName ? (
+          <Icon style={style} size={30} name={iconName} />
+        ) : (
+          <DjiniText numberOfLines={1} style={style}>
+            {text}
+          </DjiniText>
+        )}
       </TouchableOpacity>
-    );
+    )
   }
 }
 
@@ -145,33 +159,36 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 44,
+    height: 44
   },
   left: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   center: {
     position: 'absolute',
-    left: 0, right: 0, top: 0, bottom: 0,
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     alignItems: 'center',
     justifyContent: 'center'
   },
   right: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    flex: 1,
+    flex: 1
   },
   title: {
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   },
   actionButton: {
     padding: 10,
-    alignItems: 'flex-end',
+    alignItems: 'flex-end'
   },
   actionButtonLeft: {
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
   },
   actionTextDisabled: {
     opacity: 0.5

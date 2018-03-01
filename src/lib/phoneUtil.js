@@ -1,4 +1,4 @@
-import {PhoneNumberFormat, PhoneNumberUtil, PhoneNumberType} from 'google-libphonenumber'
+import { PhoneNumberFormat, PhoneNumberUtil, PhoneNumberType } from 'google-libphonenumber'
 const phoneUtil = PhoneNumberUtil.getInstance()
 
 export function isValidNumber(number, country = 'CH') {
@@ -29,7 +29,9 @@ export function isMobileNumber(number, country = 'CH') {
       number = phoneUtil.parse(number, country)
     }
     const numberType = phoneUtil.getNumberType(number)
-    return numberType === PhoneNumberType.MOBILE || numberType === PhoneNumberType.FIXED_LINE_OR_MOBILE
+    return (
+      numberType === PhoneNumberType.MOBILE || numberType === PhoneNumberType.FIXED_LINE_OR_MOBILE
+    )
   } catch (e) {
     return false
   }

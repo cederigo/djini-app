@@ -7,7 +7,7 @@ export type User = {
   email: string,
   phoneNumber: string,
   birthday: string,
-  registered: bool
+  registered: boolean
 }
 
 /* Local (From adressbook) */
@@ -15,7 +15,7 @@ export type Contact = {
   phoneNumber: string,
   name: string,
   nameTransliterated: string,
-  birthday: string,
+  birthday: string
 }
 
 /* Wish or Idea (technically its the same thing) */
@@ -26,12 +26,12 @@ export type Wish = {
   description: string,
   price: string,
   seenAt: string,
-  isPrivate: bool,
-  isFavorite: bool,
+  isPrivate: boolean,
+  isFavorite: boolean,
   fromUserId: string,
   toUserId: string,
   fulfillerId: string,
-  fulfillerName: ?string,
+  fulfillerName: ?string
 }
 
 export type Note = {
@@ -40,8 +40,8 @@ export type Note = {
   title: string,
   comment: string,
   dueDate: string, // YYYY-MM-DD
-  type: 'reminder' | 'task', 
+  type: 'reminder' | 'task',
   done: boolean, // For type task
   contact: Contact, // A note is always associated with one of our contacts
-  wish: ?Wish, // For type task
+  wish: ?Wish // For type task
 }

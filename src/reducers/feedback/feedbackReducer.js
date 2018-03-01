@@ -5,25 +5,23 @@ import {
   ON_FEEDBACK_CHANGE
 } from '../../lib/constants'
 
-import InitialState from './feedbackInitialState';
+import InitialState from './feedbackInitialState'
 
-const initialState = new InitialState;
+const initialState = new InitialState()
 
-export default function feedbackReducer(state = initialState, {type, payload}) {
+export default function feedbackReducer(state = initialState, { type, payload }) {
   switch (type) {
     case FEEDBACK_REQUEST:
-      return state.set('isFetching', true)
-        .set('error', null)
+      return state.set('isFetching', true).set('error', null)
     case FEEDBACK_SUCCESS:
-      return state.set('isFetching', false)
+      return state
+        .set('isFetching', false)
         .set('isValid', false)
         .set('description', '')
     case FEEDBACK_FAILURE:
-      return state.set('isFetching', false)
-        .set('error', payload)
+      return state.set('isFetching', false).set('error', payload)
     case ON_FEEDBACK_CHANGE:
-      return state.set('description', payload)
-        .set('isValid', payload ? true : false)
+      return state.set('description', payload).set('isValid', payload ? true : false)
   }
-  return state;
+  return state
 }

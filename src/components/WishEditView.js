@@ -1,22 +1,33 @@
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import {View, ScrollView, StyleSheet, TouchableOpacity, Image,
-  NativeModules, Dimensions, KeyboardAvoidingView, Alert, Platform} from 'react-native';
-import { Actions} from 'react-native-router-flux'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  NativeModules,
+  Dimensions,
+  KeyboardAvoidingView,
+  Alert,
+  Platform
+} from 'react-native'
+import { Actions } from 'react-native-router-flux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import {AppBar, ActionButton} from './AppBar'
+import { AppBar, ActionButton } from './AppBar'
 import WishEditForm from './WishEditForm'
 
+import { trackScreenView } from '../lib/analytics'
+
 // Actions
-import {uploadWishImage} from '../actions/wishes'
+import { uploadWishImage } from '../actions/wishes'
 
 const IMAGE_WIDTH = Dimensions.get('window').width
 const IMAGE_HEIGHT = 200
 
 class WishEditView extends Component {
-
   static propTypes = {
     wish: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
@@ -40,23 +51,27 @@ class WishEditView extends Component {
       imageURL: props.wish.imageURL
     }
   }
-  
-  componentWillMount() {
-    Actions.refresh({hideTabBar: true, sceneStyle: null})
+
+  componentDidMount() {
+    trackScreenView('wish (edit)')
   }
-  
+
+  componentWillMount() {
+    Actions.refresh({ hideTabBar: true, sceneStyle: null })
+  }
+
   uploadImage(base64Data) {
     if (this.state.uploading) {
-      return;
+      return
     }
-    const {dispatch} = this.props
+    const { dispatch } = this.props
     this.setState({ uploading: true, uploadFailure: false })
     dispatch(uploadWishImage(base64Data))
-      .then((imageURL) => {
-        this.setState({uploading: false, uploadFailure: false, imageURL})
+      .then(imageURL => {
+        this.setState({ uploading: false, uploadFailure: false, imageURL })
       })
       .catch(() => {
-        this.setState({uploading: false, uploadFailure: true})
+        this.setState({ uploading: false, uploadFailure: true })
       })
   }
 
@@ -67,7 +82,7 @@ class WishEditView extends Component {
       takePhotoButtonTitle: 'Eine Aufnahme machen...', // specify null or empty string to remove this button
       chooseFromLibraryButtonTitle: 'Aus Galerie...', // specify null or empty string to remove this button
       customButtons: [
-        {title: 'Bild löschen', name: 'remove-image'}, // [Button Text] : [String returned upon selection]
+        { title: 'Bild löschen', name: 'remove-image' } // [Button Text] : [String returned upon selection]
       ],
       cameraType: 'back', // 'front' or 'back'
       mediaType: 'photo', // 'photo' or 'video'
@@ -78,74 +93,95 @@ class WishEditView extends Component {
       quality: 0.6, // 0 to 1, photos only
       angle: 0, // android only, photos only
       allowsEditing: true, // Built in functionality to resize/reposition the image after selection
-      noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
-    };
+      noData: false // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
+    }
 
-    NativeModules.ImagePickerManager.showImagePicker(options, (response) => {
+    NativeModules.ImagePickerManager.showImagePicker(options, response => {
       if (response.didCancel || response.error) {
-        return;
+        return
       }
 
       if (response.data) {
-        this.setState({ imageSource: {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true} })
+        this.setState({
+          imageSource: { uri: 'data:image/jpeg;base64,' + response.data, isStatic: true }
+        })
         this.uploadImage(response.data)
       } else {
         //clear image
-        this.setState({imageSource: null, imageURL: null})
+        this.setState({ imageSource: null, imageURL: null })
       }
     })
   }
 
   renderImage() {
-    const {uploading, uploadFailure, imageURL} = this.state
-    const imageSource = imageURL ? {uri: imageURL} : this.state.imageSource
+    const { uploading, uploadFailure, imageURL } = this.state
+    const imageSource = imageURL ? { uri: imageURL } : this.state.imageSource
     let image
     if (imageSource) {
-      image = <Image style={[styles.image, uploading ? styles.imageUploading : undefined]} source={imageSource}/>
+      image = (
+        <Image
+          style={[styles.image, uploading ? styles.imageUploading : undefined]}
+          source={imageSource}
+        />
+      )
     }
     return (
       <TouchableOpacity style={styles.imageWrapper} onPress={() => this.showImagePicker()}>
         {image}
-        {uploadFailure ? 
-          <Icon style={styles.icon} name="error" size={40}/> :
-          <Icon style={styles.icon} name="add-a-photo" size={40}/>
-        }
+        {uploadFailure ? (
+          <Icon style={styles.icon} name="error" size={40} />
+        ) : (
+          <Icon style={styles.icon} name="add-a-photo" size={40} />
+        )}
       </TouchableOpacity>
     )
   }
-  
+
   onValidationChange(isValid) {
-    this.setState({isValid})
+    this.setState({ isValid })
   }
 
   render() {
-    const {wish, title, isFetching, error, dispatch} = this.props
-    const {isValid, imageURL} = this.state
-    const disableSave = this.state.uploading || !isValid || isFetching;
-    
-    if (error) {
-      Alert.alert('Djini Fehler', 'Oops, Wunsch konnte nicht gespeichert werden. Stelle sicher, dass du eine Internet Verbindung hast.')
-    }
-    
-    const content = 
-      <ScrollView
-        style={styles.container}
-        keyboardShouldPersistTaps="always">
-        {this.renderImage()} 
-        <WishEditForm dispatch={dispatch} wish={wish} ref={(form) => this._form = form} onValidationChange={(isValid) => this.onValidationChange(isValid)}/>
-      </ScrollView>
+    const { wish, title, isFetching, error, dispatch } = this.props
+    const { isValid, imageURL } = this.state
+    const disableSave = this.state.uploading || !isValid || isFetching
 
-    return ( 
+    if (error) {
+      Alert.alert(
+        'Djini Fehler',
+        'Oops, Wunsch konnte nicht gespeichert werden. Stelle sicher, dass du eine Internet Verbindung hast.'
+      )
+    }
+
+    const content = (
+      <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
+        {this.renderImage()}
+        <WishEditForm
+          dispatch={dispatch}
+          wish={wish}
+          ref={form => (this._form = form)}
+          onValidationChange={isValid => this.onValidationChange(isValid)}
+        />
+      </ScrollView>
+    )
+
+    return (
       <View style={styles.container}>
         <AppBar showBackButton={true} backButtonText="Abbrechen" title={title} textStyle="dark">
-          <ActionButton text="Fertig" textStyle="dark" disabled={disableSave} onPress={() => this._form.save(imageURL)}/>
+          <ActionButton
+            text="Fertig"
+            textStyle="dark"
+            disabled={disableSave}
+            onPress={() => this._form.save(imageURL)}
+          />
         </AppBar>
-        {Platform.OS === 'ios' ?
+        {Platform.OS === 'ios' ? (
           <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoid}>
             {content}
           </KeyboardAvoidingView>
-          : content
-        }
+        ) : (
+          content
+        )}
       </View>
     )
   }
@@ -154,10 +190,10 @@ class WishEditView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgb(240, 240, 240)',
+    backgroundColor: 'rgb(240, 240, 240)'
   },
   keyboardAvoid: {
-    flex: 1,
+    flex: 1
   },
   imageWrapper: {
     height: IMAGE_HEIGHT,
@@ -173,9 +209,10 @@ const styles = StyleSheet.create({
   image: {
     resizeMode: 'cover',
     position: 'absolute',
-    left: 0, top: 0,
+    left: 0,
+    top: 0,
     width: IMAGE_WIDTH,
-    height: IMAGE_HEIGHT,
+    height: IMAGE_HEIGHT
   },
   imageUploading: {
     opacity: 0.5

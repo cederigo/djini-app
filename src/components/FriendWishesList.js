@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import React, {Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 
 import DjiniText from './DjiniText'
 import PureListView from './PureListView'
@@ -10,7 +10,7 @@ import ListRow from './ListRow'
 import ListRowIcon from './ListRowIcon'
 import SwipeoutButton from './ListRowSwipeoutButton'
 
-import {fulfillable} from '../lib/wishUtil'
+import { fulfillable } from '../lib/wishUtil'
 
 const styles = StyleSheet.create({
   emptyList: {
@@ -22,14 +22,13 @@ const styles = StyleSheet.create({
   }
 })
 
-
-import {fulfilled, fulfilledByUser} from '../lib/wishUtil'
+import { fulfilled, fulfilledByUser } from '../lib/wishUtil'
 
 // actions
-import {showWish, copyWish, toggleFulfilled} from '../actions/wishes'
+import { showWish, copyWish, toggleFulfilled } from '../actions/wishes'
+import { trackScreenView } from '../lib/analytics'
 
 class FriendWishesList extends Component {
-
   static propTypes = {
     wishes: PropTypes.array.isRequired,
     user: PropTypes.object.isRequired,
@@ -39,12 +38,16 @@ class FriendWishesList extends Component {
   constructor(props) {
     super(props)
 
-    this._innerRef = null;
+    this._innerRef = null
 
-    this.renderRow = this.renderRow.bind(this);
-    this.storeInnerRef = this.storeInnerRef.bind(this);
+    this.renderRow = this.renderRow.bind(this)
+    this.storeInnerRef = this.storeInnerRef.bind(this)
   }
-  
+
+  componentDidMount() {
+    trackScreenView('friend wishes')
+  }
+
   render() {
     return (
       <PureListView
@@ -55,51 +58,51 @@ class FriendWishesList extends Component {
         renderSeparator={this.renderSeparator}
         {...this.props}
       />
-    );
+    )
   }
 
-  getRowDescription (wish, user) {
+  getRowDescription(wish, user) {
     if (!fulfilled(wish)) {
       return '' //nothing to render
     }
     if (fulfilledByUser(wish, user)) {
       return 'Wird von mir erfüllt'
-    }
-    else if (wish.fulfillerName) {
+    } else if (wish.fulfillerName) {
       return `Wird erfüllt durch ${wish.fulfillerName}`
     }
     return 'Wird erfüllt'
   }
 
-  _swipeoutBtns (wish) {
-    const {dispatch, user, contact} = this.props
+  _swipeoutBtns(wish) {
+    const { dispatch, user, contact } = this.props
     const result = [
-      { 
+      {
         backgroundColor: 'transparent',
-        component: <SwipeoutButton iconName='playlist-add' />,
+        component: <SwipeoutButton iconName="playlist-add" />,
         onPress: () => dispatch(copyWish(wish, user))
       }
     ]
-    if (fulfillable(wish, user)){
-      result.push({ 
+    if (fulfillable(wish, user)) {
+      result.push({
         backgroundColor: 'transparent',
         component: <SwipeoutButton iconName={fulfilled(wish) ? 'clear' : 'check'} />,
-        onPress: () => dispatch(toggleFulfilled(wish, contact)),
+        onPress: () => dispatch(toggleFulfilled(wish, contact))
       })
     }
     return result
   }
 
-  renderRow (wish) {
-    const {dispatch, user, contact} = this.props
+  renderRow(wish) {
+    const { dispatch, user, contact } = this.props
     return (
       <ListRow
         title={wish.title}
         swipeoutBtns={this._swipeoutBtns(wish)}
         description={this.getRowDescription(wish, user)}
-        onPress={() => dispatch(showWish(wish, 'friend', contact))}>
-       {wish.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="star"/> : undefined}
-       {fulfilled(wish) ? <ListRowIcon name="check"/> : undefined}
+        onPress={() => dispatch(showWish(wish, 'friend', contact))}
+      >
+        {wish.isFavorite ? <ListRowIcon style={styles.favoriteIcon} name="star" /> : undefined}
+        {fulfilled(wish) ? <ListRowIcon name="check" /> : undefined}
       </ListRow>
     )
   }
@@ -107,15 +110,15 @@ class FriendWishesList extends Component {
   renderEmptyList() {
     return (
       <DjiniText style={styles.emptyList}>Dein Freund hat noch keine Wünsche erfasst</DjiniText>
-    );
+    )
   }
 
   renderSeparator(sectionID, rowID) {
-    return <ListRowSeperator key={"SEP_" + sectionID + "_" + rowID}/>
+    return <ListRowSeperator key={'SEP_' + sectionID + '_' + rowID} />
   }
 
   storeInnerRef(ref: ?PureListView) {
-    this._innerRef = ref;
+    this._innerRef = ref
   }
 }
 

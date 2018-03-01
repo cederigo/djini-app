@@ -5,7 +5,7 @@
 /**
  * ## Import
  */
-import {Record, List} from 'immutable'
+import { Record, List } from 'immutable'
 
 /**
  * ## Form
@@ -21,4 +21,4 @@ const InitialState = Record({
   ideas: List()
 })
 
-export default InitialState;
+export default InitialState

@@ -22,9 +22,9 @@
  * @flow
  */
 
-'use strict';
+'use strict'
 
-import {Platform} from 'react-native'
+import { Platform } from 'react-native'
 import Parse from 'parse/react-native'
 
 async function currentInstallation(): Promise<Parse.Installation> {
@@ -35,16 +35,16 @@ async function currentInstallation(): Promise<Parse.Installation> {
       appName: 'Djini',
       deviceType: Platform.OS,
       // TODO: Get this information from the app itself
-      appIdentifier: Platform.OS === 'ios' ? 'ch.djini' : 'ch.djini',
-    });
-  } catch(e) {
+      appIdentifier: Platform.OS === 'ios' ? 'ch.djini' : 'ch.djini'
+    })
+  } catch (e) {
     console.log('Could not update installation')
   }
 }
 
 export async function updateInstallation(updates: Object = {}): Promise<void> {
-  const installation = await currentInstallation();
+  const installation = await currentInstallation()
   if (installation) {
-    await installation.save(updates);
+    await installation.save(updates)
   }
 }

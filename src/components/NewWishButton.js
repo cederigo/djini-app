@@ -1,20 +1,23 @@
-import { connect } from 'react-redux';
-import React, {Component} from 'react'
-import { StyleSheet, TouchableOpacity} from 'react-native';
+import { connect } from 'react-redux'
+import React, { Component } from 'react'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 
-import {User} from '../lib/types'
-import {newWish} from '../actions/wishes'
+import { User } from '../lib/types'
+import { newWish } from '../actions/wishes'
 
 class NewWishButton extends Component {
   props: {
     fromUser: User,
-    toUser: User,
+    toUser: User
   }
   render() {
-    const {dispatch, fromUser, toUser} = this.props
+    const { dispatch, fromUser, toUser } = this.props
 
     return (
-      <TouchableOpacity style={styles.container} onPress={() => dispatch(newWish(fromUser, toUser))}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => dispatch(newWish(fromUser, toUser))}
+      >
         {this.props.children}
       </TouchableOpacity>
     )
@@ -36,8 +39,8 @@ const styles = StyleSheet.create({
  * Redux boilerplate
  */
 function select(state) {
-  return { 
+  return {
     fromUser: state.global.currentUser
-  };
+  }
 }
 export default connect(select)(NewWishButton)
