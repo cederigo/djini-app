@@ -38,7 +38,17 @@ export function trackEvent(...args) {
  * @param  {Boolean} fatal A value indiciating if the error was fatal, defaults to false
  */
 export function trackException(error, fatal) {
-  tracker.trackException(error, fatal)
+  try {
+    let msg = ''
+    if (typeof error === 'string') {
+      msg = error
+    } else {
+      msg = error.message
+    }
+    tracker.trackException(msg, fatal)
+  } catch (e) {
+    // Ignore
+  }
 }
 
 /**
