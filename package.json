@@ -3,7 +3,8 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "fix-local-cli": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json",
+    "fix-local-cli": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json || echo 'does not exist'",
+    "postinstall": "npm run fix-local-cli",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest --no-cache",
     "test:watch": "npm run test -- --watch",
@@ -22,7 +23,7 @@
     "react-native-image-picker": "^0.26.7",
     "react-native-linear-gradient": "^2.4.0",
     "react-native-push-notification": "^3.0.2",
-    "react-native-router-flux": "3.43.0",
+    "react-native-router-flux": "git://github.com/cederigo/react-native-router-flux#v3",
     "react-native-swipeout": "2.3.3",
     "react-native-vector-icons": "^4.5.0",
     "react-redux": "^5.0.6",
