@@ -1,10 +1,9 @@
 {
   "name": "djini",
-  "version": "1.0.7-dev",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
-    "fix-local-cli":
-      "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json",
+    "fix-local-cli": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest --no-cache",
     "test:watch": "npm run test -- --watch",
